@@ -1,0 +1,21 @@
+@import './assets/plugins/bootstrap/css/bootstrap.min.css';
+
+@import './assets/css/main.css';
+
+@import './assets/css/theme2.css';
+
+@import './assets/css/custom.css';
+
+@import './assets/plugins/charts-c3/c3.min.css';
+
+@import './assets/plugins/summernote/dist/summernote.css';
+
+@import './assets/plugins/jvectormap/jvectormap-2.0.3.css';
+
+@import './assets/plugins/bootstrap-multiselect/bootstrap-multiselect.css';
+
+@import './assets/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css';
+
+@import './assets/plugins/fullcalendar/fullcalendar.min.css';
+
+@import './assets/plugins/jquery-steps/jquery.steps.css';

@@ -1,0 +1,32 @@
+.fc-event-container .fc-event,.fc-event-container .fc-event-dot {
+    background-color: #39374e !important;
+    color: #BABDBF!important;
+    border-color:  #39374e !important;
+}
+
+.nav-link-gdc-selected {
+    font-weight: bold !important;
+}
+
+div.font-montserrat{
+    font-family:"Montserrat",sans-serif
+}
+div.font-roboto{
+    font-family:"Robot",sans-serif
+}
+div.font-opensans{
+    font-family:"Open Sans",sans-serif;
+    font-size:14px
+}
+/* div.rtl{ */
+div.rtl{
+    direction: rtl !important;   
+    text-align: right;
+}
+.sticky-top {
+    width: calc(100% - 280px);
+    position: fixed;
+}
+.marginTop{
+    margin-top: 7.2%!important;
+}

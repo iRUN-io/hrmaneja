@@ -1,0 +1,460 @@
+﻿@import '../base/colors';
+
+$t2-pink:           #e8769f;
+$t2-greenlight:     #cedd7a;
+$t2-purple:         #5a5278;
+$t2-orangelight:    #e4bd51;
+$t2-darkblue:       #2c2945;
+$t2-dark:           #39374e;
+$t2-lightdark:      #3f3d56;
+$t2-xlightdark:     #706e85;
+$t2-card:           #ffffff;
+$t2-xlight:         #f1f1f1;
+
+
+::selection {
+    color: $white; 
+    background: $t2-purple;
+}
+a,
+.btn-link{
+    color: $t2-purple;
+}
+.text-green,
+.text-info,
+.text-success,
+.text-danger,
+.text-primary,
+.text-warning,
+.mail-star.active,
+.page-title{ color: $t2-purple !important;}
+.badge-default{
+    background: $t2-lightdark;
+    color: $t2-xlight;
+}
+.loader{
+    color: $t2-purple;
+}
+.badge-primary{
+    background-color: $t2-purple;
+}
+.btn-primary{
+    background: $t2-purple;
+    color: $white;
+    border-color: $t2-purple;
+}
+.btn-info{
+    background-color: $t2-pink;
+    border-color: $t2-pink;
+}
+.nav-tabs .nav-link.active{
+    border-color: $t2-purple;
+    color: $t2-purple;
+}
+.form-control{
+    &:focus{
+        box-shadow: 0 0 0 0.2rem rgba($t2-purple,.25);
+    }
+}
+.card,
+.dropify-wrapper,
+.btn-primary{
+    border: 0;
+}
+.bg-primary,
+.bg-info,
+.bg-warning,
+.btn-success{
+    background-color: $t2-purple !important;
+    border: transparent;
+}
+.bg-success,
+.bg-danger,
+.badge-success,
+.progress-bar,
+.btn-danger,
+.btn-warning{
+    background-color: $t2-pink;
+    border: transparent;
+}
+
+.btn-outline-primary{
+    color: $t2-purple;
+    border-color: $t2-purple;
+    &:hover{
+        background-color: $t2-purple;
+        border-color: $t2-purple;
+    }
+}
+.custom-control-input:checked~.custom-control-label::before,
+.custom-radio .custom-control-input:disabled:checked~.custom-control-label::before,
+.custom-checkbox .custom-control-input:disabled:checked~.custom-control-label::before{
+    border-color: $t2-purple;
+    background-color: $t2-purple;
+}
+.custom-switch-input:checked ~ .custom-switch-indicator{
+    background: $t2-purple;
+}
+.selectgroup-input:checked+.selectgroup-button{
+    border-color: $t2-purple;
+    color: $t2-purple;
+    background: rgba($t2-purple, 0.2);
+}
+
+.imagecheck-figure:before{
+    color: $t2-pink !important;
+}
+.wizard > .steps .current a,
+.wizard > .steps .current a:hover,
+.wizard > .steps .current a:active,
+.wizard > .actions a,
+.wizard > .actions a:hover{
+    background: $t2-purple;
+}
+.wizard > .steps .done a,
+.wizard > .steps .done a:hover{
+    background: rgba($t2-purple, 0.2);
+    color: $t2-purple;
+}
+.table{
+    th{
+        color: $t2-darkblue;
+    }
+    &.table-custom{
+        td, th{
+            background: $t2-xlight;
+        }
+    }
+}
+.right_chat li.online .status{
+    background: $t2-purple;
+}
+
+.bg-blue,
+.bg-azure,
+.bg-indigo,
+.bg-purple,
+.bg-red,
+.bg-orange  { background-color: $t2-purple !important; }
+
+.bg-pink,
+.bg-yellow,
+.bg-lime,
+.bg-green,
+.bg-teal,
+.bg-cyan    { background-color: $t2-pink !important; }
+
+.bg-light-blue,
+.bg-light-azure,
+.bg-light-indigo,
+.bg-light-lime,
+.bg-light-green,
+.bg-light-teal    { background-color: rgba($t2-purple, 0.1); color: $t2-purple; }
+
+.bg-light-pink,
+.bg-light-red,
+.bg-light-orange,
+.bg-light-yellow,
+.bg-light-cyan    { background-color: rgba($t2-pink, 0.1); color: $t2-pink; }
+
+.bg-light-purple  { background-color: rgba($t2-orangelight, 0.1); color: $t2-orangelight; }
+.bg-light-gray    { background-color: rgba($gray-500, 0.1); color: $gray-500; }
+
+.avatar {
+    &.avatar-blue {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-azure {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-indigo {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-purple {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-pink {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-red {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-orange {
+        background-color: rgba($t2-purple, 0.1);
+        color: $t2-purple;
+    }
+    &.avatar-yellow {
+        background-color: rgba($t2-pink, 0.1);
+        color: $t2-pink;
+    }
+    &.avatar-lime {
+        background-color: rgba($t2-pink, 0.1);
+        color: $t2-pink;
+    }
+    &.avatar-green {
+        background-color: rgba($t2-pink, 0.1);
+        color: $t2-pink;
+    }
+    &.avatar-teal {
+        background-color: rgba($t2-pink, 0.1);
+        color: $t2-pink;
+    }
+    &.avatar-cyan {
+        background-color: rgba($t2-pink, 0.1);
+        color: $t2-pink;
+    }
+}
+
+
+body{
+    background-color: $t2-xlight;
+    color: $t2-darkblue;
+}
+
+.page-header .right .nav-pills .nav-link{
+    color: $t2-darkblue;
+}
+#header_top{
+    .brand-logo{
+        background: $t2-purple;
+    }
+}
+.header{
+    background: $t2-purple;
+    .nav-tabs{
+        .nav-link{
+            color: $white;
+            &.active{
+                border-color: $white; 
+            }
+        }            
+    }
+    .dropdown-menu .dropdown-item:hover,
+    .dropdown-menu .dropdown-item.active{
+        color: $t2-purple;
+    }
+}
+.page{
+    .section-white,
+    .section-body{
+        background: $t2-xlight;    
+    }
+}
+#header_top .nav-link{
+    color: $t2-darkblue;
+}
+.header_top{
+    &.dark{
+        background-color: $t2-dark !important;
+        .nav-link{
+            color: $t2-xlight !important;
+        }
+    }
+}
+.card{
+    background-color: $t2-card;
+    .card-options{
+        a{
+            color: $t2-purple;
+            &.btn{
+                color: $white;
+            }
+        }
+    }
+    &.card-fullscreen{
+        background-color: $t2-card !important;
+    }
+}
+
+.metismenu {
+    a{
+        color: $t2-darkblue;
+        &:hover{
+            color: $t2-purple;
+            border-color: $t2-purple;
+        }
+    }
+    .active{
+        > a{
+            color: $t2-purple;
+            border-color: $t2-purple;
+        }
+        ul{
+            .active{
+                a{
+                    color: $t2-purple;
+                    background: transparent;
+                }
+            }
+        }
+    }
+    &.grid{
+        >li{
+            &.active > a,
+            >a:hover{
+                background: rgba($t2-purple, 0.1);
+                color: $t2-purple;
+            }
+        }
+    }
+}
+.inbox .detail{
+    background: $white;
+}
+.file_folder a{
+    background: $white;
+    border-color: $t2-xlight;
+}
+.auth .auth_left{
+    background: $t2-card;
+}
+.gender_overview{
+    background: $t2-xlight;
+}
+.table-calendar-link{
+    background: $t2-purple;
+    &:hover{
+        background: $t2-dark;
+    }
+    &::before{
+        background: $t2-dark;
+    }
+}
+.theme_div{
+    background: $t2-card;
+}
+.ribbon {
+    .ribbon-box.green{
+        background: $t2-greenlight;
+        &::before{
+            border-color: $t2-greenlight;
+            border-right-color: transparent;
+        }
+    }
+    .ribbon-box.orange{
+        background: $t2-purple;
+        &::before{
+            border-color: $t2-purple;
+            border-right-color: transparent;
+        }
+    }
+    .ribbon-box.pink{
+        background: $t2-pink;
+        &::before{
+            border-color: $t2-pink;
+            border-right-color: transparent;
+        }
+    }
+    .ribbon-box.indigo{
+        background: $t2-orangelight;
+        &::before{
+            border-color: $t2-orangelight;
+            border-right-color: transparent;
+        }
+    }
+}
+.text-orange{
+    color: $t2-orangelight !important;
+}
+.tag-info{
+    background: $t2-purple;
+}
+.tag-success,
+.tag-green{
+    background: $t2-greenlight;
+}
+.tag-orange{
+    background: $t2-pink;
+}
+.tag-danger{
+    background: $t2-pink;
+}
+.bg-success{
+    background: $t2-greenlight !important;
+}
+.bg-danger{
+    background-color: $t2-pink !important;
+}
+.auth{
+    .auth_left{
+        background: $t2-dark;
+        .card{
+            padding: 20px;
+            right: -150px;
+            z-index: 99999;
+           
+            @media only screen and (max-width: 1024px) {
+                right: -50px;
+            }
+            @media only screen and (max-width: 992px) {
+                right: auto;
+            }
+        }
+    }    
+}
+
+// 
+.top_dark {
+    background-color: $t2-dark !important;
+}
+.sidebar_dark{
+    #left-sidebar{
+        background-color: $t2-dark !important;
+    }
+    #header_top .nav-link{
+        color: $t2-xlight !important;
+    }
+    .sidebar .metismenu {
+        .active {
+            > a{
+                color: $t2-orangelight;
+            }
+            ul .active a{
+                color: $t2-orangelight;
+            }
+        }
+    }
+}
+.iconcolor{
+    #header_top{
+        .nav-link{
+            color: $t2-orangelight !important;
+        }
+    }
+}
+.gradient{   
+    .custom-switch-input:checked ~ .custom-switch-indicator{
+        background: linear-gradient(45deg, $t2-purple, $t2-pink) !important;
+    }
+    .metismenu.grid>li.active>a,
+    .metismenu.grid>li>a:hover{
+        background: linear-gradient(45deg, $t2-purple, $t2-purple) !important;
+        color: $white;
+        border: 0;
+    }        
+    .btn-primary{
+        background: linear-gradient(45deg, $t2-purple, $t2-pink) !important;
+        border: 0;
+    }
+    .btn-dark{
+        background: linear-gradient(45deg, $gray-400, $gray-700) !important;
+    }
+    .bg-success,
+    .bg-danger,
+    .badge-success,
+    .progress-bar,
+    .btn-danger{
+        background: linear-gradient(45deg, $t2-purple, $t2-pink) !important;
+    }
+}
+.metismenu.grid{
+    >li>a{
+        border-color: $t2-purple; 
+    }
+}
