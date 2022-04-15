@@ -133,7 +133,7 @@ $(document).ready(function() {
             height: 350,
             type: 'bar',
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
         plotOptions: {
             bar: {
                 horizontal: false,
@@ -281,7 +281,7 @@ $(function(){
     }
     var plot = $.plot('#flotChart', [ getRandomData() ], {
         series: {
-            color: '#5a5278',
+            color: '#865bff',
             shadowSize: 0,
             lines: {
                 show: true,
@@ -301,7 +301,7 @@ $(function(){
             color: 'rgba(0,0,0,.06)',
             font: {
                 size: 10,
-                color: '#5a5278',
+                color: '#865bff',
                 family: 'Arial'
             },
             tickSize: 15

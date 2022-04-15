@@ -90,7 +90,7 @@ $(function() {
                 areaStyle: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                         offset: 0,
-                        color: '#5a5278',
+                        color: '#865bff',
                     }, {
                         offset: 1,
                         color: '#e4bd51',
@@ -178,7 +178,7 @@ $(function() {
             name: 'bar2',
             type: 'bar',
             data: data2,
-            color: '#5a5278',
+            color: '#865bff',
             
             animationDelay: function (idx) {
                 return idx * 5 + 100;
@@ -268,7 +268,7 @@ $(function() {
             {
                 name:'data2',
                 type:'bar',
-                color: '#5a5278',
+                color: '#865bff',
                 data:[2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
                 markPoint : {
                     data : [
@@ -400,7 +400,7 @@ $(function() {
                 })()
             },
             {
-                color: '#5a5278',
+                color: '#865bff',
                 name:'Latest transaction',
                 type:'line',
                 data:(function (){
@@ -493,8 +493,8 @@ $(function() {
                 },
                 {
                     itemStyle:{
-                        color: '#5a5278',
-                        borderColor: '#5a5278',
+                        color: '#865bff',
+                        borderColor: '#865bff',
                     },
                     value: [40, 40, 32, 42]
                 },
@@ -557,7 +557,7 @@ $(function() {
         },
         series: [{
             symbolSize: 15,
-            color: '#5a5278',
+            color: '#865bff',
             data: [
                 [10.0, 8.04],
                 [8.0, 6.95],
@@ -627,7 +627,7 @@ $(function() {
                     }
                 },
                 data:[
-                    {value:335, name:'Data1', itemStyle: {color: '#5a5278',}},
+                    {value:335, name:'Data1', itemStyle: {color: '#865bff',}},
                     {value:310, name:'Data2', itemStyle: {color: '#6f6593',}},
                     {value:234, name:'Data3', itemStyle: {color: '#8075aa',}},
                     {value:135, name:'Data4', itemStyle: {color: '#a192d9',}},
@@ -811,14 +811,14 @@ $(function() {
                 label: {
                     normal: {
                         textStyle: {
-                            color: '#5a5278',
+                            color: '#865bff',
                         }
                     }
                 },
                 labelLine: {
                     normal: {
                         lineStyle: {
-                            color: '#5a5278',
+                            color: '#865bff',
                         },
                         smooth: 0.2,
                         length: 10,
@@ -896,7 +896,7 @@ $(function() {
                 data: [18203, 23489, 29034, 104970, 131744, 630230]
             },
             {
-                color: '#5a5278',
+                color: '#865bff',
                 name: '2018',
                 type: 'bar',
                 data: [19325, 23438, 31000, 121594, 134141, 681807]
@@ -987,7 +987,7 @@ $(function() {
                         color: new echarts.graphic.LinearGradient(
                             0, 0, 0, 1,
                             [
-                                {offset: 0, color: '#5a5278'},
+                                {offset: 0, color: '#865bff'},
                                 {offset: 0.5, color: '#e4bd51'},
                                 {offset: 1, color: '#e4bd51'}
                             ]
@@ -997,8 +997,8 @@ $(function() {
                         color: new echarts.graphic.LinearGradient(
                             0, 0, 0, 1,
                             [
-                                {offset: 0, color: '#5a5278'},
-                                {offset: 0.7, color: '#5a5278'},
+                                {offset: 0, color: '#865bff'},
+                                {offset: 0.7, color: '#865bff'},
                                 {offset: 1, color: '#e4bd51'}
                             ]
                         )

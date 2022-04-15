@@ -16,7 +16,7 @@ $(document).ready(function() {
             },
         },
 
-        colors: ['#e8769f', '#5a5278', '#e4bd51'],
+        colors: ['#e8769f', '#865bff', '#e4bd51'],
         dataLabels: {
             enabled: false
         },
@@ -242,7 +242,7 @@ $(document).ready(function() {
                 shade: 'dark',
                 type: 'horizontal',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#5a5278'],
+                gradientToColors: ['#865bff'],
                 inverseColors: true,
                 opacityFrom: 1,
                 opacityTo: 1,
@@ -276,7 +276,7 @@ $(document).ready(function() {
                 top: 1
             }
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
         series: [{
             name: 'Male',
             data: [80, 50, 30, 40, 100, 20],
@@ -357,26 +357,26 @@ $(document).ready(function() {
         annotations: {
             yaxis: [{
                 y: 30,
-                borderColor: '#5a5278',
+                borderColor: '#865bff',
                 label: {
                     show: true,
                     text: 'Support',
                     style: {
                         color: "#fff",
-                        background: '#5a5278'
+                        background: '#865bff'
                     }
                 }
             }],
             xaxis: [{
             x: new Date('14 Nov 2012').getTime(),
-            borderColor: '#5a5278',
+            borderColor: '#865bff',
             yAxisIndex: 0,
             label: {
                 show: true,
                 text: 'Rally',
                 style: {
                     color: "#fff",
-                    background: '#5a5278'
+                    background: '#865bff'
                 }
             }
         }]
@@ -388,7 +388,7 @@ $(document).ready(function() {
                 show: false,
             },
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         dataLabels: {
             enabled: false
         },
@@ -793,7 +793,7 @@ $(function() {
         stroke: {
             width: 2
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
           data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54]
         }],
@@ -836,7 +836,7 @@ $(function() {
                 columnWidth: '80%'
             }
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
             data: [47, 45, 74, 14, 56, 74, 14, 11, 7, 39, 82]
         }],
@@ -879,7 +879,7 @@ $(function() {
         height: '30px',
         barSpacing: 6,
         barWidth: 2,
-        barColor: '#5a5278',        
+        barColor: '#865bff',        
     });    
 
     if( $('#world-map-markers').length > 0 ){

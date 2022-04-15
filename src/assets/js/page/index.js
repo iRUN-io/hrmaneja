@@ -42,7 +42,7 @@ $(function() {
             ],
             type: 'bar', // default type of chart
             colors: {
-                'data1': '#5a5278',
+                'data1': '#865bff',
                 'data2': '#6f6593',
                 'data3': '#8075aa',
                 'data4': '#a192d9',
@@ -93,7 +93,7 @@ $(function() {
                 [ 'data1', 'data2']
             ],
             colors: {
-                'data1': '#5a5278',
+                'data1': '#865bff',
                 'data2': '#e8769f',
             },
             names: {
@@ -171,7 +171,7 @@ $(function() {
                 ],
                 type: 'donut', // default type of chart
                 colors: {
-                    'data1': '#5a5278',
+                    'data1': '#865bff',
                     'data2': '#e8769f',
                 },
                 names: {

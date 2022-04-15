@@ -102,7 +102,7 @@ $(document).ready(function() {
         stroke: {
             width: 2
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         series: [{
             data: randomizeArray(sparklineData)
         }],
@@ -144,7 +144,7 @@ $(document).ready(function() {
         stroke: {
             width: 2
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
           data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54]
         }],
@@ -182,7 +182,7 @@ $(document).ready(function() {
         stroke: {
             width: 2
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
           data: [12, 14, 2, 47, 42, 15, 47, 75, 65, 19, 14]
         }],
@@ -224,7 +224,7 @@ $(document).ready(function() {
                 columnWidth: '80%'
             }
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
             data: [47, 45, 74, 14, 56, 74, 14, 11, 7, 39, 82]
         }],
@@ -272,7 +272,7 @@ $(document).ready(function() {
                 columnWidth: '80%'
             }
         },
-        colors:['#5a5278'],
+        colors:['#865bff'],
         series: [{
             data: [25, 66, 41, 89, 63, 25, 44, 12, 36, 9, 54]
         }],
@@ -321,7 +321,7 @@ $(document).ready(function() {
             },
         },
 
-        colors: ['#5a5278', '#e8769f', '#e4bd51'],
+        colors: ['#865bff', '#e8769f', '#e4bd51'],
         dataLabels: {
             enabled: false
         },
@@ -410,26 +410,26 @@ $(document).ready(function() {
         annotations: {
             yaxis: [{
                 y: 30,
-                borderColor: '#5a5278',
+                borderColor: '#865bff',
                 label: {
                     show: true,
                     text: 'Support',
                     style: {
                         color: "#fff",
-                        background: '#5a5278'
+                        background: '#865bff'
                     }
                 }
             }],
             xaxis: [{
             x: new Date('14 Nov 2012').getTime(),
-            borderColor: '#5a5278',
+            borderColor: '#865bff',
             yAxisIndex: 0,
             label: {
                 show: true,
                 text: 'Rally',
                 style: {
                     color: "#fff",
-                    background: '#5a5278'
+                    background: '#865bff'
                 }
             }
         }]
@@ -441,7 +441,7 @@ $(document).ready(function() {
                 show: false,
             },
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         dataLabels: {
             enabled: false
         },
@@ -846,7 +846,7 @@ $(document).ready(function() {
                 horizontal: true,                
             }
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
 
         series: [{
             name: 'Bob',            
@@ -920,7 +920,7 @@ $(document).ready(function() {
                 show: false,
             },
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         grid: {
             yaxis: {
                 lines: {
@@ -971,7 +971,7 @@ $(document).ready(function() {
         plotOptions: {
             candlestick: {
                 colors: {
-                    upward: '#5a5278',
+                    upward: '#865bff',
                     downward: '#e8769f',
                 },
                 wick: {
@@ -1249,7 +1249,7 @@ $(document).ready(function() {
             height: 350,
             type: 'bar',
         },
-        colors: ['#5a5278', '#e8769f', '#868e96'],
+        colors: ['#865bff', '#e8769f', '#868e96'],
         plotOptions: {
             bar: {
                 horizontal: false,
@@ -1314,7 +1314,7 @@ $(document).ready(function() {
         dataLabels: {
             enabled: false
         },
-        colors: ["#5a5278"],
+        colors: ["#865bff"],
         series: [{
                 name: 'Metric1',
                 data: generateData(18, {
@@ -1421,7 +1421,7 @@ $(document).ready(function() {
                 type: 'xy'
             }
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
         grid: {
             yaxis: {
                 lines: {
@@ -1475,7 +1475,7 @@ $(document).ready(function() {
                 show: false,
             },
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
         series: [{
             name: 'Website Blog',
             type: 'column',
@@ -1520,7 +1520,7 @@ $(document).ready(function() {
             height: 350,
             type: 'radar',
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         series: [{
             name: 'Series 1',
             data: [80, 50, 30, 40, 100, 20],
@@ -1549,7 +1549,7 @@ $(document).ready(function() {
                 top: 1
             }
         },
-        colors: ['#5a5278', '#e8769f', '#868e96'],
+        colors: ['#865bff', '#e8769f', '#868e96'],
         series: [{
             name: 'Series 1',
             data: [80, 50, 30, 40, 100, 20],
@@ -1626,11 +1626,11 @@ $(document).ready(function() {
                 }
             }
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         markers: {
             size: 4,
             colors: ['#fff'],
-            strokeColor: '#5a5278',
+            strokeColor: '#865bff',
             strokeWidth: 2,
         },
         tooltip: {
@@ -1674,7 +1674,7 @@ $(document).ready(function() {
             horizontalAlign: 'left',
             show: true,
         },
-        colors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9'],
+        colors: ['#865bff', '#6f6593', '#8075aa', '#a192d9'],
         series: [44, 55, 41, 17],
         responsive: [{
             breakpoint: 480,
@@ -1730,7 +1730,7 @@ $(document).ready(function() {
             height: 250,
             type: 'radialBar',
         },
-        colors: ['#5a5278', '#e4bd51', '#e8769f', '#6c7989'],
+        colors: ['#865bff', '#e4bd51', '#e8769f', '#6c7989'],
         plotOptions: {
             radialBar: {
                 dataLabels: {
@@ -1831,7 +1831,7 @@ $(document).ready(function() {
                 shade: 'dark',
                 type: 'horizontal',
                 shadeIntensity: 0.5,
-                gradientToColors: ['#5a5278'],
+                gradientToColors: ['#865bff'],
                 inverseColors: true,
                 opacityFrom: 1,
                 opacityTo: 1,
@@ -1860,7 +1860,7 @@ $(document).ready(function() {
             height: 250,
             type: 'radialBar',
         },
-        colors: ['#5a5278'],
+        colors: ['#865bff'],
         plotOptions: {
             radialBar: {
                 startAngle: -135,
@@ -1938,7 +1938,7 @@ $(document).ready(function() {
                 show: false,
             },
         },
-        colors: ['#5a5278', '#e8769f'],
+        colors: ['#865bff', '#e8769f'],
         dataLabels: {
             enabled: false
         },

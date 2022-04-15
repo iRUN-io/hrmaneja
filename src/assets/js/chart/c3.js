@@ -15,7 +15,7 @@ $(function() {
                 colors: {
                     'data1': '#706e85',
                     'data2': '#cedd7a',
-                    'data3': '#5a5278'
+                    'data3': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -53,7 +53,7 @@ $(function() {
                 type: 'line', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -89,7 +89,7 @@ $(function() {
                 type: 'area', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -125,7 +125,7 @@ $(function() {
                 type: 'area-spline', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -164,7 +164,7 @@ $(function() {
                 ],
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -201,7 +201,7 @@ $(function() {
                 type: 'spline', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -237,7 +237,7 @@ $(function() {
                 type: 'spline', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -274,7 +274,7 @@ $(function() {
                 type: 'step', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -310,7 +310,7 @@ $(function() {
                 type: 'area-step', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -346,7 +346,7 @@ $(function() {
                 type: 'bar', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -385,7 +385,7 @@ $(function() {
                 type: 'bar', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -428,7 +428,7 @@ $(function() {
                 ],
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -469,7 +469,7 @@ $(function() {
                 type: 'pie', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278',
+                    'data2': '#865bff',
                     'data3': '#6c7989',
                     'data4': '#9aa2ac'
                 },
@@ -503,7 +503,7 @@ $(function() {
                 ],
                 type: 'donut', // default type of chart
                 colors: {
-                    'data1': '#5a5278',
+                    'data1': '#865bff',
                     'data2': '#cedd7a'
                 },
                 names: {
@@ -535,7 +535,7 @@ $(function() {
                 type: 'scatter', // default type of chart
                 colors: {
                     'data1': '#cedd7a',
-                    'data2': '#5a5278'
+                    'data2': '#865bff'
                 },
                 names: {
                     // name of each serie
@@ -579,9 +579,9 @@ $(function() {
                     [ 'data1', 'data4']
                 ],
                 colors: {
-                    'data1': '#5a5278',
-                    'data2': '#5a5278',
-                    'data3': '#5a5278',
+                    'data1': '#865bff',
+                    'data2': '#865bff',
+                    'data3': '#865bff',
                     'data4': '#cedd7a'
                 },
                 names: {

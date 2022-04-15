@@ -28,10 +28,10 @@ function drawDocSparklines() {
             height: '1.5em',
             width: '8em',
             lineColor: '#f00',
-            fillColor: '#5a5278',
+            fillColor: '#865bff',
             minSpotColor: false,
             maxSpotColor: false,
-            spotColor: '#5a5278',
+            spotColor: '#865bff',
             spotRadius: 3,
         });
 
@@ -49,7 +49,7 @@ function drawDocSparklines() {
     // Tri-state charts using inline values
     $('.sparktristate').sparkline('html', { type: 'tristate' });
     $('.sparktristatecols').sparkline('html',
-        { type: 'tristate', colorMap: { '-2': '#fa7', '2': '#5a5278' } });
+        { type: 'tristate', colorMap: { '-2': '#fa7', '2': '#865bff' } });
 
     // Composite line charts, the second using values supplied via javascript
     $('#compositeline').sparkline('html', { fillColor: false, changeRangeMin: 0, chartRangeMax: 10 });
@@ -60,7 +60,7 @@ function drawDocSparklines() {
     $('#normalline').sparkline('html',
         { fillColor: false, normalRangeMin: -1, normalRangeMax: 8 });
     $('#normalExample').sparkline('html',
-        { fillColor: false, normalRangeMin: 80, normalRangeMax: 95, normalRangeColor: '#5a5278' });
+        { fillColor: false, normalRangeMin: 80, normalRangeMax: 95, normalRangeColor: '#865bff' });
 
     // Discrete charts
     $('.discrete1').sparkline('html',
@@ -327,7 +327,7 @@ function SparklineCustom() {
         chartRangeMax: 50,
         resize: true,
         lineColor: '#51aaed',
-        fillColor: '#5a5278',
+        fillColor: '#865bff',
         highlightLineColor: 'rgba(0,0,0,.1)',
         highlightSpotColor: 'rgba(0,0,0,.2)',
     });

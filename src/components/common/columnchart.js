@@ -33,7 +33,7 @@ class Columnchart extends Component {
                 },
                 legend: {
                     markers: {
-                        fillColors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                        fillColors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                     }
                 },
                 stroke: {
@@ -51,7 +51,7 @@ class Columnchart extends Component {
                 },
                 fill: {
                     opacity: 1,
-                    colors: ['#5a5278', '#6f6593', '#8075aa']
+                    colors: ['#865bff', '#6f6593', '#8075aa']
                 },
                 tooltip: {
                     y: {

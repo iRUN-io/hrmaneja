@@ -54,7 +54,7 @@ class Timelinechart extends Component {
                     type: 'datetime'
                 },
                 fill: {
-                    colors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                    colors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                 },
             },
 

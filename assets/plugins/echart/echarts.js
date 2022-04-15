@@ -520,7 +520,7 @@ $(function() {
                     }
                 },
                 data:[
-                    {value:335, name:'Data1', itemStyle: {color: '#5a5278',}},
+                    {value:335, name:'Data1', itemStyle: {color: '#865bff',}},
                     {value:310, name:'Data2', itemStyle: {color: '#6f6593',}},
                     {value:234, name:'Data3', itemStyle: {color: '#8075aa',}},
                     {value:135, name:'Data4', itemStyle: {color: '#a192d9',}},

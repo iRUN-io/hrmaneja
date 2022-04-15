@@ -269,7 +269,7 @@ class Candlestick extends Component {
                         enabled: true
                     }
                 }, fill: {
-                    colors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                    colors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                 }
             },
 

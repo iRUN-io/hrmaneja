@@ -343,7 +343,7 @@ class Areachart extends Component {
                 },
                 fill: {
                     type: 'gradient',
-                    // colors: ['#5a5278', '#e8769f'],
+                    // colors: ['#865bff', '#e8769f'],
                     gradient: {
                         shadeIntensity: 1,
                         opacityFrom: 0.7,

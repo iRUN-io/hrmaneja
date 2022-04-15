@@ -865,7 +865,7 @@ class Menu extends Component {
 						</div>
 						<div className={`user_div ${isOpenUserMenu && 'open'}`}>
 							<h5 className="brand-name mb-4">
-								Epic HR
+								HrManeja
 							<p className="user_btn" onClick={this.toggleUserMenu}>
 									<i className="icon-logout" />
 								</p>
@@ -1109,7 +1109,7 @@ class Menu extends Component {
 							</div>
 						</div>
 						<div id="left-sidebar" className="sidebar ">
-							<h5 className="brand-name">Epic HR</h5>
+							<h5 className="brand-name">HrManeja</h5>
 							<nav id="left-sidebar-nav" className="sidebar-nav">
 								<MetisMenu className=""
 									content={content}

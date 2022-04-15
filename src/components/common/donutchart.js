@@ -13,12 +13,12 @@ class Donutchart extends Component {
                 },
                 labels: ['USA', 'UK', 'Australia ', 'Europe'],
                 fill: {
-                    colors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                    colors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                 },
                 legend: {
                     position: 'bottom',
                     markers: {
-                        fillColors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                        fillColors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                     }
                 },
                 dataLabels: {

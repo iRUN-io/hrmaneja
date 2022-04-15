@@ -32,7 +32,7 @@ $(function() {
                     [ 'data1', 'data4']
                 ],
                 colors: {
-                    'data1': '#5a5278',
+                    'data1': '#865bff',
                     'data2': '#e8769f',
                     'data3': '#e8769f',
                     'data4': '#cedd7a'

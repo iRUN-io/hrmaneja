@@ -119,7 +119,7 @@ export default class ChartsKnob extends Component {
 											data-width={125}
 											data-height={125}
 											data-thickness="0.25"
-											data-fgcolor="#5a5278"
+											data-fgcolor="#865bff"
 										/>
 									</div>
 								</div>
@@ -137,7 +137,7 @@ export default class ChartsKnob extends Component {
 											data-width={125}
 											data-height={125}
 											data-thickness="0.25"
-											data-fgcolor="#5a5278"
+											data-fgcolor="#865bff"
 											readOnly
 										/>
 									</div>
@@ -159,7 +159,7 @@ export default class ChartsKnob extends Component {
 											data-thickness="0.2"
 											data-anglearc={270}
 											data-angleoffset={90}
-											data-fgcolor="#5a5278"
+											data-fgcolor="#865bff"
 										/>
 									</div>
 								</div>

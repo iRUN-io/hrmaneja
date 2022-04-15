@@ -58,12 +58,12 @@ class Stackedchart extends Component {
                     offsetX: -5,
                     offsetY: 5,
                     markers: {
-                        fillColors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                        fillColors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                     }
                 },
                 fill: {
                     opacity: 1,
-                    colors: ['#5a5278', '#6f6593', '#8075aa', '#a192d9']
+                    colors: ['#865bff', '#6f6593', '#8075aa', '#a192d9']
                 },
                 tooltip: {
                     style: {
