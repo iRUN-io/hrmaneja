@@ -242,158 +242,158 @@ class Menu extends Component {
 					}
 				]
 			},
-			{
-				"id": 13,
-				"icon": "icon-cup",
-				"label": "Project",
-				content: [
-					{
-						"id": 14,
-						"label": "Dashboard",
-						"to": "/project-dashboard"
-					},
-					{
-						"id": 15,
-						"label": "Project List",
-						"to": "/project-list"
-					},
-					{
-						"id": 16,
-						"label": "Taskboard",
-						"to": "/project-taskboard"
-					},
-					{
-						"id": 17,
-						"label": "Ticket List",
-						"to": "/project-ticket"
-					},
-					{
-						"id": 18,
-						"label": "Ticket Details",
-						"to": "/project-ticket-details"
-					},
-					{
-						"id": 19,
-						"label": "Clients",
-						"to": "/project-clients"
-					},
-					{
-						"id": 20,
-						"label": "Todo List",
-						"to": "/project-todo"
-					}
-				]
-			},
-			{
-				"id": 21,
-				"icon": "icon-briefcase",
-				"label": "Job Portal",
-				content: [
-					{
-						"id": 22,
-						"label": "Job Dashboard",
-						"to": "/jobportal-dashboard"
-					},
-					{
-						"id": 23,
-						"label": "Positions",
-						"to": "/jobportal-positions"
-					},
-					{
-						"id": 24,
-						"label": "Applicant",
-						"to": "/jobportal-applicants"
-					},
-					{
-						"id": 25,
-						"label": "Resumes",
-						"to": "/jobportal-resumes"
-					},
-					{
-						"id": 26,
-						"label": "Settings",
-						"to": "/jobportal-settings"
-					}
-				]
-			},
-			{
-				"id": 27,
-				"icon": "icon-lock",
-				"label": "Authentication",
-				content: [
-					{
-						"id": 28,
-						"label": "Login",
-						"to": "/login"
-					},
-					{
-						"id": 29,
-						"label": "Register",
-						"to": "/signup"
-					},
-					{
-						"id": 30,
-						"label": "Forgot Password",
-						"to": "/forgotpassword"
-					},
-					{
-						"id": 31,
-						"label": "404 error",
-						"to": "/notfound"
-					},
-					{
-						"id": 32,
-						"label": "500 Error",
-						"to": "/internalserver"
-					}
-				]
-			},
-			{
-				"id": 'UiElements',
-				"label": "Ui Elements"
-			},
-			{
-				"id": 33,
-				"icon": "icon-tag",
-				"label": "Icons",
-				"to": "/icons",
-			},
-			{
-				"id": 34,
-				"icon": "icon-bar-chart",
-				"label": "Charts",
-				"to": "/charts",
-			},
-			{
-				"id": 35,
-				"icon": "icon-layers",
-				"label": "Forms",
-				"to": "/forms",
-			},
-			{
-				"id": 36,
-				"icon": "icon-tag",
-				"label": "Tables",
-				"to": "/tables",
-			},
-			{
-				"id": 37,
-				"icon": "icon-puzzle",
-				"label": "Widgets",
-				"to": "/widgets",
-			},
-			{
-				"id": 38,
-				"icon": "icon-map",
-				"label": "Maps",
-				"to": "/maps",
-			},
-			{
-				"id": 39,
-				"icon": "icon-picture",
-				"label": "Gallery",
-				"to": "/gallery",
-			},
+			// {
+			// 	"id": 13,
+			// 	"icon": "icon-cup",
+			// 	"label": "Project",
+			// 	content: [
+			// 		{
+			// 			"id": 14,
+			// 			"label": "Dashboard",
+			// 			"to": "/project-dashboard"
+			// 		},
+			// 		{
+			// 			"id": 15,
+			// 			"label": "Project List",
+			// 			"to": "/project-list"
+			// 		},
+			// 		{
+			// 			"id": 16,
+			// 			"label": "Taskboard",
+			// 			"to": "/project-taskboard"
+			// 		},
+			// 		{
+			// 			"id": 17,
+			// 			"label": "Ticket List",
+			// 			"to": "/project-ticket"
+			// 		},
+			// 		{
+			// 			"id": 18,
+			// 			"label": "Ticket Details",
+			// 			"to": "/project-ticket-details"
+			// 		},
+			// 		{
+			// 			"id": 19,
+			// 			"label": "Clients",
+			// 			"to": "/project-clients"
+			// 		},
+			// 		{
+			// 			"id": 20,
+			// 			"label": "Todo List",
+			// 			"to": "/project-todo"
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	"id": 21,
+			// 	"icon": "icon-briefcase",
+			// 	"label": "Job Portal",
+			// 	content: [
+			// 		{
+			// 			"id": 22,
+			// 			"label": "Job Dashboard",
+			// 			"to": "/jobportal-dashboard"
+			// 		},
+			// 		{
+			// 			"id": 23,
+			// 			"label": "Positions",
+			// 			"to": "/jobportal-positions"
+			// 		},
+			// 		{
+			// 			"id": 24,
+			// 			"label": "Applicant",
+			// 			"to": "/jobportal-applicants"
+			// 		},
+			// 		{
+			// 			"id": 25,
+			// 			"label": "Resumes",
+			// 			"to": "/jobportal-resumes"
+			// 		},
+			// 		{
+			// 			"id": 26,
+			// 			"label": "Settings",
+			// 			"to": "/jobportal-settings"
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	"id": 27,
+			// 	"icon": "icon-lock",
+			// 	"label": "Authentication",
+			// 	content: [
+			// 		{
+			// 			"id": 28,
+			// 			"label": "Login",
+			// 			"to": "/login"
+			// 		},
+			// 		{
+			// 			"id": 29,
+			// 			"label": "Register",
+			// 			"to": "/signup"
+			// 		},
+			// 		{
+			// 			"id": 30,
+			// 			"label": "Forgot Password",
+			// 			"to": "/forgotpassword"
+			// 		},
+			// 		{
+			// 			"id": 31,
+			// 			"label": "404 error",
+			// 			"to": "/notfound"
+			// 		},
+			// 		{
+			// 			"id": 32,
+			// 			"label": "500 Error",
+			// 			"to": "/internalserver"
+			// 		}
+			// 	]
+			// },
+			// {
+			// 	"id": 'UiElements',
+			// 	"label": "Ui Elements"
+			// },
+			// {
+			// 	"id": 33,
+			// 	"icon": "icon-tag",
+			// 	"label": "Icons",
+			// 	"to": "/icons",
+			// },
+			// {
+			// 	"id": 34,
+			// 	"icon": "icon-bar-chart",
+			// 	"label": "Charts",
+			// 	"to": "/charts",
+			// },
+			// {
+			// 	"id": 35,
+			// 	"icon": "icon-layers",
+			// 	"label": "Forms",
+			// 	"to": "/forms",
+			// },
+			// {
+			// 	"id": 36,
+			// 	"icon": "icon-tag",
+			// 	"label": "Tables",
+			// 	"to": "/tables",
+			// },
+			// {
+			// 	"id": 37,
+			// 	"icon": "icon-puzzle",
+			// 	"label": "Widgets",
+			// 	"to": "/widgets",
+			// },
+			// {
+			// 	"id": 38,
+			// 	"icon": "icon-map",
+			// 	"label": "Maps",
+			// 	"to": "/maps",
+			// },
+			// {
+			// 	"id": 39,
+			// 	"icon": "icon-picture",
+			// 	"label": "Gallery",
+			// 	"to": "/gallery",
+			// },
 		];
 		const { isOpenRightSidebar, isOpenUserMenu } = this.state
 		const { darkMinSidebar, istoggleLeftMenu, friendListOpen, statisticsOpen, statisticsClose, friendListClose } = this.props

@@ -9,6 +9,7 @@ class Users extends Component {
 		return (
 			<>
 				<div>
+					<div>
 					<div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
 						<div className="container-fluid">
 							<div className="d-flex justify-content-between align-items-center">
@@ -29,12 +30,12 @@ class Users extends Component {
 										</a>
 									</li>
 								</ul>
-								<div className="header-action">
+								{/* <div className="header-action">
 									<button type="button" className="btn btn-primary">
 										<i className="fe fe-plus mr-2" />
 										Add
 									</button>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
@@ -706,6 +707,7 @@ class Users extends Component {
 							</div>
 						</div>
 					</div>
+				</div>
 
 				</div>
 			</>
