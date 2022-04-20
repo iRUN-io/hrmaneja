@@ -15,6 +15,20 @@ export async function getAllDepartments(userId, ref) {
   });
 }
 
+export async function getDepartment(userId, id) {
+  return request(`${API_URL}/api/department/${userId}?id=${id}`, {
+    method: 'get',
+    headers: {
+       'Content-Type': 'application/json',
+       'Authorization': USER_TOKEN,
+    },
+    params: {
+      userId: userId,
+      id: id,
+    },
+  });
+}
+
 export async function createDepartment(body, userId) {
   return request(`${API_URL}/api/department/${userId}`, {
     method: 'post',

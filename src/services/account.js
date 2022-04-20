@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllUsers(userId, ref) {
-  return request(`${API_URL}/api/user/${userId}?ref=${ref}`, {
+export async function getAllAccounts(userId, ref) {
+  return request(`${API_URL}/api/account/${userId}?ref=${ref}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -15,8 +15,8 @@ export async function getAllUsers(userId, ref) {
   });
 }
 
-export async function getUser(userId, id) {
-  return request(`${API_URL}/api/user/${userId}?id=${id}`, {
+export async function getAccount(userId, id) {
+  return request(`${API_URL}/api/account/${userId}?id=${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -29,8 +29,8 @@ export async function getUser(userId, id) {
   });
 }
 
-export async function createUser(body, userId) {
-  return request(`${API_URL}/api/user/${userId}`, {
+export async function createAccount(body, userId) {
+  return request(`${API_URL}/api/account/${userId}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -40,8 +40,8 @@ export async function createUser(body, userId) {
   });
 }
 
-export async function updateUser(body, userId, myUserId) {
-  return request(`${API_URL}/api/user/${userId}?id=${myUserId}`, {
+export async function updateAccount(body, userId, myUserId) {
+  return request(`${API_URL}/api/account/${userId}?id=${myUserId}`, {
     method: 'patch',
     headers: {
       'Content-Type': 'application/json',
@@ -52,8 +52,8 @@ export async function updateUser(body, userId, myUserId) {
 }
 
 
-export async function deleteUser(userId, myUserId, ref) {
-  return request(`${API_URL}/api/user/${userId}?id=${myUserId}&ref=${ref}`, {
+export async function deleteAccount(userId, myUserId, ref) {
+  return request(`${API_URL}/api/account/${userId}?id=${myUserId}&ref=${ref}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',

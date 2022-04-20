@@ -15,6 +15,20 @@ export async function getAllPayrolls(userId, ref) {
   });
 }
 
+export async function getPayroll(userId, id) {
+  return request(`${API_URL}/api/payroll/${userId}?id=${id}`, {
+    method: 'get',
+    headers: {
+       'Content-Type': 'application/json',
+       'Authorization': USER_TOKEN,
+    },
+    params: {
+      userId: userId,
+      id: id,
+    },
+  });
+}
+
 export async function createPayroll(body, userId) {
   return request(`${API_URL}/api/payroll/${userId}`, {
     method: 'post',

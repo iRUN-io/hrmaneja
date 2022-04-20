@@ -15,6 +15,20 @@ export async function getAllEmployees(userId, ref) {
   });
 }
 
+export async function getEmployee(userId, id) {
+    return request(`${API_URL}/api/employee/${userId}?id=${id}`, {
+      method: 'get',
+      headers: {
+         'Content-Type': 'application/json',
+         'Authorization': USER_TOKEN,
+      },
+      params: {
+        userId: userId,
+        id: id,
+      },
+    });
+  }
+
 export async function createEmployee(body, userId) {
   return request(`${API_URL}/api/employee/${userId}`, {
     method: 'post',
