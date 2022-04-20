@@ -7,8 +7,6 @@ class Applicants extends Component {
 		const { fixNavbar } = this.props;
 		return (
 			<>
-
-
 				<div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
 					<div className="container-fluid">
 						<div className="row clearfix">

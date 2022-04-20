@@ -1,10 +1,37 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { loginUser } from "../../services/auth";
+import { setUserSession } from '../../config/common';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export default class Login extends Component {
-	render() {
+	const Login = () => {
+		const [email, setUserName] = useState();
+		const [password, setPassword] = useState();
+		const handleSubmit = async e => {
+		  e.preventDefault();
+		  const response = await loginUser({
+			email,
+			password
+		  });
+		  try {
+		  if ('token' in response.data) {
+			toast.success('Logged in successfully !')
+			  setUserSession(response.data.token, response.data);
+			  window.location.href = "/";
+		  } else {
+			toast.error("Failed");
+		  }
+		} catch (error) {
+		  console.log('error', error);
+		  if (response.data.status === 'error') 
+		  toast.error(response.data.message);
+		  else toast.error("Something went wrong. Please try again later.");
+		}
+		};
 		return (
 			<div className="auth">
+				<ToastContainer/>
 				<div className="auth_left">
 					<div className="card">
 						<div className="text-center mb-2">
@@ -12,6 +39,7 @@ export default class Login extends Component {
 								<i className="fe fe-command brand-logo" />
 							</Link>
 						</div>
+						<form  noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
 							<div className="form-group">
@@ -28,6 +56,7 @@ export default class Login extends Component {
 									id="exampleInputEmail1"
 									aria-describedby="emailHelp"
 									placeholder="Enter email"
+									onChange={e => setUserName(e.target.value)}
 								/>
 							</div>
 							<div className="form-group">
@@ -42,6 +71,7 @@ export default class Login extends Component {
 									className="form-control"
 									id="exampleInputPassword1"
 									placeholder="Password"
+									onChange={e => setPassword(e.target.value)}
 								/>
 							</div>
 							<div className="form-group">
@@ -51,11 +81,12 @@ export default class Login extends Component {
 								</label>
 							</div>
 							<div className="form-footer">
-								<a className="btn btn-primary btn-block" href="/">
+								<button type='submit' className="btn btn-primary btn-block" href="/">
 									Click to login
-								</a>
+								</button>
 							</div>
 						</div>
+						</form>
 						<div className="text-center text-muted">
 							Don't have account yet? <Link to="/signup">Sign Up</Link>
 						</div>
@@ -91,4 +122,6 @@ export default class Login extends Component {
 			</div>
 		);
 	}
-}
+
+export default Login;
+

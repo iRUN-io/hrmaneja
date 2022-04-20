@@ -1,16 +1,24 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+
+import { getAllUsers } from '../../../services/user'
 
 
-class Users extends Component {
+const Login = (navStatus) => {
+const [customers, setCustomers] = useState([]);
+		useEffect(() => {
+			async function fetchData() {
+				const userId = "c59c1cfb-1c16-4b48-937a-917f7548b798"; // to be gotten from local storage
+				const ref = "428a580735fa1c8a1d78"; // to be gotten from local storage
+			  	const response = await getAllUsers(userId, ref);
+			  setCustomers(response?.data);
+			}
+			fetchData();
+		}, []);
 
-	render() {
-		const { fixNavbar } = this.props;
 		return (
 			<>
 				<div>
 					<div>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
 						<div className="container-fluid">
 							<div className="d-flex justify-content-between align-items-center">
 								<ul className="nav nav-tabs page-header-tab">
@@ -78,6 +86,7 @@ class Users extends Component {
 														</tr>
 													</thead>
 													<tbody>
+														{customers.map((customer) => (
 														<tr>
 															<td className="width45">
 																<span
@@ -100,6 +109,7 @@ class Users extends Component {
 															<td>CEO and Founder</td>
 															<td />
 														</tr>
+														))}
 														<tr>
 															<td>
 																<img
@@ -138,272 +148,7 @@ class Users extends Component {
 																</button>
 															</td>
 														</tr>
-														<tr>
-															<td>
-																<img
-																	src="../assets/images/xs/avatar2.jpg"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	alt="Avatar"
-																	className="avatar"
-																	data-original-title="Avatar Name"
-																/>
-															</td>
-															<td>
-																<h6 className="mb-0">Debra Stewart</h6>
-																<span>debra@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-default">Employee</span>
-															</td>
-															<td>21 July, 2015</td>
-															<td>Team Lead</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span
-																	className="avatar avatar-green"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	data-original-title="Avatar Name"
-																>
-																	KH
-																</span>
-															</td>
-															<td>
-																<h6 className="mb-0">Erin Gonzales</h6>
-																<span>Erinonzales@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-default">Employee</span>
-															</td>
-															<td>21 July, 2015</td>
-															<td>Web Developer</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<img
-																	src="../assets/images/xs/avatar3.jpg"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	alt="Avatar"
-																	className="avatar"
-																	data-original-title="Avatar Name"
-																/>
-															</td>
-															<td>
-																<h6 className="mb-0">Susie Willis</h6>
-																<span>sussie-w@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-info">Admin</span>
-															</td>
-															<td>28 Jun, 2015</td>
-															<td>Team Lead</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<img
-																	src="../assets/images/xs/avatar4.jpg"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	alt="Avatar"
-																	className="avatar"
-																	data-original-title="Avatar Name"
-																/>
-															</td>
-															<td>
-																<h6 className="mb-0">Debra Stewart</h6>
-																<span>debra@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-default">Employee</span>
-															</td>
-															<td>21 July, 2015</td>
-															<td>Team Lead</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<img
-																	src="../assets/images/xs/avatar5.jpg"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	alt="Avatar"
-																	className="avatar"
-																	data-original-title="Avatar Name"
-																/>
-															</td>
-															<td>
-																<h6 className="mb-0">Erin Gonzales</h6>
-																<span>Erinonzales@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-default">Employee</span>
-															</td>
-															<td>21 July, 2016</td>
-															<td>Web Developer</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<img
-																	src="../assets/images/xs/avatar6.jpg"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	alt="Avatar"
-																	className="avatar"
-																	data-original-title="Avatar Name"
-																/>
-															</td>
-															<td>
-																<h6 className="mb-0">Ava Alexander</h6>
-																<span>alexander@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-success">HR Admin</span>
-															</td>
-															<td>21 July, 2016</td>
-															<td>HR</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span
-																	className="avatar avatar-green"
-																	data-toggle="tooltip"
-																	data-placement="top"
-																	data-original-title="Avatar Name"
-																>
-																	KH
-																</span>
-															</td>
-															<td>
-																<h6 className="mb-0">Ava Alexander</h6>
-																<span>alexander@gmail.com</span>
-															</td>
-															<td>
-																<span className="tag tag-success">HR Admin</span>
-															</td>
-															<td>21 July, 2019</td>
-															<td>HR</td>
-															<td>
-																<button
-																	type="button"
-																	className="btn btn-icon"
-																	title="Edit"
-																>
-																	<i className="fa fa-edit" />
-																</button>
-																<button
-																	type="button"
-																	className="btn btn-icon js-sweetalert"
-																	title="Delete"
-																	data-type="confirm"
-																>
-																	<i className="fa fa-trash-o text-danger" />
-																</button>
-															</td>
-														</tr>
+
 													</tbody>
 												</table>
 											</div>
@@ -709,14 +454,9 @@ class Users extends Component {
 					</div>
 				</div>
 
-				</div>
+				{/* </div> */}
 			</>
 		);
 	}
-}
-const mapStateToProps = state => ({
-	fixNavbar: state.settings.isFixNavbar
-})
 
-const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Users);
+export default Login;

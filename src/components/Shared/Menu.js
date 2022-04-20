@@ -398,7 +398,7 @@ class Menu extends Component {
 		const { isOpenRightSidebar, isOpenUserMenu } = this.state
 		const { darkMinSidebar, istoggleLeftMenu, friendListOpen, statisticsOpen, statisticsClose, friendListClose } = this.props
 		const pageHeading = Routes.filter((route) => route.path === this.props.location.pathname)
-		
+
 		return (
 			<>
 				<div className={`${istoggleLeftMenu ? "offcanvas-active" : ""}`}>

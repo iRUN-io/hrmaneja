@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllUsers(userId, ref) {
-  return request(`${API_URL}/api/user/${userId}?ref=${ref}`, {
+export async function getAllUsers(userId) {
+  return request(`${API_URL}/api/user/${userId}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -10,7 +10,6 @@ export async function getAllUsers(userId, ref) {
     },
     params: {
       id: userId,
-      ref: ref,
     },
   });
 }
