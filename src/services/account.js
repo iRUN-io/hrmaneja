@@ -2,7 +2,7 @@ import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllAccounts(userId, ref) {
-  return request(`${API_URL}/api/account/${userId}?ref=${ref}`, {
+  return request(`${API_URL}/api/account/${userId}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export async function updateAccount(body, userId, myUserId) {
 
 
 export async function deleteAccount(userId, myUserId, ref) {
-  return request(`${API_URL}/api/account/${userId}?id=${myUserId}&ref=${ref}`, {
+  return request(`${API_URL}/api/account/${userId}?id=${myUserId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',

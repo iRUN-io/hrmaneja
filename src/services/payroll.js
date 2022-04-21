@@ -1,36 +1,35 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN } from '../config/config';
+import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
 
-export async function getAllPayrolls(userId, ref) {
-  return request(`${API_URL}/api/payroll/${userId}?ref=${ref}`, {
+export async function getAllPayrolls(ref) {
+  return request(`${API_URL}/api/payroll/${USER_ID}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
     params: {
-      id: userId,
-      ref: ref,
+      id: USER_ID,
     },
   });
 }
 
-export async function getPayroll(userId, id) {
-  return request(`${API_URL}/api/payroll/${userId}?id=${id}`, {
+export async function getPayroll(id) {
+  return request(`${API_URL}/api/payroll/${USER_ID}?id=${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
     params: {
-      userId: userId,
+      userId: USER_ID,
       id: id,
     },
   });
 }
 
-export async function createPayroll(body, userId) {
-  return request(`${API_URL}/api/payroll/${userId}`, {
+export async function createPayroll(body) {
+  return request(`${API_URL}/api/payroll/${USER_ID}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -40,8 +39,8 @@ export async function createPayroll(body, userId) {
   });
 }
 
-export async function updatePayroll(body, userId, payrollId) {
-  return request(`${API_URL}/api/payroll/${userId}?id=${payrollId}`, {
+export async function updatePayroll(body, payrollId) {
+  return request(`${API_URL}/api/payroll/${payrollId}`, {
     method: 'patch',
     headers: {
       'Content-Type': 'application/json',
@@ -52,16 +51,15 @@ export async function updatePayroll(body, userId, payrollId) {
 }
 
 
-export async function deletePayroll(userId, payrollId, ref) {
-  return request(`${API_URL}/api/payroll/${userId}?id=${payrollId}&ref=${ref}`, {
+export async function deletePayroll(payrollId) {
+  return request(`${API_URL}/api/payroll/${payrollId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,
     },
     params: {
-      id: userId,
-      ref: ref,
+      payrollId: payrollId,
     },
   });
 }

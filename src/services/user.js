@@ -1,35 +1,35 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN } from '../config/config';
+import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
 
-export async function getAllUsers(userId) {
-  return request(`${API_URL}/api/user/${userId}`, {
+export async function getAllUsers() {
+  return request(`${API_URL}/api/user/${USER_ID}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
     params: {
-      id: userId,
+      id: USER_ID,
     },
   });
 }
 
-export async function getUser(userId, id) {
-  return request(`${API_URL}/api/user/${userId}?id=${id}`, {
+export async function getUser(id) {
+  return request(`${API_URL}/api/user/${USER_ID}?id=${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
     params: {
-      userId: userId,
+      USER_ID: USER_ID,
       id: id,
     },
   });
 }
 
-export async function createUser(body, userId) {
-  return request(`${API_URL}/api/user/${userId}`, {
+export async function createUser(body) {
+  return request(`${API_URL}/api/user/${USER_ID}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -39,8 +39,8 @@ export async function createUser(body, userId) {
   });
 }
 
-export async function updateUser(body, userId, myUserId) {
-  return request(`${API_URL}/api/user/${userId}?id=${myUserId}`, {
+export async function updateUser(body) {
+  return request(`${API_URL}/api/user/${USER_ID}?id=${USER_ID}`, {
     method: 'patch',
     headers: {
       'Content-Type': 'application/json',
@@ -51,16 +51,15 @@ export async function updateUser(body, userId, myUserId) {
 }
 
 
-export async function deleteUser(userId, myUserId, ref) {
-  return request(`${API_URL}/api/user/${userId}?id=${myUserId}&ref=${ref}`, {
+export async function deleteUser(id) {
+  return request(`${API_URL}/api/user/delete/${id}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,
     },
     params: {
-      id: userId,
-      ref: ref,
+      id: USER_ID,
     },
   });
 }

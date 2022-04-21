@@ -2,7 +2,7 @@ import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllDepartments(userId, ref) {
-  return request(`${API_URL}/api/department/${userId}?ref=${ref}`, {
+  return request(`${API_URL}/api/department/${userId}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export async function updateDepartment(body, userId, departmentId) {
 
 
 export async function deleteDepartment(userId, departmentId, ref) {
-  return request(`${API_URL}/api/department/${userId}?id=${departmentId}&ref=${ref}`, {
+  return request(`${API_URL}/api/department/${userId}?id=${departmentId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',

@@ -1,8 +1,8 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN } from '../config/config';
+import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
 
-export async function getAllEmployees(userId, ref) {
-  return request(`${API_URL}/api/employee/${userId}?ref=${ref}`, {
+export async function getAllEmployees(userId) {
+  return request(`${API_URL}/api/employee/${USER_ID}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -10,7 +10,6 @@ export async function getAllEmployees(userId, ref) {
     },
     params: {
       id: userId,
-      ref: ref,
     },
   });
 }
@@ -52,8 +51,8 @@ export async function updateEmployee(body, userId, employeeId) {
 }
 
 
-export async function deleteEmployee(userId, employeeId, ref) {
-  return request(`${API_URL}/api/employee/${userId}?id=${employeeId}&ref=${ref}`, {
+export async function deleteEmployee(userId, employeeId) {
+  return request(`${API_URL}/api/employee/${userId}?id=${employeeId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
@@ -61,7 +60,7 @@ export async function deleteEmployee(userId, employeeId, ref) {
     },
     params: {
       id: userId,
-      ref: ref,
+      employeeId: employeeId,
     },
   });
 }

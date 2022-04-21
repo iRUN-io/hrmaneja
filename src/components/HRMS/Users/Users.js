@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
 import { getAllUsers } from '../../../services/user'
-
+import { getUser } from '../../../config/common';
 
 const Login = (navStatus) => {
 const [customers, setCustomers] = useState([]);
 		useEffect(() => {
 			async function fetchData() {
-				const userId = "c59c1cfb-1c16-4b48-937a-917f7548b798"; // to be gotten from local storage
-				const ref = "428a580735fa1c8a1d78"; // to be gotten from local storage
-			  	const response = await getAllUsers(userId, ref);
+				const user = await getUser();
+				const userId = user.id;
+			  	const response = await getAllUsers(userId);
 			  setCustomers(response?.data);
 			}
 			fetchData();
