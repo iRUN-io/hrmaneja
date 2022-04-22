@@ -8,9 +8,11 @@ const [customers, setCustomers] = useState([]);
 		useEffect(() => {
 			async function fetchData() {
 				const user = await getUser();
-				const userId = user.id;
-			  	const response = await getAllUsers(userId);
-			  setCustomers(response?.data);
+				if(user){
+					const userId = user.id;
+					const response = await getAllUsers(userId);
+			  		setCustomers(response?.data);
+				}
 			}
 			fetchData();
 		}, []);

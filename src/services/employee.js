@@ -1,7 +1,7 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
 
-export async function getAllEmployees(userId) {
+export async function getAllEmployees() {
   return request(`${API_URL}/api/employee/${USER_ID}`, {
     method: 'get',
     headers: {
@@ -9,7 +9,7 @@ export async function getAllEmployees(userId) {
        'Authorization': USER_TOKEN,
     },
     params: {
-      id: userId,
+      id: USER_ID,
     },
   });
 }
