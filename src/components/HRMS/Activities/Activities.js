@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getAllActivities } from '../../../services/activities'
 import { getUser } from '../../../config/common';
-import Ckeditor from '../../common/ckeditor';
+// import Ckeditor from '../../common/ckeditor';
 const Activities = () => {
 	const [activities, setActivities] = useState([]);
 			useEffect(() => {
@@ -28,7 +28,7 @@ const Activities = () => {
 											<h3 className="card-title">Timeline Activity</h3>
 										</div>
 										<div className="card-body">
-											<div className="summernote">
+											{/* <div className="summernote">
 												<Ckeditor />
 												Hello there,
 												<br />
@@ -40,7 +40,9 @@ const Activities = () => {
 												<p>
 													Please try <b>paste some texts</b> here
 												</p>
-											</div>
+											</div> */}
+											{/* map activities */}
+											{activities.map((activity) => (
 											<div className="timeline_item ">
 												<img
 													className="tl_avatar"
@@ -117,6 +119,7 @@ const Activities = () => {
 													</div>
 												</div>
 											</div>
+											))}
 											<div className="timeline_item ">
 												<img
 													className="tl_avatar"
@@ -236,59 +239,7 @@ const Activities = () => {
 														</ul>
 													</div>
 												</div>
-											</div>
-											<div className="timeline_item ">
-												<img
-													className="tl_avatar"
-													src="../assets/images/xs/avatar7.jpg"
-													alt="fake_url"
-												/>
-												<span>
-													<a href="fake_url">Rochelle Barton</a> San Francisco, CA{' '}
-													<small className="float-right text-right">12-April-2019</small>
-												</span>
-												<h6 className="font600">
-													An Engineer Explains Why You Should Always Order the Larger Pizza
-												</h6>
-												<div className="msg">
-													<p>
-														I'm speaking with myself, number one, because I have a very good
-														brain and I've said a lot of things. I write the best
-														placeholder text, and I'm the biggest developer on the web by
-														far... While that's mock-ups and this is politics, is the Lorem
-														card.
-													</p>
-													<a href="fake_url;" className="mr-20 text-muted">
-														<i className="fa fa-heart text-pink" /> 7 Love
-													</a>
-													<a
-														className="text-muted"
-														role="button"
-														data-toggle="collapse"
-														href="#collapseExample2"
-														aria-expanded="false"
-														aria-controls="collapseExample2"
-													>
-														<i className="fa fa-comments" /> 1 Comment
-													</a>
-													<div
-														className="collapse p-4 section-gray mt-2"
-														id="collapseExample2"
-													>
-														<form className="well">
-															<div className="form-group">
-																<textarea
-																	rows={2}
-																	className="form-control no-resize"
-																	placeholder="Enter here for tweet..."
-																	defaultValue={''}
-																/>
-															</div>
-															<button className="btn btn-primary">Submit</button>
-														</form>
-													</div>
-												</div>
-											</div>
+											</div>	
 										</div>
 									</div>
 								</div>
