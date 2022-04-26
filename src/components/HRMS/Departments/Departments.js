@@ -1,14 +1,24 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux';
-
-class departments extends Component {
-    render() {
-        const { fixNavbar } = this.props;
-        return (
-            <>
+import React, { useState, useEffect } from 'react'
+import { getAllUsers } from '../../../services/user'
+import { getUser } from '../../../config/common';
+const Department = () => {
+    const [departments, setDepartments] = useState([]);
+            useEffect(() => {
+                async function fetchData() {
+                    const user = await getUser();
+                    if(user){
+                        const userId = user.id;
+                        const response = await getAllUsers(userId);
+                          setDepartments(response?.data);
+                    }
+                }
+                fetchData();
+            }, []);
+    
+            return (
+                <>
                 <div>
                     <div>
-                        <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
                             <div className="container-fluid">
                                 <div className="d-flex justify-content-between align-items-center">
                                     <ul className="nav nav-tabs page-header-tab">
@@ -50,71 +60,23 @@ class departments extends Component {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                        {departments.map((department) => (
+														<tr>
+                                                            <td>01</td>
+                                                            <td><div className="font-15">Web Development</div></td>
+                                                            <td>John Smith</td>
+                                                            <td>102</td>
+                                                            <td>
+                                                                <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
+                                                                <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                            </td>
+                                                        </tr>
+														))}
                                                             <tr>
                                                                 <td>01</td>
                                                                 <td><div className="font-15">Web Development</div></td>
                                                                 <td>John Smith</td>
                                                                 <td>102</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>02</td>
-                                                                <td><div className="font-15">Marketing</div></td>
-                                                                <td>Maryam Amiri</td>
-                                                                <td>13</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>03</td>
-                                                                <td><div className="font-15">App Development</div></td>
-                                                                <td>Frank Camly</td>
-                                                                <td>21</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>04</td>
-                                                                <td><div className="font-15">Support</div></td>
-                                                                <td>Gary Camara</td>
-                                                                <td>84</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>05</td>
-                                                                <td><div className="font-15">Accounts</div></td>
-                                                                <td>Fidel Tonn</td>
-                                                                <td>11</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>06</td>
-                                                                <td><div className="font-15">PHP Open Source</div></td>
-                                                                <td>Maryam Amiri</td>
-                                                                <td>37</td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>07</td>
-                                                                <td><div className="font-15">Design and Printing</div></td>
-                                                                <td>Maryam Amiri</td>
-                                                                <td>17</td>
                                                                 <td>
                                                                     <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
                                                                     <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
@@ -330,14 +292,9 @@ class departments extends Component {
                             </div>
                         </div>
                     </div>
-                </div>
-            </>
-        )
-    }
+ 
+</>
+);
 }
-const mapStateToProps = state => ({
-    fixNavbar: state.settings.isFixNavbar
-})
 
-const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(departments);
+export default Department;

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 
-const Login = (navStatus) => {
+const Login = () => {
 const [customers, setCustomers] = useState([]);
 		useEffect(() => {
 			async function fetchData() {
