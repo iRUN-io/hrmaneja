@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getAllUsers } from '../../../services/user'
+import { getAllDepartments } from '../../../services/department'
 import { getUser } from '../../../config/common';
 const Department = () => {
     const [departments, setDepartments] = useState([]);
@@ -8,7 +8,7 @@ const Department = () => {
                     const user = await getUser();
                     if(user){
                         const userId = user.id;
-                        const response = await getAllUsers(userId);
+                        const response = await getAllDepartments(userId);
                           setDepartments(response?.data);
                     }
                 }

@@ -1,16 +1,25 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect } from 'react'
+import { getAllActivities } from '../../../services/activities'
+import { getUser } from '../../../config/common';
 import Ckeditor from '../../common/ckeditor';
-class Activities extends Component {
-
-
-	render() {
-		const { fixNavbar } = this.props;
+const Activities = () => {
+	const [activities, setActivities] = useState([]);
+			useEffect(() => {
+				async function fetchData() {
+					const user = await getUser();
+					if(user){
+						const userId = user.id;
+						const response = await getAllActivities(userId);
+						setActivities(response?.data);
+					}
+				}
+				fetchData();
+			}, []);
 		return (
 			<>
 				{/* <link rel="stylesheet" href="../assets/plugins/summernote/dist/summernote.css" /> */}
 				<div>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
+					<div>
 						<div className="container-fluid">
 							<div className="row clearfix">
 								<div className="col-md-12">
@@ -288,13 +297,9 @@ class Activities extends Component {
 					</div>
 
 				</div>
-			</>
-		);
-	}
+ 
+				</>
+);
 }
-const mapStateToProps = state => ({
-	fixNavbar: state.settings.isFixNavbar
-})
 
-const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Activities);
+export default Activities;
