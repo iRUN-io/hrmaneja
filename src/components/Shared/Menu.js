@@ -165,7 +165,7 @@ class Menu extends Component {
 		if (e.itemId) {
 			const subClass = e.items.map((menuItem, i) => {
 				if (menuItem.to === this.props.location.pathname) {
-					menucClass = "in";
+					menucClass = "in"; // change this to in when you add more labels
 				} else {
 					menucClass = "collapse";
 				}
@@ -215,16 +215,16 @@ class Menu extends Component {
 						"label": "Activities",
 						"to": "/hr-activities"
 					},
-					{
-						"id": 8,
-						"label": "Holidays",
-						"to": "/hr-holidays"
-					},
-					{
-						"id": 9,
-						"label": "Events",
-						"to": "/hr-events"
-					},
+					// {
+					// 	"id": 8,
+					// 	"label": "Holidays",
+					// 	"to": "/hr-holidays"
+					// },
+					// {
+					// 	"id": 9,
+					// 	"label": "Events",
+					// 	"to": "/hr-events"
+					// },
 					{
 						"id": 10,
 						"label": "Payroll",
@@ -414,10 +414,11 @@ class Menu extends Component {
 										<i className="fe fe-command brand-logo" />
 									</NavLink>
 									<div className="dropdown">
-										<NavLink to="/page-search" className="nav-link icon">
+										{/* <NavLink to="/page-search" className="nav-link icon">
 											<i className="fa fa-search" />
-										</NavLink>
-										<NavLink to="/app-calendar" className="nav-link icon app_inbox">
+										</NavLink> */}
+										{/* to enable this when we are ready to release them each one */}
+										{/* <NavLink to="/app-calendar" className="nav-link icon app_inbox">
 											<i className="fa fa-calendar" />
 										</NavLink>
 										<NavLink to="/app-contact" className="nav-link icon xs-hide">
@@ -428,7 +429,7 @@ class Menu extends Component {
 										</NavLink>
 										<NavLink to="/app-filemanager" className="nav-link icon app_file xs-hide">
 											<i className="fa fa-folder-o" />
-										</NavLink>
+										</NavLink> */}
 									</div>
 								</div>
 								<div className="hright">
@@ -441,14 +442,14 @@ class Menu extends Component {
 											title="Themes"
 										></i>
 									</a> */}
-										<span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
+										{/* <span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
 											<i
 												className="fa fa-gear fa-spin"
 												data-toggle="tooltip"
 												data-placement="right"
 												title="Settings"
 											/>
-										</span>
+										</span> */}
 										<p className="nav-link user_btn" onClick={this.toggleUserMenu}>
 											<img
 												className="avatar"

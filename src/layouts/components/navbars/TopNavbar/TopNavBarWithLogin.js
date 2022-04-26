@@ -179,7 +179,7 @@ class TopNavBarWithLogin extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a
+                  <a 
                     className="nav-link"
                     onClick={() => {
                       this.props.logoutUserIfNeeded();

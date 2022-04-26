@@ -27,7 +27,7 @@ class Header extends Component {
 							</div>
 							<div className="right">
 								<ul className="nav nav-pills">
-									<li className="nav-item dropdown">
+									{/* <li className="nav-item dropdown">
 										<a
 											className="nav-link dropdown-toggle"
 											data-toggle="dropdown"
@@ -73,8 +73,8 @@ class Header extends Component {
 												France
 											</a>
 										</div>
-									</li>
-									<li className="nav-item dropdown">
+									</li> */}
+									{/* <li className="nav-item dropdown">
 										<a
 											className="nav-link dropdown-toggle"
 											data-toggle="dropdown"
@@ -96,8 +96,8 @@ class Header extends Component {
 												<i className="dropdown-icon fa fa-file-pdf-o" /> PDF
 											</a>
 										</div>
-									</li>
-									<li className="nav-item dropdown">
+									</li> */}
+									{/* <li className="nav-item dropdown">
 										<a
 											className="nav-link dropdown-toggle"
 											data-toggle="dropdown"
@@ -129,7 +129,7 @@ class Header extends Component {
 												New Blog post
 											</a>
 										</div>
-									</li>
+									</li> */}
 								</ul>
 								<div className="notification d-flex">
 									<div className="dropdown d-flex">
