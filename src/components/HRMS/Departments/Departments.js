@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { getAllDepartments } from '../../../services/department'
+import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 const Department = () => {
     const [departments, setDepartments] = useState([]);
+    const [users, setUsers] = useState([]);
             useEffect(() => {
                 async function fetchData() {
                     const user = await getUser();
                     if(user){
                         const userId = user.id;
                         const response = await getAllDepartments(userId);
+                        const userResponse = await getAllUsers(userId);
                           setDepartments(response?.data);
+                          setUsers(userResponse?.data);
                     }
                 }
                 fetchData();
@@ -90,12 +94,13 @@ const Department = () => {
                                     </div>
                                     <div className="tab-pane fade" id="Departments-grid" role="tabpanel">
                                         <div className="row clearfix">
+                                        {departments.map((department) => (
                                             <div className="col-lg-3 col-md-6">
                                                 <div className="card">
                                                     <div className="card-body text-center">
                                                         <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">John Smith</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
+                                                        <h6 className="mt-3">{department.name}</h6>
+                                                        {/* <div className="text-center text-muted mb-3">Web Development</div> */}
                                                         <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
                                                         <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
                                                     </div>
@@ -107,127 +112,14 @@ const Department = () => {
                                                             </div>
                                                             <div className="col-6">
                                                                 <h5 className="mb-0">$3100</h5>
-                                                                <div className="text-muted">Earnings</div>
+                                                                <div className="text-muted">Total Salary</div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-lg-3 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body text-center">
-                                                        <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar2.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">Maryam Amiri</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
-                                                        <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                        <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                    </div>
-                                                    <div className="card-footer text-center">
-                                                        <div className="row clearfix">
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">105</h5>
-                                                                <div className="text-muted">Employee</div>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">$3100</h5>
-                                                                <div className="text-muted">Earnings</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body text-center">
-                                                        <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar3.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">Fidel Tonn</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
-                                                        <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                        <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                    </div>
-                                                    <div className="card-footer text-center">
-                                                        <div className="row clearfix">
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">12</h5>
-                                                                <div className="text-muted">Employee</div>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">$1800</h5>
-                                                                <div className="text-muted">Earnings</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body text-center">
-                                                        <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar4.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">Frank Camly</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
-                                                        <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                        <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                    </div>
-                                                    <div className="card-footer text-center">
-                                                        <div className="row clearfix">
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">105</h5>
-                                                                <div className="text-muted">Employee</div>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">$3100</h5>
-                                                                <div className="text-muted">Earnings</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body text-center">
-                                                        <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar2.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">Maryam Amiri</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
-                                                        <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                        <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                    </div>
-                                                    <div className="card-footer text-center">
-                                                        <div className="row clearfix">
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">105</h5>
-                                                                <div className="text-muted">Employee</div>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">$3100</h5>
-                                                                <div className="text-muted">Earnings</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="col-lg-3 col-md-6">
-                                                <div className="card">
-                                                    <div className="card-body text-center">
-                                                        <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
-                                                        <h6 className="mt-3">John Smith</h6>
-                                                        <div className="text-center text-muted mb-3">Web Development</div>
-                                                        <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                        <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                    </div>
-                                                    <div className="card-footer text-center">
-                                                        <div className="row clearfix">
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">55</h5>
-                                                                <div className="text-muted">Employee</div>
-                                                            </div>
-                                                            <div className="col-6">
-                                                                <h5 className="mb-0">$12,024</h5>
-                                                                <div className="text-muted">Earnings</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            ))}
+
                                             <div className="col-lg-3 col-md-6">
                                                 <div className="card">
                                                     <div className="card-body text-center">
@@ -275,7 +167,16 @@ const Department = () => {
                                         </div>
                                         <div className="col-md-12">
                                             <div className="form-group">
-                                                <input type="text" className="form-control" placeholder="Departments Head" />
+
+                                                <select className="form-control show-tick ms select2" data-placeholder="Select">
+                                                    <option>Departments Head</option>
+                                                    {users.map((user) => (
+                                                    <>
+                                                    <option value={user.id}>{user.name}</option>
+                                                    <option value={user.id}>{user.name}</option>
+                                                    </>
+                                                    ))}
+                                                </select>
                                             </div>
                                         </div>
                                         <div className="col-md-12">
