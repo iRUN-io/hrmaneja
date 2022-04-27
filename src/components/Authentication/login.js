@@ -5,41 +5,41 @@ import { setUserSession } from '../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-	const Login = () => {
-		const [email, setUserName] = useState();
-		const [password, setPassword] = useState();
-		const handleSubmit = async e => {
-		  e.preventDefault();
-		  const response = await loginUser({
+const Login = () => {
+	const [email, setUserName] = useState();
+	const [password, setPassword] = useState();
+	const handleSubmit = async e => {
+		e.preventDefault();
+		const response = await loginUser({
 			email,
 			password
-		  });
-		  try {
-		  if ('token' in response.data) {
-			toast.success('Logged in successfully !')
-			  setUserSession(response.data.token, response.data);
-			  window.location.href = "/";
-		  } else {
-			toast.error("Failed");
-		  }
+		});
+		try {
+			if ('token' in response.data) {
+				toast.success('Logged in successfully !')
+				setUserSession(response.data.token, response.data);
+				window.location.href = "/";
+			} else {
+				toast.error("Failed");
+			}
 		} catch (error) {
-		  console.log('error', error);
-		  if (response.data.status === 'error') 
-		  toast.error(response.data.message);
-		  else toast.error("Something went wrong. Please try again later.");
+			console.log('error', error);
+			if (response.data.status === 'error')
+				toast.error(response.data.message);
+			else toast.error("Something went wrong. Please try again later.");
 		}
-		};
-		return (
-			<div className="auth">
-				<ToastContainer/>
-				<div className="auth_left">
-					<div className="card">
-						<div className="text-center mb-2">
-							<Link className="header-brand" to="/">
-								<i className="fe fe-command brand-logo" />
-							</Link>
-						</div>
-						<form  noValidate onSubmit={handleSubmit} className="authFormInput">
+	};
+	return (
+		<div className="auth">
+			<ToastContainer />
+			<div className="auth_left">
+				<div className="card">
+					<div className="text-center mb-2">
+						<Link className="header-brand" to="/">
+							<i className="fe fe-command brand-logo" />
+						</Link>
+					</div>
+					<form noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
 							<div className="form-group">
@@ -86,42 +86,42 @@ import 'react-toastify/dist/ReactToastify.css';
 								</button>
 							</div>
 						</div>
-						</form>
-						<div className="text-center text-muted">
-							Don't have account yet? <Link to="/signup">Sign Up</Link>
-						</div>
+					</form>
+					<div className="text-center text-muted">
+						Don't have account yet? <Link to="/signup">Sign Up</Link>
 					</div>
 				</div>
-				<div className="auth_right">
-					<div className="carousel slide" data-ride="carousel" data-interval={3000}>
-						<div className="carousel-inner">
-							<div className="carousel-item active">
-								<img src="assets/images/slider1.svg" className="img-fluid" alt="login page" />
-								<div className="px-4 mt-4">
-									<h4>Fully Responsive</h4>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-								</div>
+			</div>
+			<div className="auth_right">
+				<div className="carousel slide" data-ride="carousel" data-interval={3000}>
+					<div className="carousel-inner">
+						<div className="carousel-item active">
+							<img src="assets/images/slider1.svg" className="img-fluid" alt="login page" />
+							<div className="px-4 mt-4">
+								<h4>Fully Responsive</h4>
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
 							</div>
-							<div className="carousel-item">
-								<img src="assets/images/slider2.svg" className="img-fluid" alt="login page" />
-								<div className="px-4 mt-4">
-									<h4>Quality Code and Easy Customizability</h4>
-									<p>There are many variations of passages of Lorem Ipsum available.</p>
-								</div>
+						</div>
+						<div className="carousel-item">
+							<img src="assets/images/slider2.svg" className="img-fluid" alt="login page" />
+							<div className="px-4 mt-4">
+								<h4>Quality Code and Easy Customizability</h4>
+								<p>There are many variations of passages of Lorem Ipsum available.</p>
 							</div>
-							<div className="carousel-item">
-								<img src="assets/images/slider3.svg" className="img-fluid" alt="login page" />
-								<div className="px-4 mt-4">
-									<h4>Cross Browser Compatibility</h4>
-									<p>Overview We're a group of women who want to learn JavaScript.</p>
-								</div>
+						</div>
+						<div className="carousel-item">
+							<img src="assets/images/slider3.svg" className="img-fluid" alt="login page" />
+							<div className="px-4 mt-4">
+								<h4>Cross Browser Compatibility</h4>
+								<p>Overview We're a group of women who want to learn JavaScript.</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		);
-	}
+		</div>
+	);
+}
 
 export default Login;
 
