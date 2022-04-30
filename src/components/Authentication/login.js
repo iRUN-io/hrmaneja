@@ -14,13 +14,14 @@ const Login = () => {
 			email,
 			password
 		});
+
 		try {
-			if ('token' in response.data) {
+			if (response.error === false) {
 				toast.success('Logged in successfully !')
 				setUserSession(response.data.token, response.data);
 				window.location.href = "/";
 			} else {
-				toast.error("Failed");
+				toast.error("Invalid password or email, please try again !");
 			}
 		} catch (error) {
 			console.log('error', error);
@@ -42,13 +43,13 @@ const Login = () => {
 					<form noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
-							<div className="form-group">
+							{/* <div className="form-group">
 								<select className="custom-select">
 									<option>HR Dashboard</option>
 									<option>Project Dashboard</option>
 									<option>Job Portal</option>
 								</select>
-							</div>
+							</div> */}
 							<div className="form-group">
 								<input
 									type="email"

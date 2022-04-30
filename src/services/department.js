@@ -2,15 +2,16 @@ import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllDepartments(userId) {
-  return request(`${API_URL}/api/department`, {
+  return request(`${API_URL}/departments`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': USER_TOKEN,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
-    params: {
-      userId: userId,
-    },
+    // params: {
+    //   userId: userId,
+    // },
   });
 }
 
@@ -29,11 +30,12 @@ export async function getDepartment(userId, id) {
 }
 
 export async function createDepartment(body, userId) {
-  return request(`${API_URL}/api/department/${userId}`, {
+  return request(`${API_URL}/departments/create`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': USER_TOKEN,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
     body: JSON.stringify(body),
   });
