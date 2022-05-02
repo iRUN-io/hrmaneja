@@ -8,6 +8,7 @@ const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
@@ -40,6 +41,7 @@ const Department = () => {
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
+        // console.log(body)
     };
 
     const updateForm = (e) => {
@@ -48,6 +50,7 @@ const Department = () => {
             ...formState,
             [name]: value,
         });
+        console.log(value)
     };
     useEffect(() => {
         async function fetchData() {
