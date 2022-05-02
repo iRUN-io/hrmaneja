@@ -9,28 +9,32 @@ import { getAllEmployees, createEmployee } from '../../../services/employee';
 import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
-import  LeaveRequest  from './LeaveRequest';
+import LeaveRequest from './LeaveRequest';
 import 'react-toastify/dist/ReactToastify.css';
 import EmployeeDetails from './EmployeeDetails';
+import Currency from '../../common/currency';
+import Country from '../../common/country';
+import { getAllDepartments } from '../../../services/department';
 
 
 function Employee(props) {
-    const {  fixNavbar } = props;
+    const { fixNavbar } = props;
 
     const sparkline1 = useRef(null);
     const sparkline2 = useRef(null);
     const sparkline3 = useRef(null);
     const sparkline4 = useRef(null);
 
-   
+
     const [employees, setEmployee] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    const [departments, setDepartments] = useState([]);
     const [maleEmployee, setMaleEmployee] = useState([]);
     const [femaleEmployee, setFemaleEmployee] = useState([]);
 
     const [formState, setFormState] = useState({
-        employeeID: '',
+        // employeeID: '',
         name: '',
         email: '',
         phone: '',
@@ -40,8 +44,9 @@ function Employee(props) {
         salary: '',
         line_manager: '',
         department: '',
+        gender: '',
         office: '',
-        country_of_employement: '',
+        country_of_employment: '',
         currency: '',
         salary_frequency: '',
         salary_start_date: '',
@@ -58,18 +63,19 @@ function Employee(props) {
         try {
             setFormState({ ...formState });
             const body = {
-                employeeID: formState.employeeID,
-                name: formState.first_name + ' ' + formState.last_name,
+                // employeeID: formState.employeeID,
+                name: formState.name,
                 email: formState.email,
                 phone: formState.phone,
                 address: formState.address,
                 company_id: formState.company_id,
                 role: formState.role,
                 salary: formState.salary,
+                gender: formState.gender,
                 line_manager: formState.line_manager,
                 department: formState.department,
                 office: formState.office,
-                country_of_employement: formState.country_of_employement,
+                country_of_employment: formState.country_of_employment,
                 currency: formState.currency,
                 salary_frequency: formState.salary_frequency,
                 salary_start_date: formState.salary_start_date,
@@ -81,23 +87,31 @@ function Employee(props) {
                 bank_account_name: formState.bank_account_name,
                 company_admin: formState.company_admin,
             }
-            console.log(body)
-            await createEmployee(body, user.id);
-            toast.success("Employee added successfully");
+
+            if (body.name === '' || body.email === '') {
+                toast.error('Please fill all the fields');
+                return;
+            }
+            const response = await createEmployee(body, user.id);
+
+            if (response.error === false) {
+                toast.success("Employee created successfully");
+            }
 
             setFormState({
-                employeeID: '',
+                // employeeID: '',
                 name: '',
                 email: '',
                 phone: '',
                 address: '',
                 company_id: '',
                 role: '',
+                gender: '',
                 salary: '',
                 line_manager: '',
                 department: '',
                 office: '',
-                country_of_employement: '',
+                country_of_employment: '',
                 currency: '',
                 salary_frequency: '',
                 salary_start_date: '',
@@ -141,6 +155,8 @@ function Employee(props) {
                 const userId = user.id;
                 const response = await getAllEmployees(userId);
                 const userResponse = await getAllUsers(userId);
+                const departmentResponse = await getAllDepartments(userId);
+                setDepartments(departmentResponse);
                 setEmployee(response);
                 setUsers(userResponse);
                 setUser(user);
@@ -218,13 +234,13 @@ function Employee(props) {
                                         </div>
                                     </div>
 
-                                    <div className="w_chart">
+                                    {/* <div className="w_chart">
                                         <span
                                             ref={sparkline1}
                                             id="mini-bar-chart1"
                                             className="mini-bar-chart"
                                         ></span>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                                 <div className="col-lg-3 col-md-6">
@@ -395,8 +411,8 @@ function Employee(props) {
                                         </div>
                                     </div>
                                 </div>
-                                <EmployeeDetails/>
-                                <LeaveRequest/>
+                                <EmployeeDetails />
+                                <LeaveRequest />
                             </div>
                         </div>
                     </div>
@@ -415,15 +431,19 @@ function Employee(props) {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h5 className="modal-title" id="exampleModalLabel">
-                                Add Departments
+                                Add Employee
                             </h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
                         <div className="modal-body">
+                            <small id="fileHelp" className="form-text text-muted">
+                                Employee Basic Details
+                            </small><br></br>
                             <div className="row clearfix">
-                                <div className="col-md-4 col-sm-6">
+                                {/* <div className="col-md-6 col-sm-6">
+                                    <label>Employee ID</label>
                                     <div className="form-group">
                                         <input
                                             type="text" name="employeeID"
@@ -432,8 +452,9 @@ function Employee(props) {
                                             id='employeeID'
                                             className="form-control" placeholder="Employee ID" />
                                     </div>
-                                </div>
-                                <div className="col-md-4 col-sm-6">
+                                </div> */}
+                                <div className="col-md-6 col-sm-6">
+                                    <label>Employee Name</label>
                                     <div className="form-group">
                                         <input type="text" name='name' id='name'
                                             value={formState?.name}
@@ -441,89 +462,196 @@ function Employee(props) {
                                             className="form-control" placeholder="Name" />
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-6">
+
+                                <div className="col-md-6 col-sm-6">
+                                    <label>Employee Gender</label>
                                     <div className="form-group">
-                                        <input type="text" name='emailID'
-                                            value={formState?.emailID}
-                                            onChange={updateForm}
-                                            className="form-control" placeholder="Email ID" />
+                                        <select className="form-control" name='gender' id='gender'
+                                            value={formState?.gender}
+                                            onChange={updateForm}>
+                                            <option value={''}>Choose Gender</option>
+                                            <option value={'Male'}>Male</option>
+                                            <option value={'Female'}>Female</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-6">
+
+                                <div className="col-md-6 col-sm-6">
                                     <div className="form-group">
-                                        <input type="number" name='phoneNo' id='phoneNo'
-                                            value={formState?.phoneNo}
+                                        <label>Email Address</label>
+                                        <input type="text" name='email'
+                                            value={formState?.email}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="e.g email@gmail.com" />
+                                    </div>
+                                </div>
+                                <div className="col-md-6 col-sm-6">
+                                    <label>Phone Number</label>
+                                    <div className="form-group">
+                                        <input type="number" name='phone' id='phoneNo'
+                                            value={formState?.phone}
                                             onChange={updateForm}
                                             className="form-control" placeholder="Phone Number" />
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-6">
+
+                                <div className="col-12">
+                                    <small id="fileHelp" className="form-text text-muted">
+                                        Employee General Details
+                                    </small><br></br>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
-                                        <input
-                                            type="date"
-                                            name='startDate'
-                                            id='startDate'
-                                            value={formState?.startDate}
+                                        <label>Salary</label>
+                                        <input type="number"
+                                            name='salary' id='salary'
+                                            value={formState?.salary}
                                             onChange={updateForm}
-                                            data-provide="datepicker"
-                                            data-date-autoclose="true"
-                                            className="form-control"
-                                            placeholder="Start date *"
-                                        />
+                                            className="form-control" placeholder="e.g 100000" />
                                     </div>
                                 </div>
-                                <div className="col-md-4 col-sm-6">
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Currency</label>
+                                        <select className="form-control" name='currency' id='currency'
+                                            value={formState?.currency}
+                                            onChange={updateForm}>
+                                            <Currency />
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Department</label>
+                                        <select onChange={updateForm} value={formState?.department} className="form-control" name='department' id='department'>
+                                            <option value="">Select Department</option>
+                                            {departments.map((department, index) => (
+                                                <option key={index} value={department.id}>{department.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Line Manager</label>
+                                        <select onChange={updateForm} value={formState?.line_manager} className="form-control" name='line_manager' id='line_manager'>
+                                            <option value="">Select Line Manager</option>
+                                            {users.map((user, index) => (
+                                                <option key={index} value={user.id}>{user.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Start Date</label>
+                                        <input type="date" name='startDate' id='startDate'
+                                            value={formState?.startDate}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="" />
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Employment Type</label>
+                                        <input type="text" name='employment_type' id='employment_type'
+                                            value={formState?.employment_type}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Employment Type" />
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Salary Frequency</label>
+                                        {/* Montly, Weekly or Daily */}
+                                        <input type="text" name='salary_frequency' id='salary_frequency'
+                                            value={formState?.salary_frequency || 'Monthly'}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Salary Frequency" />
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Salary Start Date</label>
+                                        <input type="date" name='salary_start_date' id='salary_start_date'
+                                            value={formState?.salary_start_date}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Salary Start Date" />
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Date of Birth</label>
+                                        <input type="date" name='dob' id='dob'
+                                            value={formState?.dob}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Date of Birth" />
+                                    </div>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+                                    <div className="form-group">
+                                        <label>Country</label>
+                                        <select className="form-control" name='country' id='country'
+                                            value={formState?.country}
+                                            onChange={updateForm}>
+                                            <Country />
+                                        </select>
+                                    </div>
+                                </div>
+
+
+                                <div className="col-md-6 col-sm-6">
+                                    <label>Role</label>
                                     <div className="form-group">
                                         <input type="text" name='role' id='role'
                                             value={formState?.role}
                                             onChange={updateForm}
                                             className="form-control" placeholder="Role" />
                                     </div>
+
                                 </div>
-                                <div className="col-12">
-                                    <div className="form-group mt-2 mb-3">
-                                        <input type="file" className="dropify"
-                                            name='file'
-                                            value={formState?.file}
+                                <div className='col-md-12 col-sm-12'>
+                                    <small id="fileHelp" className="form-text text-muted">
+                                        Banking Details
+                                    </small><br></br>
+                                </div>
+
+                                <div className="col-lg-6 col-md-6">
+
+                                    <div className="form-group">
+                                        <label>Bank Name</label>
+                                        <input type="text" name='bank_name' id='bank_name'
+                                            value={formState?.bank_name}
                                             onChange={updateForm}
-                                        />
-                                        <small id="fileHelp" className="form-text text-muted">
-                                            This is some placeholder block-level help text for the above input. It's
-                                            a bit lighter and easily wraps to a new line.
-                                        </small>
+                                            className="form-control" placeholder="Bank Name" />
                                     </div>
                                 </div>
+
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
-                                        <input type="text"
-                                            name='facebook' id='facebook'
-                                            value={formState?.facebook}
+                                        <label>Bank Account Number</label>
+                                        <input type="text" name='bank_account_number' id='bank_account_number'
+                                            value={formState?.bank_account_number}
                                             onChange={updateForm}
-                                            className="form-control" placeholder="Facebook" />
+                                            className="form-control" placeholder="Bank Account Number" />
                                     </div>
                                 </div>
+
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
-                                        <input type="text" name='twitter' id='twitter'
-                                            value={formState?.twitter}
+                                        <label>Bank Account Name</label>
+                                        <input type="text" name='bank_account_name' id='bank_account_name'
+                                            value={formState?.bank_account_name}
                                             onChange={updateForm}
-                                            className="form-control" placeholder="Twitter" />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6 col-md-6">
-                                    <div className="form-group">
-                                        <input type="text" name='linkedIn' id='linkedIn'
-                                            value={formState?.linkedIn}
-                                            onChange={updateForm}
-                                            className="form-control" placeholder="Linkedin" />
-                                    </div>
-                                </div>
-                                <div className="col-lg-6 col-md-6">
-                                    <div className="form-group">
-                                        <input type="text" name='instagram' id='instagram'
-                                            value={formState?.instagram}
-                                            onChange={updateForm}
-                                            className="form-control" placeholder="instagram" />
+                                            className="form-control" placeholder="Bank Account Name" />
                                     </div>
                                 </div>
                             </div>
