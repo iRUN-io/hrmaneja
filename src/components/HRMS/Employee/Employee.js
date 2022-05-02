@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import CountUp from 'react-countup';
 import { connect } from 'react-redux';
 import {
@@ -20,10 +20,10 @@ import { getAllDepartments } from '../../../services/department';
 function Employee(props) {
     const { fixNavbar } = props;
 
-    const sparkline1 = useRef(null);
-    const sparkline2 = useRef(null);
-    const sparkline3 = useRef(null);
-    const sparkline4 = useRef(null);
+    // const sparkline1 = useRef(null);
+    // const sparkline2 = useRef(null);
+    // const sparkline3 = useRef(null);
+    // const sparkline4 = useRef(null);
 
 
     const [employees, setEmployee] = useState([]);
@@ -253,13 +253,13 @@ function Employee(props) {
                                                     {/* <span >124</span> */}
                                                 </h3>
                                             </div>
-                                            <div className="w_chart">
+                                            {/* <div className="w_chart">
                                                 <span
                                                     ref={sparkline2}
                                                     id="mini-bar-chart2"
                                                     className="mini-bar-chart"
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -270,13 +270,13 @@ function Employee(props) {
                                                 <span>Male</span>
                                                 <h3 className="mb-0 counter">	<CountUp end={maleEmployee.length} /></h3>
                                             </div>
-                                            <div className="w_chart">
+                                            {/* <div className="w_chart">
                                                 <span
                                                     ref={sparkline3}
                                                     id="mini-bar-chart3"
                                                     className="mini-bar-chart"
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -287,13 +287,13 @@ function Employee(props) {
                                                 <span>Female</span>
                                                 <h3 className="mb-0 counter">	<CountUp end={femaleEmployee.length} /></h3>
                                             </div>
-                                            <div className="w_chart">
+                                            {/* <div className="w_chart">
                                                 <span
                                                     ref={sparkline4}
                                                     id="mini-bar-chart4"
                                                     className="mini-bar-chart"
                                                 />
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
