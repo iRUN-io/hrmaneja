@@ -8,6 +8,7 @@ const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
@@ -18,13 +19,18 @@ const Department = () => {
         try {
             setFormState({ ...formState });
             const body = {
-                departmentHead: formState.departmentHead,
-                departmentName: formState.departmentName,
-                allEmployee: formState.allEmployee,
+                department_head: formState.departmentHead,
+                name: formState.departmentName,
             }
-            await createDepartment(body, user.id);
+            if (body.departmentName === '' || body.department_head === '') {
+                toast.error('Please fill all the fields');
+                return;
+            }
+            const response = await createDepartment(body, user.id);
 
-            toast.success("Department created successfully");
+            if (response.error === false) {
+                toast.success("Department created successfully");
+            }
 
             setFormState({
                 departmentHead: '',
@@ -35,6 +41,7 @@ const Department = () => {
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
+        // console.log(body)
     };
 
     const updateForm = (e) => {
@@ -43,6 +50,7 @@ const Department = () => {
             ...formState,
             [name]: value,
         });
+        console.log(value)
     };
     useEffect(() => {
         async function fetchData() {
@@ -51,14 +59,14 @@ const Department = () => {
                 const userId = user.id;
                 const response = await getAllDepartments(userId);
                 const userResponse = await getAllUsers(userId);
-                setDepartments(response?.data);
-                setUsers(userResponse?.data);
+                setDepartments(response);
+                setUsers(userResponse);
                 setUser(user);
             }
         }
         fetchData();
-    }, []);
 
+    }, []);
     return (
         <>
             <div>
@@ -106,10 +114,10 @@ const Department = () => {
                                                 </thead>
                                                 <tbody>
                                                     {departments.map((department) => (
-                                                        <tr>
-                                                            <td>01</td>
-                                                            <td><div className="font-15">Web Development</div></td>
-                                                            <td>John Smith</td>
+                                                        <tr key={department.id}>
+                                                            <td>0{department.id}</td>
+                                                            <td><div className="font-15">{department.name}</div></td>
+                                                            <td>{department.department_head}</td>
                                                             <td>102</td>
                                                             <td>
                                                                 <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
@@ -117,16 +125,6 @@ const Department = () => {
                                                             </td>
                                                         </tr>
                                                     ))}
-                                                    <tr>
-                                                        <td>01</td>
-                                                        <td><div className="font-15">Web Development</div></td>
-                                                        <td>John Smith</td>
-                                                        <td>102</td>
-                                                        <td>
-                                                            <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -161,29 +159,6 @@ const Department = () => {
                                         </div>
                                     ))}
 
-                                    <div className="col-lg-3 col-md-6">
-                                        <div className="card">
-                                            <div className="card-body text-center">
-                                                <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar2.jpg" alt="fake_url" />
-                                                <h6 className="mt-3">Maryam Amiri</h6>
-                                                <div className="text-center text-muted mb-3">Web Development</div>
-                                                <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                            </div>
-                                            <div className="card-footer text-center">
-                                                <div className="row clearfix">
-                                                    <div className="col-6">
-                                                        <h5 className="mb-0">23</h5>
-                                                        <div className="text-muted">Employee</div>
-                                                    </div>
-                                                    <div className="col-6">
-                                                        <h5 className="mb-0">$5210</h5>
-                                                        <div className="text-muted">Earnings</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +185,7 @@ const Department = () => {
                                 <div className="col-md-12">
                                     <div className="form-group">
                                         <select name='departmentHead' value={formState?.departmentHead}
-                                            onChange={updateForm} className="form-control show-tick ms select2" data-placeholder="Select">
+                                            onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Departments Head</option>
                                             {users.map((user) => (
                                                 <>
@@ -219,12 +194,6 @@ const Department = () => {
                                                 </>
                                             ))}
                                         </select>
-                                    </div>
-                                </div>
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <input type="number" name='allEmployee' value={formState?.allEmployee}
-                                            onChange={updateForm} className="form-control" placeholder="No of Employee" />
                                     </div>
                                 </div>
                             </div>
