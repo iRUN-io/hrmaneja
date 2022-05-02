@@ -1,15 +1,13 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
+import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllEmployees() {
-  return request(`${API_URL}/api/employee/${USER_ID}`, {
+  return request(`${API_URL}/employees`, {
     method: 'get',
     headers: {
-       'Content-Type': 'application/json',
-       'Authorization': USER_TOKEN,
-    },
-    params: {
-      id: USER_ID,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
   });
 }

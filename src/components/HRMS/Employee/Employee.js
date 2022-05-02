@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import CountUp from 'react-countup';
 import { connect } from 'react-redux';
 import {
@@ -26,9 +26,11 @@ function Employee(props) {
     const closeStatistics = (e) => {
         statisticsCloseAction(e)
     }
-    const [employee, setEmployee] = useState([]);
+    const [employees, setEmployee] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    const [maleEmployee, setMaleEmployee] = useState([]);
+    const [femaleEmployee, setFemaleEmployee] = useState([]);
 
     const [formState, setFormState] = useState({
         employeeID: '',
@@ -91,7 +93,32 @@ function Employee(props) {
         });
         console.log({[name]: value})
     };
+    
+    useEffect(() => {
+        const filteredEmployee = employees.filter(employee => employee.gender === 'Male');
+        setMaleEmployee(filteredEmployee);
+    }, [employees]);
 
+    useEffect(() => {
+        const filteredEmployee = employees.filter(employee => employee.gender === 'Female');
+        setFemaleEmployee(filteredEmployee);
+    }, [employees]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const user = await getUser();
+            if (user) {
+                const userId = user.id;
+                const response = await getAllEmployees(userId);
+                const userResponse = await getAllUsers(userId);
+                setEmployee(response);
+                setUsers(userResponse);
+                setUser(user);
+            }
+        }
+        fetchData();
+
+    }, []);
 
     return (
         <>
@@ -152,7 +179,7 @@ function Employee(props) {
                                             <div className="details">
                                                 <span>Total Employee</span>
                                                 <h3 className="mb-0">
-                                                    <span className="counter">	<CountUp end={614} /></span>
+                                                    <span className="counter">	<CountUp end={employees.length} /></span>
                                                 </h3>
                                             </div>
                                             <div className="w_chart">
@@ -160,7 +187,7 @@ function Employee(props) {
                                             </div>
                                         </div>
                                     </div>
-                                    {/* 
+                                    
                                         <div className="w_chart">
                                                 <span
                                                     ref={sparkline1}
@@ -168,7 +195,7 @@ function Employee(props) {
                                                     className="mini-bar-chart"
                                                 ></span>
                                             </div>
-                                    */}
+                                   
                                 </div>
                                 <div className="col-lg-3 col-md-6">
                                     <div className="card">
@@ -176,7 +203,7 @@ function Employee(props) {
                                             <div className="details">
                                                 <span>New Employee</span>
                                                 <h3 className="mb-0">
-                                                    <CountUp end={124} />
+                                                    <CountUp end={employees.length} />
                                                     {/* <span >124</span> */}
                                                 </h3>
                                             </div>
@@ -195,7 +222,7 @@ function Employee(props) {
                                         <div className="card-body w_sparkline">
                                             <div className="details">
                                                 <span>Male</span>
-                                                <h3 className="mb-0 counter">	<CountUp end={504} /></h3>
+                                                <h3 className="mb-0 counter">	<CountUp end={maleEmployee.length} /></h3>
                                             </div>
                                             <div className="w_chart">
                                                 <span
@@ -212,7 +239,7 @@ function Employee(props) {
                                         <div className="card-body w_sparkline">
                                             <div className="details">
                                                 <span>Female</span>
-                                                <h3 className="mb-0 counter">	<CountUp end={100} /></h3>
+                                                <h3 className="mb-0 counter">	<CountUp end={femaleEmployee.length} /></h3>
                                             </div>
                                             <div className="w_chart">
                                                 <span
@@ -267,7 +294,8 @@ function Employee(props) {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
+                                                        {employees.map((employee, index) => (
+                                                        <tr key={index}>
                                                             <td className="w40">
                                                                 <label className="custom-control custom-checkbox">
                                                                     <input
@@ -287,23 +315,23 @@ function Employee(props) {
                                                                     data-toggle="tooltip"
                                                                     data-original-title="Avatar Name"
                                                                 >
-                                                                    MN
+                                                                    {(employee.name[0] + employee.name[1]).toUpperCase()}
                                                                 </span>
                                                                 <div className="ml-3">
-                                                                    <h6 className="mb-0">Marshall Nichols</h6>
+                                                                    <h6 className="mb-0">{employee?.name}</h6>
                                                                     <span className="text-muted">
-                                                                        marshall-n@gmail.com
+                                                                        {employee?.email}
                                                                     </span>
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <span>LA-0215</span>
+                                                                <span>{employee?.id}</span>
                                                             </td>
                                                             <td>
-                                                                <span>+ 264-625-1526</span>
+                                                                <span>{employee?.phone}</span>
                                                             </td>
-                                                            <td>12 Jun, 2015</td>
-                                                            <td>Web Designer</td>
+                                                            <td>{employee?.created_at}</td>
+                                                            <td>{employee?.role}</td>
                                                             <td>
                                                                 <button
                                                                     type="button"
@@ -329,564 +357,8 @@ function Employee(props) {
                                                                 </button>
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <img
-                                                                    className="avatar"
-                                                                    src="../assets/images/xs/avatar2.jpg"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                    alt="fake_url"
-                                                                />
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Debra Stewart</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0216</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-4613</span>
-                                                            </td>
-                                                            <td>28 July, 2015</td>
-                                                            <td>Web Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <span
-                                                                    className="avatar avatar-green"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                >
-                                                                    JH
-                                                                </span>
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Jane Hunt</h6>
-                                                                    <span className="text-muted">
-                                                                        jane-hunt@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0215</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-4512</span>
-                                                            </td>
-                                                            <td>13 Jun, 2015</td>
-                                                            <td>Web Designer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <img
-                                                                    className="avatar"
-                                                                    src="../assets/images/xs/avatar3.jpg"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                    alt="fake_url"
-                                                                />
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Susie Willis</h6>
-                                                                    <span className="text-muted">
-                                                                        sussie-w@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0116</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-4152</span>
-                                                            </td>
-                                                            <td>9 May, 2016</td>
-                                                            <td>Web Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <span
-                                                                    className="avatar avatar-azure"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                >
-                                                                    DD
-                                                                </span>
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Darryl Day</h6>
-                                                                    <span className="text-muted">
-                                                                        darryl.day@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0215</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-8596</span>
-                                                            </td>
-                                                            <td>24 Jun, 2015</td>
-                                                            <td>Web Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <span
-                                                                    className="avatar avatar-blue"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                >
-                                                                    MN
-                                                                </span>
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Marshall Nichols</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0215</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-7845</span>
-                                                            </td>
-                                                            <td>11 Jun, 2015</td>
-                                                            <td>Web Designer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <img
-                                                                    className="avatar"
-                                                                    src="../assets/images/xs/avatar2.jpg"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                    alt="fake_url"
-                                                                />
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Debra Stewart</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0216</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-2583</span>
-                                                            </td>
-                                                            <td>28 Jun, 2018</td>
-                                                            <td>Web Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <span
-                                                                    className="avatar avatar-indigo"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                >
-                                                                    MN
-                                                                </span>
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Marshall Nichols</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0215</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-2583</span>
-                                                            </td>
-                                                            <td>24 Feb, 2019</td>
-                                                            <td>Android Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <img
-                                                                    className="avatar"
-                                                                    src="../assets/images/xs/avatar2.jpg"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                    alt="fake_url"
-                                                                />
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Debra Stewart</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0216</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-2589</span>
-                                                            </td>
-                                                            <td>28 Jun, 2015</td>
-                                                            <td>IOS Developer</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td className="w40">
-                                                                <label className="custom-control custom-checkbox">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        className="custom-control-input"
-                                                                        name="example-checkbox1"
-                                                                        defaultValue="option1"
-                                                                    />
-                                                                    <span className="custom-control-label">
-                                                                        &nbsp;
-                                                                    </span>
-                                                                </label>
-                                                            </td>
-                                                            <td className="d-flex">
-                                                                <img
-                                                                    className="avatar"
-                                                                    src="../assets/images/xs/avatar2.jpg"
-                                                                    data-toggle="tooltip"
-                                                                    data-original-title="Avatar Name"
-                                                                    alt="fake_url"
-                                                                />
-                                                                <div className="ml-3">
-                                                                    <h6 className="mb-0">Debra Stewart</h6>
-                                                                    <span className="text-muted">
-                                                                        marshall-n@gmail.com
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <span>LA-0216</span>
-                                                            </td>
-                                                            <td>
-                                                                <span>+ 264-625-2356</span>
-                                                            </td>
-                                                            <td>28 Jun, 2015</td>
-                                                            <td>Team Leader</td>
-                                                            <td>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="View"
-                                                                >
-                                                                    <i className="fa fa-eye" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm"
-                                                                    title="Edit"
-                                                                >
-                                                                    <i className="fa fa-edit" />
-                                                                </button>
-                                                                <button
-                                                                    type="button"
-                                                                    className="btn btn-icon btn-sm js-sweetalert"
-                                                                    title="Delete"
-                                                                    data-type="confirm"
-                                                                >
-                                                                    <i className="fa fa-trash-o text-danger" />
-                                                                </button>
-                                                            </td>
-                                                        </tr>
+                                                        ))}
+                                                        
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -907,44 +379,6 @@ function Employee(props) {
                                                         <div className="media-body">
                                                             <h5 className="m-0">Sara Hopkins</h5>
                                                             <p className="text-muted mb-0">Webdeveloper</p>
-                                                            <ul className="social-links list-inline mb-0 mt-2">
-                                                                <li className="list-inline-item">
-                                                                    <a
-                                                                        href="fake_url"
-                                                                        data-toggle="tooltip"
-                                                                        data-original-title="Facebook"
-                                                                    >
-                                                                        <i className="fa fa-facebook" />
-                                                                    </a>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <a
-                                                                        href="fake_url"
-                                                                        data-toggle="tooltip"
-                                                                        data-original-title="Twitter"
-                                                                    >
-                                                                        <i className="fa fa-twitter" />
-                                                                    </a>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <a
-                                                                        href="fake_url"
-                                                                        data-toggle="tooltip"
-                                                                        data-original-title={1234567890}
-                                                                    >
-                                                                        <i className="fa fa-phone" />
-                                                                    </a>
-                                                                </li>
-                                                                <li className="list-inline-item">
-                                                                    <a
-                                                                        href="fake_url"
-                                                                        data-toggle="tooltip"
-                                                                        data-original-title="@skypename"
-                                                                    >
-                                                                        <i className="fa fa-skype" />
-                                                                    </a>
-                                                                </li>
-                                                            </ul>
                                                         </div>
                                                     </div>
                                                     <p className="mb-4">
