@@ -128,7 +128,7 @@ const Login = (navStatus) => {
 		const { value, name } = e.target;
 		setFormState({
 			...formState,
-			// [name]: value,
+			[name]: value,
 			
 		})
 		// console.log(formState)
