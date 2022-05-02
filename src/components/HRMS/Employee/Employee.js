@@ -803,7 +803,7 @@ function Employee(props) {
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
                                         <input
-                                            type="text"
+                                            type="date"
                                             name='startDate'
                                             id='startDate'
                                             value={formState?.startDate}
