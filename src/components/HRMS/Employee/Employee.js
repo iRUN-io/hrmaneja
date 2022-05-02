@@ -77,19 +77,19 @@ function Employee(props) {
                 instagram: '',
                 linkedIn: '',
             });
-        } catch (err){
+        } catch (err) {
             toast.error("Error, try again");
             setFormState({ ...formState })
         };
     };
 
     const updateForm = (e) => {
-        const {value, name} = e.target;
+        const { value, name } = e.target;
         setFormState({
             ...formState,
             [name]: value,
         });
-        console.log({[name]: value})
+        console.log({ [name]: value })
     };
 
 
@@ -1334,36 +1334,36 @@ function Employee(props) {
                             <div className="row clearfix">
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
-                                        <input 
-                                        type="text" name="employeeID"
-                                        value={formState?.employeeID}
-                                        onChange={updateForm}
-                                        id='employeeID'
-                                        className="form-control" placeholder="Employee ID" />
+                                        <input
+                                            type="text" name="employeeID"
+                                            value={formState?.employeeID}
+                                            onChange={updateForm}
+                                            id='employeeID'
+                                            className="form-control" placeholder="Employee ID" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
                                         <input type="text" name='name' id='name'
-                                        value={formState?.name}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Name" />
+                                            value={formState?.name}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Name" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
                                         <input type="text" name='emailID'
-                                        value={formState?.emailID}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Email ID" />
+                                            value={formState?.emailID}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Email ID" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
                                         <input type="number" name='phoneNo' id='phoneNo'
-                                        value={formState?.phoneNo}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Phone Number" />
+                                            value={formState?.phoneNo}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Phone Number" />
                                     </div>
                                 </div>
                                 <div className="col-md-4 col-sm-6">
@@ -1384,17 +1384,17 @@ function Employee(props) {
                                 <div className="col-md-4 col-sm-6">
                                     <div className="form-group">
                                         <input type="text" name='role' id='role'
-                                        value={formState?.role}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Role" />
+                                            value={formState?.role}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Role" />
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="form-group mt-2 mb-3">
-                                        <input type="file" className="dropify" 
-                                        name='file'
-                                        value={formState?.file}
-                                        onChange={updateForm}
+                                        <input type="file" className="dropify"
+                                            name='file'
+                                            value={formState?.file}
+                                            onChange={updateForm}
                                         />
                                         <small id="fileHelp" className="form-text text-muted">
                                             This is some placeholder block-level help text for the above input. It's
@@ -1404,35 +1404,35 @@ function Employee(props) {
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
-                                        <input type="text" 
-                                        name='facebook' id='facebook'
-                                        value={formState?.facebook}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Facebook" />
+                                        <input type="text"
+                                            name='facebook' id='facebook'
+                                            value={formState?.facebook}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Facebook" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
                                         <input type="text" name='twitter' id='twitter'
-                                        value={formState?.twitter}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Twitter" />
+                                            value={formState?.twitter}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Twitter" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
                                         <input type="text" name='linkedIn' id='linkedIn'
-                                        value={formState?.linkedIn}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="Linkedin" />
+                                            value={formState?.linkedIn}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="Linkedin" />
                                     </div>
                                 </div>
                                 <div className="col-lg-6 col-md-6">
                                     <div className="form-group">
                                         <input type="text" name='instagram' id='instagram'
-                                        value={formState?.instagram}
-                                        onChange={updateForm}
-                                        className="form-control" placeholder="instagram" />
+                                            value={formState?.instagram}
+                                            onChange={updateForm}
+                                            className="form-control" placeholder="instagram" />
                                     </div>
                                 </div>
                             </div>
@@ -1442,7 +1442,7 @@ function Employee(props) {
                                 Close
                             </button>
                             <button type="submit" className="btn btn-primary"
-                            onClick={() => createEmployeeAction()}>
+                                onClick={() => createEmployeeAction()}>
                                 Save changes
                             </button>
                         </div>

@@ -23,7 +23,7 @@
 // 			selected: [],
 // 		}
 // 	}
-	
+
 // 	render() {
 // 		return (
 // 			<div>
@@ -47,7 +47,7 @@
 // 					}
 
 // 				</form>
-				
+
 // 			</div>
 // 		);
 // 	}
@@ -64,11 +64,11 @@ import { getUser } from '../../../config/common';
 
 const Login = (navStatus) => {
 	const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([]);
+	const [users, setUsers] = useState([]);
 	const [formState, setFormState] = useState({
 		employeeID: '',
-		firstName : '',
-		lastName :'',
+		firstName: '',
+		lastName: '',
 		emailID: '',
 		mobileNumber: '',
 		roleType: '',
@@ -83,7 +83,7 @@ const Login = (navStatus) => {
 
 	const createUsersAction = async () => {
 		try {
-			setFormState({ ...formState});
+			setFormState({ ...formState });
 			const body = {
 				employerID: formState.employeeID,
 				firstName: formState.firstName,
@@ -102,8 +102,8 @@ const Login = (navStatus) => {
 
 			setFormState({
 				employeeID: '',
-				firstName : '',
-				lastName :'',
+				firstName: '',
+				lastName: '',
 				emailID: '',
 				mobileNumber: '',
 				roleType: '',
@@ -119,9 +119,9 @@ const Login = (navStatus) => {
 		} catch (err) {
 			toast.error("Error, try again");
 			setFormState({ ...formState });
-			
+
 		};
-		
+
 	};
 
 	const updateForm = (e) => {
@@ -129,50 +129,50 @@ const Login = (navStatus) => {
 		setFormState({
 			...formState,
 			[name]: value,
-			
+
 		})
 		// console.log(formState)
-		console.log({[name]: value})
+		console.log({ [name]: value })
 	}
 	const [customers, setCustomers] = useState([]);
-		useEffect(() => {
-			async function fetchData() {
-				const user = await getUser();
-				if(user){
-					const userId = user.id;
-					const response = await getAllUsers(userId);
-			  		setCustomers(response?.data);
-					setUser(user)
-				}
+	useEffect(() => {
+		async function fetchData() {
+			const user = await getUser();
+			if (user) {
+				const userId = user.id;
+				const response = await getAllUsers(userId);
+				setCustomers(response?.data);
+				setUser(user)
 			}
-			fetchData();
-		}, []);
+		}
+		fetchData();
+	}, []);
 
-		return (
-			<>
+	return (
+		<>
+			<div>
+				<ToastContainer />
 				<div>
-					<ToastContainer />
-					<div>
-						<div className="container-fluid">
-							<div className="d-flex justify-content-between align-items-center">
-								<ul className="nav nav-tabs page-header-tab">
-									<li className="nav-item">
-										<a
-											className="nav-link active"
-											id="user-tab"
-											data-toggle="tab"
-											href="#user-list"
-										>
-											List
-										</a>
-									</li>
-									<li className="nav-item">
-										<a className="nav-link" id="user-tab" data-toggle="tab" href="#user-add">
-											Add New
-										</a>
-									</li>
-								</ul>
-								{/* <div className="header-action">
+					<div className="container-fluid">
+						<div className="d-flex justify-content-between align-items-center">
+							<ul className="nav nav-tabs page-header-tab">
+								<li className="nav-item">
+									<a
+										className="nav-link active"
+										id="user-tab"
+										data-toggle="tab"
+										href="#user-list"
+									>
+										List
+									</a>
+								</li>
+								<li className="nav-item">
+									<a className="nav-link" id="user-tab" data-toggle="tab" href="#user-add">
+										Add New
+									</a>
+								</li>
+							</ul>
+							{/* <div className="header-action">
 									<button type="button" className="btn btn-primary">
 										<i className="fe fe-plus mr-2" />
 										Add
@@ -317,7 +317,7 @@ const Login = (navStatus) => {
 												<div className="col-lg-6 col-md-6 col-sm-12">
 													<div className="form-group">
 														<input
-															name='lastName'  value={formState?.lastName}
+															name='lastName' value={formState?.lastName}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -328,7 +328,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<input
-															name='emailID'  value={formState?.emailID}
+															name='emailID' value={formState?.emailID}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -339,7 +339,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<input
-															name='mobileNumber'  value={formState?.mobileNumber}
+															name='mobileNumber' value={formState?.mobileNumber}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -350,7 +350,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<select className="form-control show-tick"
-															name='roleType'  value={formState?.roleType}
+															name='roleType' value={formState?.roleType}
 															onChange={updateForm}
 														>
 
@@ -364,7 +364,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<input
-															name='userName'  value={formState?.userName}
+															name='userName' value={formState?.userName}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -375,7 +375,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<input
-															name='password'  value={formState?.password}
+															name='password' value={formState?.password}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -386,7 +386,7 @@ const Login = (navStatus) => {
 												<div className="col-md-4 col-sm-12">
 													<div className="form-group">
 														<input
-															name='confirmPassword'  value={formState?.confirmPassword}
+															name='confirmPassword' value={formState?.confirmPassword}
 															onChange={updateForm}
 															type="text"
 															className="form-control"
@@ -609,7 +609,7 @@ const Login = (navStatus) => {
 			</div>
 
 		</>
-		);
-	}
+	);
+}
 
 export default Login;
