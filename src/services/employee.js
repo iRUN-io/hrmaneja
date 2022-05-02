@@ -27,11 +27,12 @@ export async function getEmployee(userId, id) {
   }
 
 export async function createEmployee(body, userId) {
-  return request(`${API_URL}/api/employee/${userId}`, {
+  return request(`${API_URL}/employees/create`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': USER_TOKEN,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
     body: JSON.stringify(body),
   });
