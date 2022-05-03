@@ -5,13 +5,13 @@ export default class Footer extends Component {
 	render() {
 		return (
 			<>
-				<div style={{
-					position: 'fixed',
-					width: '100%',
-					bottom: 0,
-					paddingTop: '10px',
-				}}>
-					<div className="section-body">
+				<div style={{paddingTop: '50px'}}>
+					<div  style={{
+							position: 'fixed',
+							width: '100%',
+							bottom: 0,
+							marginTop: '100px',
+						}}  className="section-body">
 						<footer className="footer">
 							<div className="container-fluid">
 								<div className="row">

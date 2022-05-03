@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { getAllDepartments, createDepartment } from '../../../services/department'
+import { getAllDepartments, createDepartment, deleteDepartment } from '../../../services/department'
 import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
-    
+
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
@@ -55,6 +56,23 @@ const Department = () => {
         });
         console.log(value)
     };
+
+    const removeDepartment = async (departmentId) => {
+        try {
+            console.log('departmentId', departmentId)
+            const response = await deleteDepartment(departmentId);
+
+            if (response.error === false) {
+                toast.success("Department deleted successfully");
+            }
+
+        } catch (err) {
+            toast.error("Error, try again");
+            setFormState({ ...formState });
+        }
+
+    };
+
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -73,9 +91,10 @@ const Department = () => {
         fetchData();
 
     }, []);
+
     return (
         <>
-            <div style={{marginBottom: '50px'}}>
+            <div style={{ marginBottom: '50px' }}>
                 <ToastContainer />
                 <div>
                     <div className="container-fluid">
@@ -110,33 +129,47 @@ const Department = () => {
                                         <div className="table-responsive">
 
                                             {loading ? (
-                                            <Skeleton count={4}  height={50} />
+                                                <Skeleton count={4} height={50} />
                                             ) : (
                                                 <table className="table table-striped table-vcenter table-hover mb-0">
-                                                <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Department Name</th>
-                                                        <th>Department Head</th>
-                                                        <th>Total Employee</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {departments.map((department) => (
-                                                        <tr key={department.id}>
-                                                            <td>0{department.id}</td>
-                                                            <td><div className="font-15">{department.name}</div></td>
-                                                            <td>{department.department_head}</td>
-                                                            <td>102</td>
-                                                            <td>
-                                                                <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
-                                                                <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                            </td>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Department Name</th>
+                                                            <th>Department Head</th>
+                                                            <th>Total Employee</th>
+                                                            <th>Action</th>
                                                         </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        {departments.map((department) => (
+                                                            <tr key={department.id}>
+                                                                <td>0{department.id}</td>
+                                                                <td><div className="font-15">{department.name}</div></td>
+                                                                <td>{department.department_head}</td>
+                                                                <td>102</td>
+                                                                <td>
+                                                                <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
+                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        overlay={
+                                                                            <Popover id="popover-basic">
+                                                                                <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                                <Popover.Body>
+                                                                                    <div class="clearfix" >
+                                                                                        <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
+                                                                                        <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                                                                    </div>
+                                                                                </Popover.Body>
+                                                                            </Popover>
+                                                                        }>
+                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                                    </OverlayTrigger>
+
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
                                             )}
                                         </div>
                                     </div>
@@ -150,7 +183,6 @@ const Department = () => {
                                                 <div className="card-body text-center">
                                                     <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
                                                     <h6 className="mt-3">{department.name}</h6>
-                                                    {/* <div className="text-center text-muted mb-3">Web Development</div> */}
                                                     <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
                                                     <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
                                                 </div>

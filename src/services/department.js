@@ -53,16 +53,13 @@ export async function updateDepartment(body, userId, departmentId) {
 }
 
 
-export async function deleteDepartment(userId, departmentId, ref) {
-  return request(`${API_URL}/api/department/${userId}?id=${departmentId}`, {
+export async function deleteDepartment(departmentId) {
+  return request(`${API_URL}/departments/delete/${departmentId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': USER_TOKEN,
-    },
-    params: {
-      id: userId,
-      ref: ref,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
   });
 }
