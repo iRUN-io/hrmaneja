@@ -95,10 +95,16 @@ const Login = (navStatus) => {
 				password: formState.password,
 				confirmPassword: formState.confirmPassword,
 			}
-			console.log(body)
-			await createUser(body, user.id)
 
-			toast.success("User successfully added")
+			if (body.firstName === '' || body.emailID === '') {
+                toast.error('Please fill all the fields');
+                return;
+            }
+            const response = await await createUser(body, user.id);
+
+            if (response.error === false) {
+                toast.success("User created successfully");
+            }
 
 			setFormState({
 				employeeID: '',
@@ -134,14 +140,13 @@ const Login = (navStatus) => {
 		// console.log(formState)
 		console.log({[name]: value})
 	}
-	const [customers, setCustomers] = useState([]);
 		useEffect(() => {
 			async function fetchData() {
 				const user = await getUser();
 				if(user){
 					const userId = user.id;
 					const response = await getAllUsers(userId);
-			  		setCustomers(response?.data);
+			  		setUsers(response);
 					setUser(user)
 				}
 			}
@@ -220,7 +225,7 @@ const Login = (navStatus) => {
 													</tr>
 												</thead>
 												<tbody>
-													{customers.map((customer) => (
+													{users.map((customer) => (
 														<tr>
 															<td className="width45">
 																<span

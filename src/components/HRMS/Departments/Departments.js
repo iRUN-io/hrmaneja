@@ -4,10 +4,13 @@ import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
     
     const [formState, setFormState] = useState({
         departmentHead: '',
@@ -54,6 +57,7 @@ const Department = () => {
     };
     useEffect(() => {
         async function fetchData() {
+            setLoading(true);
             const user = await getUser();
             if (user) {
                 const userId = user.id;
@@ -62,6 +66,8 @@ const Department = () => {
                 setDepartments(response);
                 setUsers(userResponse);
                 setUser(user);
+                setLoading(false);
+
             }
         }
         fetchData();
@@ -69,7 +75,7 @@ const Department = () => {
     }, []);
     return (
         <>
-            <div>
+            <div style={{marginBottom: '50px'}}>
                 <ToastContainer />
                 <div>
                     <div className="container-fluid">
@@ -102,7 +108,11 @@ const Department = () => {
                                     </div>
                                     <div className="card-body">
                                         <div className="table-responsive">
-                                            <table className="table table-striped table-vcenter table-hover mb-0">
+
+                                            {loading ? (
+                                            <Skeleton count={4}  height={50} />
+                                            ) : (
+                                                <table className="table table-striped table-vcenter table-hover mb-0">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -127,6 +137,7 @@ const Department = () => {
                                                     ))}
                                                 </tbody>
                                             </table>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

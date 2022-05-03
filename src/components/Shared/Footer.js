@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 
 const year = new Date().getFullYear();
-export default class Footer extends Component {	render() {
+export default class Footer extends Component {
+	render() {
 		return (
 			<>
-				<div>
+				<div style={{
+					position: 'fixed',
+					width: '100%',
+					bottom: 0,
+					paddingTop: '10px',
+				}}>
 					<div className="section-body">
 						<footer className="footer">
 							<div className="container-fluid">
@@ -12,9 +18,9 @@ export default class Footer extends Component {	render() {
 									<div className="col-md-6 col-sm-12">
 										Copyright © {year}{' '}
 										<a href="https://irunauto.com">iRUN Technology</a>
-											.
-										</div>
-									<div className="col-md-6 col-sm-12 text-md-right">
+										.
+									</div>
+									<div className="col-md-3 col-sm-12 text-md-right">
 										<ul className="list-inline mb-0">
 											<li className="list-inline-item">
 												<a href="fake_url">User Manual</a>
