@@ -52,6 +52,7 @@ function Employee(props) {
     company_admin: "",
     start_date: ""
   });
+		
 
   const createEmployeeAction = async () => {
     try {
