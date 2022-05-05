@@ -140,9 +140,9 @@ function Employee(props) {
       const user = await getUser();
       if (user) {
         const userId = user.id;
-        const response = await getAllEmployees(userId);
         const userResponse = await getAllUsers(userId);
         const departmentResponse = await getAllDepartments(userId);
+        const response = await getAllEmployees();
         setDepartments(departmentResponse);
         setEmployee(response);
         setUsers(userResponse);
@@ -159,7 +159,7 @@ function Employee(props) {
         <ToastContainer />
         <div>
           <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
-              <EmployeeCounter employees={employees}  />
+            <EmployeeCounter employees={employees} />
           </div>
 
           <div className="section-body">
