@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from "../../services/auth";
-import { setUserSession } from '../../config/common';
+import { setUserSession, getUser } from '../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 	const [email, setUserName] = useState();
 	const [password, setPassword] = useState();
+
+	useEffect(() => {
+		if (getUser()) {
+			window.location.href = "/";
+		}
+	}, []);
+	
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const response = await loginUser({
 			email,
 			password
 		});
-
 		try {
 			if (response.error === false) {
 				toast.success('Logged in successfully !')

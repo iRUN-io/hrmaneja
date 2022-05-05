@@ -2,10 +2,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { removeUserSession } from '../../config/common';
 
 class Header extends Component {
 	render() {
 		const { fixNavbar, darkHeader } = this.props;
+		const logout = () => {
+			removeUserSession();
+		};
 		return (
 			<div>
 				<div
@@ -50,7 +54,7 @@ class Header extends Component {
 											<a className="dropdown-item" >
 												<i className="dropdown-icon fe fe-help-circle" /> Need help?
 											</a>
-											<NavLink to="/login" className="dropdown-item">
+											<NavLink to="/login" onClick={logout} className="dropdown-item">
 												<i className="dropdown-icon fe fe-log-out" /> Sign out
 											</NavLink>
 										</div>
