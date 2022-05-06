@@ -10,7 +10,6 @@ import { getUser } from "../../../config/common";
 import { ToastContainer, toast } from "react-toastify";
 import LeaveRequest from "./LeaveRequest";
 import "react-toastify/dist/ReactToastify.css";
-import EmployeeDetails from "./EmployeeDetails";
 import EmployeeCounter from "./EmployeeCounter";
 import Currency from "../../common/currency";
 import Country from "../../common/country";
@@ -20,7 +19,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 function Employee(props) {
   const { fixNavbar } = props;
-  const [employees, setEmployee] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [user, setUser] = useState([]);
   const [users, setUsers] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -135,6 +134,15 @@ function Employee(props) {
     console.log({ [name]: value });
   };
 
+  const employeeDetails = id => {
+    try {
+      const employee = employees.filter(employee => employee.id === id);
+      props.history.push("/hr-employee-details", { employee });
+    } catch (err) {
+      toast.error("Error, try again");
+    }
+  };
+
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
@@ -145,7 +153,7 @@ function Employee(props) {
         const departmentResponse = await getAllDepartments(userId);
         const response = await getAllEmployees();
         setDepartments(departmentResponse);
-        setEmployee(response);
+        setEmployees(response);
         setUsers(userResponse);
         setUser(user);
         setLoading(false);
@@ -261,6 +269,7 @@ function Employee(props) {
                                         type="button"
                                         className="btn btn-icon btn-sm"
                                         title="View"
+                                        onClick={() => employeeDetails(employee?.id)}
                                       >
                                         <i className="fa fa-eye" />
                                       </button>
@@ -290,7 +299,6 @@ function Employee(props) {
                     </div>
                   </div>
                 </div>
-                <EmployeeDetails />
                 <LeaveRequest />
               </div>
             </div>

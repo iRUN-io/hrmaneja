@@ -6,7 +6,7 @@ import Sparklineschart from '../../common/sparklineschart';
 import { Link } from 'react-router-dom';
 import Donutchart from '../../common/donutchart';
 import { connect } from 'react-redux';
-
+import { getUser } from "../../../config/common";
 class Dashboard extends Component {
 
 	render() {

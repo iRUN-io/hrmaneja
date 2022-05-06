@@ -1,12 +1,25 @@
 
-import React from 'react'
+import React from 'react';
+import { connect } from "react-redux";
+import {
+    statisticsAction,
+    statisticsCloseAction
+  } from "../../../actions/settingsAction";
 import 'react-toastify/dist/ReactToastify.css';
-const EmployeeDetails = () => {
+const EmployeeDetails = (employee) => {
 
+    const { location } = employee;
+    const { state } = location;
+    const  employeeData = state.employee[0];
+
+    if(!employeeData) {
+        window.location.href = "/hr-employees";
+    }
     return (
         <>
-
-            <div className="tab-pane fade" id="Employee-view" role="tabpanel">
+        <div className="section-body">
+            <div className="container-fluid">
+            <div>
                 <div className="row">
                     <div className="col-lg-4 col-md-12">
                         <div className="card">
@@ -18,8 +31,8 @@ const EmployeeDetails = () => {
                                         alt="avatar"
                                     />
                                     <div className="media-body">
-                                        <h5 className="m-0">Sara Hopkins</h5>
-                                        <p className="text-muted mb-0">Webdeveloper</p>
+                                        <h5 className="m-0">{employeeData.name}</h5>
+                                        <p className="text-muted mb-0">{employeeData.role}</p>
                                     </div>
                                 </div>
                                 <p className="mb-4">
@@ -32,7 +45,6 @@ const EmployeeDetails = () => {
                                 </button>
                             </div>
                         </div>
-
 
                     </div>
                     <div className="col-lg-8 col-md-12">
@@ -124,8 +136,20 @@ const EmployeeDetails = () => {
                     </div>
                 </div>
             </div>
+            </div>
+            </div>
         </>
     );
 }
 
-export default EmployeeDetails;
+const mapStateToProps = state => ({
+    fixNavbar: state.settings.fixNavbar,
+    statisticsOpen: state.settings.isStatistics,
+    statisticsClose: state.settings.isStatisticsClose
+  });
+  
+  const mapDispatchToProps = dispatch => ({
+    statisticsAction: e => dispatch(statisticsAction(e)),
+    statisticsCloseAction: e => dispatch(statisticsCloseAction(e))
+  });
+  export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetails);

@@ -208,7 +208,7 @@ class Menu extends Component {
 					{
 						"id": 6,
 						"label": "Employee",
-						"to": "/hr-employee"
+						"to": "/hr-employees"
 					},
 					{
 						"id": 7,
