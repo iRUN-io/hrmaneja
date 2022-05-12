@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 
-class Profile extends Component {
-    render() {
-        const { fixNavbar } = this.props;
+function Profile(props) {
+   
+        const { fixNavbar } = props;
         return (
             <>
                 <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
@@ -559,7 +559,7 @@ class Profile extends Component {
 
             </>
         )
-    }
+    
 }
 const mapStateToProps = state => ({
     fixNavbar: state.settings.isFixNavbar
