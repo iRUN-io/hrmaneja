@@ -59,7 +59,6 @@ const Department = () => {
 
     const removeDepartment = async (departmentId) => {
         try {
-            console.log('departmentId', departmentId)
             const response = await deleteDepartment(departmentId);
 
             if (response.error === false) {

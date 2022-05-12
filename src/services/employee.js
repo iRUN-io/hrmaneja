@@ -50,16 +50,13 @@ export async function updateEmployee(body, userId, employeeId) {
 }
 
 
-export async function deleteEmployee(userId, employeeId) {
-  return request(`${API_URL}/api/employee/${userId}?id=${employeeId}`, {
+export async function deleteEmployee(employeeId) {
+  return request(`${API_URL}/employees/delete/${employeeId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': USER_TOKEN,
-    },
-    params: {
-      id: userId,
-      employeeId: employeeId,
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
     },
   });
 }

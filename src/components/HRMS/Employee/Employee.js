@@ -4,7 +4,7 @@ import {
   statisticsAction,
   statisticsCloseAction
 } from "../../../actions/settingsAction";
-import { getAllEmployees, createEmployee } from "../../../services/employee";
+import { getAllEmployees, createEmployee, deleteEmployee } from "../../../services/employee";
 import { getAllUsers } from "../../../services/user";
 import { getUser } from "../../../config/common";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,6 +16,7 @@ import Country from "../../common/country";
 import { getAllDepartments } from "../../../services/department";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 function Employee(props) {
   const { fixNavbar } = props;
@@ -51,7 +52,7 @@ function Employee(props) {
     company_admin: "",
     start_date: ""
   });
-		
+
 
   const createEmployeeAction = async () => {
     try {
@@ -141,6 +142,21 @@ function Employee(props) {
     } catch (err) {
       toast.error("Error, try again");
     }
+  };
+
+  const removeEmployee = async (employeeID) => {
+    try {
+      const response = await deleteEmployee(employeeID);
+
+      if (response.error === false) {
+        toast.success("Employee deleted successfully");
+      }
+
+    } catch (err) {
+      toast.error("Error, try again");
+      setFormState({ ...formState });
+    }
+
   };
 
   useEffect(() => {
@@ -280,14 +296,20 @@ function Employee(props) {
                                       >
                                         <i className="fa fa-edit" />
                                       </button>
-                                      <button
-                                        type="button"
-                                        className="btn btn-icon btn-sm js-sweetalert"
-                                        title="Delete"
-                                        data-type="confirm"
-                                      >
-                                        <i className="fa fa-trash-o text-danger" />
-                                      </button>
+                                      <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                        overlay={
+                                          <Popover id="popover-basic">
+                                            <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                            <Popover.Body>
+                                              <div class="clearfix" >
+                                                <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
+                                                <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                              </div>
+                                            </Popover.Body>
+                                          </Popover>
+                                        }>
+                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                      </OverlayTrigger>
                                     </td>
                                   </tr>
                                 ))}
