@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-
+import data from '../../config/data.json';
 class Profile extends Component {
     render() {
         const { fixNavbar } = this.props;
+        console.log('data', data);
         return (
             <>
                 <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
