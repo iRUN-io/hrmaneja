@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import data from '../../config/data'
 import Country from '../common/country';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 
 function Profile(props) {
-    console.log(data)
-    console.log(data.name)
+    // console.log(data)
+    // console.log(data.name)
    
         const { fixNavbar } = props;
         const [activity, setActivity] = useState([]);
@@ -23,13 +27,54 @@ function Profile(props) {
             country: data.country,
             about_me: data.about
         })
+
+        const createProfileAction = async () => {
+            try {
+                setFormState({ ...formState});
+                const body = {
+                    username: data.userName,
+                    email: data.email,
+                    first_name: data.firstName,
+                    last_name: data.lastName,
+                    company: data.company,
+                    address: data.Address,
+                    city: data.city,
+                    postal_code: data.postalCode,
+                    country: data.country,
+                    about_me: data.about
+                
+
+                };
+                setFormState({
+                    username: data.userName,
+                    email: data.email,
+                    first_name: data.firstName,
+                    last_name: data.lastName,
+                    company: data.company,
+                    address: data.Address,
+                    city: data.city,
+                    postal_code: data.postalCode,
+                    country: data.country,
+                    about_me: data.about
+                }) 
+               
+
+
+            }
+            catch (err) {
+                toast.error("Error, try again");
+                setFormState({ ...formState });
+            }
+            console.log(formState)
+        }
+
         const updateForm = e => {
             const { value, name } = e.target;
             setFormState({
               ...formState,
               [name]: value
             });
-            console.log({ [name]: value });
+            // console.log({ [name]: value });
           };
 
         useEffect(() => {
@@ -376,7 +421,7 @@ function Profile(props) {
                                                 </div>
                                             </div>
                                             <div className="card-footer text-right">
-                                                <button type="submit" className="btn btn-primary">Update Profile</button>
+                                                <button type="submit" onClick={() => createProfileAction()} className="btn btn-primary" >Update Profile</button>
                                             </div>
                                         </div>
                                     </div>
