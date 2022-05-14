@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { removeUserSession } from '../../config/common';
+import { getUser, removeUserSession } from '../../config/common';
 
 class Header extends Component {
 	render() {
@@ -10,6 +10,7 @@ class Header extends Component {
 		const logout = () => {
 			removeUserSession();
 		};
+		const user = getUser();
 		return (
 			<div>
 				<div
@@ -32,7 +33,7 @@ class Header extends Component {
 											className="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-1"
 											data-toggle="dropdown"
 										>
-											<i className="fa fa-5 fa-user" />
+											<span>{user.name ?? ''} </span> <i className="fa fa-5 fa-angle-down" />
 										</a>
 										<div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 											<NavLink to="/profile" className="dropdown-item">

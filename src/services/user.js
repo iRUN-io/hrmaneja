@@ -9,14 +9,11 @@ export async function getAllUsers() {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
     },
-    // params: {
-    //   id: USER_ID,
-    // },
   });
 }
 
 export async function getUser(id) {
-  return request(`${API_URL}/api/user/${USER_ID}?id=${id}`, {
+  return request(`${API_URL}/user/${USER_ID}?id=${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -30,7 +27,7 @@ export async function getUser(id) {
 }
 
 export async function createUser(body) {
-  return request(`${API_URL}/api/user/${USER_ID}`, {
+  return request(`${API_URL}/user/create`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
