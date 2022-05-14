@@ -1,11 +1,19 @@
 {
     "id": 1,
+    "firstName": "Godfred",
+    "userName": "Godfredo",
+    "lastName": "Akpan",
+    "postalCode": "540226",
+    "about": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, numquam.",
     "email": "godfredakpan@gmail.com",
     "name": "Godfred Akpan",
     "role": "Software Engineer",
     "department": "Godfred Akpan",
-    "organization": "iRUN Technology",
+    "company": "iRUN Technology",
     "gender": "Male",
+    "Address": "455 S. Airport St. Moncks Corner",
+    "city": "Chicago",
+    "country": "Australia",
     "activity": [
         {
             "action": "Created a user",
@@ -16,6 +24,11 @@
             "action": "Created a Department",
             "date": "2020-04-17",
             "activity": "Godfred created a department in the system"
+        },
+        {
+            "action": "Created a profilr",
+            "date": "2020-04-17",
+            "activity": "Godfred created a profile in the system"
         }
 ],
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6W3siaWQiOjEsIm5hbWUiOiJHb2RmcmVkIEFrcGFuIiwiZW1haWwiOiJnb2RmcmVkYWtwYW5AZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWRfYXQiOm51bGwsInBhc3N3b3JkIjoiJDJ5JDEwJHBQZFhib21OTmZ1UmZpWDhtQ2d6ZHU3ZzRjd3I1YkFvOWRUb09VSy5sNFRkTWkzL1Y4Nmk2IiwicmVtZW1iZXJfdG9rZW4iOm51bGwsImNyZWF0ZWRfYXQiOm51bGwsInVwZGF0ZWRfYXQiOm51bGwsInN0cmlwZV9pZCI6bnVsbCwiY2FyZF9icmFuZCI6bnVsbCwiY2FyZF9sYXN0X2ZvdXIiOm51bGwsInRyaWFsX2VuZHNfYXQiOm51bGx9XSwiaWF0IjoxNjUyMzk0MjE3LCJleHAiOjE2NTI0MDE0MTd9.k5TlyPgWoTsFTa1ANIvg8zKcCk5FSPkc7oDvEOI5Ywg"
