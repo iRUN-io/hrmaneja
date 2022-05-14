@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import data from '../../config/data'
 
 function Profile(props) {
+    console.log(data)
    
         const { fixNavbar } = props;
         return (
