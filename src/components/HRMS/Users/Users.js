@@ -1,61 +1,3 @@
-// import React, { Component } from 'react'
-
-// import React, { Component } from 'react';
-
-// class Users extends Component {
-// 	constructor(props){
-// 		super(props);
-// 		this.state ={
-// 			Admin: [
-// 				{
-// 					id: 1,
-// 					name: 'read'
-// 				},
-// 				{
-// 					id: 1,
-// 					name: 'write'
-// 				},
-// 				{
-// 					id: 1,
-// 					name: 'delete'
-// 				},
-// 			],
-// 			selected: [],
-// 		}
-// 	}
-	
-// 	render() {
-// 		return (
-// 			<div>
-// 				<form>
-// 					<p>
-// 						{JSON.stringify(this.state.selected)}
-// 					</p>
-// 					<p>Foods</p>
-// 					{
-// 						this.state.Admin.map(item => {
-// 							return (
-// 								<label key = {item.id}>
-// 									<input type='checkbox'
-// 										onChange={ () => this.onChange(item.id)}
-// 										selected={this.stae.selected.includes(item.id)}
-// 									></input>
-// 									<span>{item.name}</span>
-// 								</label>
-// 							)
-// 						})
-// 					}
-
-// 				</form>
-				
-// 			</div>
-// 		);
-// 	}
-// }
-
-// export default Users;
-
-
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -408,8 +350,8 @@ const Login = (navStatus) => {
 																<tr>
 																	<th />
 																	<th>Read</th>
-																	<th>Write</th>
-																	<th>Delete</th>
+																	{/* <th>Write</th>
+																	<th>Delete</th> */}
 																</tr>
 															</thead>
 															<tbody>
@@ -429,34 +371,7 @@ const Login = (navStatus) => {
 																			</span>
 																		</label>
 																	</td>
-																	<td>
-																		<label className="custom-control custom-checkbox">
-																			<input
-																				type="checkbox"
-																				className="custom-control-input"
-																				name="example-checkbox1"
-																				defaultValue="option1"
-																				defaultChecked
-																			/>
-																			<span className="custom-control-label">
-																				&nbsp;
-																			</span>
-																		</label>
-																	</td>
-																	<td>
-																		<label className="custom-control custom-checkbox">
-																			<input
-																				type="checkbox"
-																				className="custom-control-input"
-																				name="example-checkbox1"
-																				defaultValue="option1"
-																				defaultChecked
-																			/>
-																			<span className="custom-control-label">
-																				&nbsp;
-																			</span>
-																		</label>
-																	</td>
+
 																</tr>
 																<tr>
 																	<td>Admin</td>
