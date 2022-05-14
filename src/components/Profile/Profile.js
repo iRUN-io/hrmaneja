@@ -1,29 +1,62 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import data from '../../config/data'
+import Country from '../common/country';
+
 
 function Profile(props) {
     console.log(data)
+    console.log(data.name)
    
         const { fixNavbar } = props;
+        const [activity, setActivity] = useState([]);
+
+        const [ formState, setFormState ] = useState({
+            username: data.userName,
+            email: data.email,
+            first_name: data.firstName,
+            last_name: data.lastName,
+            company: data.company,
+            address: data.Address,
+            city: data.city,
+            postal_code: data.postalCode,
+            country: data.country,
+            about_me: data.about
+        })
+        const updateForm = e => {
+            const { value, name } = e.target;
+            setFormState({
+              ...formState,
+              [name]: value
+            });
+            console.log({ [name]: value });
+          };
+
+        useEffect(() => {
+            setActivity(data);
+        }, []);
+
+
+
+
+
         return (
             <>
+
+            {/* {data.map((data, index) => ( */}
+                <div >
                 <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
                     <div className="container-fluid">
                         <div className="row clearfix">
                             <div className="col-md-12">
+                                {/* card profile */}
                                 <div className="card card-profile">
                                     <div className="card-body text-center">
                                         <img className="card-profile-img" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
-                                        <h4 className="mb-3">Sara Hopkins</h4>
-                                        <ul className="social-links list-inline mb-3 mt-2">
-                                            <li className="list-inline-item"><a href="fake_url" title="Facebook" data-toggle="tooltip"><i className="fa fa-facebook" /></a></li>
-                                            <li className="list-inline-item"><a href="fake_url" title="Twitter" data-toggle="tooltip"><i className="fa fa-twitter" /></a></li>
-                                            <li className="list-inline-item"><a href="fake_url" title={1234567890} data-toggle="tooltip"><i className="fa fa-phone" /></a></li>
-                                            <li className="list-inline-item"><a href="fake_url" title="@skypename" data-toggle="tooltip"><i className="fa fa-skype" /></a></li>
-                                        </ul>
-                                        <p className="mb-4">Contrary to popular belief, Lorem Ipsum is not simply random text.<br /> It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
-                                        <button className="btn btn-outline-primary btn-sm"><span className="fa fa-twitter" /> Follow</button>
+                                        <h4 className="mb-3">{data.name}</h4>
+                                       
+                                        <p className="mb-4">{data.about}</p>
+                                        {/* <button className="btn btn-outline-primary btn-sm"><span className="fa fa-twitter" /> Follow</button> */}
                                     </div>
                                 </div>
                             </div>
@@ -35,24 +68,20 @@ function Profile(props) {
                         <div className="row clearfix">
                             <div className="col-12">
                                 <ul className="nav nav-tabs mb-3" id="pills-tab" role="tablist">
-                                    <li className="nav-item">
-                                        <a className="nav-link active" id="pills-calendar-tab" data-toggle="pill" href="#pills-calendar" role="tab" aria-controls="pills-calendar" aria-selected="false">Calendar</a>
-                                    </li>
+                                    
                                     <li className="nav-item">
                                         <a className="nav-link" id="pills-timeline-tab" data-toggle="pill" href="#pills-timeline" role="tab" aria-controls="pills-timeline" aria-selected="true">Timeline</a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Profile</a>
                                     </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" id="pills-blog-tab" data-toggle="pill" href="#pills-blog" role="tab" aria-controls="pills-blog" aria-selected="true">Blog</a>
-                                    </li>
+                                  
                                 </ul>
                             </div>
                             <div className="col-lg-8 col-md-12">
                                 <div className="tab-content" id="pills-tabContent">
                                     <div className="tab-pane fade show active" id="pills-calendar" role="tabpanel" aria-labelledby="pills-calendar-tab">
-                                        <div className="card">
+                                        {/* <div className="card">
                                             <div className="card-header bline">
                                                 <h3 className="card-title">Calendar</h3>
                                                 <div className="card-options">
@@ -75,7 +104,7 @@ function Profile(props) {
                                             <div className="card-body">
                                                 <div id="calendar" />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="tab-pane fade" id="pills-timeline" role="tabpanel" aria-labelledby="pills-timeline-tab">
                                         <div className="card">
@@ -101,36 +130,41 @@ function Profile(props) {
                                                 </div>
                                             </div>
                                             <div className="card-body">
-                                                <div className="timeline_item ">
-                                                    <img className="tl_avatar" src="../assets/images/xs/avatar1.jpg" alt="fake_url" />
-                                                    <span><a href="fake_url;">Elisse Joson</a> San Francisco, CA <small className="float-right text-right">20-April-2019 - Today</small></span>
-                                                    <h6 className="font600">Hello, 'Im a single div responsive timeline without media Queries!</h6>
-                                                    <div className="msg">
-                                                        <p>I'm speaking with myself, number one, because I have a very good brain and I've said a lot of things. I write the best placeholder text, and I'm the biggest developer on the web card she has is the Lorem card.</p>
-                                                        <a href="fake_url;" className="mr-20 text-muted"><i className="fa fa-heart text-pink" /> 12 Love</a>
-                                                        <a className="text-muted" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i className="fa fa-comments" /> 1 Comment</a>
-                                                        <div className="collapse p-4 section-gray" id="collapseExample">
-                                                            <form className="well">
-                                                                <div className="form-group">
-                                                                    <textarea rows={2} className="form-control no-resize" placeholder="Enter here for tweet..." defaultValue={""} />
-                                                                </div>
-                                                                <button className="btn btn-primary">Submit</button>
-                                                            </form>
-                                                            <ul className="recent_comments list-unstyled mt-4 mb-0">
-                                                                <li>
-                                                                    <div className="avatar_img">
-                                                                        <img className="rounded img-fluid" src="../assets/images/xs/avatar4.jpg" alt="fake_url" />
-                                                                    </div>
-                                                                    <div className="comment_body">
-                                                                        <h6>Donald Gardner <small className="float-right font-14">Just now</small></h6>
-                                                                        <p>Lorem ipsum Veniam aliquip culpa laboris minim tempor</p>
-                                                                    </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="timeline_item ">
+                                            {data.activity.map((activity, index) => (
+                                                 <div className="timeline_item " key={index}>
+                                                 <img className="tl_avatar" src="../assets/images/xs/avatar1.jpg" alt="fake_url" />
+                                                 <span><a href="fake_url;">{data.name}</a> San Francisco, CA <small className="float-right text-right">{activity.date}</small></span>
+                                                 <h6 className="font600">{activity.action}</h6>
+                                                 <div className="msg">
+                                                 
+                                                     <p>{activity.activity}</p>
+                                                     {/* <a href="fake_url;" className="mr-20 text-muted"><i className="fa fa-heart text-pink" /> 12 Love</a>
+                                                     <a className="text-muted" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i className="fa fa-comments" /> 1 Comment</a> */}
+                                                     <div className="collapse p-4 section-gray" id="collapseExample">
+                                                         <form className="well">
+                                                             <div className="form-group">
+                                                                 <textarea rows={2} className="form-control no-resize" placeholder="Enter here for tweet..." defaultValue={""} />
+                                                             </div>
+                                                             <button className="btn btn-primary">Submit</button>
+                                                         </form>
+                                                         <ul className="recent_comments list-unstyled mt-4 mb-0">
+                                                             <li>
+                                                                 <div className="avatar_img">
+                                                                     <img className="rounded img-fluid" src="../assets/images/xs/avatar4.jpg" alt="fake_url" />
+                                                                 </div>
+                                                                 <div className="comment_body">
+                                                                     <h6>Donald Gardner <small className="float-right font-14">Just now</small></h6>
+                                                                     <p>Lorem ipsum Veniam aliquip culpa laboris minim tempor</p>
+                                                                 </div>
+                                                             </li>
+                                                         </ul>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                            ))}
+                                                
+                                               
+                                                {/* <div className="timeline_item ">
                                                     <img className="tl_avatar" src="../assets/images/xs/avatar4.jpg" alt="fake_url" />
                                                     <span><a href="fake_url;" >Dessie Parks</a> Oakland, CA <small className="float-right text-right">19-April-2019 - Yesterday</small></span>
                                                     <h6 className="font600">Oeehhh, that's awesome.. Me too!</h6>
@@ -193,7 +227,7 @@ function Profile(props) {
                                                             </form>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </div>
@@ -224,63 +258,120 @@ function Profile(props) {
                                                     <div className="col-md-5">
                                                         <div className="form-group">
                                                             <label className="form-label">Company</label>
-                                                            <input type="text" className="form-control" disabled placeholder="Company" defaultValue="Epic Theme" />
+                                                            <input type="text" className="form-control" 
+                                                            // disabled placeholder="Company" 
+                                                            name='company'
+                                                            id='company'
+                                                            value={formState?.company}
+                                                            onChange={updateForm}
+
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-3">
                                                         <div className="form-group">
                                                             <label className="form-label">Username</label>
-                                                            <input type="text" className="form-control" placeholder="Username" defaultValue="michael23" />
+                                                            <input type="text" className="form-control" placeholder="Username" 
+                                                            name='username'
+                                                            id='username'
+                                                            value={formState?.username}
+                                                            onChange={updateForm}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-4">
                                                         <div className="form-group">
                                                             <label className="form-label">Email address</label>
-                                                            <input type="email" className="form-control" placeholder="Email" />
+                                                            <input type="email" className="form-control" placeholder="Email" 
+                                                            name='email'
+                                                            id='email'
+                                                            value={formState?.email}
+                                                            onChange={updateForm}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-6">
                                                         <div className="form-group">
                                                             <label className="form-label">First Name</label>
-                                                            <input type="text" className="form-control" placeholder="Company" defaultValue="Jane" />
+                                                            <input type="text" className="form-control" placeholder="Company" 
+                                                            name='first_name'
+                                                            id='firstName'
+                                                            value={formState?.first_name}
+                                                            onChange={updateForm}
+                                                            
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-6">
                                                         <div className="form-group">
                                                             <label className="form-label">Last Name</label>
-                                                            <input type="text" className="form-control" placeholder="Last Name" defaultValue="Pearson" />
+                                                            <input type="text" className="form-control" 
+                                                            placeholder="Last Name" 
+                                                            name='last_name'
+                                                            id='lastName'
+                                                            value={formState?.last_name}
+                                                            onChange={updateForm}
+                                                            
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="form-group">
                                                             <label className="form-label">Address</label>
-                                                            <input type="text" className="form-control" placeholder="Home Address" defaultValue="455 S. Airport St. Moncks Corner" />
+                                                            <input type="text" className="form-control" 
+                                                            placeholder="Home Address" 
+                                                            name='address'
+                                                            id='lastName'
+                                                            value={formState?.last_name}
+                                                            onChange={updateForm}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-4">
                                                         <div className="form-group">
                                                             <label className="form-label">City</label>
-                                                            <input type="text" className="form-control" placeholder="City" defaultValue="New York" />
+                                                            <input type="text" className="form-control" placeholder="City" 
+                                                            name='city'
+                                                            id='city'
+                                                            value={formState?.city}
+                                                            onChange={updateForm} 
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6 col-md-3">
                                                         <div className="form-group">
                                                             <label className="form-label">Postal Code</label>
-                                                            <input type="number" className="form-control" placeholder="ZIP Code" />
+                                                            <input type="number" className="form-control" placeholder="ZIP Code" 
+                                                            name='postal_code'
+                                                            id='postalCode'
+                                                            value={formState?.postal_code}
+                                                            onChange={updateForm}
+                                                            />
                                                         </div>
                                                     </div>
                                                     <div className="col-md-5">
                                                         <div className="form-group">
                                                             <label className="form-label">Country</label>
-                                                            <select className="form-control custom-select">
-                                                                <option value>USA</option>
+                                                            <select className="form-control custom-select"
+                                                             name='country'
+                                                             id='country'
+                                                             value={formState?.country}
+                                                             onChange={updateForm}
+                                                            >
+                                                                <Country />
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="form-group mb-0">
                                                             <label className="form-label">About Me</label>
-                                                            <textarea rows={5} className="form-control" placeholder="Here can be your description" defaultValue={"Oh so, your weak rhyme You doubt I'll bother, reading into it I'll probably won't, left to my own devices But that's the difference in our opinions."} />
+                                                            <textarea rows={5} className="form-control" placeholder="Here can be your description" 
+                                                            
+                                                            name='about'
+                                                            id='about'
+                                                            value={formState?.about_me}
+                                                            onChange={updateForm}
+                                                             />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -559,6 +650,10 @@ function Profile(props) {
                     </div>
                 </div>
 
+            </div>
+            {/* // ))} */}
+            
+                
             </>
         )
     
