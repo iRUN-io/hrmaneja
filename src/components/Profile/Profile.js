@@ -43,7 +43,6 @@ function Profile(props) {
         return (
             <>
 
-            {/* {data.map((data, index) => ( */}
                 <div >
                 <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
                     <div className="container-fluid">
@@ -322,7 +321,7 @@ function Profile(props) {
                                                             placeholder="Home Address" 
                                                             name='address'
                                                             id='lastName'
-                                                            value={formState?.last_name}
+                                                            value={formState?.address}
                                                             onChange={updateForm}
                                                             />
                                                         </div>
