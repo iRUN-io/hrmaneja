@@ -33,7 +33,7 @@ class Header extends Component {
 											className="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-1"
 											data-toggle="dropdown"
 										>
-											<span>{user.name ?? ''} </span> <i className="fa fa-5 fa-angle-down" />
+											<span>{user?.name ?? 'Guest '} </span> <i className="fa fa-5 fa-angle-down" />
 										</a>
 										<div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 											<NavLink to="/profile" className="dropdown-item">

@@ -15,16 +15,12 @@ export async function getAllDepartments(userId) {
   });
 }
 
-export async function getDepartment(userId, id) {
-  return request(`${API_URL}/api/department/?id=${id}`, {
+export async function getDepartment(id) {
+  return request(`${API_URL}/departments/details/${id}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,
-    },
-    params: {
-      userId: userId,
-      id: id,
     },
   });
 }

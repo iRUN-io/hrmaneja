@@ -7,18 +7,20 @@ import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import EditDepartments from './EditDepartment';
+
 const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
-
+    const [department, setDepartment] = useState([]);
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
         allEmployee: '',
     });
-
+console.log('departmentData', department)
     const createDepartmentAction = async () => {
         try {
             setFormState({ ...formState });
@@ -91,6 +93,7 @@ const Department = () => {
 
     }, []);
 
+
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
@@ -99,8 +102,7 @@ const Department = () => {
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-                                <li className="nav-item"><a className="nav-link active" id="Departments-tab" data-toggle="tab" href="#Departments-list">List View</a></li>
-                                <li className="nav-item"><a className="nav-link" id="Departments-tab" data-toggle="tab" href="#Departments-grid">Grid View</a></li>
+                                <li className="nav-item"><a className="nav-link active" id="Departments-tab" data-toggle="tab" href="#Departments-list">List</a></li>
                             </ul>
                             <div className="header-action">
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
@@ -148,7 +150,8 @@ const Department = () => {
                                                                 <td>{department.department_head}</td>
                                                                 <td>102</td>
                                                                 <td>
-                                                                <button type="button" className="btn btn-icon" title="Edit"><i className="fa fa-edit" /></button>
+
+                                                                    <button type="button" className="btn btn-icon" title="Edit" onClick={()=> setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
                                                                     <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                         overlay={
                                                                             <Popover id="popover-basic">
@@ -174,35 +177,7 @@ const Department = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="tab-pane fade" id="Departments-grid" role="tabpanel">
-                                <div className="row clearfix">
-                                    {departments.map((department) => (
-                                        <div className="col-lg-3 col-md-6">
-                                            <div className="card">
-                                                <div className="card-body text-center">
-                                                    <img className="img-thumbnail rounded-circle avatar-xxl" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
-                                                    <h6 className="mt-3">{department.name}</h6>
-                                                    <button type="button" className="btn btn-icon btn-outline-primary"><i className="fa fa-pencil" /></button>
-                                                    <button type="button" className="btn btn-icon btn-outline-danger"><i className="fa fa-trash" /></button>
-                                                </div>
-                                                <div className="card-footer text-center">
-                                                    <div className="row clearfix">
-                                                        <div className="col-6">
-                                                            <h5 className="mb-0">105</h5>
-                                                            <div className="text-muted">Employee</div>
-                                                        </div>
-                                                        <div className="col-6">
-                                                            <h5 className="mb-0">$3100</h5>
-                                                            <div className="text-muted">Total Salary</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -244,6 +219,18 @@ const Department = () => {
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" onClick={() => createDepartmentAction()} className="btn btn-primary">Save changes</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+            {/* Update Modal */}
+            <div className="modal fade" id="editModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">Edit Department</h5>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <EditDepartments department={department} />
                     </div>
                 </div>
             </div>
