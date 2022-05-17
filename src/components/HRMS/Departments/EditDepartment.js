@@ -42,12 +42,12 @@ const EditDepartment = (departmentData) => {
 
     useEffect(() => {
         async function fetchData() {
-                const userResponse = await getAllUsers();
-                setFormState({
-                    departmentHead: departmentData.department.department_head,
-                    departmentName: departmentData.department.name,
-                });
-                setUsers(userResponse);
+            const userResponse = await getAllUsers();
+            setFormState({
+                departmentHead: departmentData.department.department_head,
+                departmentName: departmentData.department.name,
+            });
+            setUsers(userResponse);
         }
         fetchData();
 

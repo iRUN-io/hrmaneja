@@ -191,6 +191,7 @@ console.log('departmentData', department)
                             <h5 className="modal-title" id="exampleModalLabel">Add Departments</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
+                        {/* update form */}
                         <div className="modal-body">
                             <div className="row clearfix">
                                 <div className="col-md-12">
