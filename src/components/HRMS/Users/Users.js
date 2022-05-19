@@ -3,17 +3,14 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getAllUsers, createUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
-import { getUser } from '../../../config/common';
+import { getUser, formatDate } from '../../../config/common';
 import EditUsers from './EditUsers';
-import usersInfo from '../../../config/usersInfo.json'
 
-const Login = (navStatus) => {
-	const [user, setUser] = useState([]);
-
+const Users = (navStatus) => {
+	const [user, setCurrentUser] = useState([]);
+	const [userData, setUserData] = useState([]);
 	const [users, setUsers] = useState([]);
-	// const [usersInfo, setUsersInfo] = useState();
 	const [employees, setEmployees] = useState([]);
-
 	const [formState, setFormState] = useState({
 		employeeID: '',
 		name: '',
@@ -23,7 +20,7 @@ const Login = (navStatus) => {
 		userName: '',
 		password: '',
 		confirmPassword: '',
-		
+
 	});
 
 	const createUsersAction = async () => {
@@ -79,9 +76,7 @@ const Login = (navStatus) => {
 		setFormState({
 			...formState,
 			[name]: value,
-
 		})
-		// console.log(formState)
 		console.log({ [name]: value })
 	}
 
@@ -94,19 +89,11 @@ const Login = (navStatus) => {
 				const employeeResponse = await getAllEmployees(userId);
 				setUsers(response);
 				setEmployees(employeeResponse);
-				setUser(user)
+				setCurrentUser(user)
 			}
 		}
 		fetchData();
 	}, []);
-
-
-
-	const [usersData, setUsersData] = useState([]);
-	useEffect(() => {
-		setUsersData(usersInfo);
-	}, []);
-	// console.log('userInfo', usersInfo)
 	return (
 		<>
 			<div>
@@ -169,14 +156,14 @@ const Login = (navStatus) => {
 													<tr>
 														<th className="w60">Name</th>
 														<th />
-														<th />
-														<th>Created Date</th>
 														<th>Role</th>
+														<th>Phone</th>
+														<th>Created Date</th>
 														<th className="w100">Action</th>
 													</tr>
 												</thead>
 												<tbody>
-													{usersInfo.map((user) => (
+													{users.map((user) => (
 														<tr>
 															<td className="width45">
 																<span
@@ -193,17 +180,19 @@ const Login = (navStatus) => {
 																<span>{user.email}</span>
 															</td>
 															<td>
-																<span className="tag tag-danger">{user.roleType}</span>
+																<span className="tag tag-danger">{user.role}</span>
 															</td>
-															<td>{user.date}</td>
-															<td>{user.roleType}</td>
-															<td><td>
+															<td>{user.phone}</td>
 															
+															<td>{formatDate(user.created_at)}</td>
+															<td><td>
+
 																<button
-																 	data-toggle="modal" data-target="#editModal"
+																	data-toggle="modal" data-target="#editModal"
 																	type="button"
 																	className="btn btn-icon"
 																	title="Edit"
+																	onClick={()=> setUserData(user)}
 																>
 																	<i className="fa fa-edit" />
 																</button>
@@ -236,7 +225,7 @@ const Login = (navStatus) => {
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h5 className="modal-title" id="exampleModalLabel">Add Users</h5>
+							<h5 className="modal-title" id="exampleModalLabel">Add User</h5>
 							<button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 						</div>
 						<div className="modal-body">
@@ -256,7 +245,7 @@ const Login = (navStatus) => {
 												</select>
 											</div>
 										</div>
-										<div className="col-lg-6 col-md-6 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='name' value={formState?.name}
@@ -267,7 +256,7 @@ const Login = (navStatus) => {
 												/>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='email' value={formState?.email}
@@ -278,7 +267,7 @@ const Login = (navStatus) => {
 												/>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='phone' value={formState?.phone}
@@ -289,7 +278,7 @@ const Login = (navStatus) => {
 												/>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<select className="form-control show-tick"
 													name='roleType' value={formState?.roleType}
@@ -302,7 +291,7 @@ const Login = (navStatus) => {
 												</select>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='userName' value={formState?.userName}
@@ -313,7 +302,7 @@ const Login = (navStatus) => {
 												/>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='password' value={formState?.password}
@@ -324,7 +313,7 @@ const Login = (navStatus) => {
 												/>
 											</div>
 										</div>
-										<div className="col-md-4 col-sm-12">
+										<div className="col-lg-12 col-md-12 col-sm-12">
 											<div className="form-group">
 												<input
 													name='confirmPassword' value={formState?.confirmPassword}
@@ -350,20 +339,20 @@ const Login = (navStatus) => {
 				</div>
 			</div>
 			{/* update modal */}
-			
+
 			<div className="modal fade" id="editModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Edit User</h5>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        </div>
-                        <EditUsers users={users} />
-                    </div>
-                </div>
-            </div>
+				<div className="modal-dialog" role="document">
+					<div className="modal-content">
+						<div className="modal-header">
+							<h5 className="modal-title" id="exampleModalLabel">Edit User</h5>
+							<button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+						</div>
+						<EditUsers user={userData} />
+					</div>
+				</div>
+			</div>
 		</>
 	);
 }
 
-export default Login;
+export default Users;

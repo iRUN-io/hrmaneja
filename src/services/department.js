@@ -37,9 +37,9 @@ export async function createDepartment(body, userId) {
   });
 }
 
-export async function updateDepartment(body, userId, departmentId) {
-  return request(`${API_URL}/api/department/${userId}?id=${departmentId}`, {
-    method: 'patch',
+export async function updateDepartment(body, departmentId) {
+  return request(`${API_URL}/departments/update/${departmentId}`, {
+    method: 'put',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,

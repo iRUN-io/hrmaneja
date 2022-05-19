@@ -38,9 +38,9 @@ export async function createEmployee(body, userId) {
   });
 }
 
-export async function updateEmployee(body, userId, employeeId) {
-  return request(`${API_URL}/api/employee/${userId}?id=${employeeId}`, {
-    method: 'patch',
+export async function updateEmployee(body, employeeId) {
+  return request(`${API_URL}/employees/update/${employeeId}`, {
+    method: 'put',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,

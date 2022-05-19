@@ -1,38 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAllUsers, createUser, updateUser } from '../../../services/user'
-import { getAllEmployees, updateEmployee } from '../../../services/employee'
-import { getUser } from '../../../config/common';
+import { updateUser } from '../../../services/user'
+import { getAllEmployees } from '../../../services/employee'
 import 'react-loading-skeleton/dist/skeleton.css'
-// import usersInfo from '../../../config/usersInfo'
-import usersInfo from '../../../config/usersInfo.json'
-import data from '../../../config/data.json'
 
-
-
-const EditUsers = () => {
-    const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([]);
-	const [employees, setEmployees] = useState([]);
+const EditUsers = (userData) => {
+    const [employees, setEmployees] = useState([]);
     const [formState, setFormState] = useState({
-        
-		employeeID: '',
+        employeeID: '',
 		email: '',
 		phone: '',
 		roleType: '',
 		userName: '',
 		password: '',
 		confirmPassword: '',
-		
 	});
+
+    const user = userData.user;
    
     const editUsersAction = async () => {
         try {
             setFormState({ ...formState });
             
             const body = {
-                employeeID: formState.employeeID,
+                employee_id: formState.employeeID,
                 name: formState.name,
                 email: formState.email,
                 phone: formState.phone,
@@ -40,38 +32,43 @@ const EditUsers = () => {
                 userName: formState.userName,
                 password: formState.password,
                 confirmPassword: formState.confirmPassword,
-               
             }
-            console.log('my body', body)
+
             if (body.name === '' || body.email === '') {
 				toast.error('Please fill all the fields');
 				return;
 			}
-			const response = await await updateUser(body, user.id);
+			const response = await updateUser(body, user.id);
 
 			if (response.error === false) {
-				toast.success("User created successfully");
+				toast.success("User updated successfully");
 			}
         } catch (err){
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
-         // console.log(body)
+
     };
     
     useEffect(() => {
-        setUsers(data);
         setFormState({
-            employeeID: data.employeeID,
-            email: data.email,
-            phone: data.phone,
-            role: data.role,
-            userName: data.userName,
-            name: data.firstName + ' ' + data.lastName,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            userName: user.userName,
+            name: user.name,
         });
-    }, [data, users]);
-    // console.log('formstate', formState)
-    // console.log(users)
+    }, [user]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const employeeResponse = await getAllEmployees();
+            setEmployees(employeeResponse || []);
+        }
+        fetchData();
+    
+    }, []);
+
 
     const updateForm = (e) => {
         const { value, name } = e.target;
@@ -79,13 +76,13 @@ const EditUsers = () => {
             ...formState,
             [name]: value,
         });
-        // console.log(value)
     };
 
 
   return (
     <>
         <div style={{ marginBottom: '50px' }}>
+            <ToastContainer/>
             <div className="modal-body">
                 <div className="card">
                     <div className="card-body">
@@ -98,13 +95,13 @@ const EditUsers = () => {
                                         onChange={updateForm}
                                     >
                                         <option>Select Employee</option>
-                                        {usersInfo.map((user) => (
+                                        {employees.map((user) => (
                                             <option value={user.id}>{user.name}</option>
                                         ))}
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-lg-6 col-md-6 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='name' value={formState?.name}
@@ -115,7 +112,7 @@ const EditUsers = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='email' value={formState?.email}
@@ -126,7 +123,7 @@ const EditUsers = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='phone' value={formState?.phone}
@@ -137,7 +134,7 @@ const EditUsers = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <select className="form-control show-tick"
                                         name='roleType' value={formState?.roleType}
@@ -150,7 +147,7 @@ const EditUsers = () => {
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='userName' value={formState?.userName}
@@ -161,7 +158,7 @@ const EditUsers = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            {/* <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='password' value={formState?.password}
@@ -172,7 +169,7 @@ const EditUsers = () => {
                                     />
                                 </div>
                             </div>
-                            <div className="col-md-4 col-sm-12">
+                            <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='confirmPassword' value={formState?.confirmPassword}
@@ -182,7 +179,7 @@ const EditUsers = () => {
                                         placeholder="Confirm Password"
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                         </div>
                     </div>

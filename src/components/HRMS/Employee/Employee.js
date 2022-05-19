@@ -5,7 +5,6 @@ import {
   statisticsCloseAction
 } from "../../../actions/settingsAction";
 import { getAllEmployees, createEmployee, deleteEmployee } from "../../../services/employee";
-import { getAllUsers } from "../../../services/user";
 import { getUser } from "../../../config/common";
 import { ToastContainer, toast } from "react-toastify";
 import LeaveRequest from "./LeaveRequest";
@@ -18,29 +17,26 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
-import employeeData from '../../../config/employeeData.json'
-import EditUsers from "../Users/EditUsers";
+
+
+export const getEmployeeById = (employeeId) => {
+  async function fetchData() {
+      const response = await getAllEmployees();
+      const employee = response.filter(employee => employee.id === employeeId);
+      return employee[0];
+  }
+  fetchData();
+  
+};
 
 function Employee(props) {
   const { fixNavbar } = props;
-
+  const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
-  useEffect(() => {
-    setEmployees(employeeData)
-  
-    
-  }, [])
-  console.log(employeeData)
-  
-  
-  
   const [user, setUser] = useState([]);
-  const [users, setUsers] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [formState, setFormState] = useState({
-    // employeeID: '',
     name: "",
     email: "",
     phone: "",
@@ -66,12 +62,10 @@ function Employee(props) {
     start_date: ""
   });
 
-
   const createEmployeeAction = async () => {
     try {
       setFormState({ ...formState });
       const body = {
-        // employeeID: formState.employeeID,
         name: formState.name,
         email: formState.email,
         phone: formState.phone,
@@ -108,7 +102,6 @@ function Employee(props) {
       }
 
       setFormState({
-        // employeeID: '',
         name: "",
         email: "",
         phone: "",
@@ -178,12 +171,10 @@ function Employee(props) {
       const user = await getUser();
       if (user) {
         const userId = user.id;
-        const userResponse = await getAllUsers(userId);
         const departmentResponse = await getAllDepartments(userId);
         const response = await getAllEmployees();
         setDepartments(departmentResponse);
         setEmployees(response);
-        setUsers(userResponse);
         setUser(user);
         setLoading(false);
       }
@@ -251,7 +242,7 @@ function Employee(props) {
                                 </tr>
                               </thead>
                               <tbody>
-                                {employeeData.map((employee, index) => (
+                                {employees.map((employee, index) => (
                                   <tr key={index}>
                                     <td className="w40">
                                       <label className="custom-control custom-checkbox">
@@ -272,19 +263,19 @@ function Employee(props) {
                                         data-toggle="tooltip"
                                         data-original-title="Avatar Name"
                                       >
-                                        {/* {console.log(employee.name)} */}
+
                                         {(
                                           employee?.name[0] + employee?.name[1]
                                         ).toUpperCase()}
                                       </span>
                                       <div className="ml-3">
                                         <h6 className="mb-0">
-                                          {/* godfred */}
+
                                           {employee?.name}
                                         </h6>
                                         <span className="text-muted">
-                                          felz@gmail.com
-                                          {/* {employee?.email} */}
+
+                                          {employee?.email}
                                         </span>
                                       </div>
                                     </td>
@@ -306,6 +297,7 @@ function Employee(props) {
                                         <i className="fa fa-eye" />
                                       </button>
                                       <button
+                                        onClick={()=> setEmployee(employee)}
                                         data-toggle="modal" data-target="#editModal"
                                         type="button"
                                         className="btn btn-icon btn-sm"
@@ -498,7 +490,7 @@ function Employee(props) {
                       id="line_manager"
                     >
                       <option value="">Select Line Manager</option>
-                      {users.map((user, index) => (
+                      {employees.map((user, index) => (
                         <option key={index} value={user.id}>
                           {user.name}
                         </option>
@@ -689,10 +681,10 @@ function Employee(props) {
         <div className="modal-dialog" role="document">
             <div className="modal-content">
                 <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">Edit Employees</h5>
+                    <h5 className="modal-title" id="exampleModalLabel">Edit Employee</h5>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                 </div>
-                <EditEmployee  employees={employees}/>
+                <EditEmployee  employee={employee}/>
             </div>
         </div>
     </div>

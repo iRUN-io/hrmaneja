@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
+import { getEmployeeById } from '../Employee/Employee';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);
@@ -20,7 +21,7 @@ const Department = () => {
         departmentName: '',
         allEmployee: '',
     });
-console.log('departmentData', department)
+
     const createDepartmentAction = async () => {
         try {
             setFormState({ ...formState });
@@ -147,7 +148,7 @@ console.log('departmentData', department)
                                                             <tr key={department.id}>
                                                                 <td>0{department.id}</td>
                                                                 <td><div className="font-15">{department.name}</div></td>
-                                                                <td>{department.department_head}</td>
+                                                                <td>{department?.department_head}</td>
                                                                 <td>102</td>
                                                                 <td>
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { updateDepartment } from '../../../services/department'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getUser } from '../../../services/user';
 import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -14,7 +13,6 @@ const EditDepartment = (departmentData) => {
         departmentName: '',
     });
     
-    console.log('formState', formState)
     const editDepartmentAction = async () => {
         try {
             setFormState({ ...formState });
@@ -26,8 +24,7 @@ const EditDepartment = (departmentData) => {
                 toast.error('Please fill all the fields');
                 return;
             }
-            const user = await getUser();
-            const response = await updateDepartment(body, user.id);
+            const response = await updateDepartment(body, departmentData.department.id);
 
             if (response.error === false) {
                 toast.success("Department updated successfully");

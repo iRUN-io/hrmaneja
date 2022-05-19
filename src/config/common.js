@@ -1,3 +1,5 @@
+
+
 // return the user data from the session storage
   export const getUser = () => {
     const userStr = sessionStorage.getItem('user');
@@ -21,3 +23,10 @@
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('user', JSON.stringify(user));
   }
+
+  export const formatDate = (date) => {
+		var d = new Date(date),
+			createdDate = d.toDateString();
+			return createdDate;
+	};
+  
