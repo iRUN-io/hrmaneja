@@ -5,11 +5,15 @@ import { getAllUsers, createUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import { getUser } from '../../../config/common';
 import EditUsers from './EditUsers';
+import usersInfo from '../../../config/usersInfo.json'
 
 const Login = (navStatus) => {
 	const [user, setUser] = useState([]);
+
 	const [users, setUsers] = useState([]);
+	// const [usersInfo, setUsersInfo] = useState();
 	const [employees, setEmployees] = useState([]);
+
 	const [formState, setFormState] = useState({
 		employeeID: '',
 		name: '',
@@ -19,10 +23,7 @@ const Login = (navStatus) => {
 		userName: '',
 		password: '',
 		confirmPassword: '',
-		superAdmin: [],
-		employee: [],
-		admin: [],
-		hrAdmin: [],
+		
 	});
 
 	const createUsersAction = async () => {
@@ -99,6 +100,13 @@ const Login = (navStatus) => {
 		fetchData();
 	}, []);
 
+
+
+	const [usersData, setUsersData] = useState([]);
+	useEffect(() => {
+		setUsersData(usersInfo);
+	}, []);
+	// console.log('userInfo', usersInfo)
 	return (
 		<>
 			<div>
@@ -114,7 +122,7 @@ const Login = (navStatus) => {
 										data-toggle="tab"
 										href="#user-list"
 									>
-										List
+										LIST
 									</a>
 								</li>
 								{/* <li className="nav-item">
@@ -168,7 +176,7 @@ const Login = (navStatus) => {
 													</tr>
 												</thead>
 												<tbody>
-													{users.map((user) => (
+													{usersInfo.map((user) => (
 														<tr>
 															<td className="width45">
 																<span
@@ -177,7 +185,7 @@ const Login = (navStatus) => {
 																	data-placement="top"
 																	data-original-title="Avatar Name"
 																>
-																	NG
+																	{user.avatar}
 																</span>
 															</td>
 															<td>
@@ -185,12 +193,14 @@ const Login = (navStatus) => {
 																<span>{user.email}</span>
 															</td>
 															<td>
-																<span className="tag tag-danger">{user.role}</span>
+																<span className="tag tag-danger">{user.roleType}</span>
 															</td>
-															<td>24 Jun, 2015</td>
-															<td>CEO and Founder</td>
+															<td>{user.date}</td>
+															<td>{user.roleType}</td>
 															<td><td>
+															
 																<button
+																 	data-toggle="modal" data-target="#editModal"
 																	type="button"
 																	className="btn btn-icon"
 																	title="Edit"
@@ -226,7 +236,7 @@ const Login = (navStatus) => {
 				<div className="modal-dialog" role="document">
 					<div className="modal-content">
 						<div className="modal-header">
-							<h5 className="modal-title" id="exampleModalLabel">Add Departments</h5>
+							<h5 className="modal-title" id="exampleModalLabel">Add Users</h5>
 							<button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
 						</div>
 						<div className="modal-body">
@@ -340,6 +350,7 @@ const Login = (navStatus) => {
 				</div>
 			</div>
 			{/* update modal */}
+			
 			<div className="modal fade" id="editModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
