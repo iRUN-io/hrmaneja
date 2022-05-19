@@ -17,10 +17,23 @@ import { getAllDepartments } from "../../../services/department";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import EditEmployee from "./EditEmployee";
+import employeeData from '../../../config/employeeData.json'
+import EditUsers from "../Users/EditUsers";
 
 function Employee(props) {
   const { fixNavbar } = props;
+
   const [employees, setEmployees] = useState([]);
+  useEffect(() => {
+    setEmployees(employeeData)
+  
+    
+  }, [])
+  console.log(employeeData)
+  
+  
+  
   const [user, setUser] = useState([]);
   const [users, setUsers] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -221,9 +234,9 @@ function Employee(props) {
                     </div>
                     <div className="card-body">
                       <div className="table-responsive">
-                        {loading ? (
+                        {/* {loading ? (
                           <Skeleton count={4} height={50} />
-                        ) : (
+                        ) : ( */}
                           <>
                             <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
                               <thead>
@@ -238,7 +251,7 @@ function Employee(props) {
                                 </tr>
                               </thead>
                               <tbody>
-                                {employees.map((employee, index) => (
+                                {employeeData.map((employee, index) => (
                                   <tr key={index}>
                                     <td className="w40">
                                       <label className="custom-control custom-checkbox">
@@ -259,16 +272,19 @@ function Employee(props) {
                                         data-toggle="tooltip"
                                         data-original-title="Avatar Name"
                                       >
+                                        {/* {console.log(employee.name)} */}
                                         {(
-                                          employee.name[0] + employee.name[1]
+                                          employee?.name[0] + employee?.name[1]
                                         ).toUpperCase()}
                                       </span>
                                       <div className="ml-3">
                                         <h6 className="mb-0">
+                                          {/* godfred */}
                                           {employee?.name}
                                         </h6>
                                         <span className="text-muted">
-                                          {employee?.email}
+                                          felz@gmail.com
+                                          {/* {employee?.email} */}
                                         </span>
                                       </div>
                                     </td>
@@ -290,6 +306,7 @@ function Employee(props) {
                                         <i className="fa fa-eye" />
                                       </button>
                                       <button
+                                        data-toggle="modal" data-target="#editModal"
                                         type="button"
                                         className="btn btn-icon btn-sm"
                                         title="Edit"
@@ -316,7 +333,7 @@ function Employee(props) {
                               </tbody>
                             </table>
                           </>
-                        )}
+                        {/* )} */}
                       </div>
                     </div>
                   </div>
@@ -667,6 +684,18 @@ function Employee(props) {
           </div>
         </div>
       </div>
+      {/* update modal */}
+      <div className="modal fade" id="editModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog" role="document">
+            <div className="modal-content">
+                <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Edit Employees</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <EditEmployee  employees={employees}/>
+            </div>
+        </div>
+    </div>
     </>
   );
 }
