@@ -1,5 +1,6 @@
 {
     "id": 1,
+    "phone": 1234567,
     "firstName": "Godfred",
     "userName": "Godfredo",
     "lastName": "Akpan",
@@ -14,6 +15,7 @@
     "Address": "455 S. Airport St. Moncks Corner",
     "city": "Chicago",
     "country": "Australia",
+    "employeeID" : 1234,
     "activity": [
         {
             "action": "Created a user",

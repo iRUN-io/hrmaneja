@@ -5,31 +5,32 @@ import { getAllUsers, createUser, updateUser } from '../../../services/user'
 import { getAllEmployees, updateEmployee } from '../../../services/employee'
 import { getUser } from '../../../config/common';
 import 'react-loading-skeleton/dist/skeleton.css'
+// import usersInfo from '../../../config/usersInfo'
+import usersInfo from '../../../config/usersInfo.json'
+import data from '../../../config/data.json'
 
-import React from 'react'
 
-const EditUsers = (usersData) => {
+
+const EditUsers = () => {
     const [user, setUser] = useState([]);
-	const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
 	const [employees, setEmployees] = useState([]);
     const [formState, setFormState] = useState({
+        
 		employeeID: '',
-		name: '',
 		email: '',
 		phone: '',
 		roleType: '',
 		userName: '',
 		password: '',
 		confirmPassword: '',
-		superAdmin: [],
-		employee: [],
-		admin: [],
-		hrAdmin: [],
+		
 	});
-    console.log('formstate', formState)
+   
     const editUsersAction = async () => {
         try {
             setFormState({ ...formState });
+            
             const body = {
                 employeeID: formState.employeeID,
                 name: formState.name,
@@ -41,6 +42,7 @@ const EditUsers = (usersData) => {
                 confirmPassword: formState.confirmPassword,
                
             }
+            console.log('my body', body)
             if (body.name === '' || body.email === '') {
 				toast.error('Please fill all the fields');
 				return;
@@ -58,23 +60,18 @@ const EditUsers = (usersData) => {
     };
     
     useEffect(() => {
-        async function fetchData() {
-            const userResponse = await getAllUsers();
-            setFormState({
-            employeeID: usersData.users.employeeID,
-            name: usersData.users.name,
-            email: usersData.users.email,
-            phone: usersData.users.phone,
-            roleType: usersData.users.roleType,
-            userName: usersData.users.userName,
-            password: usersData.users.password,
-            confirmPassword: usersData.users.confirmPassword,
+        setUsers(data);
+        setFormState({
+            employeeID: data.employeeID,
+            email: data.email,
+            phone: data.phone,
+            role: data.role,
+            userName: data.userName,
+            name: data.firstName + ' ' + data.lastName,
         });
-            setUsers(userResponse);
-        }
-        fetchData()
-        
-    }, [usersData])
+    }, [data, users]);
+    // console.log('formstate', formState)
+    // console.log(users)
 
     const updateForm = (e) => {
         const { value, name } = e.target;
@@ -82,7 +79,7 @@ const EditUsers = (usersData) => {
             ...formState,
             [name]: value,
         });
-        console.log(value)
+        // console.log(value)
     };
 
 
@@ -96,12 +93,13 @@ const EditUsers = (usersData) => {
                             <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <select className="form-control show-tick"
+                                        
                                         name='employeeID' value={formState?.employeeID}
                                         onChange={updateForm}
                                     >
                                         <option>Select Employee</option>
-                                        {employees.map((employee) => (
-                                            <option value={employee.id}>{employee.name}</option>
+                                        {usersInfo.map((user) => (
+                                            <option value={user.id}>{user.name}</option>
                                         ))}
                                     </select>
                                 </div>
