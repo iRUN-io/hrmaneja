@@ -25,7 +25,7 @@ export const getEmployeeById = (employeeId) => {
       const employee = response.filter(employee => employee.id === employeeId);
       return employee[0];
   }
-  fetchData();
+  return fetchData();
   
 };
 
@@ -61,6 +61,8 @@ function Employee(props) {
     company_admin: "",
     start_date: ""
   });
+
+  
 
   const createEmployeeAction = async () => {
     try {

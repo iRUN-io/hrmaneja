@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { leftSidebar, sidebarCloseAll } from "../../../../actions/sidebars";
-import Logo from "../../../../assets/images/svg/logo.svg";
+import Logo from "../../../../assets/images/hr-manager-logo.png";
 import CloseIcon from "../../../../assets/images/svg/nav-close.svg";
 import { login, modalCloseAll } from "../../../../actions/modals";
 import { logoutUserIfNeeded } from "../../../../actions/user";
-
 class LeftSidebarWithLogin extends Component {
   constructor(props) {
     super(props);

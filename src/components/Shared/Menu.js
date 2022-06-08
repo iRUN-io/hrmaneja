@@ -5,6 +5,7 @@ import { Switch, Route, NavLink } from 'react-router-dom';
 import Header from '../Shared/Header';
 import Footer from '../Shared/Footer';
 import DefaultLink from './DefaultLink';
+import Image from "../elements/Image";
 
 
 import {
@@ -411,7 +412,8 @@ class Menu extends Component {
 										onClick={() => this.handler('hr', 'dashboard')}
 										className="header-brand"
 									>
-										<i className="fe fe-command brand-logo" />
+										{/* <i class='fa fa-dashboard'></i> */}
+										<i className="fe fe-clock brand-logo" />
 									</NavLink>
 									<div className="dropdown">
 										{/* <NavLink to="/page-search" className="nav-link icon">
@@ -866,7 +868,12 @@ class Menu extends Component {
 						</div>
 						<div className={`user_div ${isOpenUserMenu && 'open'}`}>
 							<h5 className="brand-name mb-4">
-								HrManeja
+							<Image
+							src={require("../../assets/images/hr-manager-logo.png")}
+							alt="Open"
+							className="img-fluid"
+							width={100}
+							/>
 							<p className="user_btn" onClick={this.toggleUserMenu}>
 									<i className="icon-logout" />
 								</p>
@@ -1110,7 +1117,13 @@ class Menu extends Component {
 							</div>
 						</div>
 						<div id="left-sidebar" className="sidebar ">
-							<h5 className="brand-name">HrManeja</h5>
+							<h5 className="brand-name">
+								<Image
+							src={require("../../assets/images/hr-manager-logo.png")}
+							alt="Open"
+							className="img-fluid"
+							width={100}
+							/></h5>
 							<nav id="left-sidebar-nav" className="sidebar-nav">
 								<MetisMenu className=""
 									content={content}
