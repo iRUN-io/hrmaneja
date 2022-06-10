@@ -211,6 +211,7 @@ class Menu extends Component {
 						"label": "Employee",
 						"to": "/hr-employees"
 					},
+
 					{
 						"id": 7,
 						"label": "Activities",
@@ -240,6 +241,11 @@ class Menu extends Component {
 						"id": 12,
 						"label": "Report",
 						"to": "/hr-report"
+					},
+					{
+						"id": 13,
+						"label": "Leave",
+						"to": "/hr-leave"
 					}
 				]
 			},
@@ -477,12 +483,12 @@ class Menu extends Component {
 								<li className="nav-item">
 									<a className="nav-link active" data-toggle="tab" href="#Settings" aria-expanded="true">
 										Settings
-								</a>
+									</a>
 								</li>
 								<li className="nav-item">
 									<a className="nav-link" data-toggle="tab" href="#activity" aria-expanded="false">
 										Activity
-								</a>
+									</a>
 								</li>
 							</ul>
 							<div className="tab-content">
@@ -718,7 +724,7 @@ class Menu extends Component {
 										</div>
 										<button type="button" className="btn btn-primary btn-block mt-3">
 											Upgrade Storage
-									</button>
+										</button>
 									</div>
 								</div>
 								<div role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
@@ -868,13 +874,13 @@ class Menu extends Component {
 						</div>
 						<div className={`user_div ${isOpenUserMenu && 'open'}`}>
 							<h5 className="brand-name mb-4">
-							<Image
-							src={require("../../assets/images/hr-manager-logo.png")}
-							alt="Open"
-							className="img-fluid"
-							width={100}
-							/>
-							<p className="user_btn" onClick={this.toggleUserMenu}>
+								<Image
+									src={require("../../assets/images/hr-manager-logo.png")}
+									alt="Open"
+									className="img-fluid"
+									width={100}
+								/>
+								<p className="user_btn" onClick={this.toggleUserMenu}>
 									<i className="icon-logout" />
 								</p>
 							</h5>
@@ -1119,11 +1125,11 @@ class Menu extends Component {
 						<div id="left-sidebar" className="sidebar ">
 							<h5 className="brand-name">
 								<Image
-							src={require("../../assets/images/hr-manager-logo.png")}
-							alt="Open"
-							className="img-fluid"
-							width={100}
-							/></h5>
+									src={require("../../assets/images/hr-manager-logo.png")}
+									alt="Open"
+									className="img-fluid"
+									width={100}
+								/></h5>
 							<nav id="left-sidebar-nav" className="sidebar-nav">
 								<MetisMenu className=""
 									content={content}

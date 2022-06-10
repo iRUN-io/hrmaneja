@@ -15,7 +15,7 @@ const Login = () => {
 			window.location.href = "/";
 		}
 	}, []);
-	
+
 	const handleSubmit = async e => {
 		e.preventDefault();
 		const response = await loginUser({
@@ -44,11 +44,11 @@ const Login = () => {
 				<div className="card">
 					<div className="text-center mb-2">
 						<Link className="header-brand" to="/">
-						<Image
-							src={require("../../assets/images/hr-manager-logo.png")}
-							alt="Open"
-							className="img-fluid"
-							width={100}
+							<Image
+								src={require("../../assets/images/hr-manager-logo.png")}
+								alt="Open"
+								className="img-fluid"
+								width={100}
 							/>
 						</Link>
 					</div>
@@ -110,10 +110,10 @@ const Login = () => {
 					<div className="carousel-inner">
 						<div className="carousel-item active">
 							<Image
-							src={require("../../assets/images/login/organize.svg")}
-							alt="Manage"
-							className="img-fluid"
-							width={100}
+								src={require("../../assets/images/login/organize.svg")}
+								alt="Manage"
+								className="img-fluid"
+								width={100}
 							/>
 							<div className="px-4 mt-4">
 								<h4>Manage</h4>
@@ -121,11 +121,11 @@ const Login = () => {
 							</div>
 						</div>
 						<div className="carousel-item">
-						<Image
-							src={require("../../assets/images/login/analysis.svg")}
-							alt="Manage"
-							className="img-fluid"
-							width={100}
+							<Image
+								src={require("../../assets/images/login/analysis.svg")}
+								alt="Manage"
+								className="img-fluid"
+								width={100}
 							/>
 							<div className="px-4 mt-4">
 								<h4>HR Data & Analysis</h4>
@@ -133,11 +133,11 @@ const Login = () => {
 							</div>
 						</div>
 						<div className="carousel-item">
-						<Image
-							src={require("../../assets/images/login/expense.svg")}
-							alt="Manage"
-							className="img-fluid"
-							width={100}
+							<Image
+								src={require("../../assets/images/login/expense.svg")}
+								alt="Manage"
+								className="img-fluid"
+								width={100}
 							/>
 							<div className="px-4 mt-4">
 								<h4>Expense Management</h4>

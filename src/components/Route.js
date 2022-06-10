@@ -62,6 +62,7 @@ import ForgotPassword from './Authentication/forgotpassword';
 import NotFound from './Authentication/404';
 import InternalServer from './Authentication/500';
 import EmployeeDetails from './HRMS/Employee/EmployeeDetails';
+import Leave from './HRMS/Leave/Leave';
 
 const Routes = [
     {
@@ -91,6 +92,13 @@ const Routes = [
         exact: true,
         pageTitle: "Employee",
         component: Employee
+    },
+    {
+        path: "/hr-leave",
+        name: 'leave',
+        exact: true,
+        pageTitle: "Leave",
+        component: Leave
     },
     {
         path: "/hr-employee-details",

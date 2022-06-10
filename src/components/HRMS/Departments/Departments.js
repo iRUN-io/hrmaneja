@@ -148,18 +148,18 @@ const Department = () => {
                                                             <tr key={department.id}>
                                                                 <td>0{department.id}</td>
                                                                 <td><div className="font-15">{department.name}</div></td>
-                                                                <td>{department?.department_head}</td>
+                                                                <td>{department.department_head}</td>
                                                                 <td>102</td>
                                                                 <td>
 
-                                                                    <button type="button" className="btn btn-icon" title="Edit" onClick={()=> setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
+                                                                    <button type="button" className="btn btn-icon" title="Edit" onClick={() => setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
                                                                     <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                         overlay={
                                                                             <Popover id="popover-basic">
                                                                                 <Popover.Header as="p">Confirm Delete</Popover.Header>
                                                                                 <Popover.Body>
-                                                                                    <div class="clearfix" >
-                                                                                        <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
+                                                                                    <div className="clearfix" >
+                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
                                                                                         <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
                                                                                     </div>
                                                                                 </Popover.Body>
@@ -178,7 +178,7 @@ const Department = () => {
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
