@@ -5,26 +5,38 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
+import { updateLeave } from '../../../services/leave';
 
-const EditDepartment = (departmentData) => {
+const EditDepartment = (employeeData) => {
     const [users, setUsers] = useState([]);
     const [formState, setFormState] = useState({
-        departmentHead: '',
-        departmentName: '',
+        employeeId: '',
+        employeeName: '',
+        leaveType: '',
+        fromDate: '',
+        toDate: '',
+        notifyEmployee: '',
+        leaveReason: '',
     });
     
     const editDepartmentAction = async () => {
         try {
             setFormState({ ...formState });
             const body = {
-                department_head: formState.departmentHead,
-                name: formState.departmentName,
+                employeeId: formState.employeeId,
+                employeeName: formState.employeeName,
+                leaveType: formState.leaveType,
+                fromDate: formState.fromDate,
+                toDate: formState.toDate,
+                notifyEmployee: formState.notifyEmployee,
+                leaveReason: formState.leaveReason,
+                status: 'Pending',
             }
-            if (body.departmentName === '' || body.department_head === '') {
+            if (body.employeeName === '' || body.fromDate === '') {
                 toast.error('Please fill all the fields');
                 return;
             }
-            const response = await updateDepartment(body, departmentData.department.id);
+            const response = await updateLeave(body, employeeData.department.id);
 
             if (response.error === false) {
                 toast.success("Department updated successfully");
@@ -41,14 +53,20 @@ const EditDepartment = (departmentData) => {
         async function fetchData() {
             const userResponse = await getAllUsers();
             setFormState({
-                departmentHead: departmentData.department.department_head,
-                departmentName: departmentData.department.name,
+                employeeId: employeeData.employeeId,
+                employeeName: employeeData.employeeName,
+                leaveType: employeeData.leaveType,
+                fromDate: employeeData.fromDate,
+                toDate: employeeData.toDate,
+                notifyEmployee: employeeData.notifyEmployee,
+                leaveReason: employeeData.leaveReason,
+                status: 'Pending',
             });
             setUsers(userResponse);
         }
         fetchData();
 
-    }, [departmentData]);
+    }, [employeeData]);
 
     const updateForm = (e) => {
         const { value, name } = e.target;

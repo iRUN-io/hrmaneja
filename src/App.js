@@ -19,9 +19,9 @@ class App extends Component {
 						<Route path="/signup" component={SignUp} />
 						<Route path="/login" component={Login} />
 						<Route path="/forgotpassword" component={ForgotPassword} />
-						<Route path="/notfound" component={NotFound} />
 						<Route path="/internalserver" component={InternalServer} />
 						<Route component={Layout} />
+						<Route path="/notfound" component={NotFound} />
 					</Switch>
 				</Router>
 			</div>

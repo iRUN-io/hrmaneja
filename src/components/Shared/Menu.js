@@ -1155,7 +1155,7 @@ class Menu extends Component {
 					</div>
 
 					<div className="page">
-						<Header dataFromParent={this.props.dataFromParent} dataFromSubParent={pageHeading[0].pageTitle} />
+						<Header dataFromParent={this.props.dataFromParent} dataFromSubParent={pageHeading[0]?.pageTitle} />
 						<Switch>
 							{Routes.map((layout, i) => {
 								return <Route key={i} exact={layout.exact} path={layout.path} component={layout.component}></Route>
@@ -1341,6 +1341,7 @@ class Menu extends Component {
 					<Route exact path="/app-setting">
 						<AppSetting dataFromParent={'dark'} />
 					</Route> */}
+
 						</Switch>
 						<Footer />
 					</div>

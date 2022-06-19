@@ -5,10 +5,12 @@ import { setUserSession, getUser } from '../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "../elements/Image";
+import LoadingBar from 'react-top-loading-bar';
 
 const Login = () => {
 	const [email, setUserName] = useState();
 	const [password, setPassword] = useState();
+	const [progress, setProgress] = useState(0)
 
 	useEffect(() => {
 		if (getUser()) {
@@ -18,12 +20,16 @@ const Login = () => {
 
 	const handleSubmit = async e => {
 		e.preventDefault();
+		setProgress(10);
+      	setProgress(50);
 		const response = await loginUser({
 			email,
 			password
 		});
 		try {
+			setProgress(50);
 			if (response.error === false) {
+				setProgress(100);
 				toast.success('Logged in successfully !')
 				setUserSession(response.data.token, response.data);
 				window.location.href = "/";
@@ -38,7 +44,8 @@ const Login = () => {
 		}
 	};
 	return (
-		<div className="auth">
+		<>
+		<LoadingBar progress={progress} color='#f11946' /><div className="auth">
 			<ToastContainer />
 			<div className="auth_left">
 				<div className="card">
@@ -48,20 +55,19 @@ const Login = () => {
 								src={require("../../assets/images/hr-manager-logo.png")}
 								alt="Open"
 								className="img-fluid"
-								width={100}
-							/>
+								width={100} />
 						</Link>
 					</div>
 					<form noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
 							{/* <div className="form-group">
-								<select className="custom-select">
-									<option>HR Dashboard</option>
-									<option>Project Dashboard</option>
-									<option>Job Portal</option>
-								</select>
-							</div> */}
+        <select className="custom-select">
+            <option>HR Dashboard</option>
+            <option>Project Dashboard</option>
+            <option>Job Portal</option>
+        </select>
+    </div> */}
 							<div className="form-group">
 								<input
 									type="email"
@@ -69,8 +75,7 @@ const Login = () => {
 									id="exampleInputEmail1"
 									aria-describedby="emailHelp"
 									placeholder="Enter email"
-									onChange={e => setUserName(e.target.value)}
-								/>
+									onChange={e => setUserName(e.target.value)} />
 							</div>
 							<div className="form-group">
 								<label className="form-label">
@@ -84,8 +89,7 @@ const Login = () => {
 									className="form-control"
 									id="exampleInputPassword1"
 									placeholder="Password"
-									onChange={e => setPassword(e.target.value)}
-								/>
+									onChange={e => setPassword(e.target.value)} />
 							</div>
 							<div className="form-group">
 								<label className="custom-control custom-checkbox">
@@ -101,8 +105,8 @@ const Login = () => {
 						</div>
 					</form>
 					{/* <div className="text-center text-muted">
-						Don't have account yet? <Link to="/signup">Sign Up</Link>
-					</div> */}
+        Don't have account yet? <Link to="/signup">Sign Up</Link>
+    </div> */}
 				</div>
 			</div>
 			<div className="auth_right">
@@ -113,8 +117,7 @@ const Login = () => {
 								src={require("../../assets/images/login/organize.svg")}
 								alt="Manage"
 								className="img-fluid"
-								width={100}
-							/>
+								width={100} />
 							<div className="px-4 mt-4">
 								<h4>Manage</h4>
 								<p>The intelligent way to manage employees.</p>
@@ -125,8 +128,7 @@ const Login = () => {
 								src={require("../../assets/images/login/analysis.svg")}
 								alt="Manage"
 								className="img-fluid"
-								width={100}
-							/>
+								width={100} />
 							<div className="px-4 mt-4">
 								<h4>HR Data & Analysis</h4>
 								<p>We provide you a quality interactive work platform that saves working time and effort, enhancing productivity.</p>
@@ -137,8 +139,7 @@ const Login = () => {
 								src={require("../../assets/images/login/expense.svg")}
 								alt="Manage"
 								className="img-fluid"
-								width={100}
-							/>
+								width={100} />
 							<div className="px-4 mt-4">
 								<h4>Expense Management</h4>
 								<p>Have the ultimate visibility of expenses in your company..</p>
@@ -147,7 +148,7 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
-		</div>
+		</div></>
 	);
 }
 

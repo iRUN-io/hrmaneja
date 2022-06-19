@@ -1,22 +1,18 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllActivities(userId, ref) {
-  return request(`${API_URL}/api/activity/${userId}`, {
+export async function getAllActivities() {
+  return request(`${API_URL}/activities/`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
-    params: {
-      id: userId,
-      ref: ref,
-    },
   });
 }
 
 export async function getActivity(userId, id) {
-  return request(`${API_URL}/api/activity/${userId}?id=${id}`, {
+  return request(`${API_URL}/activities/${userId}?id=${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -30,7 +26,7 @@ export async function getActivity(userId, id) {
 }
 
 export async function createActivity(body, userId) {
-  return request(`${API_URL}/api/activity/${userId}`, {
+  return request(`${API_URL}/activities/${userId}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -41,7 +37,7 @@ export async function createActivity(body, userId) {
 }
 
 export async function updateActivity(body, userId, myUserId) {
-  return request(`${API_URL}/api/activity/${userId}?id=${myUserId}`, {
+  return request(`${API_URL}/activities/${userId}?id=${myUserId}`, {
     method: 'patch',
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +49,7 @@ export async function updateActivity(body, userId, myUserId) {
 
 
 export async function deleteActivity(userId, myUserId, ref) {
-  return request(`${API_URL}/api/activity/${userId}?id=${myUserId}`, {
+  return request(`${API_URL}/activities/${userId}?id=${myUserId}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',

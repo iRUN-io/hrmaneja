@@ -9,6 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditLeaves from './EditLeave';
 import { getEmployeeById } from '../Employee/Employee';
+import moment from 'moment';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -26,11 +27,18 @@ const Leave = () => {
         leaveReason: '',
     });
 
+    useEffect(() => {
+        const user = getUser();
+        setFormState({ ...formState, employeeId: user.id, employeeName: user.name });
+    }, []);
+
     console.log('formState', formState)
 
     const createLeaveAction = async () => {
         try {
             setFormState({ ...formState });
+            console.log('formState', formState)
+
             const body = {
                 employeeId: formState.employeeId,
                 employeeName: formState.employeeName,
@@ -51,15 +59,15 @@ const Leave = () => {
                 toast.success("Leave created successfully");
             }
 
-            setFormState({
-                employeeId: '',
-                employeeName: '',
-                leaveType: '',
-                fromDate: '',
-                toDate: '',
-                notifyEmployee: '',
-                leaveReason: '',
-            });
+            // setFormState({
+            //     employeeId: '',
+            //     employeeName: '',
+            //     leaveType: '',
+            //     fromDate: '',
+            //     toDate: '',
+            //     notifyEmployee: '',
+            //     leaveReason: '',
+            // });
         } catch (err) {
             toast.error("Error, try again");
             setFormState({ ...formState });
@@ -73,7 +81,7 @@ const Leave = () => {
             ...formState,
             [name]: value,
         });
-        console.log(value)
+        // console.log(value)
     };
 
     const removeLeave = async (leaveId) => {
@@ -154,7 +162,7 @@ const Leave = () => {
                                                         <tr>
                                                             <th>#</th>
                                                             <th>Name</th>
-                                                            <th>Employee ID</th>
+                                                            {/* <th>Employee ID</th> */}
                                                             <th>Leave Type</th>
                                                             <th>Date</th>
                                                             <th>Reason</th>
@@ -170,20 +178,19 @@ const Leave = () => {
                                                                         data-toggle="tooltip"
                                                                         title="Avatar Name"
                                                                     >
-                                                                        DB
+                                                                        {leave.employee.charAt(0).toUpperCase()}
                                                                     </span>
                                                                 </td>
                                                                 <td>
-                                                                    <div className="font-15">{leave.employeeName}</div>
+                                                                    <div className="font-15">{leave.employee}</div>
                                                                 </td>
+
                                                                 <td>
-                                                                    <span>{leave.employeeName}</span>
+                                                                    <span>{leave.leave_type}</span>
                                                                 </td>
-                                                                <td>
-                                                                    <span>{leave.leaveType}</span>
-                                                                </td>
-                                                                <td>24 July, 2019 to 26 July, 2019</td>
-                                                                <td>{leave.leaveReason}</td>
+
+                                                                <td> {moment(leave.from).format('MMM Do YYYY')} To {moment(leave.to).format('MMM Do YYYY')}</td>
+                                                                <td>{leave.reason}</td>
                                                                 <td>
                                                                     <button
                                                                         type="button"
@@ -197,6 +204,7 @@ const Leave = () => {
                                                                         className="btn btn-icon btn-sm js-sweetalert"
                                                                         title="Delete"
                                                                         data-type="confirm"
+                                                                        onClick={() => removeLeave(leave.id)}
                                                                     >
                                                                         <i className="fa fa-trash-o text-danger" />
                                                                     </button>
@@ -263,7 +271,6 @@ const Leave = () => {
                                             {users.map((user) => (
                                                 <>
                                                     <option value={user.id}>{user.name}</option>
-                                                    <option value={user.id}>{user.name}</option>
                                                 </>
                                             ))}
                                         </select>
@@ -273,7 +280,7 @@ const Leave = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" onClick={() => createLeaveAction()} className="btn btn-primary">Save changes</button>
+                            <button onClick={() => createLeaveAction()} className="btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </div>
