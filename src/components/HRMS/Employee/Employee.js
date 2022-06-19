@@ -13,7 +13,7 @@ import EmployeeCounter from "./EmployeeCounter";
 import Currency from "../../common/currency";
 import Country from "../../common/country";
 import { getAllDepartments } from "../../../services/department";
-import Skeleton from "react-loading-skeleton";
+// import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
@@ -312,7 +312,7 @@ function Employee(props) {
                                           <Popover id="popover-basic">
                                             <Popover.Header as="p">Confirm Delete</Popover.Header>
                                             <Popover.Body>
-                                              <div class="clearfix" >
+                                              <div className="clearfix" >
                                                 <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
                                                 <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
                                               </div>

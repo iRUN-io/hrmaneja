@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
-import { getEmployeeById } from '../Employee/Employee';
+// import { getEmployeeById } from '../Employee/Employee';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);

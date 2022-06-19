@@ -1,14 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import CountUp from 'react-countup'
+import ComingSoon from '../../common/comingSoon';
 
 class Accounts extends Component {
 
     render() {
         const { fixNavbar } = this.props;
+        const comingSoon = true;
         return (
             <>
                 <div>
+                {comingSoon ?
+					<ComingSoon />
+					:
+					<>
                     <div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
                         <div className="container-fluid">
                             <div className="d-flex justify-content-between align-items-center">
@@ -513,7 +519,8 @@ class Accounts extends Component {
                             </div>
                         </div>
                     </div>
-
+                    </>
+				}
                 </div>
             </>
         )
