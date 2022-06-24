@@ -91,7 +91,7 @@ class WData extends Component {
                                         <table className="table card-table">
                                             <tbody>
                                                 <tr>
-                                                    <td>Admin Template</td>
+                                                    <td>HrManeja</td>
                                                     <td className="text-right">
                                                         <span className="tag tag-default">65%</span>
                                                     </td>

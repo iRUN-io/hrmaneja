@@ -26,7 +26,7 @@ const Department = () => {
         try {
             setFormState({ ...formState });
             const body = {
-                department_head: formState.departmentHead,
+                department_head: formState.departmentHead || 1,
                 name: formState.departmentName,
             }
             if (body.departmentName === '' || body.department_head === '') {

@@ -1085,7 +1085,7 @@ class Menu extends Component {
 										</div>
 										<div className="ml-3">
 											<div>+$29 New sale</div>
-											<a href="#!">Admin Template</a>
+											<a href="#!">HrManeja</a>
 											<div className="text-muted font-12">5 min ago</div>
 										</div>
 									</li>

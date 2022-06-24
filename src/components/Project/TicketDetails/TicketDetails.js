@@ -90,7 +90,7 @@ class TicketDetails extends Component {
                                             <ul className="list-group">
                                                 <li className="list-group-item">
                                                     <small className="text-muted">Title: </small>
-                                                    <p className="mb-0">Oculux Admin Template</p>
+                                                    <p className="mb-0">Oculux HrManeja</p>
                                                 </li>
                                                 <li className="list-group-item">
                                                     <small className="text-muted">Department: </small>
