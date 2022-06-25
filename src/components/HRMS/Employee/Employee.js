@@ -7,13 +7,11 @@ import {
 import { getAllEmployees, createEmployee, deleteEmployee } from "../../../services/employee";
 import { getUser } from "../../../config/common";
 import { ToastContainer, toast } from "react-toastify";
-import LeaveRequest from "./LeaveRequest";
 import "react-toastify/dist/ReactToastify.css";
 import EmployeeCounter from "./EmployeeCounter";
 import Currency from "../../common/currency";
 import Country from "../../common/country";
 import { getAllDepartments } from "../../../services/department";
-// import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
@@ -22,12 +20,12 @@ import { createActivity } from "../../../services/activities";
 
 export const getEmployeeById = (employeeId) => {
   async function fetchData() {
-      const response = await getAllEmployees();
-      const employee = response.filter(employee => employee.id === employeeId);
-      return employee[0];
+    const response = await getAllEmployees();
+    const employee = response.filter(employee => employee.id === employeeId);
+    return employee[0];
   }
   return fetchData();
-  
+
 };
 
 function Employee(props) {
@@ -63,7 +61,7 @@ function Employee(props) {
     start_date: ""
   });
 
-  
+
 
   const createEmployeeAction = async () => {
     try {
@@ -112,10 +110,10 @@ function Employee(props) {
           }
         )
 
-        if(logActivity.id){
+        if (logActivity.id) {
           toast.success("Employee created successfully");
         }
-        
+
       }
 
       setFormState({
@@ -172,8 +170,8 @@ function Employee(props) {
       const response = await deleteEmployee(employeeID);
 
       if (response.message) {
-        const newEmployees = employees.filter(employee => employee.id !== employeeId);
-                setEmployees(newEmployees);
+        const newEmployees = employees.filter(employee => employee.id !== employeeID);
+        setEmployees(newEmployees);
         toast.info(response.message);
       }
 
@@ -247,103 +245,103 @@ function Employee(props) {
                         {/* {loading ? (
                           <Skeleton count={4} height={50} />
                         ) : ( */}
-                          <>
-                            <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Name</th>
-                                  <th>Employee ID</th>
-                                  <th>Phone</th>
-                                  <th>Join Date</th>
-                                  <th>Role</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {employees.map((employee, index) => (
-                                  <tr key={index}>
-                                    <td className="w40">
-                                      <label className="custom-control custom-checkbox">
-                                        <input
-                                          type="checkbox"
-                                          className="custom-control-input"
-                                          name="example-checkbox1"
-                                          defaultValue="option1"
-                                        />
-                                        <span className="custom-control-label">
-                                          &nbsp;
-                                        </span>
-                                      </label>
-                                    </td>
-                                    <td className="d-flex">
-                                      <span
-                                        className="avatar avatar-blue"
-                                        data-toggle="tooltip"
-                                        data-original-title="Avatar Name"
-                                      >
-
-                                        {(
-                                          employee?.name[0] + employee?.name[1]
-                                        ).toUpperCase()}
+                        <>
+                          <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Employee ID</th>
+                                <th>Phone</th>
+                                <th>Join Date</th>
+                                <th>Role</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {employees.map((employee, index) => (
+                                <tr key={index}>
+                                  <td className="w40">
+                                    <label className="custom-control custom-checkbox">
+                                      <input
+                                        type="checkbox"
+                                        className="custom-control-input"
+                                        name="example-checkbox1"
+                                        defaultValue="option1"
+                                      />
+                                      <span className="custom-control-label">
+                                        &nbsp;
                                       </span>
-                                      <div className="ml-3">
-                                        <h6 className="mb-0">
+                                    </label>
+                                  </td>
+                                  <td className="d-flex">
+                                    <span
+                                      className="avatar avatar-blue"
+                                      data-toggle="tooltip"
+                                      data-original-title="Avatar Name"
+                                    >
 
-                                          {employee?.name}
-                                        </h6>
-                                        <span className="text-muted">
+                                      {(
+                                        employee?.name[0] + employee?.name[1]
+                                      ).toUpperCase()}
+                                    </span>
+                                    <div className="ml-3">
+                                      <h6 className="mb-0">
 
-                                          {employee?.email}
-                                        </span>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <span>{employee?.id}</span>
-                                    </td>
-                                    <td>
-                                      <span>{employee?.phone}</span>
-                                    </td>
-                                    <td>{employee?.start_date}</td>
-                                    <td>{employee?.role}</td>
-                                    <td>
-                                      <button
-                                        type="button"
-                                        className="btn btn-icon btn-sm"
-                                        title="View"
-                                        onClick={() => employeeDetails(employee?.id)}
-                                      >
-                                        <i className="fa fa-eye" />
-                                      </button>
-                                      <button
-                                        onClick={()=> setEmployee(employee)}
-                                        data-toggle="modal" data-target="#editModal"
-                                        type="button"
-                                        className="btn btn-icon btn-sm"
-                                        title="Edit"
-                                      >
-                                        <i className="fa fa-edit" />
-                                      </button>
-                                      <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                        overlay={
-                                          <Popover id="popover-basic">
-                                            <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                            <Popover.Body>
-                                              <div className="clearfix" >
-                                                <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
-                                                <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
-                                              </div>
-                                            </Popover.Body>
-                                          </Popover>
-                                        }>
-                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                      </OverlayTrigger>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </>
+                                        {employee?.name}
+                                      </h6>
+                                      <span className="text-muted">
+
+                                        {employee?.email}
+                                      </span>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span>{employee?.id}</span>
+                                  </td>
+                                  <td>
+                                    <span>{employee?.phone}</span>
+                                  </td>
+                                  <td>{employee?.start_date}</td>
+                                  <td>{employee?.role}</td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className="btn btn-icon btn-sm"
+                                      title="View"
+                                      onClick={() => employeeDetails(employee?.id)}
+                                    >
+                                      <i className="fa fa-eye" />
+                                    </button>
+                                    <button
+                                      onClick={() => setEmployee(employee)}
+                                      data-toggle="modal" data-target="#editModal"
+                                      type="button"
+                                      className="btn btn-icon btn-sm"
+                                      title="Edit"
+                                    >
+                                      <i className="fa fa-edit" />
+                                    </button>
+                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                      overlay={
+                                        <Popover id="popover-basic">
+                                          <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                          <Popover.Body>
+                                            <div className="clearfix" >
+                                              <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
+                                              <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                            </div>
+                                          </Popover.Body>
+                                        </Popover>
+                                      }>
+                                      <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                    </OverlayTrigger>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </>
                         {/* )} */}
                       </div>
                     </div>
@@ -698,15 +696,15 @@ function Employee(props) {
       {/* update modal */}
       <div className="modal fade" id="editModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div className="modal-dialog" role="document">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLabel">Edit Employee</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                </div>
-                <EditEmployee  employee={employee}/>
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">Edit Employee</h5>
+              <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
+            <EditEmployee employee={employee} />
+          </div>
         </div>
-    </div>
+      </div>
     </>
   );
 }

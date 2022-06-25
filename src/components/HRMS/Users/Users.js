@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getAllUsers, createUser } from '../../../services/user'
+import { getAllUsers, createUser, deleteUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import { getUser, formatDate } from '../../../config/common';
 import EditUsers from './EditUsers';
@@ -45,20 +45,20 @@ const Users = (navStatus) => {
 
 			if (response.id) {
 				const logActivity = await createActivity(
-                    {
-                        name: 'Create User',
-                        employee_id: user.id,
-                        activity: `${user.name} Created a new User with name; ${body.name}`,
-                        activity_name: 'Creation',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
+					{
+						name: 'Create User',
+						employee_id: user.id,
+						activity: `${user.name} Created a new User with name; ${body.name}`,
+						activity_name: 'Creation',
+						user: user.name,
+						company_id: user.company_id,
+					}
+				)
 
-                if(logActivity.id){
+				if (logActivity.id) {
 
-                    toast.success("User created successfully");
-                }
+					toast.success("User created successfully");
+				}
 			}
 
 			setFormState({
@@ -76,23 +76,16 @@ const Users = (navStatus) => {
 				admin: [],
 				hrAdmin: [],
 			})
+			
 
-			const removeUser = async (userId) => {
-				try {
-					const response = await deleteUser(userId);
-					if (response.message) {
-						const newUsers = users.filter(user => user.id !== userId);
-						setUsers(newUsers);
-						toast.info(response.message);
-					}
-		
 		} catch (err) {
 			toast.error("Error, try again");
 			setFormState({ ...formState });
 
 		};
 
-	};
+	}
+
 
 	const updateForm = (e) => {
 		const { value, name } = e.target;
@@ -102,6 +95,23 @@ const Users = (navStatus) => {
 		})
 		console.log({ [name]: value })
 	}
+
+	const removeUser = async (userId) => {
+		try {
+			const response = await deleteUser(userId);
+			if (response.message) {
+				const newUsers = users.filter(user => user.id !== userId);
+				setUsers(newUsers);
+				toast.info(response.message);
+			}
+
+		} catch (err) {
+			toast.error("Error, try again");
+			setFormState({ ...formState });
+
+		};
+
+	};
 
 	useEffect(() => {
 		async function fetchData() {
@@ -117,6 +127,7 @@ const Users = (navStatus) => {
 		}
 		fetchData();
 	}, []);
+
 	return (
 		<>
 			<div>
@@ -206,7 +217,7 @@ const Users = (navStatus) => {
 																<span className="tag tag-danger">{user.role}</span>
 															</td>
 															<td>{user.phone}</td>
-															
+
 															<td>{formatDate(user.created_at)}</td>
 															<td><td>
 
@@ -215,7 +226,7 @@ const Users = (navStatus) => {
 																	type="button"
 																	className="btn btn-icon"
 																	title="Edit"
-																	onClick={()=> setUserData(user)}
+																	onClick={() => setUserData(user)}
 																>
 																	<i className="fa fa-edit" />
 																</button>
@@ -224,6 +235,7 @@ const Users = (navStatus) => {
 																	className="btn btn-icon js-sweetalert"
 																	title="Delete"
 																	data-type="confirm"
+																	onClick={() => removeUser(user.id)}
 																>
 																	<i className="fa fa-trash-o text-danger" />
 																</button>

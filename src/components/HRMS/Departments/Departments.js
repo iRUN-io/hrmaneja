@@ -49,7 +49,7 @@ const Department = () => {
                     }
                 )
 
-                if(logActivity.id){
+                if (logActivity.id) {
 
                     toast.success("Department created successfully");
                 }

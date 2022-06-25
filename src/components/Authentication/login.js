@@ -113,7 +113,7 @@ const Login = () => {
 			<div className="auth_right">
 				<div className="carousel slide" data-ride="carousel" data-interval={3000}>
 					<div className="carousel-inner">
-						<div className="carousel-item active">
+						<div className="carousel-item">
 							<Image
 								src={require("../../assets/images/login/organize.svg")}
 								alt="Manage"
@@ -124,7 +124,7 @@ const Login = () => {
 								<p>The intelligent way to manage employees.</p>
 							</div>
 						</div>
-						<div className="carousel-item">
+						<div className="carousel-item active">
 							<Image
 								src={require("../../assets/images/login/analysis.svg")}
 								alt="Manage"
