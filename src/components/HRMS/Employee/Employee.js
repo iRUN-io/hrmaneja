@@ -17,6 +17,7 @@ import { getAllDepartments } from "../../../services/department";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
+import { createActivity } from "../../../services/activities";
 
 
 export const getEmployeeById = (employeeId) => {
@@ -100,7 +101,21 @@ function Employee(props) {
       const response = await createEmployee(body, user.id);
 
       if (response.id) {
-        toast.success("Employee created successfully");
+        const logActivity = await createActivity(
+          {
+            name: 'Create Department',
+            employee_id: user.id,
+            activity: `${user.name} created a new employee with naem; ${body.name}`,
+            activity_name: 'Creation',
+            user: user.name,
+            company_id: user.company_id
+          }
+        )
+
+        if(logActivity.id){
+          toast.success("Employee created successfully");
+        }
+        
       }
 
       setFormState({
