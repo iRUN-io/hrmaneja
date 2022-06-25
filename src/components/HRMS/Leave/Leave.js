@@ -37,7 +37,6 @@ const Leave = () => {
     const createLeaveAction = async () => {
         try {
             setFormState({ ...formState });
-            console.log('formState', formState)
 
             const body = {
                 employeeId: formState.employeeId,
@@ -45,6 +44,7 @@ const Leave = () => {
                 leaveType: formState.leaveType,
                 fromDate: formState.fromDate,
                 toDate: formState.toDate,
+                company_id: user.company_id,
                 notifyEmployee: formState.notifyEmployee,
                 leaveReason: formState.leaveReason,
                 status: 'Pending',
@@ -55,19 +55,19 @@ const Leave = () => {
             }
             const response = await createLeave(body, user.id);
 
-            if (response.error === false) {
+            if (!response.error) {
                 toast.success("Leave created successfully");
             }
 
-            // setFormState({
-            //     employeeId: '',
-            //     employeeName: '',
-            //     leaveType: '',
-            //     fromDate: '',
-            //     toDate: '',
-            //     notifyEmployee: '',
-            //     leaveReason: '',
-            // });
+            setFormState({
+                employeeId: '',
+                employeeName: '',
+                leaveType: '',
+                fromDate: '',
+                toDate: '',
+                notifyEmployee: '',
+                leaveReason: '',
+            });
         } catch (err) {
             toast.error("Error, try again");
             setFormState({ ...formState });
@@ -240,9 +240,9 @@ const Leave = () => {
                                         <select name='leaveType' value={formState?.leaveType}
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Leave Type</option>
-                                            <option value="sick Leave">Sick Leave</option>
-                                            <option value="paid Leave">Paid Leave</option>
-                                            <option value="rest Leave">Rest Leave</option>
+                                            <option value="Sick Leave">Sick Leave</option>
+                                            <option value="Paid Leave">Paid Leave</option>
+                                            <option value="Rest Leave">Rest Leave</option>
                                         </select>
                                     </div>
                                 </div>

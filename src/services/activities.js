@@ -2,7 +2,7 @@ import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllActivities() {
-  return request(`${API_URL}/activities/`, {
+  return request(`${API_URL}/activities`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ export async function getActivity(userId, id) {
 }
 
 export async function createActivity(body, userId) {
-  return request(`${API_URL}/activities/${userId}`, {
+  return request(`${API_URL}/activities/create`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',

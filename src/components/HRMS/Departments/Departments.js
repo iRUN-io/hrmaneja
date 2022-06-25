@@ -8,6 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
+import { createActivity } from '../../../services/activities';
 // import { getEmployeeById } from '../Employee/Employee';
 
 const Department = () => {
@@ -35,8 +36,24 @@ const Department = () => {
             }
             const response = await createDepartment(body, user.id);
 
-            if (response.error === false) {
-                toast.success("Department created successfully");
+            if (response.id) {
+
+                const logActivity = await createActivity(
+                    {
+                        name: 'Create Department',
+                        employee_id: user.id,
+                        activity: `${user.name} Created a new department with name; ${body.name}`,
+                        activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if(logActivity.id){
+
+                    toast.success("Department created successfully");
+                }
+
             }
 
             setFormState({
@@ -57,7 +74,6 @@ const Department = () => {
             ...formState,
             [name]: value,
         });
-        console.log(value)
     };
 
     const removeDepartment = async (departmentId) => {
@@ -208,7 +224,6 @@ const Department = () => {
                                             <option>Departments Head</option>
                                             {users.map((user) => (
                                                 <>
-                                                    <option value={user.id}>{user.name}</option>
                                                     <option value={user.id}>{user.name}</option>
                                                 </>
                                             ))}

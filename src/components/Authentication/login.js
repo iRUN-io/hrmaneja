@@ -28,7 +28,7 @@ const Login = () => {
 		});
 		try {
 			setProgress(50);
-			if (response.error === false) {
+			if (response.status === 'ok') {
 				setProgress(100);
 				toast.success('Logged in successfully !')
 				setUserSession(response.data.token, response.data);
@@ -38,14 +38,15 @@ const Login = () => {
 			}
 		} catch (error) {
 			console.log('error', error);
-			if (response.data.status === 'error')
+			if (response.status === 'error')
 				toast.error(response.data.message);
 			else toast.error("Something went wrong. Please try again later.");
 		}
 	};
 	return (
 		<>
-		<LoadingBar progress={progress} color='#f11946' /><div className="auth">
+		<LoadingBar progress={progress} color='#f11946' />
+		<div className="auth">
 			<ToastContainer />
 			<div className="auth_left">
 				<div className="card">
