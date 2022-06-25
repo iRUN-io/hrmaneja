@@ -72,7 +72,7 @@ const EditEmployee = (employeeData) => {
       }
       const response = await updateEmployee(body, employeeInfo.id);
 
-      if (response.error === false) {
+      if (response.id) {
         toast.success("Employee updated successfully");
       }
 

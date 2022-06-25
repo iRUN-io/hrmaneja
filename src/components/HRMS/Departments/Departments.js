@@ -79,9 +79,10 @@ const Department = () => {
     const removeDepartment = async (departmentId) => {
         try {
             const response = await deleteDepartment(departmentId);
-
-            if (response.error === false) {
-                toast.success("Department deleted successfully");
+            if (response.message) {
+                const newDepartments = departments.filter(department => department.id !== departmentId);
+                setDepartments(newDepartments);
+                toast.info(response.message);
             }
 
         } catch (err) {

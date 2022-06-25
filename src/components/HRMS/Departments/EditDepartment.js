@@ -26,7 +26,7 @@ const EditDepartment = (departmentData) => {
             }
             const response = await updateDepartment(body, departmentData.department.id);
 
-            if (response.error === false) {
+            if (response.id) {
                 toast.success("Department updated successfully");
             }
 

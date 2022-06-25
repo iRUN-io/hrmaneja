@@ -99,7 +99,7 @@ function Employee(props) {
       }
       const response = await createEmployee(body, user.id);
 
-      if (response.error === false) {
+      if (response.id) {
         toast.success("Employee created successfully");
       }
 
@@ -156,8 +156,8 @@ function Employee(props) {
     try {
       const response = await deleteEmployee(employeeID);
 
-      if (response.error === false) {
-        toast.success("Employee deleted successfully");
+      if (response.message) {
+        toast.info(response.message);
       }
 
     } catch (err) {
@@ -332,7 +332,7 @@ function Employee(props) {
                     </div>
                   </div>
                 </div>
-                <LeaveRequest />
+                {/* <LeaveRequest /> */}
               </div>
             </div>
           </div>

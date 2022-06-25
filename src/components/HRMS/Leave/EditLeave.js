@@ -38,7 +38,7 @@ const EditDepartment = (employeeData) => {
             }
             const response = await updateLeave(body, employeeData.department.id);
 
-            if (response.error === false) {
+            if (response.id) {
                 toast.success("Department updated successfully");
             }
 

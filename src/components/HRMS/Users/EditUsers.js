@@ -40,7 +40,7 @@ const EditUsers = (userData) => {
 			}
 			const response = await updateUser(body, user.id);
 
-			if (response.error === false) {
+			if (response.id) {
 				toast.success("User updated successfully");
 			}
         } catch (err){
