@@ -10,6 +10,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditLeaves from './EditLeave';
 import { getEmployeeById } from '../Employee/Employee';
 import moment from 'moment';
+import { createActivity } from '../../../services/activities';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -56,7 +57,21 @@ const Leave = () => {
             const response = await createLeave(body, user.id);
 
             if (!response.error) {
-                toast.success("Leave created successfully");
+               const logActivity = await createActivity(
+                    {
+                        name: 'Create Leave',
+                        employee_id: user.id,
+                        activity: `${user.name} Created a new leave with name; ${body.name}`,
+                        activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if(logActivity.id){
+
+                    toast.success("Leave created successfully");
+                }
             }
 
             setFormState({
