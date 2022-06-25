@@ -88,8 +88,8 @@ const Leave = () => {
         try {
             const response = await deleteLeave(leaveId);
 
-            if (response.error === false) {
-                toast.success("Leave deleted successfully");
+            if (response.message) {
+                toast.info(response.message);
             }
 
         } catch (err) {

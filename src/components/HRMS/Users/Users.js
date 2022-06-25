@@ -43,7 +43,7 @@ const Users = (navStatus) => {
 			}
 			const response = await await createUser(body, user.id);
 
-			if (response.error === false) {
+			if (response.id) {
 				toast.success("User created successfully");
 			}
 

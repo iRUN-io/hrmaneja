@@ -43,7 +43,7 @@ export default function  EmployeeCounter ({employees}) {
                                 View
                             </a>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a
                                 className="nav-link"
                                 id="Employee-tab"
@@ -52,7 +52,7 @@ export default function  EmployeeCounter ({employees}) {
                             >
                                 Leave Request
                             </a>
-                        </li>
+                        </li> */}
                     </ul>
                     <div className="header-action">
                         <button
