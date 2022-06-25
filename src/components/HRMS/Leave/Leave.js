@@ -6,9 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditLeaves from './EditLeave';
-import { getEmployeeById } from '../Employee/Employee';
 import moment from 'moment';
 import { createActivity } from '../../../services/activities';
 
@@ -33,7 +31,6 @@ const Leave = () => {
         setFormState({ ...formState, employeeId: user.id, employeeName: user.name });
     }, []);
 
-    console.log('formState', formState)
 
     const createLeaveAction = async () => {
         try {
@@ -57,6 +54,7 @@ const Leave = () => {
             const response = await createLeave(body, user.id);
 
             if (!response.error) {
+                setLeaves([...leaves, response])
                const logActivity = await createActivity(
                     {
                         name: 'Create Leave',
@@ -69,7 +67,6 @@ const Leave = () => {
                 )
 
                 if(logActivity.id){
-
                     toast.success("Leave created successfully");
                 }
             }
@@ -87,7 +84,6 @@ const Leave = () => {
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
-        // console.log(body)
     };
 
     const updateForm = (e) => {
@@ -96,7 +92,6 @@ const Leave = () => {
             ...formState,
             [name]: value,
         });
-        // console.log(value)
     };
 
     const removeLeave = async (leaveId) => {
