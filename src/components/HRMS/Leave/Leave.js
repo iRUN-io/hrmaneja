@@ -9,6 +9,7 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import EditLeaves from './EditLeave';
 import moment from 'moment';
 import { createActivity } from '../../../services/activities';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -211,15 +212,20 @@ const Leave = () => {
                                                                     >
                                                                         <i className="fa fa-check text-success" />
                                                                     </button>
-                                                                    <button
-                                                                        type="button"
-                                                                        className="btn btn-icon btn-sm js-sweetalert"
-                                                                        title="Delete"
-                                                                        data-type="confirm"
-                                                                        onClick={() => removeLeave(leave.id)}
-                                                                    >
-                                                                        <i className="fa fa-trash-o text-danger" />
-                                                                    </button>
+                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        overlay={
+                                                                            <Popover id="popover-basic">
+                                                                                <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                                <Popover.Body>
+                                                                                    <div className="clearfix" >
+                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                        <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                                                                    </div>
+                                                                                </Popover.Body>
+                                                                            </Popover>
+                                                                        }>
+                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                                    </OverlayTrigger>
                                                                 </td>
                                                             </tr>
                                                         ))}
