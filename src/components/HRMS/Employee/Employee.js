@@ -157,6 +157,8 @@ function Employee(props) {
       const response = await deleteEmployee(employeeID);
 
       if (response.message) {
+        const newEmployees = employees.filter(employee => employee.id !== employeeId);
+                setEmployees(newEmployees);
         toast.info(response.message);
       }
 
