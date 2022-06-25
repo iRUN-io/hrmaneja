@@ -132,7 +132,7 @@ const Login = () => {
 								width={100} />
 							<div className="px-4 mt-4">
 								<h4>HR Data & Analysis</h4>
-								<p>We provide you a quality interactive work platform that saves working time and effort, enhancing productivity.</p>
+								<p>We provide you a quality interactive work platform that enhances productivity.</p>
 							</div>
 						</div>
 						<div className="carousel-item">
