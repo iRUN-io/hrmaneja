@@ -104,6 +104,8 @@ const Leave = () => {
             const response = await deleteLeave(leaveId);
 
             if (response.message) {
+                const newLeaves = leaves.filter(leave => leave.id !== leaveId);
+                setLeaves(newLeaves);
                 toast.info(response.message);
             }
 

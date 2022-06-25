@@ -77,6 +77,15 @@ const Users = (navStatus) => {
 				hrAdmin: [],
 			})
 
+			const removeUser = async (userId) => {
+				try {
+					const response = await deleteUser(userId);
+					if (response.message) {
+						const newUsers = users.filter(user => user.id !== userId);
+						setUsers(newUsers);
+						toast.info(response.message);
+					}
+		
 		} catch (err) {
 			toast.error("Error, try again");
 			setFormState({ ...formState });
