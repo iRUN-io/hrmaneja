@@ -5,7 +5,7 @@ import { getAllUsers, createUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import { getUser, formatDate } from '../../../config/common';
 import EditUsers from './EditUsers';
-
+import { createActivity } from '../../../services/activities';
 const Users = (navStatus) => {
 	const [user, setCurrentUser] = useState([]);
 	const [userData, setUserData] = useState([]);
@@ -44,7 +44,21 @@ const Users = (navStatus) => {
 			const response = await await createUser(body, user.id);
 
 			if (response.id) {
-				toast.success("User created successfully");
+				const logActivity = await createActivity(
+                    {
+                        name: 'Create User',
+                        employee_id: user.id,
+                        activity: `${user.name} Created a new User with name; ${body.name}`,
+                        activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if(logActivity.id){
+
+                    toast.success("User created successfully");
+                }
 			}
 
 			setFormState({
