@@ -6,8 +6,12 @@ import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { updateLeave } from '../../../services/leave';
+import { updateActivity } from '../../../services/activities';
 
 const EditDepartment = (employeeData) => {
+    const [leaves, setLeaves] = useState([]);
+    const [user, setUser] = useState([]);
+
     const [users, setUsers] = useState([]);
     const [formState, setFormState] = useState({
         employeeId: '',
@@ -37,9 +41,22 @@ const EditDepartment = (employeeData) => {
                 return;
             }
             const response = await updateLeave(body, employeeData.department.id);
-
             if (response.id) {
-                toast.success("Department updated successfully");
+                setLeaves([...leaves, response])
+
+                const logActivity = await updateActivity(
+                    {
+                        name: 'Update Leave',
+                        employee_id: user.id,
+                        activity: `${user.name} UPdated a leave with name; ${body.name}`,
+                        activity_name: 'Updating',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+                if (logActivity.id){
+                    toast.success("Leave updated successfully");
+                }
             }
 
         } catch (err) {

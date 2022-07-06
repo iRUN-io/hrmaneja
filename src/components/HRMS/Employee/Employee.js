@@ -99,6 +99,7 @@ function Employee(props) {
       const response = await createEmployee(body, user.id);
 
       if (response.id) {
+        setEmployees([...employees, response])
         const logActivity = await createActivity(
           {
             name: 'Create Department',

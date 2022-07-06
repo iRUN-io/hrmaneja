@@ -44,6 +44,7 @@ const Users = (navStatus) => {
 			const response = await await createUser(body, user.id);
 
 			if (response.id) {
+				setUsers([...users, response])
 				const logActivity = await createActivity(
 					{
 						name: 'Create User',

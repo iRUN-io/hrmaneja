@@ -4,8 +4,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { updateUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { updateActivity } from '../../../services/activities';
 
 const EditUsers = (userData) => {
+	const [users, setUsers] = useState([]);
+
     const [employees, setEmployees] = useState([]);
     const [formState, setFormState] = useState({
         employeeID: '',
@@ -41,10 +44,25 @@ const EditUsers = (userData) => {
 			const response = await updateUser(body, user.id);
 
 			if (response.id) {
-				toast.success("User updated successfully");
+                setUsers([...users, response]);
+
+                const logActivity = await updateActivity(
+                  {
+                    name: 'Update user',
+                    employee_id: user.id,
+                    activity: `${user.name} UPdated a user with name; ${body.name}`,
+                    activity_name: 'Updating',
+                    user: user.name,
+                    company_id: user.company_id,
+                  }
+                )
+                if(logActivity.id){
+                  toast.success("User updated successfully");
+        
+                }
 			}
         } catch (err){
-            toast.error("Error, try again");
+            toast.error("Error, please try again");
             setFormState({ ...formState });
         }
 

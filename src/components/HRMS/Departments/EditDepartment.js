@@ -5,8 +5,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
+import { updateActivity } from '../../../services/activities';
 
 const EditDepartment = (departmentData) => {
+    const [departments, setDepartments] = useState([]);
+    const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
     const [formState, setFormState] = useState({
         departmentHead: '',
@@ -25,10 +28,26 @@ const EditDepartment = (departmentData) => {
                 return;
             }
             const response = await updateDepartment(body, departmentData.department.id);
+            if(response.id) {
+                setDepartments([...departments, response])
 
-            if (response.id) {
-                toast.success("Department updated successfully");
+                 const logActivity = await updateActivity(
+                    {
+                        name: 'update department',
+                        employee_id: user.id,
+                        activity: `${user.name} updated a department with name; ${body.name}`,
+                        activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if(!logActivity.id){
+                    console.log('successfully updated')
+                    toast.success("department updated successfully");
+                }
             }
+            
 
         } catch (err) {
             toast.error("Error, try again");
