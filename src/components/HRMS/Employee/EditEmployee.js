@@ -5,8 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Currency from "../../common/currency";
 import Country from "../../common/country";
 import { getAllDepartments } from "../../../services/department";
+import { updateActivity } from "../../../services/activities";
 
 const EditEmployee = (employeeData) => {
+  const [user, setUser] = useState([]);
 
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
@@ -73,7 +75,22 @@ const EditEmployee = (employeeData) => {
       const response = await updateEmployee(body, employeeInfo.id);
 
       if (response.id) {
-        toast.success("Employee updated successfully");
+        setEmployees([...employees, response]);
+
+        const logActivity = await updateActivity(
+          {
+            name: 'Update employee',
+            employee_id: user.id,
+            activity: `${user.name} UPdated an employee with name; ${body.name}`,
+            activity_name: 'Updating',
+            user: user.name,
+            company_id: user.company_id,
+          }
+        )
+        if(logActivity.id){
+          toast.success("Employee updated successfully");
+
+        }
       }
 
     } catch (err) {

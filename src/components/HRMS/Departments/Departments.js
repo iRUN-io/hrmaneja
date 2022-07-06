@@ -37,7 +37,7 @@ const Department = () => {
             const response = await createDepartment(body, user.id);
 
             if (response.id) {
-
+                setDepartments([...departments, response])
                 const logActivity = await createActivity(
                     {
                         name: 'Create Department',
