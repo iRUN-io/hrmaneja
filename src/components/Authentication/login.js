@@ -28,6 +28,7 @@ const Login = () => {
 		});
 		try {
 			setProgress(50);
+			console.log('response', response);
 			if (response.status === 'ok') {
 				setProgress(100);
 				toast.success('Logged in successfully !')
@@ -62,13 +63,7 @@ const Login = () => {
 					<form noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
-							{/* <div className="form-group">
-        <select className="custom-select">
-            <option>HR Dashboard</option>
-            <option>Project Dashboard</option>
-            <option>Job Portal</option>
-        </select>
-    </div> */}
+				
 							<div className="form-group">
 								<input
 									type="email"

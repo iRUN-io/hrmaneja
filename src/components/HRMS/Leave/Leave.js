@@ -10,11 +10,14 @@ import EditLeaves from './EditLeave';
 import moment from 'moment';
 import { createActivity } from '../../../services/activities';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
+import { getAllEmployees, getEmployee } from '../../../services/employee';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
     const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([]);
+    const [employees, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [leave, setLeave] = useState([]);
     const [formState, setFormState] = useState({
@@ -55,20 +58,27 @@ const Leave = () => {
             const response = await createLeave(body, user.id);
 
             if (!response.error) {
-                setLeaves([...leaves, response])
-               const logActivity = await createActivity(
+                const logActivity = await createActivity(
                     {
                         name: 'Create Leave',
                         employee_id: user.id,
-                        activity: `${user.name} Created a new leave with name; ${body.name}`,
+                        activity: `${user.name} Created a new leave ; ${body.leaveType}`,
                         activity_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,
                     }
                 )
 
-                if(logActivity.id){
-                    toast.success("Leave created successfully");
+                if (logActivity.id) {
+                    sendEmail(user.emailAddress, user.name, emailCase.createLeave);
+                    if (body.notifyEmployee) {
+                        const notifyEmployee = await getEmployee(body.notifyEmployee);
+                        if (notifyEmployee.id) {
+                            sendEmail(notifyEmployee.emailAddress, notifyEmployee.name, emailCase.notifyLeave);
+                        }
+                    }
+                    setLeaves([...leaves, response])
+                    toast.success("Leave request sent successfully");
                 }
             }
 
@@ -117,9 +127,9 @@ const Leave = () => {
             setLoading(true);
             const user = await getUser();
             if (user) {
-                const userId = user.id;
-                const response = await getAllLeaves(userId);
-                const userResponse = await getAllUsers(userId);
+                const company_id = user.company_id;
+                const response = await getAllLeaves(company_id);
+                const userResponse = await getAllEmployees(company_id);
                 setLeaves(response);
                 setUsers(userResponse);
                 setUser(user);
@@ -286,7 +296,7 @@ const Leave = () => {
                                         <select name='notifyEmployee' value={formState?.notifyEmployee}
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Notify Employee</option>
-                                            {users.map((user) => (
+                                            {employees.map((user) => (
                                                 <>
                                                     <option value={user.id}>{user.name}</option>
                                                 </>

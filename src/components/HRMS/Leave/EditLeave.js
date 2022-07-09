@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { updateDepartment } from '../../../services/department'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { updateLeave } from '../../../services/leave';
-import { updateActivity } from '../../../services/activities';
+import { createActivity } from '../../../services/activities';
+import { getUser } from '../../../config/common';
 
 const EditDepartment = (employeeData) => {
     const [leaves, setLeaves] = useState([]);
@@ -44,7 +44,7 @@ const EditDepartment = (employeeData) => {
             if (response.id) {
                 setLeaves([...leaves, response])
 
-                const logActivity = await updateActivity(
+                const logActivity = await createActivity(
                     {
                         name: 'Update Leave',
                         employee_id: user.id,
@@ -68,7 +68,9 @@ const EditDepartment = (employeeData) => {
 
     useEffect(() => {
         async function fetchData() {
-            const userResponse = await getAllUsers();
+            const user = await getUser();
+            const company_id = user.company_id;
+            const userResponse = await getAllUsers(company_id);
             setFormState({
                 employeeId: employeeData.employeeId,
                 employeeName: employeeData.employeeName,
@@ -79,6 +81,7 @@ const EditDepartment = (employeeData) => {
                 leaveReason: employeeData.leaveReason,
                 status: 'Pending',
             });
+            setUser(user);
             setUsers(userResponse);
         }
         fetchData();

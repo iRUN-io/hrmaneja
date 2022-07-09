@@ -5,8 +5,14 @@ import configureStore from './store';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { getUser } from './config/common';
 // import registerServiceWorker from './registerServiceWorker';
-
+// logout if user is not logged in
+if (!getUser()) {
+    if (window.location.pathname !== '/login' && window.location.pathname !== '/forgotpassword') {
+    window.location.href = '/login';
+    }
+}
 ReactDOM.render(
     <Provider store={configureStore()}>
         <App />

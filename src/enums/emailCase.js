@@ -1,0 +1,21 @@
+
+export const emailCase = {
+    userCreation:       'userCreation',
+    passwordReset:      'passwordReset',
+    deleteUser:         'deleteUser',
+    createDepartment:   'createDepartment',
+    updateDepartment:   'updateDepartment',
+    deleteDepartment:   'deleteDepartment',
+    createEmployee:     'createEmployee',
+    updateEmployee:     'updateEmployee',
+    deleteEmployee:     'deleteEmployee',
+    createLeave:        'createLeave',
+    notifyLeave:        'notifyLeave',
+    approveLeave:       'approveLeave',
+    rejectLeave:        'rejectLeave',
+    deleteLeave:        'deleteLeave',
+    createPayroll:      'createPayroll',
+    updatePayroll:      'updatePayroll',
+    deletePayroll:      'deletePayroll',
+    userLoggedIn:       'userLoggedIn',
+}

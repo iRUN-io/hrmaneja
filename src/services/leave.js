@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllLeaves() {
-  return request(`${API_URL}/leaves`, {
+export async function getAllLeaves(COMPANY_ID) {
+  return request(`${API_URL}/leaves/${COMPANY_ID}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',

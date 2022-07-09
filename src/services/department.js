@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllDepartments(userId) {
-  return request(`${API_URL}/departments`, {
+export async function getAllDepartments(COMPANY_ID) {
+  return request(`${API_URL}/departments/${COMPANY_ID}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',

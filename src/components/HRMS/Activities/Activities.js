@@ -9,7 +9,8 @@ const Activities = () => {
 				async function fetchData() {
 					const user = await getUser();
 					if(user){
-						const response = await getAllActivities();
+						const company_id = user.company_id;
+						const response = await getAllActivities(company_id);
 						setActivities(response);
 					}
 				}

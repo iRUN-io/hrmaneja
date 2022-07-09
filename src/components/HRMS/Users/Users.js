@@ -6,6 +6,8 @@ import { getAllEmployees } from '../../../services/employee'
 import { getUser, formatDate } from '../../../config/common';
 import EditUsers from './EditUsers';
 import { createActivity } from '../../../services/activities';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
 const Users = (navStatus) => {
 	const [user, setCurrentUser] = useState([]);
 	const [userData, setUserData] = useState([]);
@@ -32,6 +34,7 @@ const Users = (navStatus) => {
 				userName: formState.userName,
 				email: formState.email,
 				phone: formState.phone,
+				company_id: user.company_id,
 				role: formState.roleType,
 				password: formState.password,
 				confirmPassword: formState.confirmPassword,
@@ -41,10 +44,10 @@ const Users = (navStatus) => {
 				toast.error('Please fill all the fields');
 				return;
 			}
-			const response = await await createUser(body, user.id);
+			const response = await createUser(body, user.id);
 
 			if (response.id) {
-				setUsers([...users, response])
+
 				const logActivity = await createActivity(
 					{
 						name: 'Create User',
@@ -57,7 +60,8 @@ const Users = (navStatus) => {
 				)
 
 				if (logActivity.id) {
-
+					sendEmail(user.emailAddress, user.name, emailCase.userCreation);
+					setUsers([...users, response])
 					toast.success("User created successfully");
 				}
 			}
@@ -77,7 +81,6 @@ const Users = (navStatus) => {
 				admin: [],
 				hrAdmin: [],
 			})
-			
 
 		} catch (err) {
 			toast.error("Error, try again");
@@ -102,8 +105,24 @@ const Users = (navStatus) => {
 			const response = await deleteUser(userId);
 			if (response.message) {
 				const newUsers = users.filter(user => user.id !== userId);
-				setUsers(newUsers);
-				toast.info(response.message);
+
+				// create activity
+				const logActivity = await createActivity(
+					{
+						name: 'Delete User',
+						employee_id: user.id,
+						activity: `${user.name} Deleted a User with name; ${response.name}`,
+						activity_name: 'Deletion',
+						user: user.name,
+						company_id: user.company_id,
+					}
+				)
+
+				if (logActivity.id) {
+					sendEmail(user.emailAddress, user.name, emailCase.deleteUser);
+					setUsers(newUsers);
+					toast.info(response.message);
+				}
 			}
 
 		} catch (err) {
@@ -118,9 +137,9 @@ const Users = (navStatus) => {
 		async function fetchData() {
 			const user = await getUser();
 			if (user) {
-				const userId = user.id;
-				const response = await getAllUsers(userId);
-				const employeeResponse = await getAllEmployees(userId);
+				const company_id = user.company_id;
+				const response = await getAllUsers(company_id);
+				const employeeResponse = await getAllEmployees(company_id);
 				setUsers(response);
 				setEmployees(employeeResponse);
 				setCurrentUser(user)

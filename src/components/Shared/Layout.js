@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Menu from './Menu';
-import { getUser } from "../../config/common";
+// import { getUser } from "../../config/common";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 export default class Layout extends Component {

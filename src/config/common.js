@@ -1,3 +1,4 @@
+import moment from "moment";
 
 
 // return the user data from the session storage
@@ -25,8 +26,6 @@
   }
 
   export const formatDate = (date) => {
-		var d = new Date(date),
-			createdDate = d.toDateString();
-			return createdDate;
+    return moment(date).format('MMMM Do YYYY, h:mm:ss a');
 	};
   

@@ -5,7 +5,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getAllUsers } from '../../../services/user';
 
 import 'react-loading-skeleton/dist/skeleton.css'
-import { updateActivity } from '../../../services/activities';
+import { createActivity } from '../../../services/activities';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
+import { getUser } from '../../../config/common';
 
 const EditDepartment = (departmentData) => {
     const [departments, setDepartments] = useState([]);
@@ -31,7 +34,7 @@ const EditDepartment = (departmentData) => {
             if(response.id) {
                 setDepartments([...departments, response])
 
-                 const logActivity = await updateActivity(
+                 const logActivity = await createActivity(
                     {
                         name: 'update department',
                         employee_id: user.id,
@@ -42,8 +45,8 @@ const EditDepartment = (departmentData) => {
                     }
                 )
 
-                if(!logActivity.id){
-                    console.log('successfully updated')
+                if(logActivity.id){
+                    sendEmail(user.emailAddress, user.name, emailCase.updateDepartment);
                     toast.success("department updated successfully");
                 }
             }
@@ -58,11 +61,14 @@ const EditDepartment = (departmentData) => {
 
     useEffect(() => {
         async function fetchData() {
-            const userResponse = await getAllUsers();
+            const user = await getUser();
+            const company_id = user.company_id;
+            const userResponse = await getAllUsers(company_id);
             setFormState({
                 departmentHead: departmentData.department.department_head,
                 departmentName: departmentData.department.name,
             });
+            setUser(user);
             setUsers(userResponse);
         }
         fetchData();

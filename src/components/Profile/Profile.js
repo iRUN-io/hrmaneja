@@ -28,17 +28,17 @@ function Profile(props) {
     const createProfileAction = async () => {
         try {
             setFormState({ ...formState });
-            const body = {
-                username: user.userName,
-                email: user.email,
-                name: user.name,
-                company: user.company,
-                address: user.Address,
-                city: user.city,
-                postal_code: user.postalCode,
-                country: user.country,
-                about_me: user.about
-            };
+            // const body = {
+            //     username: user.userName,
+            //     email: user.email,
+            //     name: user.name,
+            //     company: user.company,
+            //     address: user.Address,
+            //     city: user.city,
+            //     postal_code: user.postalCode,
+            //     country: user.country,
+            //     about_me: user.about
+            // };
             setFormState({
                 username: user.username,
                 email: user.email,

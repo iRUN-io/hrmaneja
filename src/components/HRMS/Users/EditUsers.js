@@ -4,28 +4,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import { updateUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import 'react-loading-skeleton/dist/skeleton.css'
-import { updateActivity } from '../../../services/activities';
+import { createActivity } from '../../../services/activities';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
 
 const EditUsers = (userData) => {
-	const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const [employees, setEmployees] = useState([]);
     const [formState, setFormState] = useState({
         employeeID: '',
-		email: '',
-		phone: '',
-		roleType: '',
-		userName: '',
-		password: '',
-		confirmPassword: '',
-	});
+        email: '',
+        phone: '',
+        roleType: '',
+        userName: '',
+        password: '',
+        confirmPassword: '',
+    });
 
     const user = userData.user;
-   
+
     const editUsersAction = async () => {
         try {
             setFormState({ ...formState });
-            
+
             const body = {
                 employee_id: formState.employeeID,
                 name: formState.name,
@@ -38,36 +40,37 @@ const EditUsers = (userData) => {
             }
 
             if (body.name === '' || body.email === '') {
-				toast.error('Please fill all the fields');
-				return;
-			}
-			const response = await updateUser(body, user.id);
+                toast.error('Please fill all the fields');
+                return;
+            }
+            const response = await updateUser(body, user.id);
 
-			if (response.id) {
+            if (response.id) {
                 setUsers([...users, response]);
 
-                const logActivity = await updateActivity(
-                  {
-                    name: 'Update user',
-                    employee_id: user.id,
-                    activity: `${user.name} UPdated a user with name; ${body.name}`,
-                    activity_name: 'Updating',
-                    user: user.name,
-                    company_id: user.company_id,
-                  }
+                const logActivity = await createActivity(
+                    {
+                        name: 'Update user',
+                        employee_id: user.id,
+                        activity: `${user.name} UPdated a user with name; ${body.name}`,
+                        activity_name: 'Updating',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
                 )
-                if(logActivity.id){
-                  toast.success("User updated successfully");
-        
+                if (logActivity.id) {
+                    sendEmail(user.emailAddress, user.name, emailCase.updateUser);
+                    toast.success("User updated successfully");
+
                 }
-			}
-        } catch (err){
+            }
+        } catch (err) {
             toast.error("Error, please try again");
             setFormState({ ...formState });
         }
 
     };
-    
+
     useEffect(() => {
         setFormState({
             email: user.email,
@@ -84,7 +87,7 @@ const EditUsers = (userData) => {
             setEmployees(employeeResponse || []);
         }
         fetchData();
-    
+
     }, []);
 
 
@@ -97,86 +100,86 @@ const EditUsers = (userData) => {
     };
 
 
-  return (
-    <>
-        <div style={{ marginBottom: '50px' }}>
-            <ToastContainer/>
-            <div className="modal-body">
-                <div className="card">
-                    <div className="card-body">
-                        <div className="row clearfix">
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <select className="form-control show-tick"
-                                        
-                                        name='employeeID' value={formState?.employeeID}
-                                        onChange={updateForm}
-                                    >
-                                        <option>Select Employee</option>
-                                        {employees.map((user) => (
-                                            <option value={user.id}>{user.name}</option>
-                                        ))}
-                                    </select>
+    return (
+        <>
+            <div style={{ marginBottom: '50px' }}>
+                <ToastContainer />
+                <div className="modal-body">
+                    <div className="card">
+                        <div className="card-body">
+                            <div className="row clearfix">
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <select className="form-control show-tick"
+
+                                            name='employeeID' value={formState?.employeeID}
+                                            onChange={updateForm}
+                                        >
+                                            <option>Select Employee</option>
+                                            {employees.map((user) => (
+                                                <option key={user.id} value={user.id}>{user.name}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <input
-                                        name='name' value={formState?.name}
-                                        onChange={updateForm}
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Name *"
-                                    />
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <input
+                                            name='name' value={formState?.name}
+                                            onChange={updateForm}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Name *"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <input
-                                        name='email' value={formState?.email}
-                                        onChange={updateForm}
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Email ID *"
-                                    />
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <input
+                                            name='email' value={formState?.email}
+                                            onChange={updateForm}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Email ID *"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <input
-                                        name='phone' value={formState?.phone}
-                                        onChange={updateForm}
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Mobile No"
-                                    />
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <input
+                                            name='phone' value={formState?.phone}
+                                            onChange={updateForm}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Mobile No"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <select className="form-control show-tick"
-                                        name='roleType' value={formState?.roleType}
-                                        onChange={updateForm}
-                                    >
-                                        <option>Select Role Type</option>
-                                        <option>Super Admin</option>
-                                        <option>Admin</option>
-                                        <option>Employee</option>
-                                    </select>
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <select className="form-control show-tick"
+                                            name='roleType' value={formState?.roleType}
+                                            onChange={updateForm}
+                                        >
+                                            <option>Select Role Type</option>
+                                            <option>Super Admin</option>
+                                            <option>Admin</option>
+                                            <option>Employee</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-lg-12 col-md-12 col-sm-12">
-                                <div className="form-group">
-                                    <input
-                                        name='userName' value={formState?.userName}
-                                        onChange={updateForm}
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="Username *"
-                                    />
+                                <div className="col-lg-12 col-md-12 col-sm-12">
+                                    <div className="form-group">
+                                        <input
+                                            name='userName' value={formState?.userName}
+                                            onChange={updateForm}
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="Username *"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
-                            {/* <div className="col-lg-12 col-md-12 col-sm-12">
+                                {/* <div className="col-lg-12 col-md-12 col-sm-12">
                                 <div className="form-group">
                                     <input
                                         name='password' value={formState?.password}
@@ -199,20 +202,20 @@ const EditUsers = (userData) => {
                                 </div>
                             </div> */}
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="submit" className="btn right btn-primary" onClick={() => editUsersAction()}>
-                Add
-            </button>
-        </div>
+            <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" className="btn right btn-primary" onClick={() => editUsersAction()}>
+                    Add
+                </button>
+            </div>
 
-    </>
-  )
+        </>
+    )
 }
 
 export default EditUsers

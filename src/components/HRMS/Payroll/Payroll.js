@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAllEmployees } from "../../../services/employee";
-import { getAllUsers } from "../../../services/user";
+// import { getAllUsers } from "../../../services/user";
 import { getUser } from "../../../config/common";
 import CountUp from 'react-countup';
 import Skeleton from "react-loading-skeleton";

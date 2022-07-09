@@ -16,6 +16,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
 import { createActivity } from "../../../services/activities";
+import { sendEmail } from "../../../services/mail/sendMail";
+import { emailCase } from "../../../enums/emailCase";
 
 
 export const getEmployeeById = (employeeId) => {
@@ -71,7 +73,7 @@ function Employee(props) {
         email: formState.email,
         phone: formState.phone,
         address: formState.address,
-        company_id: formState.company_id,
+        company_id: user.company_id,
         role: formState.role,
         salary: formState.salary,
         gender: formState.gender,
@@ -102,7 +104,7 @@ function Employee(props) {
         setEmployees([...employees, response])
         const logActivity = await createActivity(
           {
-            name: 'Create Department',
+            name: 'Create Employee',
             employee_id: user.id,
             activity: `${user.name} created a new employee with naem; ${body.name}`,
             activity_name: 'Creation',
@@ -112,6 +114,8 @@ function Employee(props) {
         )
 
         if (logActivity.id) {
+          setEmployees([...employees, response])
+          sendEmail(user.emailAddress, user.name, emailCase.createEmployee)
           toast.success("Employee created successfully");
         }
 
@@ -171,9 +175,22 @@ function Employee(props) {
       const response = await deleteEmployee(employeeID);
 
       if (response.message) {
-        const newEmployees = employees.filter(employee => employee.id !== employeeID);
-        setEmployees(newEmployees);
-        toast.info(response.message);
+        const logActivity = await createActivity(
+          { 
+            name: 'Delete Employee',
+            employee_id: user.id,
+            activity: `${user.name} deleted an employee with id; ${employeeID}`,
+            activity_name: 'Deletion',
+            user: user.name,
+            company_id: user.company_id
+          }
+        )
+        if (logActivity.id) {
+          const newEmployees = employees.filter(employee => employee.id !== employeeID);
+          sendEmail(user.emailAddress, user.name, emailCase.deleteEmployee)
+          setEmployees(newEmployees);
+          toast.info(response.message);
+        }
       }
 
     } catch (err) {
@@ -188,9 +205,9 @@ function Employee(props) {
       setLoading(true);
       const user = await getUser();
       if (user) {
-        const userId = user.id;
-        const departmentResponse = await getAllDepartments(userId);
-        const response = await getAllEmployees();
+        const company_id = user.company_id;
+        const departmentResponse = await getAllDepartments(company_id);
+        const response = await getAllEmployees(company_id);
         setDepartments(departmentResponse);
         setEmployees(response);
         setUser(user);
@@ -329,8 +346,8 @@ function Employee(props) {
                                           <Popover.Header as="p">Confirm Delete</Popover.Header>
                                           <Popover.Body>
                                             <div className="clearfix" >
-                                              <button style={{ margin: '10px' }} type="" class="btn btn-sm btn-success">Cancel</button>
-                                              <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                              <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                              <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
                                             </div>
                                           </Popover.Body>
                                         </Popover>

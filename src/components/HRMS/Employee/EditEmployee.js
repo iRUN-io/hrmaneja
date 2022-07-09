@@ -5,7 +5,10 @@ import "react-toastify/dist/ReactToastify.css";
 import Currency from "../../common/currency";
 import Country from "../../common/country";
 import { getAllDepartments } from "../../../services/department";
-import { updateActivity } from "../../../services/activities";
+import { createActivity } from "../../../services/activities";
+import { sendEmail } from "../../../services/mail/sendMail";
+import { emailCase } from "../../../enums/emailCase";
+import { getUser } from "../../../config/common";
 
 const EditEmployee = (employeeData) => {
   const [user, setUser] = useState([]);
@@ -74,20 +77,21 @@ const EditEmployee = (employeeData) => {
       }
       const response = await updateEmployee(body, employeeInfo.id);
 
-      if (response.id) {
+      if (response.message === 'Employee was updated successfully.') {
         setEmployees([...employees, response]);
 
-        const logActivity = await updateActivity(
+        const logActivity = await createActivity(
           {
             name: 'Update employee',
             employee_id: user.id,
-            activity: `${user.name} UPdated an employee with name; ${body.name}`,
+            activity: `${user.name} Updated an employee with name; ${body.name}`,
             activity_name: 'Updating',
             user: user.name,
             company_id: user.company_id,
           }
         )
         if(logActivity.id){
+          sendEmail(user.emailAddress, user.name, emailCase.updateEmployee);
           toast.success("Employee updated successfully");
 
         }
@@ -129,8 +133,11 @@ const EditEmployee = (employeeData) => {
 
   useEffect(() => {
     async function fetchData() {
-        const employeeResponse = await getAllEmployees();
-        const departmentResponse = await getAllDepartments();
+        const user = await getUser();
+        const company_id = user.company_id;
+        const employeeResponse = await getAllEmployees(company_id);
+        const departmentResponse = await getAllDepartments(company_id);
+        setUser(user);
         setEmployees(employeeResponse);
         setDepartments(departmentResponse);
     }

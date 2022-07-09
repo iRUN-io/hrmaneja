@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
 
-export async function getAllUsers() {
-  return request(`${API_URL}/user`, {
+export async function getAllUsers(COMPANY_ID) {
+  return request(`${API_URL}/user/${COMPANY_ID}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ export async function createUser(body) {
 }
 
 export async function updateUser(body) {
-  return request(`${API_URL}/api/user/${USER_ID}?id=${USER_ID}`, {
+  return request(`${API_URL}/user/${USER_ID}?id=${USER_ID}`, {
     method: 'patch',
     headers: {
       'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export async function updateUser(body) {
 
 
 export async function deleteUser(id) {
-  return request(`${API_URL}/api/user/delete/${id}`, {
+  return request(`${API_URL}/user/delete/${id}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',

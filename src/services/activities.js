@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllActivities() {
-  return request(`${API_URL}/activities`, {
+export async function getAllActivities(COMPANY_ID) {
+  return request(`${API_URL}/activities/${COMPANY_ID}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',

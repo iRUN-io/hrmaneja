@@ -9,6 +9,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
 import { createActivity } from '../../../services/activities';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
 // import { getEmployeeById } from '../Employee/Employee';
 
 const Department = () => {
@@ -29,6 +31,7 @@ const Department = () => {
             const body = {
                 department_head: formState.departmentHead || 1,
                 name: formState.departmentName,
+                company_id: user.company_id,
             }
             if (body.departmentName === '' || body.department_head === '') {
                 toast.error('Please fill all the fields');
@@ -50,7 +53,7 @@ const Department = () => {
                 )
 
                 if (logActivity.id) {
-
+                    sendEmail(user.emailAddress, user.name, emailCase.createDepartment); // change this to your email to test the email // user.emailAddress
                     toast.success("Department created successfully");
                 }
 
@@ -80,6 +83,7 @@ const Department = () => {
         try {
             const response = await deleteDepartment(departmentId);
             if (response.message) {
+                sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
                 const newDepartments = departments.filter(department => department.id !== departmentId);
                 setDepartments(newDepartments);
                 toast.info(response.message);
@@ -97,9 +101,9 @@ const Department = () => {
             setLoading(true);
             const user = await getUser();
             if (user) {
-                const userId = user.id;
-                const response = await getAllDepartments(userId);
-                const userResponse = await getAllUsers(userId);
+                const company_id = user.company_id;
+                const response = await getAllDepartments(company_id);
+                const userResponse = await getAllUsers(company_id);
                 setDepartments(response);
                 setUsers(userResponse);
                 setUser(user);

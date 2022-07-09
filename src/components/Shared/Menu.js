@@ -450,15 +450,16 @@ class Menu extends Component {
 											title="Themes"
 										></i>
 									</a> */}
-										{/* <span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
+										<span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
 											<i
 												className="fa fa-gear fa-spin"
 												data-toggle="tooltip"
 												data-placement="right"
 												title="Settings"
 											/>
-										</span> */}
-										<p className="nav-link user_btn" onClick={this.toggleUserMenu}>
+										</span>
+										{/* to relese user profile toggle  --- NOTE */}
+										{/* <p className="nav-link user_btn" onClick={this.toggleUserMenu}>
 											<img
 												className="avatar"
 												src="/assets/images/user.png"
@@ -467,7 +468,7 @@ class Menu extends Component {
 												data-placement="right"
 												title="User Menu"
 											/>
-										</p>
+										</p> */}
 										<p className="nav-link icon menu_toggle" onClick={() => this.toggleLeftMenu(!istoggleLeftMenu)}>
 											<i className="fa  fa-align-left" />
 										</p>
@@ -708,7 +709,7 @@ class Menu extends Component {
 										</ul>
 									</div>
 									<hr />
-									<div className="form-group">
+									{/* <div className="form-group">
 										<label className="d-block">
 											Storage <span className="float-right">77%</span>
 										</label>
@@ -725,8 +726,9 @@ class Menu extends Component {
 										<button type="button" className="btn btn-primary btn-block mt-3">
 											Upgrade Storage
 										</button>
-									</div>
+									</div> */}
 								</div>
+								{/* loop through activity here */}
 								<div role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
 									<ul className="new_timeline mt-3">
 										<li>
@@ -1160,188 +1162,6 @@ class Menu extends Component {
 							{Routes.map((layout, i) => {
 								return <Route key={i} exact={layout.exact} path={layout.path} component={layout.component}></Route>
 							})}
-							{/* <Dashboard action={this.handler} dataFromParent={'dark'} /> */}
-							{/* <Route exact path="/hr-users" component={Users}>
-					</Route>
-					<Route exact path="/hr-department">
-						<Departments dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-employee">
-						<Employee dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-events">
-						<Events dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-holidays">
-						<Holidays dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-activities">
-						<Activities dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-payroll">
-						<Payroll dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-accounts">
-						<Accounts dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/hr-report">
-						<Report dataFromParent={'dark'} />
-					</Route>
-
-					<Route exact path="/project-dashboard">
-						<ProjectDashboard dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-list">
-						<ProjectList dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-taskboard">
-						<Taskboard dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-ticket">
-						<TicketList dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-ticket-details">
-						<TicketDetails dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-clients">
-						<Clients dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/project-todo">
-						<TodoList dataFromParent={'dark'} />
-					</Route>
-
-					<Route exact path="/jobportal-dashboard">
-						<JobPortalDashboard dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/jobportal-applicants">
-						<Applicants dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/jobportal-positions">
-						<Positions dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/jobportal-resumes">
-						<Resumes dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/jobportal-settings">
-						<Settings dataFromParent={'dark'} />
-					</Route>
-
-					<Route path="/login" component={Login} />
-					<Route path="/signup" component={SignUp} />
-					<Route path="/forgotpassword" component={ForgotPassword} />
-					<Route path="/notfound" component={NotFound} />
-					<Route path="/internalserver" component={InternalServer} />
-
-					<Route exact path="/icons">
-						<Icons dataFromParent={''} />
-					</Route>
-					<Route exact path="/icons-feather">
-						<IconsFeather dataFromParent={''} />
-					</Route>
-					<Route exact path="/icons-line">
-						<IconsLine dataFromParent={''} />
-					</Route>
-					<Route exact path="/icons-flag">
-						<IconsFlags dataFromParent={''} />
-					</Route>
-					<Route exact path="/icons-payments">
-						<IconsPayments dataFromParent={''} />
-					</Route>
-
-					<Route exact path="/charts">
-						<Charts dataFromParent={''} />
-					</Route>
-					<Route exact path="/charts-e">
-						<ChartsE dataFromParent={''} />
-					</Route>
-					<Route exact path="/charts-c3">
-						<ChartsC3 dataFromParent={''} />
-					</Route>
-					<Route exact path="/charts-knob">
-						<ChartsKnob dataFromParent={''} />
-					</Route>
-					<Route exact path="/charts-sparkline">
-						<ChartsSparkline dataFromParent={''} />
-					</Route>
-
-					<Route exact path="/forms">
-						<Forms dataFromParent={''} />
-					</Route>
-					<Route exact path="/form-advanced">
-						<FormAdvanced dataFromParent={''} />
-					</Route>
-					<Route exact path="/form-validation">
-						<FormValidation dataFromParent={''} />
-					</Route>
-					<Route exact path="/form-wizard">
-						<FormWizard dataFromParent={''} />
-					</Route>
-					<Route exact path="/form-summernote">
-						<FormSummernote dataFromParent={''} />
-					</Route>
-
-					<Route exact path="/gallery">
-						<Gallery dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/maps">
-						<Maps dataFromParent={'dark'} />
-					</Route> */}
-
-							{/* <Route exact path="/tables">
-						<Tables dataFromParent={''} />
-					</Route>
-					<Route exact path="/tables-datatable">
-						<DataTables dataFromParent={''} />
-					</Route>
-					<Route exact path="/tables-color">
-						<TablesColor dataFromParent={''} />
-					</Route>
-					<Route exact path="/tables-basic">
-						<TablesBasic dataFromParent={''} />
-					</Route>
-
-					<Route exact path="/widgets">
-						<Widgets dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/w-card">
-						<WCard dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/w-statistics">
-						<WStatistics dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/w-data">
-						<WData dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/w-social">
-						<WSocial dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/w-other">
-						<WOther dataFromParent={'dark'} />
-					</Route>
-
-					<Route exact path="/page-search">
-						<Search dataFromParent={''} />
-					</Route>
-					<Route exact path="/profile">
-						<Profile dataFromParent={'dark'} />
-					</Route>
-
-					<Route exact path="/app-calendar">
-						<AppCalender dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/app-contact">
-						<AppContact dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/app-chat">
-						<AppChart dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/app-filemanager">
-						<AppFileManager dataFromParent={'dark'} />
-					</Route>
-					<Route exact path="/app-setting">
-						<AppSetting dataFromParent={'dark'} />
-					</Route> */}
-
 						</Switch>
 						<Footer />
 					</div>

@@ -1,8 +1,8 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllEmployees() {
-  return request(`${API_URL}/employees`, {
+export async function getAllEmployees(COMPANY_ID) {
+  return request(`${API_URL}/employees/${COMPANY_ID}`, {
     method: 'get',
     headers: {
       'Content-Type': 'application/json',
@@ -12,16 +12,12 @@ export async function getAllEmployees() {
   });
 }
 
-export async function getEmployee(userId, id) {
-    return request(`${API_URL}/api/employee/${userId}?id=${id}`, {
+export async function getEmployee(id) {
+    return request(`${API_URL}/employees/${id}`, {
       method: 'get',
       headers: {
          'Content-Type': 'application/json',
          'Authorization': USER_TOKEN,
-      },
-      params: {
-        userId: userId,
-        id: id,
       },
     });
   }
