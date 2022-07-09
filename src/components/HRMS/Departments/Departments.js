@@ -181,7 +181,7 @@ const Department = () => {
                                                                                 <Popover.Body>
                                                                                     <div className="clearfix" >
                                                                                         <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                        <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                                                                        <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
                                                                                     </div>
                                                                                 </Popover.Body>
                                                                             </Popover>
@@ -228,6 +228,7 @@ const Department = () => {
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Departments Head</option>
                                             {users.map((user) => (
+                                                // @ignore-next-line
                                                 <>
                                                     <option value={user.id}>{user.name}</option>
                                                 </>
