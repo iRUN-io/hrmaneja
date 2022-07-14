@@ -1,5 +1,20 @@
+import { getSetting } from "../services/setting"
+
+
+async function getSettingData(companyId) {
+	  const response = await getSetting(companyId);
+	  return response
+}
+
 const initialState = {
-	isDarkMode: false, isDarkHeader: false, isFixNavbar: false, isMinSidebar: false, isDarkSidebar: false, isIconColor: false, isGradientColor: false,
+	isDarkMode: false,
+	isDarkHeader: false,
+	isEmailNotification: false,
+	isFixNavbar: false, 
+	isMinSidebar: false, 
+	isDarkSidebar: false, 
+	isIconColor: false, 
+	isGradientColor: false,
 	isRtl: false,
 	isFont: "font-montserrat",
 	isSubMenuIcon: "list-a",
@@ -38,6 +53,12 @@ export default (state = initialState, action) => {
 			return {
 				...state,
 				isDarkMode: action.payload
+			}
+		case 'CHANGE_EMAIL_NOTIFICATION':
+			const notificationStatus = getSettingData('1');
+			return {
+				...state,
+				isEmailNotification: notificationStatus.emailNotificationEnabled ? true : action.payload
 			}
 		case 'CHANGE_DARK_HEADER':
 			return {

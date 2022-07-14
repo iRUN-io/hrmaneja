@@ -9,16 +9,29 @@ import Image from "../elements/Image";
 
 
 import {
-	darkModeAction, darkHeaderAction, fixNavbarAction,
-	darkMinSidebarAction, darkSidebarAction, iconColorAction,
-	gradientColorAction, rtlAction, fontAction,
+	darkModeAction,
+	darkHeaderAction,
+	fixNavbarAction,
+	darkMinSidebarAction,
+	darkSidebarAction,
+	iconColorAction,
+	gradientColorAction,
+	rtlAction,
+	fontAction,
 	subMenuIconAction,
 	menuIconAction,
 	boxLayoutAction,
-	statisticsAction, friendListAction,
-	statisticsCloseAction, friendListCloseAction, toggleLeftMenuAction
+	statisticsAction,
+	friendListAction,
+	statisticsCloseAction,
+	friendListCloseAction,
+	toggleLeftMenuAction,
+	emailNotificationAction,
 } from '../../actions/settingsAction';
 import Routes from '../Route';
+import { createOrUpdateSetting } from '../../services/setting';
+import { toast } from 'react-toastify';
+import { getUser } from '../../config/common';
 
 
 const masterNone = {
@@ -105,6 +118,23 @@ class Menu extends Component {
 
 	handleDarkMode(e) {
 		this.props.darkModeAction(e.target.checked)
+	}
+
+	handleEmailNotification(e) {
+		this.props.emailNotificationAction(e.target.checked)
+		const user = getUser();
+		if (user) {
+			const company_id = user.company_id;
+			const body = {
+				company_id: company_id,
+				emailNotificationEnabled: e.target.checked,
+				twoFactorEnabled: false, // TODO: add two factor
+			}
+			const update = createOrUpdateSetting(body);
+			if (update) {
+				toast.success("Successfully updated");
+			}
+		}
 	}
 	handleFixNavbar(e) {
 		this.props.fixNavbarAction(e.target.checked)
@@ -617,6 +647,22 @@ class Menu extends Component {
 														className="custom-switch-input btn-darkmode"
 														onChange={(e) => this.handleDarkMode(e)}
 													/>
+													<span className="custom-switch-indicator" />
+												</label>
+											</li>
+											<li>
+												<label className="custom-switch">
+													<span className="custom-switch-description">Email Nofications</span>
+													{this.state.isEmailNotification ? (
+														<input type="checkbox" onChange={(e) => this.handleEmailNotification(e)} className="custom-switch-input" defaultChecked />
+													) : (	
+													<input
+														type="checkbox"
+														name="custom-switch-checkbox"
+														className="custom-switch-input btn-darkmode"
+														onChange={(e) => this.handleEmailNotification(e)}
+													/>
+													)}
 													<span className="custom-switch-indicator" />
 												</label>
 											</li>
@@ -1197,6 +1243,7 @@ const mapDispatchToProps = dispatch => ({
 	friendListAction: (e) => dispatch(friendListAction(e)),
 	statisticsCloseAction: (e) => dispatch(statisticsCloseAction(e)),
 	friendListCloseAction: (e) => dispatch(friendListCloseAction(e)),
-	toggleLeftMenuAction: (e) => dispatch(toggleLeftMenuAction(e))
+	toggleLeftMenuAction: (e) => dispatch(toggleLeftMenuAction(e)),
+	emailNotificationAction: (e) => dispatch(emailNotificationAction(e))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

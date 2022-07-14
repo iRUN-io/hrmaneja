@@ -11,7 +11,6 @@ import EditDepartments from './EditDepartment';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
-// import { getEmployeeById } from '../Employee/Employee';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);
@@ -40,7 +39,6 @@ const Department = () => {
             const response = await createDepartment(body, user.id);
 
             if (response.id) {
-                setDepartments([...departments, response])
                 const logActivity = await createActivity(
                     {
                         name: 'Create Department',
@@ -53,7 +51,8 @@ const Department = () => {
                 )
 
                 if (logActivity.id) {
-                    sendEmail(user.emailAddress, user.name, emailCase.createDepartment); // change this to your email to test the email // user.emailAddress
+                    sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
+                    setDepartments([...departments, response])
                     toast.success("Department created successfully");
                 }
 
@@ -108,7 +107,6 @@ const Department = () => {
                 setUsers(userResponse);
                 setUser(user);
                 setLoading(false);
-
             }
         }
         fetchData();

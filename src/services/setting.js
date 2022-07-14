@@ -1,0 +1,58 @@
+import request from 'umi-request';
+import { API_URL, USER_TOKEN } from '../config/config';
+
+export async function getAllSetting(COMPANY_ID) {
+  return request(`${API_URL}/setting/${COMPANY_ID}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  });
+}
+
+export async function getSetting(companyId) {
+    return request(`${API_URL}/setting/${companyId}`, {
+        method: 'get',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': USER_TOKEN,
+        },
+    });
+}
+
+export async function createOrUpdateSetting(body) {
+  return request(`${API_URL}/setting/create`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+export async function updateSetting(body, settingId) {
+  return request(`${API_URL}/setting/update/${settingId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+
+export async function deleteSetting(settingId) {
+  return request(`${API_URL}/setting/delete/${settingId}`, {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  });
+}

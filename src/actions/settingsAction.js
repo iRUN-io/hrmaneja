@@ -4,6 +4,12 @@ export const darkModeAction = (e) => dispatch => {
 		payload: e
 	})
 }
+export const emailNotificationAction = (e) => dispatch => {
+	dispatch({
+		type: 'CHANGE_EMAIL_NOTIFICATION',
+		payload: e
+	})
+}
 export const darkHeaderAction = (e) => dispatch => {
 	dispatch({
 		type: 'CHANGE_DARK_HEADER',
