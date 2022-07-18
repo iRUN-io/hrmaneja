@@ -31,7 +31,7 @@ const Login = () => {
 		try {
 			setProgress(50);
 			setResponse(response);
-			if (response.status === 200) {
+			if (loggedResponse.status === 200) {
 				setProgress(100);
 				toast.success(response.message)
 				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn);
@@ -53,7 +53,7 @@ const Login = () => {
 		<div className="auth">
 			<ToastContainer />
 			<div className="auth_left">
-				<div className="card">
+				<div className="card" style={{marginTop: '40px'}}>
 					<div className="text-center mb-2">
 						<Link className="header-brand" to="/">
 							<Image

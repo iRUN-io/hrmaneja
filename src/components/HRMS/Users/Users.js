@@ -8,6 +8,8 @@ import EditUsers from './EditUsers';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
+import { Link, useHistory } from 'react-router-dom';
+
 const Users = (navStatus) => {
 	const [user, setCurrentUser] = useState([]);
 	const [userData, setUserData] = useState([]);
@@ -24,7 +26,7 @@ const Users = (navStatus) => {
 		confirmPassword: '',
 
 	});
-
+	const history = useHistory();
 	const createUsersAction = async () => {
 		try {
 			setFormState({ ...formState });
@@ -147,7 +149,7 @@ const Users = (navStatus) => {
 		}
 		fetchData();
 	}, []);
-
+	
 	return (
 		<>
 			<div>
@@ -156,6 +158,12 @@ const Users = (navStatus) => {
 					<div className="container-fluid">
 						<div className="d-flex justify-content-between align-items-center">
 							<ul className="nav nav-tabs page-header-tab">
+								<li className="nav-item">
+
+									<Link onClick={() => history.goBack()} className="nav-link active">
+										<i className="fa fa-arrow-left"></i>
+									</Link>
+								</li>
 							</ul>
 							<div className="header-action">
 								<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>

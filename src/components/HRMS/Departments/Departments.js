@@ -11,6 +11,7 @@ import EditDepartments from './EditDepartment';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
+import { Link, useHistory } from 'react-router-dom';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);
@@ -23,7 +24,7 @@ const Department = () => {
         departmentName: '',
         allEmployee: '',
     });
-
+	const history = useHistory();
     const createDepartmentAction = async () => {
         try {
             setFormState({ ...formState });
@@ -122,7 +123,11 @@ const Department = () => {
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-
+                            <li className="nav-item">
+                                <Link onClick={() => history.goBack()} className="nav-link active">
+                                    <i className="fa fa-arrow-left"></i>
+                                </Link>
+                                </li>
                             </ul>
                             <div className="header-action">
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>

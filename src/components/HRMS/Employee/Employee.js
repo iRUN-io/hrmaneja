@@ -18,6 +18,7 @@ import EditEmployee from "./EditEmployee";
 import { createActivity } from "../../../services/activities";
 import { sendEmail } from "../../../services/mail/sendMail";
 import { emailCase } from "../../../enums/emailCase";
+import Skeleton from "react-loading-skeleton";
 
 
 export const getEmployeeById = (employeeId) => {
@@ -260,9 +261,9 @@ function Employee(props) {
                     </div>
                     <div className="card-body">
                       <div className="table-responsive">
-                        {/* {loading ? (
+                        {loading ? (
                           <Skeleton count={4} height={50} />
-                        ) : ( */}
+                        ) : (
                         <>
                           <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
                             <thead>
@@ -360,7 +361,7 @@ function Employee(props) {
                             </tbody>
                           </table>
                         </>
-                        {/* )} */}
+                         )}
                       </div>
                     </div>
                   </div>

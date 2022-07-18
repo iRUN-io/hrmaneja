@@ -278,6 +278,11 @@ class Menu extends Component {
 						"label": "Report",
 						"to": "/hr-report"
 					},
+					{
+						"id": 14,
+						"label": "Profile",
+						"to": "profile"
+					},
 				]
 			},
 			// {

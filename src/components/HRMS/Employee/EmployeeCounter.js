@@ -1,11 +1,13 @@
 
 import React, {useState, useEffect} from 'react'
 import CountUp from 'react-countup';
+import { Link, useHistory } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function  EmployeeCounter ({employees}) {
     const [maleEmployee, setMaleEmployee] = useState([]);
     const [femaleEmployee, setFemaleEmployee] = useState([]);
+	const history = useHistory();
     
     useEffect(() => {
         const filteredEmployee = employees.filter(employee => employee.gender === 'Male');
@@ -22,36 +24,11 @@ export default function  EmployeeCounter ({employees}) {
             <div className="container-fluid">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <ul className="nav nav-tabs page-header-tab">
-                        {/* <li className="nav-item">
-                            <a
-                                className="nav-link active"
-                                id="Employee-tab"
-                                data-toggle="tab"
-                                href="#Employee-list"
-                            >
-                                All
-                            </a>
+                    <li className="nav-item">
+                        <Link onClick={() => history.goBack()} className="nav-link active">
+                            <i className="fa fa-arrow-left"></i>
+                        </Link>
                         </li>
-                        <li className="nav-item">
-                            <a
-                                className="nav-link"
-                                id="Employee-tab"
-                                data-toggle="tab"
-                                href="#Employee-view"
-                            >
-                                View
-                            </a>
-                        </li> */}
-                        {/* <li className="nav-item">
-                            <a
-                                className="nav-link"
-                                id="Employee-tab"
-                                data-toggle="tab"
-                                href="#Employee-Request"
-                            >
-                                Leave Request
-                            </a>
-                        </li> */}
                     </ul>
                     <div className="header-action">
                         <button

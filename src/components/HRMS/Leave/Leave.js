@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { getAllLeaves, createLeave, deleteLeave } from '../../../services/leave'
-import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +12,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getAllEmployees, getEmployee } from '../../../services/employee';
+import { Link, useHistory } from 'react-router-dom';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -29,7 +29,7 @@ const Leave = () => {
         notifyEmployee: '',
         leaveReason: '',
     });
-
+    const history = useHistory();
     useEffect(() => {
         const user = getUser();
         setFormState({ ...formState, employeeId: user.id, employeeName: user.name });
@@ -141,6 +141,7 @@ const Leave = () => {
 
     }, []);
 
+    
 
     return (
         <>
@@ -150,7 +151,11 @@ const Leave = () => {
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-                                {/* <li className="nav-item"><a className="nav-link active" id="Leaves-tab" data-toggle="tab" href="#Leaves-list">List</a></li> */}
+                            <li className="nav-item">
+                                <Link onClick={() => history.goBack()} className="nav-link active">
+                                    <i className="fa fa-arrow-left"></i>
+                                </Link>
+                                </li>
                             </ul>
                             <div className="header-action">
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
