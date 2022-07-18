@@ -31,7 +31,7 @@ const Login = () => {
 		try {
 			setProgress(50);
 			setResponse(response);
-			if (loggedResponse.status === 200) {
+			if (loggedResponse.data) {
 				setProgress(100);
 				toast.success(response.message)
 				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn);
