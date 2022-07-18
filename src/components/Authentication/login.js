@@ -6,6 +6,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Image from "../elements/Image";
 import LoadingBar from 'react-top-loading-bar';
+import { sendEmail } from '../../services/mail/sendMail';
+import { emailCase } from '../../enums/emailCase';
 
 const Login = () => {
 	const [email, setUserName] = useState();
@@ -28,18 +30,17 @@ const Login = () => {
 		});
 		try {
 			setProgress(50);
-			console.log('response', response);
-			if (response.status === 'ok') {
+			if (response.status === 200) {
 				setProgress(100);
-				toast.success('Logged in successfully !')
+				toast.success(response.data.message)
+				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn);
 				setUserSession(response.data.token, response.data);
 				window.location.href = "/";
 			} else {
 				toast.error("Invalid password or email, please try again !");
 			}
 		} catch (error) {
-			console.log('error', error);
-			if (response.status === 'error')
+			if (response.status === 400)
 				toast.error(response.data.message);
 			else toast.error("Something went wrong. Please try again later.");
 		}
