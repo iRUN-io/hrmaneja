@@ -13,26 +13,27 @@ const Login = () => {
 	const [email, setUserName] = useState();
 	const [password, setPassword] = useState();
 	const [progress, setProgress] = useState(0)
-
+	const [loggedResponse, setResponse] = useState();
 	useEffect(() => {
 		if (getUser()) {
 			window.location.href = "/";
 		}
 	}, []);
 
-	const handleSubmit = async e => {
-		e.preventDefault();
+	const handleSubmit =  async () => {
+		// e.preventDefault();
 		setProgress(10);
       	setProgress(50);
-		const response = await loginUser({
+		  const response = await loginUser({
 			email,
 			password
 		});
 		try {
 			setProgress(50);
+			setResponse(response);
 			if (response.status === 200) {
 				setProgress(100);
-				toast.success(response.data.message)
+				toast.success(response.message)
 				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn);
 				setUserSession(response.data.token, response.data);
 				window.location.href = "/";
@@ -40,8 +41,9 @@ const Login = () => {
 				toast.error("Invalid password or email, please try again !");
 			}
 		} catch (error) {
-			if (response.status === 400)
-				toast.error(response.data.message);
+			console.log('response', response)
+			if (response.status === 404)
+				toast.error(loggedResponse.message);
 			else toast.error("Something went wrong. Please try again later.");
 		}
 	};
@@ -61,7 +63,6 @@ const Login = () => {
 								width={100} />
 						</Link>
 					</div>
-					<form noValidate onSubmit={handleSubmit} className="authFormInput">
 						<div className="card-body">
 							<div className="card-title">Login to your account</div>
 				
@@ -95,12 +96,11 @@ const Login = () => {
 								</label>
 							</div>
 							<div className="form-footer">
-								<button type='submit' className="btn btn-primary btn-block" href="/">
+								<button type='submit' onClick={() => handleSubmit()} className="btn btn-primary btn-block">
 									Click to login
 								</button>
 							</div>
 						</div>
-					</form>
 					{/* <div className="text-center text-muted">
         Don't have account yet? <Link to="/signup">Sign Up</Link>
     </div> */}

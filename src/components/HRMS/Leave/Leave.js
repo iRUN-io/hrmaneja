@@ -146,11 +146,11 @@ const Leave = () => {
         <>
             <div style={{ marginBottom: '50px' }}>
                 <ToastContainer />
-                <div>
+                <div className='container'>
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-                                <li className="nav-item"><a className="nav-link active" id="Leaves-tab" data-toggle="tab" href="#Leaves-list">List</a></li>
+                                {/* <li className="nav-item"><a className="nav-link active" id="Leaves-tab" data-toggle="tab" href="#Leaves-list">List</a></li> */}
                             </ul>
                             <div className="header-action">
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
@@ -164,7 +164,7 @@ const Leave = () => {
                             <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
                                 <div className="card">
                                     <div className="card-header">
-                                        <h3 className="card-title">Leaves List</h3>
+                                        <h3 className="card-title">Employee Leave Record</h3>
                                         <div className="card-options">
                                             <form>
                                                 <div className="input-group">
@@ -229,7 +229,7 @@ const Leave = () => {
                                                                                 <Popover.Body>
                                                                                     <div className="clearfix" >
                                                                                         <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                        <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" class="btn btn-sm btn-danger">Delete</button>
+                                                                                        <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
                                                                                     </div>
                                                                                 </Popover.Body>
                                                                             </Popover>
@@ -257,7 +257,7 @@ const Leave = () => {
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Add Leave</h5>
+                            <h5 className="modal-title" id="exampleModalLabel">Request Leave</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         </div>
                         {/* update form */}

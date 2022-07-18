@@ -6,11 +6,12 @@ import Sparklineschart from '../../common/sparklineschart';
 import { Link } from 'react-router-dom';
 import Donutchart from '../../common/donutchart';
 import { connect } from 'react-redux';
-// import { getUser } from "../../../config/common";
+import { getUser } from "../../../config/common";
 class Dashboard extends Component {
 
 	render() {
 		const { fixNavbar } = this.props;
+		const user = getUser();
 		return (
 			<>
 				<div>
@@ -19,10 +20,9 @@ class Dashboard extends Component {
 							<div className="row clearfix">
 								<div className="col-lg-12">
 									<div className={`section-body ${fixNavbar ? "mb-4 mt-3" : "mb-4"}`}>
-										<h4>Welcome Jason Porter!</h4>
+										<h4>Welcome {user.name}</h4>
 										<small>
-											Measure How Fast You’re Growing Monthly Recurring Revenue.{' '}
-											<a href="fake_url">Learn More</a>
+											Get realtime information about your company.{' '}
 										</small>
 									</div>
 								</div>

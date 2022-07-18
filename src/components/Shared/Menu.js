@@ -233,12 +233,12 @@ class Menu extends Component {
 					},
 					{
 						"id": 5,
-						"label": "Department",
+						"label": "Departments",
 						"to": "/hr-department"
 					},
 					{
 						"id": 6,
-						"label": "Employee",
+						"label": "Employees",
 						"to": "/hr-employees"
 					},
 
@@ -257,26 +257,27 @@ class Menu extends Component {
 					// 	"label": "Events",
 					// 	"to": "/hr-events"
 					// },
+					
 					{
 						"id": 10,
+						"label": "Employee Leave",
+						"to": "/hr-leave"
+					},
+					{
+						"id": 11,
 						"label": "Payroll",
 						"to": "/hr-payroll"
 					},
 					{
-						"id": 11,
+						"id": 12,
 						"label": "Accounts",
 						"to": "/hr-accounts"
 					},
 					{
-						"id": 12,
+						"id": 13,
 						"label": "Report",
 						"to": "/hr-report"
 					},
-					{
-						"id": 13,
-						"label": "Leave",
-						"to": "/hr-leave"
-					}
 				]
 			},
 			// {

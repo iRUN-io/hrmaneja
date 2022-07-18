@@ -152,25 +152,10 @@ const Users = (navStatus) => {
 		<>
 			<div>
 				<ToastContainer />
-				<div>
+				<div className='container'>
 					<div className="container-fluid">
 						<div className="d-flex justify-content-between align-items-center">
 							<ul className="nav nav-tabs page-header-tab">
-								<li className="nav-item">
-									<a
-										className="nav-link active"
-										id="user-tab"
-										data-toggle="tab"
-										href="#user-list"
-									>
-										LIST
-									</a>
-								</li>
-								{/* <li className="nav-item">
-										<a className="nav-link" id="user-tab" data-toggle="tab" href="#user-add">
-											Add New
-										</a>
-									</li> */}
 							</ul>
 							<div className="header-action">
 								<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>

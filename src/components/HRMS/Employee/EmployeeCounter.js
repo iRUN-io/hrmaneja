@@ -19,11 +19,10 @@ export default function  EmployeeCounter ({employees}) {
 
     return (
         <>
-
             <div className="container-fluid">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <ul className="nav nav-tabs page-header-tab">
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a
                                 className="nav-link active"
                                 id="Employee-tab"
@@ -42,7 +41,7 @@ export default function  EmployeeCounter ({employees}) {
                             >
                                 View
                             </a>
-                        </li>
+                        </li> */}
                         {/* <li className="nav-item">
                             <a
                                 className="nav-link"
@@ -88,7 +87,7 @@ export default function  EmployeeCounter ({employees}) {
                         <div className="card">
                             <div className="card-body w_sparkline">
                                 <div className="details">
-                                    <span>New Employee</span>
+                                    <span>New Employees</span>
                                     <h3 className="mb-0">
                                         <CountUp end={employees.length} />
                                     </h3>
@@ -100,7 +99,7 @@ export default function  EmployeeCounter ({employees}) {
                         <div className="card">
                             <div className="card-body w_sparkline">
                                 <div className="details">
-                                    <span>Male</span>
+                                    <span>Male Employees</span>
                                     <h3 className="mb-0 counter">	<CountUp end={maleEmployee.length} /></h3>
                                 </div>
 
@@ -111,7 +110,7 @@ export default function  EmployeeCounter ({employees}) {
                         <div className="card">
                             <div className="card-body w_sparkline">
                                 <div className="details">
-                                    <span>Female</span>
+                                    <span>Female Employees</span>
                                     <h3 className="mb-0 counter">	<CountUp end={femaleEmployee.length} /></h3>
                                 </div>
                             </div>
