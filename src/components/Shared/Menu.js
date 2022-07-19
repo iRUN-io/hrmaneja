@@ -32,6 +32,7 @@ import Routes from '../Route';
 import { createOrUpdateSetting } from '../../services/setting';
 import { toast } from 'react-toastify';
 import { getUser } from '../../config/common';
+import { getAllActivities } from '../../services/activities';
 
 
 const masterNone = {
@@ -71,6 +72,7 @@ class Menu extends Component {
 			isBoxLayout: false,
 			parentlink: null,
 			childlink: null,
+			activityLogs: [],
 		};
 	}
 
@@ -209,7 +211,23 @@ class Menu extends Component {
 		}
 	}
 
+	getActivity = async function (){
+		const user = getUser();
+		if (user) {
+			const company_id = user.company_id;
+			const getActivity = await getAllActivities(company_id);
+			this.setState({
+				activityLogs: getActivity,
+			});
+		}
+	}
+
+
 	render() {
+		if (this.state.activityLogs.length === 0) {
+			this.getActivity();
+		}
+		const activityLogs = this.state.activityLogs; // Use this for the map
 		const content = [
 			{
 				"id": 'Directories',
