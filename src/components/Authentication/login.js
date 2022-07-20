@@ -21,7 +21,6 @@ const Login = () => {
 	}, []);
 
 	const handleSubmit =  async () => {
-		// e.preventDefault();
 		setProgress(10);
       	setProgress(50);
 		  const response = await loginUser({
@@ -101,9 +100,6 @@ const Login = () => {
 								</button>
 							</div>
 						</div>
-					{/* <div className="text-center text-muted">
-        Don't have account yet? <Link to="/signup">Sign Up</Link>
-    </div> */}
 				</div>
 			</div>
 			<div className="auth_right">
