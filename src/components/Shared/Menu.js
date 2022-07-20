@@ -6,6 +6,7 @@ import Header from '../Shared/Header';
 import Footer from '../Shared/Footer';
 import DefaultLink from './DefaultLink';
 import Image from "../elements/Image";
+import moment from 'moment';
 
 
 import {
@@ -228,6 +229,7 @@ class Menu extends Component {
 			this.getActivity();
 		}
 		const activityLogs = this.state.activityLogs; // Use this for the map
+		console.log(activityLogs)
 		const content = [
 			{
 				"id": 'Directories',
@@ -553,7 +555,7 @@ class Menu extends Component {
 									id="Settings"
 									aria-expanded="true"
 								>
-									<div className="mb-4">
+									{/* <div className="mb-4">
 										<h6 className="font-14 font-weight-bold text-muted">Font Style</h6>
 										<div className="custom-controls-stacked font_setting">
 											<label className="custom-control custom-radio custom-control-inline">
@@ -587,8 +589,8 @@ class Menu extends Component {
 												<span className="custom-control-label">Robot Google Font</span>
 											</label>
 										</div>
-									</div>
-									<div className="mb-4">
+									</div> */}
+									{/* <div className="mb-4">
 										<h6 className="font-14 font-weight-bold text-muted">Selected Menu Icon</h6>
 										<div className="custom-controls-stacked arrow_option">
 											<label className="custom-control custom-radio custom-control-inline">
@@ -658,11 +660,11 @@ class Menu extends Component {
 												<span className="custom-control-label">C</span>
 											</label>
 										</div>
-									</div>
+									</div> */}
 									<div>
 										<h6 className="font-14 font-weight-bold mt-4 text-muted">General Settings</h6>
 										<ul className="setting-list list-unstyled mt-1 setting_switch">
-											<li>
+											{/* <li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Night Mode</span>
 													<input
@@ -673,7 +675,7 @@ class Menu extends Component {
 													/>
 													<span className="custom-switch-indicator" />
 												</label>
-											</li>
+											</li> */}
 											<li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Email Nofications</span>
@@ -690,7 +692,7 @@ class Menu extends Component {
 													<span className="custom-switch-indicator" />
 												</label>
 											</li>
-											<li>
+											{/* <li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Fix Navbar top</span>
 													<input
@@ -774,7 +776,7 @@ class Menu extends Component {
 													/>
 													<span className="custom-switch-indicator" />
 												</label>
-											</li>
+											</li> */}
 
 										</ul>
 									</div>
@@ -799,71 +801,28 @@ class Menu extends Component {
 									</div> */}
 								</div>
 								{/* loop through activity here */}
-								<div role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
-									<ul className="new_timeline mt-3">
-										<li>
-											<div className="bullet pink" />
-											<div className="time">11:00am</div>
-											<div className="desc">
-												<h3>Attendance</h3>
-												<h4>Computer Class</h4>
-											</div>
-										</li>
-										<li>
-											<div className="bullet pink" />
-											<div className="time">11:30am</div>
-											<div className="desc">
-												<h3>Added an interest</h3>
-												<h4>“Volunteer Activities”</h4>
-											</div>
-										</li>
-										<li>
-											<div className="bullet green" />
-											<div className="time">12:00pm</div>
-											<div className="desc">
-												<h3>Developer Team</h3>
-												<h4>Hangouts</h4>
-												<ul className="list-unstyled team-info margin-0 p-t-5">
-													<li>
-														<img src="/assets/images/xs/avatar1.jpg" alt="Avatar" />
-													</li>
-													<li>
-														<img src="/assets/images/xs/avatar2.jpg" alt="Avatar" />
-													</li>
-													<li>
-														<img src="/assets/images/xs/avatar3.jpg" alt="Avatar" />
-													</li>
-													<li>
-														<img src="/assets/images/xs/avatar4.jpg" alt="Avatar" />
-													</li>
-												</ul>
-											</div>
-										</li>
-										<li>
-											<div className="bullet green" />
-											<div className="time">2:00pm</div>
-											<div className="desc">
-												<h3>Responded to need</h3>
-												<a href="#!">“In-Kind Opportunity”</a>
-											</div>
-										</li>
-										<li>
-											<div className="bullet orange" />
-											<div className="time">1:30pm</div>
-											<div className="desc">
-												<h3>Lunch Break</h3>
-											</div>
-										</li>
-										<li>
-											<div className="bullet green" />
-											<div className="time">2:38pm</div>
-											<div className="desc">
-												<h3>Finish</h3>
-												<h4>Go to Home</h4>
-											</div>
-										</li>
-									</ul>
+								
+									<div  role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
+										{activityLogs.splice(0, 5).map((activity) => (
+											<ul key={activity.id} className="new_timeline mt-3">
+												<li>
+													<div className="bullet pink" />
+													<div className="time">{moment(activity.created_at).format('MMMM Do YYYY, h:mm:ss a')}</div>
+													<div className="desc">
+														<h3>{activity.name}</h3>
+														<h4>{activity.activity}</h4>
+													</div>
+												</li>
+												
+												
+											</ul>
+										))}
+									<a href='/hr-activities' className='desc'>
+											...see more
+									</a>
 								</div>
+								
+								
 							</div>
 						</div>
 						<div className="theme_div">
