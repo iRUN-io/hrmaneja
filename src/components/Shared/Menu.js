@@ -212,7 +212,7 @@ class Menu extends Component {
 		}
 	}
 
-	getActivity = async function (){
+	getActivity = async function () {
 		const user = getUser();
 		if (user) {
 			const company_id = user.company_id;
@@ -229,7 +229,7 @@ class Menu extends Component {
 			this.getActivity();
 		}
 		const activityLogs = this.state.activityLogs; // Use this for the map
-		console.log(activityLogs)
+
 		const content = [
 			{
 				"id": 'Directories',
@@ -277,7 +277,7 @@ class Menu extends Component {
 					// 	"label": "Events",
 					// 	"to": "/hr-events"
 					// },
-					
+
 					{
 						"id": 10,
 						"label": "Employee Leave",
@@ -681,13 +681,13 @@ class Menu extends Component {
 													<span className="custom-switch-description">Email Nofications</span>
 													{this.state.isEmailNotification ? (
 														<input type="checkbox" onChange={(e) => this.handleEmailNotification(e)} className="custom-switch-input" defaultChecked />
-													) : (	
-													<input
-														type="checkbox"
-														name="custom-switch-checkbox"
-														className="custom-switch-input btn-darkmode"
-														onChange={(e) => this.handleEmailNotification(e)}
-													/>
+													) : (
+														<input
+															type="checkbox"
+															name="custom-switch-checkbox"
+															className="custom-switch-input btn-darkmode"
+															onChange={(e) => this.handleEmailNotification(e)}
+														/>
 													)}
 													<span className="custom-switch-indicator" />
 												</label>
@@ -801,28 +801,28 @@ class Menu extends Component {
 									</div> */}
 								</div>
 								{/* loop through activity here */}
-								
-									<div  role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
-										{activityLogs.splice(0, 5).map((activity) => (
-											<ul key={activity.id} className="new_timeline mt-3">
-												<li>
-													<div className="bullet pink" />
-													<div className="time">{moment(activity.created_at).format('MMMM Do YYYY, h:mm:ss a')}</div>
-													<div className="desc">
-														<h3>{activity.name}</h3>
-														<h4>{activity.activity}</h4>
-													</div>
-												</li>
-												
-												
-											</ul>
-										))}
+
+								<div role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
+									{activityLogs.splice(0, 5).map((activity) => (
+										<ul key={activity.id} className="new_timeline mt-3">
+											<li>
+												<div className="bullet pink" />
+												<div className="time">{moment(activity.created_at).format('MMMM Do YYYY, h:mm:ss a')}</div>
+												<div className="desc">
+													<h3>{activity.name}</h3>
+													<h4>{activity.activity}</h4>
+												</div>
+											</li>
+
+
+										</ul>
+									))}
 									<a href='/hr-activities' className='desc'>
-											...see more
+										...see more
 									</a>
 								</div>
-								
-								
+
+
 							</div>
 						</div>
 						<div className="theme_div">
