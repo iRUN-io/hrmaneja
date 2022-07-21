@@ -23,13 +23,15 @@ const Login = () => {
 	const handleSubmit =  async () => {
 		setProgress(10);
       	setProgress(50);
-		  const response = await loginUser({
-			email,
-			password
-		});
+		
 		try {
+			const response = await loginUser({
+				email,
+				password
+			});
 			setProgress(50);
 			setResponse(response);
+			await new Promise(resolve => setTimeout(resolve, 1000));
 			if (response.data) {
 				setProgress(100);
 				toast.success(response.message)
@@ -40,8 +42,7 @@ const Login = () => {
 				toast.error("Invalid password or email, please try again !");
 			}
 		} catch (error) {
-			console.log('response', response)
-			if (response.status === 404)
+			if (loggedResponse.status === 404)
 				toast.error(loggedResponse.message);
 			else toast.error("Something went wrong. Please try again later.");
 		}
