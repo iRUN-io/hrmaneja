@@ -2,8 +2,14 @@
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../../config/config';
 
-export const sendEmail = (email, name, caseType) => {
-  prepareMail(email, name, caseType);
+export const sendEmail = async (email, name, caseType) => {
+  if (localStorage.getItem('emailNotificationEnabled') === 'false')
+  {
+    return;
+  }else{
+    prepareMail(email, name, caseType);
+
+  }
 }
 
 const emailSwitch = {

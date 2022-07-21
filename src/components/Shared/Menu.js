@@ -130,14 +130,23 @@ class Menu extends Component {
 			const company_id = user.company_id;
 			const body = {
 				company_id: company_id,
-				emailNotificationEnabled: e.target.checked,
+				emailNotificationEnabled: e.target.checked.toString(),
 				twoFactorEnabled: false, // TODO: add two factor
 			}
 			const update = createOrUpdateSetting(body);
 			if (update) {
+				localStorage.setItem('emailNotificationEnabled', e.target.checked);
 				toast.success("Successfully updated");
 			}
 		}
+	}
+
+	handleEmailNotificationCheckbox() {
+		const emailNotificationEnabled = localStorage.getItem('emailNotificationEnabled');
+		if (emailNotificationEnabled === 'true') {
+			return true;
+		}
+		return false;
 	}
 	handleFixNavbar(e) {
 		this.props.fixNavbarAction(e.target.checked)
@@ -679,16 +688,7 @@ class Menu extends Component {
 											<li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Email Nofications</span>
-													{this.state.isEmailNotification ? (
-														<input type="checkbox" onChange={(e) => this.handleEmailNotification(e)} className="custom-switch-input" defaultChecked />
-													) : (
-														<input
-															type="checkbox"
-															name="custom-switch-checkbox"
-															className="custom-switch-input btn-darkmode"
-															onChange={(e) => this.handleEmailNotification(e)}
-														/>
-													)}
+													<input type="checkbox" name="custom-switch-checkbox" className="custom-switch-input" defaultChecked={this.handleEmailNotificationCheckbox()} onChange={(e) => this.handleEmailNotification(e)} />
 													<span className="custom-switch-indicator" />
 												</label>
 											</li>

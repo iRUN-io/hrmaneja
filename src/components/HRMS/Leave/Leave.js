@@ -112,6 +112,7 @@ const Leave = () => {
             if (response.message) {
                 const newLeaves = leaves.filter(leave => leave.id !== leaveId);
                 setLeaves(newLeaves);
+                sendEmail(user.emailAddress, user.name, emailCase.deleteLeave);
                 toast.info(response.message);
             }
 
