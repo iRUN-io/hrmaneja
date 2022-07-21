@@ -21,9 +21,12 @@ const Login = () => {
 	}, []);
 
 	const handleSubmit =  async () => {
+		if (!password || !email) {
+			toast.error("Email / Password is required !");
+			return;
+		}
 		setProgress(10);
       	setProgress(50);
-		
 		try {
 			const response = await loginUser({
 				email,
@@ -31,17 +34,19 @@ const Login = () => {
 			});
 			setProgress(50);
 			setResponse(response);
+			setProgress(100);
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			if (response.data) {
-				setProgress(100);
 				toast.success(response.message)
 				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn);
 				setUserSession(response.data.token, response.data);
 				window.location.href = "/";
 			} else {
+				setProgress(10);
 				toast.error("Invalid password or email, please try again !");
 			}
 		} catch (error) {
+			setProgress(10);
 			if (loggedResponse.status === 404)
 				toast.error(loggedResponse.message);
 			else toast.error("Something went wrong. Please try again later.");
@@ -49,7 +54,7 @@ const Login = () => {
 	};
 	return (
 		<>
-		<LoadingBar progress={progress} color='#f11946' />
+		<LoadingBar progress={progress} color='#8759ff' height={5} />
 		<div className="auth">
 			<ToastContainer />
 			<div className="auth_left">
@@ -73,6 +78,7 @@ const Login = () => {
 									id="exampleInputEmail1"
 									aria-describedby="emailHelp"
 									placeholder="Enter email"
+									required
 									onChange={e => setUserName(e.target.value)} />
 							</div>
 							<div className="form-group">
@@ -87,6 +93,7 @@ const Login = () => {
 									className="form-control"
 									id="exampleInputPassword1"
 									placeholder="Password"
+									required
 									onChange={e => setPassword(e.target.value)} />
 							</div>
 							<div className="form-group">
