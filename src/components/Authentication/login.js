@@ -54,7 +54,7 @@ const Login = () => {
 	};
 	return (
 		<>
-		<LoadingBar progress={progress} color='#8759ff' height={5} />
+		<LoadingBar progress={progress} color='#8759ff' height={7} />
 		<div className="auth">
 			<ToastContainer />
 			<div className="auth_left">

@@ -310,7 +310,7 @@ class Menu extends Component {
 					{
 						"id": 14,
 						"label": "Profile",
-						"to": "profile"
+						"to": "/hr-profile"
 					},
 				]
 			},

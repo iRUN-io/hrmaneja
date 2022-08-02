@@ -6,7 +6,7 @@ import {
 } from "../../../actions/settingsAction";
 import { getAllEmployees, createEmployee, deleteEmployee } from "../../../services/employee";
 import { getUser } from "../../../config/common";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import EmployeeCounter from "./EmployeeCounter";
 import Currency from "../../common/currency";
@@ -19,6 +19,7 @@ import { createActivity } from "../../../services/activities";
 import { sendEmail } from "../../../services/mail/sendMail";
 import { emailCase } from "../../../enums/emailCase";
 import Skeleton from "react-loading-skeleton";
+import EmptyState from "../../EmptyState";
 
 
 export const getEmployeeById = (employeeId) => {
@@ -106,7 +107,7 @@ function Employee(props) {
         const logActivity = await createActivity(
           {
             name: 'Create Employee',
-            employee_id: user.id,
+            employee_id: user.employee_id,
             activity: `${user.name} created a new employee with naem; ${body.name}`,
             activity_name: 'Creation',
             user: user.name,
@@ -159,7 +160,7 @@ function Employee(props) {
       ...formState,
       [name]: value
     });
-    console.log({ [name]: value });
+
   };
 
   const employeeDetails = id => {
@@ -179,7 +180,7 @@ function Employee(props) {
         const logActivity = await createActivity(
           { 
             name: 'Delete Employee',
-            employee_id: user.id,
+            employee_id: user.employee_id,
             activity: `${user.name} deleted an employee with id; ${employeeID}`,
             activity_name: 'Deletion',
             user: user.name,
@@ -221,7 +222,6 @@ function Employee(props) {
   return (
     <>
       <div>
-        <ToastContainer />
         <div>
           <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
             <EmployeeCounter employees={employees} />
@@ -237,14 +237,14 @@ function Employee(props) {
                 >
                   <div className="card">
                     <div className="card-header">
-                      <h3 className="card-title">Employee List</h3>
+                      <h3 className="card-title">Employees</h3>
                       <div className="card-options">
                         <form>
                           <div className="input-group">
                             <input
                               type="text"
                               className="form-control form-control-sm"
-                              placeholder="Search something..."
+                              placeholder="Search Employee..."
                               name="s"
                             />
                             <span className="input-group-btn ml-2">
@@ -259,6 +259,9 @@ function Employee(props) {
                         </form>
                       </div>
                     </div>
+                    {employees.length === 0 && !loading ? (
+                      <EmptyState/>
+                    ) : (
                     <div className="card-body">
                       <div className="table-responsive">
                         {loading ? (
@@ -364,6 +367,7 @@ function Employee(props) {
                          )}
                       </div>
                     </div>
+                    )}
                   </div>
                 </div>
                 {/* <LeaveRequest /> */}

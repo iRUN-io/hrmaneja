@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { getAllLeaves, createLeave, deleteLeave } from '../../../services/leave'
 import { getUser } from '../../../config/common';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -13,6 +13,7 @@ import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getAllEmployees, getEmployee } from '../../../services/employee';
 import { Link, useHistory } from 'react-router-dom';
+import EmptyState from '../../EmptyState';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -61,7 +62,7 @@ const Leave = () => {
                 const logActivity = await createActivity(
                     {
                         name: 'Create Leave',
-                        employee_id: user.id,
+                        employee_id: user.employee_id,
                         activity: `${user.name} Created a new leave ; ${body.leaveType}`,
                         activity_name: 'Creation',
                         user: user.name,
@@ -109,12 +110,29 @@ const Leave = () => {
         try {
             const response = await deleteLeave(leaveId);
 
-            if (response.message) {
+            if (!response.error) {
+                const logActivity = await createActivity(
+                    {
+                        name: 'Delete Leave',
+                        employee_id: user.employee_id,
+                        activity: `${user.name} Deleted a leave`,
+                        activity_name: 'Deletion',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+            
+            setLeaves(leaves.filter(leave => leave.id !== leaveId));
+
+            toast.success("Leave request deleted successfully");
+
+            if (logActivity.id) {
                 const newLeaves = leaves.filter(leave => leave.id !== leaveId);
                 setLeaves(newLeaves);
                 sendEmail(user.emailAddress, user.name, emailCase.deleteLeave);
                 toast.info(response.message);
             }
+        }
 
         } catch (err) {
             toast.error("Error, try again");
@@ -147,7 +165,6 @@ const Leave = () => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <ToastContainer />
                 <div className='container'>
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
@@ -180,6 +197,9 @@ const Leave = () => {
                                             </form>
                                         </div>
                                     </div>
+                                    {leaves.length === 0 && !loading ? (
+                                        <EmptyState/>
+                                        ) : (
                                     <div className="card-body">
                                         <div className="table-responsive">
 
@@ -200,7 +220,7 @@ const Leave = () => {
                                                     </thead>
                                                     <tbody>
                                                         {leaves.map((leave) => (
-                                                            <tr>
+                                                            <tr key={leave.id}>
                                                                 <td className="width45">
                                                                     <span
                                                                         className="avatar avatar-orange"
@@ -250,6 +270,7 @@ const Leave = () => {
                                             )}
                                         </div>
                                     </div>
+                                        )}
                                 </div>
                             </div>
 
@@ -303,9 +324,9 @@ const Leave = () => {
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Notify Employee</option>
                                             {employees.map((user) => (
-                                                <>
-                                                    <option value={user.id}>{user.name}</option>
-                                                </>
+
+                                                    <option key={user.id} value={user.id}>{user.name}</option>
+
                                             ))}
                                         </select>
                                     </div>

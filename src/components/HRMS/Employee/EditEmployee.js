@@ -83,7 +83,7 @@ const EditEmployee = (employeeData) => {
         const logActivity = await createActivity(
           {
             name: 'Update employee',
-            employee_id: user.id,
+            employee_id: user.employee_id,
             activity: `${user.name} Updated an employee with name; ${body.name}`,
             activity_name: 'Updating',
             user: user.name,

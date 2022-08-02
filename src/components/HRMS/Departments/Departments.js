@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../../services/department'
 import { getAllUsers } from '../../../services/user'
 import { getUser } from '../../../config/common';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -12,6 +12,7 @@ import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { Link, useHistory } from 'react-router-dom';
+import EmptyState from '../../EmptyState';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);
@@ -24,6 +25,7 @@ const Department = () => {
         departmentName: '',
         allEmployee: '',
     });
+    
 	const history = useHistory();
     const createDepartmentAction = async () => {
         try {
@@ -43,7 +45,7 @@ const Department = () => {
                 const logActivity = await createActivity(
                     {
                         name: 'Create Department',
-                        employee_id: user.id,
+                        employee_id: user.employee_id,
                         activity: `${user.name} Created a new department with name; ${body.name}`,
                         activity_name: 'Creation',
                         user: user.name,
@@ -118,7 +120,6 @@ const Department = () => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <ToastContainer />
                 <div className='container'>
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
@@ -151,6 +152,9 @@ const Department = () => {
                                             </form>
                                         </div>
                                     </div>
+                                    {departments.length === 0 && !loading ? (
+                                        <EmptyState/>
+                                        ) : (
                                     <div className="card-body">
                                         <div className="table-responsive">
 
@@ -200,6 +204,7 @@ const Department = () => {
                                             )}
                                         </div>
                                     </div>
+                                        )}
                                 </div>
                             </div>
 
@@ -231,10 +236,7 @@ const Department = () => {
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Departments Head</option>
                                             {users.map((user) => (
-                                                // @ignore-next-line
-                                                <>
-                                                    <option value={user.id}>{user.name}</option>
-                                                </>
+                                                    <option key={user.id} value={user.id}>{user.name}</option>
                                             ))}
                                         </select>
                                     </div>

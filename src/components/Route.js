@@ -502,7 +502,7 @@ const Routes = [
         component: AppSetting
     },
     {
-        path: "/profile",
+        path: "/hr-profile",
         name: 'profile',
         exact: true,
         pageTitle: "My Profile",

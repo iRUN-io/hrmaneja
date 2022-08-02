@@ -47,7 +47,7 @@ const EditDepartment = (employeeData) => {
                 const logActivity = await createActivity(
                     {
                         name: 'Update Leave',
-                        employee_id: user.id,
+                        employee_id: user.employee_id,
                         activity: `${user.name} UPdated a leave with name; ${body.name}`,
                         activity_name: 'Updating',
                         user: user.name,

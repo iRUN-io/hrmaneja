@@ -13,7 +13,7 @@ export async function getAllEmployees(COMPANY_ID) {
 }
 
 export async function getEmployee(id) {
-    return request(`${API_URL}/employees/${id}`, {
+    return request(`${API_URL}/employees/employee/${id}`, {
       method: 'get',
       headers: {
          'Content-Type': 'application/json',

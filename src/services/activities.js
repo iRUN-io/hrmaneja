@@ -11,16 +11,12 @@ export async function getAllActivities(COMPANY_ID) {
   });
 }
 
-export async function getActivity(userId, id) {
-  return request(`${API_URL}/activities/${userId}?id=${id}`, {
+export async function getActivity(employeeId) {
+  return request(`${API_URL}/activities/employee/${employeeId}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
-    },
-    params: {
-      userId: userId,
-      id: id,
     },
   });
 }
