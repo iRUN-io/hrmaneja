@@ -101,7 +101,6 @@ const EditDepartment = (employeeData) => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <ToastContainer />
                 <div className="modal-body">
                     <div className="row clearfix">
                         <div className="col-md-12">

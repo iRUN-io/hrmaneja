@@ -47,7 +47,7 @@ const Login = () => {
 			}
 		} catch (error) {
 			setProgress(10);
-			if (loggedResponse.status === 404)
+			if (loggedResponse?.status === 404)
 				toast.error(loggedResponse.message);
 			else toast.error("Something went wrong. Please try again later.");
 		}

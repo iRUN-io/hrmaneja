@@ -103,7 +103,6 @@ const EditUsers = (userData) => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <ToastContainer />
                 <div className="modal-body">
                     <div className="card">
                         <div className="card-body">
