@@ -60,3 +60,29 @@ export async function deleteLeave(leaveId) {
     },
   });
 }
+
+
+export async function approveLeave(leaveId) {
+  return request(`${API_URL}/leaves/approve/${leaveId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  });
+}
+
+
+export async function disapproveLeave(leaveId) {
+  return request(`${API_URL}/leaves/disapprove/${leaveId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  });
+}
+
+

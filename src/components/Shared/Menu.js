@@ -210,7 +210,7 @@ class Menu extends Component {
 				if (menuItem.to === this.props.location.pathname) {
 					menucClass = "in"; // change this to in when you add more labels
 				} else {
-					menucClass = "collapse";
+					menucClass = ""; // fix this
 				}
 				return menucClass
 			})
@@ -241,13 +241,9 @@ class Menu extends Component {
 
 		const content = [
 			{
-				"id": 'Directories',
-				"label": "Directories"
-			},
-			{
 				"id": 1,
-				"icon": "icon-rocket",
-				"label": "HRMS",
+				"icon": "",
+				"label": "",
 				"to": "#!",
 				content: [
 					{
@@ -309,6 +305,11 @@ class Menu extends Component {
 					},
 					{
 						"id": 14,
+						"label": "Expense",
+						"to": "/hr-expense"
+					},
+					{
+						"id": 15,
 						"label": "Profile",
 						"to": "/hr-profile"
 					},

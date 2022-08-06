@@ -30,3 +30,20 @@ div.rtl{
 .marginTop{
     margin-top: 7.2%!important;
 }
+
+.text-warning{
+    color: #ff6618!important;
+}
+
+.text-danger{
+    color: #ff0000!important;
+}
+
+.text-success {
+    color: #187f189e!important;
+}
+
+.badge-success {
+    background-color: #187f189e!important;
+    color: white;
+}
