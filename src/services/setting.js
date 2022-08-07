@@ -56,3 +56,54 @@ export async function deleteSetting(settingId) {
     },
   });
 }
+
+// get total number of services 
+export async function totalEmployees(companyId) {
+  return request(`${API_URL}/setting/totalEmployees/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+
+export async function totalDepartments(companyId) {
+  return request(`${API_URL}/setting/totalDepartments/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+
+export async function totalLeaves(companyId) {
+  return request(`${API_URL}/setting/totalLeaves/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+
+export async function totalUsers(companyId) {
+  return request(`${API_URL}/setting/totalUsers/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+
+export async function totalCompanies(companyId) {
+  return request(`${API_URL}/setting/totalCompanies/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}

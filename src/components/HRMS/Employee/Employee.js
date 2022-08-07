@@ -273,7 +273,7 @@ function Employee(props) {
                               <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Employee ID</th>
+                                {/* <th>Employee ID</th> */}
                                 <th>Phone</th>
                                 <th>Join Date</th>
                                 <th>Role</th>
@@ -318,9 +318,9 @@ function Employee(props) {
                                       </span>
                                     </div>
                                   </td>
-                                  <td>
+                                  {/* <td>
                                     <span>{employee?.id}</span>
-                                  </td>
+                                  </td> */}
                                   <td>
                                     <span>{employee?.phone}</span>
                                   </td>

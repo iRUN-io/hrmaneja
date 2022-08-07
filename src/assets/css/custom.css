@@ -47,3 +47,7 @@ div.rtl{
     background-color: #187f189e!important;
     color: white;
 }
+
+.disabled-card {
+    opacity: .4 !important;
+}

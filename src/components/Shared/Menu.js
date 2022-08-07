@@ -242,8 +242,8 @@ class Menu extends Component {
 		const content = [
 			{
 				"id": 1,
-				"icon": "",
-				"label": "",
+				"icon": "fa fa-tags",
+				"label": "Main",
 				"to": "#!",
 				content: [
 					{
@@ -251,27 +251,27 @@ class Menu extends Component {
 						"label": "Dashboard",
 						"to": "/"
 					},
-					{
-						"id": 4,
-						"label": "Users",
-						"to": "/hr-users"
-					},
-					{
-						"id": 5,
-						"label": "Departments",
-						"to": "/hr-department"
-					},
-					{
-						"id": 6,
-						"label": "Employees",
-						"to": "/hr-employees"
-					},
+					// {
+					// 	"id": 4,
+					// 	"label": "Users",
+					// 	"to": "/hr-users"
+					// },
+					// {
+					// 	"id": 5,
+					// 	"label": "Departments",
+					// 	"to": "/hr-department"
+					// },
+					// {
+					// 	"id": 6,
+					// 	"label": "Employees",
+					// 	"to": "/hr-employees"
+					// },
 
-					{
-						"id": 7,
-						"label": "Activities",
-						"to": "/hr-activities"
-					},
+					// {
+					// 	"id": 7,
+					// 	"label": "Activities",
+					// 	"to": "/hr-activities"
+					// },
 					// {
 					// 	"id": 8,
 					// 	"label": "Holidays",
@@ -285,33 +285,52 @@ class Menu extends Component {
 
 					{
 						"id": 10,
-						"label": "Employee Leave",
+						"label": "Leaves",
 						"to": "/hr-leave"
 					},
-					{
-						"id": 11,
-						"label": "Payroll",
-						"to": "/hr-payroll"
-					},
-					{
-						"id": 12,
-						"label": "Accounts",
-						"to": "/hr-accounts"
-					},
-					{
-						"id": 13,
-						"label": "Report",
-						"to": "/hr-report"
-					},
-					{
-						"id": 14,
-						"label": "Expense",
-						"to": "/hr-expense"
-					},
+
+					// {
+					// 	"id": 12,
+					// 	"label": "Accounts",
+					// 	"to": "/hr-accounts"
+					// },
+					// {
+					// 	"id": 13,
+					// 	"label": "Report",
+					// 	"to": "/hr-report"
+					// },
+					// {
+					// 	"id": 14,
+					// 	"label": "Expense",
+					// 	"to": "/hr-expense"
+					// },
 					{
 						"id": 15,
 						"label": "Profile",
 						"to": "/hr-profile"
+					},
+				]
+			},
+			{
+				"id": 2,
+				"icon": "fa fa-cogs",
+				"label": "Admin",
+				"to": "#!",
+				content: [
+					{
+						"id": 16,
+						"label": "Payroll",
+						"to": "/hr-payroll"
+					},
+					{
+						"id": 17,
+						"label": "General",
+						"to": "/admin/settings"
+					},
+					{
+						"id": 18,
+						"label": "Billing",
+						"to": "/admin/billing"
 					},
 				]
 			},

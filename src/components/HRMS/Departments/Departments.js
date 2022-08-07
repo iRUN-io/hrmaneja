@@ -116,6 +116,24 @@ const Department = () => {
 
     }, []);
 
+    // function to return the department head name
+    const getDepartmentHead = (departmentHeadId) => {
+        const departmentHead = users.find(user => user.id === departmentHeadId);
+        if (departmentHead) {
+            return departmentHead.name;
+        }
+        return 'No department head';
+    }
+
+    // get all employees in a department
+    const getAllEmployees = (departmentId) => {
+        const employees = users.filter(user => user.department_id === departmentId);
+        if (employees.length > 0) {
+            return employees.map(employee => employee.name).join(', ');
+        }
+        return 'No Employee';
+    }
+
 
     return (
         <>
@@ -164,7 +182,7 @@ const Department = () => {
                                                 <table className="table table-striped table-vcenter table-hover mb-0">
                                                     <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            {/* <th>#</th> */}
                                                             <th>Department Name</th>
                                                             <th>Department Head</th>
                                                             <th>Total Employee</th>
@@ -174,10 +192,10 @@ const Department = () => {
                                                     <tbody>
                                                         {departments.map((department) => (
                                                             <tr key={department.id}>
-                                                                <td>0{department.id}</td>
+                                                                {/* <td>0{department.id}</td> */}
                                                                 <td><div className="font-15">{department.name}</div></td>
-                                                                <td>{department.department_head}</td>
-                                                                <td>102</td>
+                                                                <td>{getDepartmentHead(department.department_head)}</td>
+                                                                <td>{getAllEmployees(department.id)}</td>
                                                                 <td>
 
                                                                     <button type="button" className="btn btn-icon" title="Edit" onClick={() => setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
