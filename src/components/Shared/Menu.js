@@ -34,6 +34,7 @@ import { createOrUpdateSetting } from '../../services/setting';
 import { toast } from 'react-toastify';
 import { getUser } from '../../config/common';
 import { getAllActivities } from '../../services/activities';
+import NotFound from '../Authentication/404';
 
 
 const masterNone = {
@@ -286,7 +287,7 @@ class Menu extends Component {
 					{
 						"id": 10,
 						"label": "Leaves",
-						"to": "/hr-leave"
+						"to": "/hr-leaves"
 					},
 
 					// {
@@ -491,6 +492,10 @@ class Menu extends Component {
 		const { darkMinSidebar, istoggleLeftMenu, friendListOpen, statisticsOpen, statisticsClose, friendListClose } = this.props
 		const pageHeading = Routes.filter((route) => route.path === this.props.location.pathname)
 
+		// if route is not found in Routes, then return 404
+		if (pageHeading.length === 0) {
+			return <NotFound />
+		}
 		return (
 			<>
 				<div className={`${istoggleLeftMenu ? "offcanvas-active" : ""}`}>
@@ -584,127 +589,11 @@ class Menu extends Component {
 									id="Settings"
 									aria-expanded="true"
 								>
-									{/* <div className="mb-4">
-										<h6 className="font-14 font-weight-bold text-muted">Font Style</h6>
-										<div className="custom-controls-stacked font_setting">
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="font"
-													defaultChecked
-													defaultValue="font-opensans"
-													onChange={() => this.handleFont('font-opensans')}
-												/>
-												<span className="custom-control-label">Open Sans Font</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="font"
-													defaultValue="font-montserrat"
-													onChange={() => this.handleFont('font-montserrat')}
-												/>
-												<span className="custom-control-label">Montserrat Google Font</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="font"
-													onChange={() => this.handleFont('font-roboto')}
-												/>
-												<span className="custom-control-label">Robot Google Font</span>
-											</label>
-										</div>
-									</div> */}
-									{/* <div className="mb-4">
-										<h6 className="font-14 font-weight-bold text-muted">Selected Menu Icon</h6>
-										<div className="custom-controls-stacked arrow_option">
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="marrow"
-													defaultValue="arrow-a"
-													onChange={() => this.handleMenuIcon('list-a')}
-												/>
-												<span className="custom-control-label">A</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="marrow"
-													defaultValue="arrow-b"
-													onChange={() => this.handleMenuIcon('list-b')}
-												/>
-												<span className="custom-control-label">B</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="marrow"
-													defaultValue="arrow-c"
-													defaultChecked
-													onChange={() => this.handleMenuIcon('list-c')}
-												/>
-												<span className="custom-control-label">C</span>
-											</label>
-										</div>
-
-										<h6 className="font-14 font-weight-bold mt-4 text-muted">SubMenu List Icon</h6>
-										<div className="custom-controls-stacked list_option">
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="listicon"
-													defaultValue="list-a"
-													defaultChecked
-													onChange={() => this.handleSubMenuIcon('list-a')}
-												/>
-												<span className="custom-control-label">A</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="listicon"
-													defaultValue="list-b"
-													onChange={() => this.handleSubMenuIcon('list-b')}
-												/>
-												<span className="custom-control-label">B</span>
-											</label>
-											<label className="custom-control custom-radio custom-control-inline">
-												<input
-													type="radio"
-													className="custom-control-input"
-													name="listicon"
-													defaultValue="list-c"
-													onChange={() => this.handleSubMenuIcon('list-c')}
-												/>
-												<span className="custom-control-label">C</span>
-											</label>
-										</div>
-									</div> */}
+									
 									<div>
 										<h6 className="font-14 font-weight-bold mt-4 text-muted">General Settings</h6>
 										<ul className="setting-list list-unstyled mt-1 setting_switch">
-											{/* <li>
-												<label className="custom-switch">
-													<span className="custom-switch-description">Night Mode</span>
-													<input
-														type="checkbox"
-														name="custom-switch-checkbox"
-														className="custom-switch-input btn-darkmode"
-														onChange={(e) => this.handleDarkMode(e)}
-													/>
-													<span className="custom-switch-indicator" />
-												</label>
-											</li> */}
+											
 											<li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Email Nofications</span>
@@ -845,7 +734,7 @@ class Menu extends Component {
 
 							</div>
 						</div>
-						<div className="theme_div">
+						{/* <div className="theme_div">
 							<div className="card">
 								<div className="card-body">
 									<ul className="list-group list-unstyled">
@@ -922,7 +811,7 @@ class Menu extends Component {
 									</ul>
 								</div>
 							</div>
-						</div>
+						</div> */}
 						<div className={`user_div ${isOpenUserMenu && 'open'}`}>
 							<h5 className="brand-name mb-4">
 								<Image

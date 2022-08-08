@@ -4,7 +4,8 @@ import './App.css';
 import Layout from './components/Shared/Layout';
 import Login from './components/Authentication/login';
 import SignUp from './components/Authentication/signup';
-import ForgotPassword from './components/Authentication/forgotpassword';
+import ForgotPassword from './components/Authentication/forgotPassword';
+import ChangePassword from './components/Authentication/changePassword';
 import NotFound from './components/Authentication/404';
 import InternalServer from './components/Authentication/500';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -18,8 +19,9 @@ class App extends Component {
 					<Switch>
 						<Route path="/signup" component={SignUp} />
 						<Route path="/login" component={Login} />
-						<Route path="/forgotpassword" component={ForgotPassword} />
-						<Route path="/internalserver" component={InternalServer} />
+						<Route path="/forgot-password" component={ForgotPassword} />
+						<Route path="/change-password/:token" component={ChangePassword} />
+						<Route path="/internalserver" component={InternalServer} />	
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />
 					</Switch>

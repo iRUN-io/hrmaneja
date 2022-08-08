@@ -73,3 +73,28 @@ export async function resetPassword(body) {
     body: JSON.stringify(body),
   });
 }
+
+// change password
+export async function changePassword(body) {
+  return request(`${API_URL}/user/change-password`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+
+// confirm token 
+export async function confirmToken(body) {
+  return request(`${API_URL}/user/confirm-token`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}

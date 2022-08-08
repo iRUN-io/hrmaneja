@@ -62,6 +62,7 @@ import Profile from './Profile/Profile';
 // import Signup from './Authentication/signup';
 // import ForgotPassword from './Authentication/forgotpassword';
 import NotFound from './Authentication/404';
+import ChangePassword from './Authentication/changePassword';
 // import InternalServer from './Authentication/500';
 import EmployeeDetails from './HRMS/Employee/EmployeeDetails';
 import Leave from './HRMS/Leave/Leave';
@@ -169,6 +170,15 @@ const Routes = [
 
     // Admin 
 
+    {
+        path: "/admin/billing",
+        name: 'billing',
+        exact: true,
+        pageTitle: "Billing",
+        component: Payroll // update this component
+    },
+
+    
     {
         path: "/admin/settings",
         name: 'settings',
@@ -294,6 +304,13 @@ const Routes = [
     //     pageTitle: "Tables",
     //     component: ForgotPassword
     // },
+        {
+        path: "/change-password/:token",
+        name: 'changePassword',
+        exact: true,
+        pageTitle: "Change Password",
+        component: ChangePassword
+    },
     {
         path: "/notfound",
         name: 'notfound',

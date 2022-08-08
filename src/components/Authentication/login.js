@@ -84,7 +84,7 @@ const Login = () => {
 							<div className="form-group">
 								<label className="form-label">
 									Password
-									<Link className="float-right small" to="/forgotpassword">
+									<Link className="float-right small" to="/forgot-password">
 										I forgot password
 									</Link>
 								</label>

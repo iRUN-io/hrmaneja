@@ -8,7 +8,7 @@ const ForgotPassword = () => {
 	const [email, setEmail] = useState();
 	const [status, setStatus] = useState('');
 
-	const initiatePassword = async () => {
+	const initiatePasswordReset = async () => {
         try {
 			
             const response = await resetPassword({email: email});
@@ -61,7 +61,7 @@ const ForgotPassword = () => {
 								/>
 							</div>
 							<div className="form-footer">
-								<Link  onClick={() => initiatePassword()} className="btn btn-primary btn-block" >
+								<Link  onClick={() => initiatePasswordReset()} className="btn btn-primary btn-block" >
 									Proceed
 								</Link>
 							</div>
