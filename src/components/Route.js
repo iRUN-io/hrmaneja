@@ -50,7 +50,7 @@ import IconsFeather from './Icons/IconsFeather';
 // import WSocial from './Widgets/WSocial';
 // import WOther from './Widgets/WOther';
 // import Search from './Search/Search';
-// import Profile from './Profile/Profile';
+import Profile from './Profile/Profile';
 // import AppCalendar from './AppPages/AppCalendar';
 // import AppContact from './AppPages/AppContact';
 // import AppChart from './AppPages/AppChart';
@@ -528,13 +528,13 @@ const Routes = [
     //     pageTitle: "App Setting",
     //     component: AppSetting
     // },
-    // {
-    //     path: "/hr-profile",
-    //     name: 'profile',
-    //     exact: true,
-    //     pageTitle: "My Profile",
-    //     component: Profile
-    // },
+    {
+        path: "/hr-profile",
+        name: 'profile',
+        exact: true,
+        pageTitle: "My Profile",
+        component: Profile
+    },
     // {
     //     path: "/maps",
     //     name: 'maps',

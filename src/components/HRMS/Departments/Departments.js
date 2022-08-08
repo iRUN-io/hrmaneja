@@ -84,12 +84,26 @@ const Department = () => {
     const removeDepartment = async (departmentId) => {
         try {
             const response = await deleteDepartment(departmentId);
-            if (response.message) {
+
+            if (response.id) {
+                
+                const logActivity = await createActivity(
+                    {
+                        name: 'Delete Department',
+                        employee_id: user.employee_id,
+                        activity: `${user.name} Deleted a department with name; ${response.name}`,
+                        activity_name: 'Deletion',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+           
+            if (logActivity.id) {
                 sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
                 const newDepartments = departments.filter(department => department.id !== departmentId);
                 setDepartments(newDepartments);
-                toast.info(response.message);
             }
+        }
 
         } catch (err) {
             toast.error("Error, try again");

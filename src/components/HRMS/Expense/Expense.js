@@ -200,13 +200,13 @@ function Expense(props) {
 																						).toUpperCase()}
 																					</span>
 																					<div className="ml-3">
-																						<a href="fake_url">{employee?.name}</a>
-																						<p className="mb-0">{employee?.email}</p>
+																						<a href="fake_url">{employee.name}</a>
+																						<p className="mb-0">{employee.email}</p>
 																					</div>
 																				</div>
 																			</td>
-																			<td>{employee?.role}</td>
-																			<td>{employee?.salary}</td>
+																			<td>{employee.role}</td>
+																			<td>{employee.salary}</td>
 																			<td>
 																				<span className="tag tag-success ml-0 mr-0">Done</span>
 																			</td>

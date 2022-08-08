@@ -20,14 +20,13 @@ function Profile(props) {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
-            console.log(user);
             if (user) {
                 const user = getUser();
-                // const employee = await getEmployee(user.employee_id);
+                const employee = await getEmployee(user.employee_id);
                 const activity = await getActivity(user.employee_id);
                 setUser(user);
                 setActivity(activity);
-                // setEmployee(employee);
+                setEmployee(employee);
                 setLoading(false);
             }
         }
@@ -46,10 +45,23 @@ function Profile(props) {
         about_me: user.about
     })
 
+    useEffect(() => {
+        setFormState({
+            username: user.username,
+            email: user.email,
+            name: user.name,
+            company: user.company,
+            address: user.Address,
+            city: user.city,
+            postal_code: user.postalCode,
+            country: user.country,
+            about_me: user.about
+        })
+    }, [user])
+
     const createProfileAction = async () => {
         try {
             setFormState({ ...formState });
-
         }
         catch (err) {
             toast.error("Error, try again");

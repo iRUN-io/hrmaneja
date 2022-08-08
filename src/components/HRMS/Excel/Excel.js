@@ -25,22 +25,22 @@ function Excel() {
     });
   };
 
-    return (
-        <>
-            <div className="Excel">
-      <input type="file" onChange={fileHandler} />
-      {file && (
-        <OutTable
-          data={file.rows}
-          columns={file.cols}
-          tableClassName="table"
-          tableHeaderRowClass="heading"
-        />
-      )}
-    </div>
+  return (
+    <>
+      <div className="Excel">
+        <input type="file" onChange={fileHandler} />
+        {file && (
+          <OutTable
+            data={file.rows}
+            columns={file.cols}
+            tableClassName="table"
+            tableHeaderRowClass="heading"
+          />
+        )}
+      </div>
 
-        </>
-    );
+    </>
+  );
 }
 
 export default Excel;

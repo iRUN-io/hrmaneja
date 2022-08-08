@@ -61,3 +61,15 @@ export async function deleteUser(id) {
     },
   });
 }
+
+// reset password
+export async function resetPassword(body) {
+  return request(`${API_URL}/user/reset-password`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
