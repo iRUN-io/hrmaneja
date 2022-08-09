@@ -12,6 +12,9 @@ class Dashboard extends Component {
 	render() {
 		const { fixNavbar } = this.props;
 		const user = getUser();
+		if (!user) {
+			  this.props.history.push("/login");
+		}
 		return (
 			<>
 				<div>
@@ -19,8 +22,8 @@ class Dashboard extends Component {
 						<div className="container-fluid">
 							<div className="row clearfix">
 								<div className="col-lg-12">
-									<div className={`section-body ${fixNavbar ? "mb-4 mt-3" : "mb-4"}`}>
-										<h4>Welcome {user.name}</h4>
+									<div className={`${fixNavbar ? "mb-4 mt-3" : "mb-4 "}`}>
+										<h4>Welcome {user?.name}</h4>
 										<small>
 											Get realtime information about your company.{' '}
 										</small>
@@ -143,7 +146,7 @@ class Dashboard extends Component {
 												<span className="text-green font-15">+3.7%</span>
 											</h3>
 											<small>
-												Lorem Ipsum is simply dummy text <br />{' '}
+												Total revenue across all customers<br />{' '}
 												{/* <a href="fake_url">Read more</a>{' '} */}
 											</small>
 											{/* <div className="mt-4">
