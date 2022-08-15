@@ -298,8 +298,8 @@ class Menu extends Component {
 
 					{
 						"id": 10,
-						"label": "Leaves",
-						"to": "/hr-leaves"
+						"label": "My Leaves",
+						"to": "/my-leaves"
 					},
 
 					// {

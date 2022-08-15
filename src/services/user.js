@@ -12,19 +12,6 @@ export async function getAllUsers(COMPANY_ID) {
   });
 }
 
-export async function getUser(id) {
-  return request(`${API_URL}/user/${USER_ID}?id=${id}`, {
-    method: 'get',
-    headers: {
-       'Content-Type': 'application/json',
-       'Authorization': USER_TOKEN,
-    },
-    params: {
-      USER_ID: USER_ID,
-      id: id,
-    },
-  });
-}
 
 export async function createUser(body) {
   return request(`${API_URL}/user/create`, {

@@ -68,10 +68,11 @@ import EmployeeDetails from './HRMS/Employee/EmployeeDetails';
 import Leave from './HRMS/Leave/Leave';
 import Settings from './Settings/Settings';
 import { getUser } from '../config/common';
+import MyLeave from './HRMS/Myleave/Leave';
 
 const user = getUser();
 
-const isAdmin = user.role === "HR Manager";
+const isAdmin = user?.role === "HR Manager";
 
 
 const Routes = [
@@ -130,6 +131,13 @@ const Routes = [
         exact: true,
         pageTitle: "Holidays",
         component: Holidays
+    },
+    {
+        path: "/my-leaves",
+        name: 'myLeaves',
+        exact: true,
+        pageTitle: "My Leaves",
+        component: MyLeave
     },
     {
         path: "/hr-events",

@@ -12,16 +12,12 @@ export async function getAllLeaves(COMPANY_ID) {
   });
 }
 
-export async function getEmployee(userId, id) {
-    return request(`${API_URL}/api/leave/${userId}?id=${id}`, {
+export async function getEmployeeLeave(employeeId) {
+    return request(`${API_URL}/leaves/employee/${employeeId}`, {
       method: 'get',
       headers: {
          'Content-Type': 'application/json',
          'Authorization': USER_TOKEN,
-      },
-      params: {
-        userId: userId,
-        id: id,
       },
     });
   }

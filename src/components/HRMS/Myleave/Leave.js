@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getAllLeaves, createLeave, deleteLeave, approveLeave, disapproveLeave } from '../../../services/leave'
+import { createLeave, getEmployeeLeave } from '../../../services/leave'
 import { getUser } from '../../../config/common';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,15 +8,13 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import EditLeaves from './EditLeave';
 import moment from 'moment';
 import { createActivity } from '../../../services/activities';
-import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getAllEmployees, getEmployee } from '../../../services/employee';
 import { Link, useHistory } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
-import { array } from 'yup';
 
-const Leave = () => {
+const MyLeave = () => {
     const [leaves, setLeaves] = useState([]);
     const [user, setUser] = useState([]);
     const [employees, setUsers] = useState([]);
@@ -43,7 +41,7 @@ const Leave = () => {
             setFormState({ ...formState });
 
             const body = {
-                employeeId: formState.employeeId,
+                employeeId: user.employee_id,
                 employeeName: formState.employeeName,
                 leaveType: formState.leaveType,
                 fromDate: formState.fromDate,
@@ -107,112 +105,19 @@ const Leave = () => {
         });
     };
 
-    const removeLeave = async (leaveId) => {
-        try {
-            const response = await deleteLeave(leaveId);
-
-            if (!response.error) {
-
-                const logActivity = await createActivity(
-                    {
-                        name: 'Delete Leave',
-                        employee_id: user.employee_id,
-                        activity: `${user.name} Deleted a leave`,
-                        activity_name: 'Deletion',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
-
-                setLeaves(leaves.filter(leave => leave.id !== leaveId));
-
-                toast.info("Leave request deleted successfully");
-
-                if (logActivity.id) {
-                    const newLeaves = leaves.filter(leave => leave.id !== leaveId);
-                    setLeaves(newLeaves);
-                    sendEmail(user.emailAddress, user.name, emailCase.deleteLeave);
-                }
-            }
-
-        } catch (err) {
-            toast.error("Error, try again");
-            
-            setFormState({ ...formState });
-        }
-
-    };
-
-    const toggleLeave = async (leaveId, type) => {
-        try {
-            let response;
-
-            if (type === 'approve') {
-
-                response = await approveLeave(leaveId);
-
-            } else {
-
-                response = await disapproveLeave(leaveId);
-            }
-
-            if (!response.error) {
-
-                const logActivity = await createActivity(
-                    {
-                        name: type === 'approve' ? 'Approve Leave' : 'Reject Leave',
-                        employee_id: user.employee_id,
-                        activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
-                        activity_name: type === 'approve' ? 'Approval' : 'Rejection',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
-
-                if (logActivity.id) {
-                    if (type === 'approve') {
-                        sendEmail(user.emailAddress, user.name, emailCase.approveLeave);
-                        const newLeaves = leaves.map(leave => {
-                            if (leave.id === leaveId) {
-                                leave.status = 'approve'
-                            }
-                            return leave;
-                        });
-                        setLeaves(newLeaves);
-                    } else {
-                        const newLeaves = leaves.map(leave => {
-                            if (leave.id === leaveId) {
-                                leave.status = 'disapprove'
-                            }
-                            return leave;
-                        });
-                        setLeaves(newLeaves);
-                        sendEmail(user.emailAddress, user.name, emailCase.rejectLeave);
-                    }
-                    toast.info(response.message);
-                }
-            }
-
-        } catch (err) {
-            toast.error("Error, try again");
-            setFormState({ ...formState });
-        }
-
-    };
 
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
             if (user) {
-                const company_id = user.company_id;
-                const response = await getAllLeaves(company_id);
+                const {employee_id, company_id} = user;
+                const response = await getEmployeeLeave(employee_id);
                 const userResponse = await getAllEmployees(company_id);
                 setLeaves(response);
                 setUsers(userResponse);
                 setUser(user);
                 setLoading(false);
-
             }
         }
         fetchData();
@@ -246,7 +151,7 @@ const Leave = () => {
                             <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
                                 <div className="card">
                                     <div className="card-header">
-                                        <h3 className="card-title">Employee Leave Record</h3>
+                                        <h3 className="card-title">My Leave Record</h3>
                                         <div className="card-options">
                                             <form>
                                                 <div className="input-group">
@@ -270,94 +175,43 @@ const Leave = () => {
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Name</th>
-                                                                {/* <th>Employee ID</th> */}
                                                                 <th>Leave Type</th>
                                                                 <th>Date</th>
                                                                 <th>Reason</th>
                                                                 <th>Status</th>
-                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {leaves.map((leave) => (
-                                                                <tr key={leave.id}>
+                                                                <tr key={leave?.id}>
                                                                     <td className="width45">
                                                                         <span
                                                                             className="avatar avatar-orange"
                                                                             data-toggle="tooltip"
                                                                             title="Avatar Name"
                                                                         >
-                                                                            {leave.employee.charAt(0).toUpperCase()}
+                                                                            {leave?.employee?.charAt(0).toUpperCase()}
                                                                         </span>
                                                                     </td>
                                                                     <td>
-                                                                        <div className="font-15">{leave.employee}</div>
+                                                                        <div className="font-15">{leave?.employee}</div>
                                                                     </td>
 
                                                                     <td>
-                                                                        <span>{leave.leave_type}</span>
+                                                                        <span>{leave?.leave_type}</span>
                                                                     </td>
 
-                                                                    <td> {moment(leave.from).format('MMM Do YYYY')} To {moment(leave.to).format('MMM Do YYYY')}</td>
-                                                                    <td>{leave.reason}</td>
-                                                                    <td> {leave.status === 'approve' && ( 
+                                                                    <td> {moment(leave?.from).format('MMM Do YYYY')} To {moment(leave?.to).format('MMM Do YYYY')}</td>
+                                                                    <td>{leave?.reason}</td>
+                                                                    <td> {leave?.status === 'approve' && ( 
                                                                     <span className="badge badge-success">approved</span>
                                                                     )}
-                                                                    {leave.status === 'disapprove' && (
+                                                                    {leave?.status === 'disapprove' && (
                                                                     <span className="badge badge-warning">rejected</span>
                                                                     )}
-                                                                    {leave.status === 'pending' && (
+                                                                    {leave?.status === 'pending' && (
                                                                     <span className="badge badge-primary">pending</span>
                                                                     )}
-                                                                    </td>
-
-                                                                    <td>
-                                                                        {leave.status === 'approve'  &&  ( 
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                            overlay={
-                                                                                <Popover id="popover-basic">
-                                                                                    <Popover.Header as="p">Confirm Decline</Popover.Header>
-                                                                                    <Popover.Body>
-                                                                                        <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
-                                                                                        </div>
-                                                                                    </Popover.Body>
-                                                                                </Popover>
-                                                                            }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
-                                                                        </OverlayTrigger>
-                                                                        )}
-                                                                        {(leave.status === 'pending' || leave.status === 'disapprove') && (
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                            overlay={ 
-                                                                                <Popover id="popover-basic">
-                                                                                    <Popover.Header as="p">Confirm Approval</Popover.Header>
-                                                                                    <Popover.Body>
-                                                                                        <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
-                                                                                        </div>
-                                                                                    </Popover.Body>
-                                                                                </Popover>
-                                                                            }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
-                                                                        </OverlayTrigger>
-                                                                        )}
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                            overlay={
-                                                                                <Popover id="popover-basic">
-                                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                                                                    <Popover.Body>
-                                                                                        <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                                                                        </div>
-                                                                                    </Popover.Body>
-                                                                                </Popover>
-                                                                            }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                        </OverlayTrigger>
                                                                     </td>
                                                                 </tr>
                                                             ))}
@@ -453,4 +307,4 @@ const Leave = () => {
     );
 }
 
-export default Leave;
+export default MyLeave;
