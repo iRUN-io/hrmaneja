@@ -75,6 +75,7 @@ class Menu extends Component {
 			parentlink: null,
 			childlink: null,
 			activityLogs: [],
+			user: [],
 		};
 	}
 
@@ -233,13 +234,24 @@ class Menu extends Component {
 		}
 	}
 
+	getUser = async function () {
+		const user = getUser();
+		if (user) {
+			this.setState({
+				user: user,
+			});
+		}
+	}
 
 	render() {
 		if (this.state.activityLogs.length === 0) {
 			this.getActivity();
 		}
+		if (this.state.user.length === 0) {
+			this.getUser();
+		}
 		const activityLogs = this.state.activityLogs; // Use this for the map
-
+		const user = this.state.user;
 		const content = [
 			{
 				"id": 1,
@@ -312,12 +324,13 @@ class Menu extends Component {
 					},
 				]
 			},
-			{
+
+			user.role === "HR Manager" && {
 				"id": 2,
 				"icon": "fa fa-cogs",
 				"label": "Admin",
 				"to": "#!",
-				content: [
+				content: [ 
 					{
 						"id": 16,
 						"label": "Payroll",
@@ -832,7 +845,7 @@ class Menu extends Component {
 											src="/assets/images/user.png"
 											alt="avatar"
 										/>
-										<div className="media-body">
+										{/* <div className="media-body">
 											<h5 className="m-0">Sara Hopkins</h5>
 											<p className="text-muted mb-0">Webdeveloper</p>
 											<ul className="social-links list-inline mb-0 mt-2">
@@ -877,13 +890,13 @@ class Menu extends Component {
 													</a>
 												</li>
 											</ul>
-										</div>
+										</div> */}
 									</div>
 								</div>
 							</div>
 							{statisticsClose ?
 								<div className={`card ${statisticsOpen ? 'card-collapsed' : ""}`}>
-									< div className="card-header">
+									{/* < div className="card-header">
 										<h3 className="card-title">Statistics</h3>
 										<div className="card-options">
 											<span className="card-options-collapse" data-toggle="card-collapse" onClick={() => this.handleStatistics(!statisticsOpen)}>
@@ -952,11 +965,11 @@ class Menu extends Component {
 												/>
 											</div>
 										</div>
-									</div>
+									</div> */}
 								</div> : ""}
 							{friendListClose ?
 								<div className={`card ${friendListOpen ? 'card-collapsed' : ""}`}>
-									<div className="card-header">
+									{/* <div className="card-header">
 										<h3 className="card-title">Friends</h3>
 										<div className="card-options">
 											<span className="card-options-collapse" data-toggle="card-collapse" onClick={() => this.handleFriendList(!friendListOpen)}>
@@ -966,8 +979,8 @@ class Menu extends Component {
 												<i className="fe fe-x" />
 											</span>
 										</div>
-									</div>
-									<div className="card-body">
+									</div> */}
+									{/* <div className="card-body">
 										<ul className="right_chat list-unstyled">
 											<li className="online">
 												<a href="#!">
@@ -1014,11 +1027,11 @@ class Menu extends Component {
 												</a>
 											</li>
 										</ul>
-									</div>
+									</div> */}
 								</div>
 								: ""}
 							<div className="card b-none">
-								<ul className="list-group">
+								{/* <ul className="list-group">
 									<li className="list-group-item d-flex">
 										<div className="box-icon sm rounded bg-blue">
 											<i className="fa fa-credit-card" />{' '}
@@ -1059,7 +1072,7 @@ class Menu extends Component {
 											<div className="text-muted font-12">17 min ago</div>
 										</div>
 									</li>
-								</ul>
+								</ul> */}
 							</div>
 						</div>
 						<div id="left-sidebar" className="sidebar ">

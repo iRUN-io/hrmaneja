@@ -15,7 +15,7 @@ class Events extends Component {
                                 <div className="col-12">
                                     <div className="card">
                                         <div className="card-header bline">
-                                            <h3 className="card-title">Sara Hopkins</h3>
+                                            <h3 className="card-title">Calender</h3>
                                             <div className="card-options">
                                                 <a href="/#" className="card-options-collapse" data-toggle="card-collapse"><i className="fe fe-chevron-up" /></a>
                                                 <a href="/#" className="card-options-fullscreen" data-toggle="card-fullscreen"><i className="fe fe-maximize" /></a>

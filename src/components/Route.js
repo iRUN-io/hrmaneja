@@ -67,6 +67,12 @@ import ChangePassword from './Authentication/changePassword';
 import EmployeeDetails from './HRMS/Employee/EmployeeDetails';
 import Leave from './HRMS/Leave/Leave';
 import Settings from './Settings/Settings';
+import { getUser } from '../config/common';
+
+const user = getUser();
+
+const isAdmin = user.role === "HR Manager";
+
 
 const Routes = [
     {
@@ -76,42 +82,42 @@ const Routes = [
         pageTitle: "HR Dashboard",
         component: Dashboard
     },
-    {
+    isAdmin && {
         path: "/hr-users",
         name: 'hr-users',
         exact: true,
         pageTitle: "Users",
         component: Users
     },
-    {
+    isAdmin && {
         path: "/hr-departments",
         name: 'departments',
         exact: true,
         pageTitle: "Departments",
         component: Departments
     },
-    {
+    isAdmin && {
         path: "/hr-employees",
         name: 'employees',
         exact: true,
         pageTitle: "Employee",
         component: Employee
     },
-    {
+    isAdmin && {
         path: "/hr-leaves",
         name: 'leaves',
         exact: true,
         pageTitle: "Leaves",
         component: Leave
     },
-    {
+    isAdmin && {
         path: "/hr-employee-details",
         name: 'employee',
         exact: true,
         pageTitle: "Employee Details",
         component: EmployeeDetails
     },
-    {
+    isAdmin && {
         path: "/hr-activities",
         name: 'activities',
         exact: true,
@@ -132,35 +138,35 @@ const Routes = [
         pageTitle: "Events",
         component: Events
     },
-    {
+    isAdmin && {
         path: "/hr-payroll",
         name: 'payroll',
         exact: true,
         pageTitle: "Payroll",
         component: Payroll
     },
-    {
+    isAdmin && {
         path: "/hr-expense",
         name: 'expense',
         exact: true,
         pageTitle: "Expense",
         component: Expense
     },
-    {
+    isAdmin && {
         path: "/hr-accounts",
         name: 'accounts',
         exact: true,
         pageTitle: "Accounts",
         component: Accounts
     },
-    {
+    isAdmin && {
         path: "/hr-report",
         name: 'report',
         exact: true,
         pageTitle: "Report",
         component: Report
     },
-    {
+    isAdmin && {
         path: "/hr-excel",
         name: 'excel',
         exact: true,
@@ -170,7 +176,7 @@ const Routes = [
 
     // Admin 
 
-    {
+    isAdmin && {
         path: "/admin/billing",
         name: 'billing',
         exact: true,
@@ -179,7 +185,7 @@ const Routes = [
     },
 
     
-    {
+    isAdmin && {
         path: "/admin/settings",
         name: 'settings',
         exact: true,
