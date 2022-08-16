@@ -13,13 +13,15 @@ import { toast } from 'react-toastify';
 import { createActivity } from '../../../services/activities';
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
-import { createRequisition, getAllRequisitions } from '../../../services/expense';
+import { approveRequisition, createRequisition, disapproveRequisition, getAllRequisitions } from '../../../services/expense';
 import moment from 'moment';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import request from 'umi-request';
 
 
 function Expense(props) {
 	const [loading, setLoading] = useState(false);
-	const [requisions, setRequisition] = useState([]);
+	const [requisitions, setRequisitions] = useState([]);
 	const [user, setUser] = useState({});
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
@@ -70,14 +72,14 @@ function Expense(props) {
 				)
 
 				if (logActivity.id) {
-					sendEmail(user.emailAddress, user.name, emailCase.createLeave);
+					sendEmail(user.emailAddress, user.name, emailCase.createRequisition);
 					if (body.notifyEmployee) {
 						const notifyEmployee = await getEmployee(body.notifyEmployee);
 						if (notifyEmployee.id) {
-							sendEmail(notifyEmployee.emailAddress, notifyEmployee.name, emailCase.notifyLeave);
+							sendEmail(notifyEmployee.emailAddress, notifyEmployee.name, emailCase.notifyRequisition);
 						}
 					}
-					setRequisition([...requisions, response])
+					setRequisitions([...requisitions, response])
 					toast.success("Requisition request sent successfully");
 				}
 			}
@@ -105,7 +107,7 @@ function Expense(props) {
 			if (user) {
 				const employeeRecord = await getEmployee(user.employee_id);
 				const allRequisition = await getAllRequisitions(user.company_id);
-				setRequisition(allRequisition);
+				setRequisitions(allRequisition);
 				setFormState({ ...formState, 
 					employeeId: employeeRecord.id, 
 					employeeName: employeeRecord.name, 
@@ -127,6 +129,63 @@ function Expense(props) {
 			[name]: value,
 		});
 	};
+
+	const toggleRequisition = async (reqId, type) => {
+        try {
+            let response;
+
+            if (type === 'approve') {
+
+                response = await approveRequisition(reqId);
+
+            } else {
+
+                response = await disapproveRequisition(reqId);
+            }
+
+            if (!response.error) {
+
+                const logActivity = await createActivity(
+                    {
+                        name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
+                        employee_id: user.employee_id,
+                        activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
+                        activity_name: type === 'approve' ? 'Approval' : 'Rejection',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if (logActivity.id) {
+                    if (type === 'approve') {
+                        sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
+                        const newRequisitions = requisitions.map(request => {
+                            if (request.id === reqId) {
+                                request.status = 'approve'
+                            }
+                            return request;
+                        });
+                        setRequisitions(newRequisitions);
+                    } else {
+                        const newRequisitions = requisitions.map(request => {
+                            if (request.id === reqId) {
+                                request.status = 'disapprove'
+                            }
+                            return request;
+                        });
+                        setRequisitions(newRequisitions);
+                        sendEmail(user.emailAddress, user.name, emailCase.rejectRequisition);
+                    }
+                    toast.info(response.message);
+                }
+            }
+
+        } catch (err) {
+            toast.error("Error, try again");
+            setFormState({ ...formState });
+        }
+
+    };
 
 	return (
 		<>
@@ -220,7 +279,7 @@ function Expense(props) {
 										</div>
 										<div className="card">
 											<div className="card-header">
-												<h3 className="card-title">Employee</h3>
+												<h3 className="card-title">Expenses</h3>
 												<div className="card-options">
 													<form>
 														<div className="input-group">
@@ -256,7 +315,7 @@ function Expense(props) {
 																</thead>
 																<tbody>
 
-																	{requisions.map((request, index) => (
+																	{requisitions.map((request, index) => (
 																		<tr key={index}>
 
 																			<td>
@@ -280,18 +339,19 @@ function Expense(props) {
 																			<td>{request.category}</td>
 																			<td>{moment(request.dueDate).format('MMM Do YYYY')}</td>
 																			<td>
-																				<span className="tag tag-success ml-0 mr-0">Done</span>
+																			<td> {request.status === 'approve' && ( 
+																				<span className="badge badge-success">approved</span>
+																				)}
+																				{request.status === 'disapprove' && (
+																				<span className="badge badge-warning">rejected</span>
+																				)}
+																				{request.status === 'pending' && (
+																				<span className="badge badge-primary">pending</span>
+																				)}
+																				</td>
 																			</td>
 																			<td className='align-items-center'>
-																				<button
-																					type="button"
-																					className="btn btn-icon"
-																					title="Send Invoice"
-																					data-toggle="tooltip"
-																					data-placement="top"
-																				>
-																					<i className="icon-envelope text-info" />
-																				</button>
+																				
 																				<button
 																					type="button"
 																					className="btn btn-icon "
@@ -301,15 +361,40 @@ function Expense(props) {
 																				>
 																					<i className="icon-printer" />
 																				</button>
-																				<button
-																					type="button"
-																					className="btn btn-icon"
-																					title="Delete"
-																					data-toggle="tooltip"
-																					data-placement="top"
-																				>
-																					<i className="icon-trash text-danger" />
-																				</button>
+
+																				{request.status === 'approve'  &&  ( 
+                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                            overlay={
+                                                                                <Popover id="popover-basic">
+                                                                                    <Popover.Header as="p">Confirm Decline</Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <div className="clearfix" >
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                        </div>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
+                                                                            }>
+                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+                                                                        </OverlayTrigger>
+                                                                        )}
+                                                                        {(request.status === 'pending' || request.status === 'disapprove') && (
+                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                            overlay={ 
+                                                                                <Popover id="popover-basic">
+                                                                                    <Popover.Header as="p">Confirm Approval</Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <div className="clearfix" >
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
+                                                                                        </div>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
+                                                                            }>
+                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
+                                                                        </OverlayTrigger>
+                                                                        )}
+																				
 																			</td>
 																		</tr>
 																	))}
