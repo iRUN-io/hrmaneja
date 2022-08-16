@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getAllEmployees, getEmployee } from "../../../services/employee";
@@ -13,11 +14,11 @@ import { createActivity } from '../../../services/activities';
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { createRequisition, getAllRequisitions } from '../../../services/expense';
+import moment from 'moment';
 
 
 function Expense(props) {
 	const [loading, setLoading] = useState(false);
-	const [employees, setEmployee] = useState([]);
 	const [requisions, setRequisition] = useState([]);
 	const [user, setUser] = useState({});
 	const comingSoon = false;
@@ -29,6 +30,8 @@ function Expense(props) {
 		dueDate: '',
 		notifyEmployee: '',
 		note: '',
+		amount: '',
+		department: '',
 	});
 	const history = useHistory();
 
@@ -44,9 +47,11 @@ function Expense(props) {
 				company_id: user.company_id,
 				notifyEmployee: formState.notifyEmployee,
 				note: formState.note,
+				department: formState.department,
+				amount: formState.amount,
 				status: 'pending',
 			}
-			if (body.employeeName === '' || body.category === '' || body.fromDate === '' || body.dueDate === '' || body.note === '') {
+			if (body.employeeName === '' || body.category === '' || body.dueDate === '' || body.note === '') {
 				toast.error('Please fill all the fields');
 				return;
 			}
@@ -55,9 +60,9 @@ function Expense(props) {
 			if (!response.error) {
 				const logActivity = await createActivity(
 					{
-						name: 'Create Leave',
+						name: 'Sent Requisition',
 						employee_id: user.employee_id,
-						activity: `${user.name} Created a new leave ; ${body.category}`,
+						activity: `Sent Requisition from ${body.employeeName}`,
 						activity_name: 'Creation',
 						user: user.name,
 						company_id: user.company_id,
@@ -73,7 +78,7 @@ function Expense(props) {
 						}
 					}
 					setRequisition([...requisions, response])
-					toast.success("Leave request sent successfully");
+					toast.success("Requisition request sent successfully");
 				}
 			}
 
@@ -83,6 +88,7 @@ function Expense(props) {
 				category: '',
 				fromDate: '',
 				dueDate: '',
+				department: '',
 				notifyEmployee: '',
 				note: '',
 			});
@@ -95,17 +101,19 @@ function Expense(props) {
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
-			const user = await getUser();
+			const user = getUser();
 			if (user) {
-				// const userId = user.id;
-				// const userResponse = await getAllUsers(userId);
-				const response = await getAllEmployees();
-				const allRequisition = await getAllRequisitions();
+				const employeeRecord = await getEmployee(user.employee_id);
+				const allRequisition = await getAllRequisitions(user.company_id);
 				setRequisition(allRequisition);
-				setEmployee(response);
+				setFormState({ ...formState, 
+					employeeId: employeeRecord.id, 
+					employeeName: employeeRecord.name, 
+					notifyEmployee: employeeRecord.line_manager,
+					department: employeeRecord.department
+				 });
 				setLoading(false);
 				setUser(user);
-				setFormState({ ...formState, employeeId: user.id, employeeName: user.name, notifyEmployee: user.line_manager });
 
 			}
 		}
@@ -239,21 +247,18 @@ function Expense(props) {
 															<table className="table table-hover table-striped table-vcenter text-nowrap">
 																<thead>
 																	<tr>
-																		<th style={{ width: 20 }}>#</th>
-																		<th>Employee</th>
-																		<th className="w200">Role</th>
-																		<th className="w60">Salary</th>
+																		<th className="w200">Employee</th>
+																		<th className="w200">Category</th>
+																		<th className="w60">Due Date</th>
 																		<th className="w60">Status</th>
 																		<th className="w200">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
 
-																	{employees.map((employee, index) => (
+																	{requisions.map((request, index) => (
 																		<tr key={index}>
-																			<td>
-																				<span>{(index + 1)}</span>
-																			</td>
+
 																			<td>
 																				<div className="d-flex align-items-center">
 																					<span
@@ -263,21 +268,21 @@ function Expense(props) {
 																						title="Avatar Name"
 																					>
 																						{(
-																							employee.name[0] + employee.name[1]
+																							request.employee[0] + request.employee[1]
 																						).toUpperCase()}
 																					</span>
 																					<div className="ml-3">
-																						<a href="fake_url">{employee.name}</a>
-																						<p className="mb-0">{employee.email}</p>
+																						<a href="#">{request.employee}</a>
+																						<p className="mb-0">{request.note}</p>
 																					</div>
 																				</div>
 																			</td>
-																			<td>{employee.role}</td>
-																			<td>{employee.salary}</td>
+																			<td>{request.category}</td>
+																			<td>{moment(request.dueDate).format('MMM Do YYYY')}</td>
 																			<td>
 																				<span className="tag tag-success ml-0 mr-0">Done</span>
 																			</td>
-																			<td>
+																			<td className='align-items-center'>
 																				<button
 																					type="button"
 																					className="btn btn-icon"
@@ -312,35 +317,6 @@ function Expense(props) {
 															</table>
 														)}
 												</div>
-												<nav aria-label="Page navigation">
-													<ul className="pagination mb-0 justify-content-end">
-														<li className="page-item">
-															<a className="page-link" href="/#">
-																Previous
-															</a>
-														</li>
-														<li className="page-item active">
-															<a className="page-link" href="/#">
-																1
-															</a>
-														</li>
-														<li className="page-item">
-															<a className="page-link" href="/#">
-																2
-															</a>
-														</li>
-														<li className="page-item">
-															<a className="page-link" href="/#">
-																3
-															</a>
-														</li>
-														<li className="page-item">
-															<a className="page-link" href="/#">
-																Next
-															</a>
-														</li>
-													</ul>
-												</nav>
 											</div>
 										</div>
 									</div>

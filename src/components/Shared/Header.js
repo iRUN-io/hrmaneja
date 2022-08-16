@@ -36,12 +36,15 @@ class Header extends Component {
 											<span>{user?.name ?? 'Guest '} </span> <i className="fa fa-5 fa-angle-down" />
 										</a>
 										<div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-											<NavLink to="/profile" className="dropdown-item">
+											<NavLink to="/hr-profile" className="dropdown-item">
 												<i className="dropdown-icon fe fe-user" /> Profile
 											</NavLink>
-											<a className="dropdown-item" >
+
+											{user?.role === 'HR Manager' && (
+											<a className="dropdown-item" href='/admin/settings'>
 												<i className="dropdown-icon fe fe-settings" /> Settings
 											</a>
+											)}
 											<a className="dropdown-item">
 												<span className="float-right">
 													<span className="badge badge-primary">6</span>

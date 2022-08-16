@@ -33,7 +33,7 @@ const Leave = () => {
     const history = useHistory();
     useEffect(() => {
         const user = getUser();
-        setFormState({ ...formState, employeeId: user.id, employeeName: user.name });
+        setFormState({ ...formState, employeeId: user.employee_id, employeeName: user.name });
     }, []);
 
 
