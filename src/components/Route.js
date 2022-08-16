@@ -146,6 +146,13 @@ const Routes = [
         pageTitle: "Events",
         component: Events
     },
+    {
+        path: "/expense-requisition",
+        name: 'expense',
+        exact: true,
+        pageTitle: "Requisition",
+        component: Expense
+    },
     isAdmin && {
         path: "/hr-payroll",
         name: 'payroll',

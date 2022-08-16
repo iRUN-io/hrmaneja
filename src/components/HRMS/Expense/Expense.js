@@ -1,22 +1,97 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAllEmployees } from "../../../services/employee";
+import { getAllEmployees, getEmployee } from "../../../services/employee";
 // import { getAllUsers } from "../../../services/user";
 import { getUser } from "../../../config/common";
 import CountUp from 'react-countup';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
+import { Link, useHistory } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { createActivity } from '../../../services/activities';
+import { emailCase } from '../../../enums/emailCase';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { createRequisition, getAllRequisitions } from '../../../services/expense';
 
 
 function Expense(props) {
-	const { fixNavbar } = props;
-	const [employees, setEmployee] = useState([]);
-	// const [user, setUser] = useState([]);
-	// const [users, setUsers] = useState([]);
-	// const [departments, setDepartments] = useState([]);
 	const [loading, setLoading] = useState(false);
-	const comingSoon = true;
+	const [employees, setEmployee] = useState([]);
+	const [requisions, setRequisition] = useState([]);
+	const [user, setUser] = useState({});
+	const comingSoon = false;
+	const [formState, setFormState] = useState({
+		employeeId: '',
+		employeeName: '',
+		category: '',
+		fromDate: '',
+		dueDate: '',
+		notifyEmployee: '',
+		note: '',
+	});
+	const history = useHistory();
+
+	const makeRequisition = async () => {
+		try {
+			setFormState({ ...formState });
+
+			const body = {
+				employeeId: formState.employeeId,
+				employeeName: formState.employeeName,
+				category: formState.category,
+				dueDate: formState.dueDate,
+				company_id: user.company_id,
+				notifyEmployee: formState.notifyEmployee,
+				note: formState.note,
+				status: 'pending',
+			}
+			if (body.employeeName === '' || body.category === '' || body.fromDate === '' || body.dueDate === '' || body.note === '') {
+				toast.error('Please fill all the fields');
+				return;
+			}
+			const response = await createRequisition(body, user.id);
+
+			if (!response.error) {
+				const logActivity = await createActivity(
+					{
+						name: 'Create Leave',
+						employee_id: user.employee_id,
+						activity: `${user.name} Created a new leave ; ${body.category}`,
+						activity_name: 'Creation',
+						user: user.name,
+						company_id: user.company_id,
+					}
+				)
+
+				if (logActivity.id) {
+					sendEmail(user.emailAddress, user.name, emailCase.createLeave);
+					if (body.notifyEmployee) {
+						const notifyEmployee = await getEmployee(body.notifyEmployee);
+						if (notifyEmployee.id) {
+							sendEmail(notifyEmployee.emailAddress, notifyEmployee.name, emailCase.notifyLeave);
+						}
+					}
+					setRequisition([...requisions, response])
+					toast.success("Leave request sent successfully");
+				}
+			}
+
+			setFormState({
+				employeeId: '',
+				employeeName: '',
+				category: '',
+				fromDate: '',
+				dueDate: '',
+				notifyEmployee: '',
+				note: '',
+			});
+		} catch (err) {
+			toast.error("Error, try again");
+			setFormState({ ...formState });
+		}
+	};
+
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
@@ -25,12 +100,25 @@ function Expense(props) {
 				// const userId = user.id;
 				// const userResponse = await getAllUsers(userId);
 				const response = await getAllEmployees();
+				const allRequisition = await getAllRequisitions();
+				setRequisition(allRequisition);
 				setEmployee(response);
 				setLoading(false);
+				setUser(user);
+				setFormState({ ...formState, employeeId: user.id, employeeName: user.name, notifyEmployee: user.line_manager });
+
 			}
 		}
 		fetchData();
 	}, []);
+
+	const updateForm = (e) => {
+		const { value, name } = e.target;
+		setFormState({
+			...formState,
+			[name]: value,
+		});
+	};
 
 	return (
 		<>
@@ -40,41 +128,20 @@ function Expense(props) {
 					<ComingSoon />
 					:
 					<>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
-						<div className="container-fluid">
-							<div className="d-flex justify-content-between align-items-center">
-								<ul className="nav nav-tabs page-header-tab">
-									<li className="nav-item">
-										<a
-											className="nav-link active"
-											id="Expense-tab"
-											data-toggle="tab"
-											href="#Expense-Salary"
-										>
-											Employee Salary
-										</a>
-									</li>
-									<li className="nav-item">
-										<a className="nav-link" id="Expense-tab" data-toggle="tab" href="#Expense-Payslip">
-											Payslip
-										</a>
-									</li>
-								</ul>
-								<div className="header-action">
-									<button
-										type="button"
-										className="btn btn-primary"
-										data-toggle="modal"
-										data-target="#exampleModal"
-									>
-										<i className="fe fe-plus mr-2" />
-										Add
-									</button>
-								</div>
-							</div>
-						</div>
-					</div><div className="section-body mt-3">
+						<div className="section-body mt-3">
 							<div className="container-fluid">
+								<div className="d-flex justify-content-between align-items-center">
+									<ul className="nav nav-tabs page-header-tab">
+										<li className="nav-item">
+											<Link onClick={() => history.goBack()} className="nav-link active">
+												<i className="fa fa-arrow-left"></i>
+											</Link>
+										</li>
+									</ul>
+									<div className="header-action">
+										<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Make Requisition</button>
+									</div>
+								</div>
 								<div className="tab-content mt-3">
 									<div className="tab-pane fade show active" id="Expense-Salary" role="tabpanel">
 										<div className="row clearfix">
@@ -277,119 +344,63 @@ function Expense(props) {
 											</div>
 										</div>
 									</div>
-									<div className="tab-pane fade" id="Expense-Payslip" role="tabpanel">
-										<div className="card">
-											<div className="card-body">
-												<div className="media mb-4">
-													<div className="mr-3">
-														<img
-															className="rounded"
-															src="../assets/images/xs/avatar4.jpg"
-															alt="fake_url" />
-													</div>
-													<div className="media-body">
-														<div className="content">
-															<span>
-																<strong>Order ID: </strong> C09
-															</span>
-															<p className="h5">
-																John Smith{' '}
-																<small className="float-right badge badge-primary">
-																	Jun 15, 2019
-																</small>
-															</p>
-															<p>795 Folsom Ave, Suite 546 San Francisco, CA 54656</p>
-														</div>
-														<nav className="d-flex text-muted">
-															<a href="fake_url" className="icon mr-3">
-																<i className="icon-envelope text-info" />
-															</a>
-															<a href="fake_url" className="icon mr-3">
-																<i className="icon-printer" />
-															</a>
-														</nav>
-													</div>
+								</div>
+							</div>
+						</div>
+						{/* Modal */}
+						<div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+							<div className="modal-dialog" role="document">
+								<div className="modal-content">
+									<div className="modal-header">
+										<h5 className="modal-title" id="exampleModalLabel">Make Requisition</h5>
+										<button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+									</div>
+									{/* update form */}
+									<div className="modal-body">
+										<div className="row clearfix">
+											<div className="col-md-12">
+												<div className="form-group">
+													<label>Requisition Type</label>
+													<select name='category' value={formState?.category}
+														onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
+														<option>Select Category</option>
+														<option value="Office Supplies">Office Supplies</option>
+														<option value="Travel Expense">Travel Expense</option>
+														<option value="Taxi Fares">Taxi Fares</option>
+													</select>
 												</div>
-												<div className="table-responsive">
-													<table className="table table-hover table-striped table-vcenter">
-														<thead className="dark-mode">
-															<tr>
-																<th className="w60">#</th>
-																<th />
-																<th className="w100">Earnings</th>
-																<th className="w100">Deductions</th>
-																<th className="w100 text-right">Total</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td>01</td>
-																<td>
-																	<span>Basic Salary</span>
-																</td>
-																<td>$1,500</td>
-																<td>-</td>
-																<td className="text-right">$380</td>
-															</tr>
-															<tr>
-																<td>02</td>
-																<td>
-																	<span>House Rent Allowance (H.R.A.)</span>
-																</td>
-																<td>$62</td>
-																<td>-</td>
-																<td className="text-right">$250</td>
-															</tr>
-															<tr>
-																<td>03</td>
-																<td>
-																	<span>Tax Deducted at Source (T.D.S.)</span>
-																</td>
-																<td>-</td>
-																<td>$80</td>
-																<td className="text-right">$120</td>
-															</tr>
-															<tr>
-																<td>04</td>
-																<td>
-																	<span>C/Bank Loan</span>
-																</td>
-																<td>-</td>
-																<td>$120</td>
-																<td className="text-right">$120</td>
-															</tr>
-															<tr>
-																<td>05</td>
-																<td>
-																	<span>Other Allowance</span>
-																</td>
-																<td>$121</td>
-																<td>-</td>
-																<td className="text-right">$120</td>
-															</tr>
-														</tbody>
-														<tfoot>
-															<tr>
-																<td colSpan={2}>
-																	<span>
-																		<strong>Note:</strong> Ipsum is simply dummy text of the
-																		printing and typesetting industry.
-																	</span>
-																</td>
-																<td>$1683</td>
-																<td>$200</td>
-																<td className="text-right">
-																	<strong className="text-success">$1483.00</strong>
-																</td>
-															</tr>
-														</tfoot>
-													</table>
-													<button className="btn btn-info float-right">
-														<i className="icon-printer" /> Print
-													</button>
+											</div>
+											<div className="col-md-12">
+												<div className="form-group">
+													<label>Amount</label>
+													<input type='number' onChange={updateForm} className='form-control' name='amount' value={formState?.amount} />
+												</div>
+											</div>
+
+											<div className="col-md-12">
+												<div className="form-group">
+													<label>Note</label>
+													<textarea onChange={updateForm} className='form-control' name='note' value={formState?.note} />
+												</div>
+											</div>
+
+											<div className="col-md-12">
+												<div className="form-group">
+												<label>Due Date</label>
+													<div className="input-group">
+														
+														<div className="input-group-prepend">
+															<span className="input-group-text"><i className="fa fa-calendar" /></span>
+														</div>
+														<input type="date" className="form-control" name='dueDate' value={formState?.dueDate} onChange={updateForm} />
+													</div>
 												</div>
 											</div>
 										</div>
+									</div>
+									<div className="modal-footer">
+										<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button onClick={() => makeRequisition()} className="btn btn-primary">Save changes</button>
 									</div>
 								</div>
 							</div>

@@ -18,4 +18,7 @@ export const emailCase = {
     updatePayroll:      'updatePayroll',
     deletePayroll:      'deletePayroll',
     userLoggedIn:       'userLoggedIn',
+    makeRequisition:    'makeRequisition',
+    approveRequisition: 'approveRequisition',
+    rejectRequisition:  'rejectRequisition',
 }

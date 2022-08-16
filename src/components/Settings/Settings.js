@@ -3,8 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { getUser } from '../../config/common.js';
 import { totalDepartments, totalEmployees, totalLeaves, totalUsers } from '../../services/setting.js';
-import Piechart from '../common/piechart';
-import Stackedchart from '../common/stackedchart.js';
 
 const Settings = () => {
 	const [company, setCompany] = useState({});
@@ -34,37 +32,23 @@ const Settings = () => {
 		fetchData();
 	}, [id]);
 
-	const features = Object.keys(company.settings?.features || []).map((key) => {
-		return { name: key, value: company.settings?.features[key] };
-	});
-
-	const navigateToCompanyFeatures = (companyId) => {
-		history.push(`/companies/features/${companyId}`);
-	}
-
 	
 	return (
 		<>
 			<div>
-			<div className='container'>
+				<div className={`section-body mt-3`}  style={{marginBottom: '50px' }}>
 					<div className="container-fluid">
-						<div className="d-flex justify-content-between align-items-center">
+					<div className="d-flex justify-content-between align-items-center">
 							<ul className="nav nav-tabs page-header-tab">
 								<li className="nav-item">
 
-									<Link onClick={() => history.push(`/companies`)} className="nav-link active">
+									<Link onClick={() => history.goBack()} className="nav-link active">
 										<i className="fa fa-arrow-left"></i>
 									</Link>
 								</li>
 							</ul>
-							<div className="header-action">
-								<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
-							</div>
+
 						</div>
-					</div>
-				</div>
-				<div className={`section-body mt-3`}>
-					<div className="container-fluid">
 						<div className="row clearfix">
 							<div className="col-6 col-md-4 col-xl-3">
 								<div className="card">

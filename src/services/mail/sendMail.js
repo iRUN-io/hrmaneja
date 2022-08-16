@@ -154,6 +154,21 @@ const emailSwitch = {
   , userLoggedIn: () => {
     return { subject: 'User logged in', body: `User logged in` };
   }
+  , makeRequisition: () => {
+    return {
+      subject: 'Requisition made', body: `We have received your request for a requisition. Your request would be reviewed and an email would be sent to you upon approval or rejection.
+    Thanks,` };
+  }
+  , approveRequisition: () => {
+    return {
+      subject: 'Requisition approved', body: `Your request for a requisition has been approved. You can now proceed in making your purchase.
+    Thanks,` };
+  }
+  , rejectRequisition: () => {
+    return {
+      subject: 'Requisition rejected', body: `Your request for a requisition has been rejected. You can now proceed in making your purchase.
+    Thanks,` };
+  }
 
 }
 

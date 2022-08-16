@@ -11,6 +11,7 @@ import { getActivity } from '../../services/activities';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
 import { getAllLeaves } from '../../services/leave';
+import { Link, useHistory } from 'react-router-dom';
 
 function Profile(props) {
     const { fixNavbar } = props;
@@ -19,8 +20,8 @@ function Profile(props) {
     const [activity, setActivity] = useState([]);
     const [myTeamMembers, setTeamMembers] = useState([]);
     const [myTotalLeaves, setTotalLeaves] = useState(0);
-
     const [loading, setLoading] = useState(false);
+    const history = useHistory();
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -28,10 +29,8 @@ function Profile(props) {
             if (user) {
                 const user = getUser();
                 const employee = await getEmployee(user.employee_id);
-                console.log(employee);
                 const activity = await getActivity(user.employee_id);
                 const allEmployee = await getAllEmployees(user.company_id);
-                console.log(allEmployee);
                 const allLeaves = await getAllLeaves(user.company_id);
                 const teamMembers = allEmployee.filter(mYemployee => mYemployee.department === employee.department).filter(employee => employee.id !== user.employee_id);
                 const totalLeaves = allLeaves.filter(leave => leave.employee_id === user.employee_id).length;
@@ -91,7 +90,6 @@ function Profile(props) {
         });
     };
 
-    console.log('myTeamMembers', myTeamMembers);
 
     return (
         <>
@@ -101,6 +99,17 @@ function Profile(props) {
                 <div >
                     <div className={`section-body ${fixNavbar ? "marginTop" : ""} `}>
                         <div className="container-fluid">
+                        <div className="d-flex justify-content-between align-items-center">
+							<ul className="nav nav-tabs page-header-tab">
+								<li className="nav-item">
+
+									<Link onClick={() => history.goBack()} className="nav-link active">
+										<i className="fa fa-arrow-left"></i>
+									</Link>
+								</li>
+							</ul>
+
+						</div>
                             <div className="row clearfix">
                                 <div className="col-md-12">
                                     {/* card profile */}

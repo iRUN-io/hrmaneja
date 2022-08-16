@@ -252,6 +252,7 @@ class Menu extends Component {
 		}
 		const activityLogs = this.state.activityLogs; // Use this for the map
 		const user = this.state.user;
+		const isAdmin = user?.role === "HR Manager";
 		const content = [
 			{
 				"id": 1,
@@ -301,6 +302,11 @@ class Menu extends Component {
 						"label": "My Leaves",
 						"to": "/my-leaves"
 					},
+					{
+						"id": 11,
+						"label": "Requisition",
+						"to": "/expense-requisition"
+					},
 
 					// {
 					// 	"id": 12,
@@ -325,7 +331,7 @@ class Menu extends Component {
 				]
 			},
 
-			user.role === "HR Manager" && {
+			isAdmin && {
 				"id": 2,
 				"icon": "fa fa-cogs",
 				"label": "Admin",
@@ -553,6 +559,7 @@ class Menu extends Component {
 											title="Themes"
 										></i>
 									</a> */}
+										{isAdmin && (
 										<span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
 											<i
 												className="fa fa-gear fa-spin"
@@ -561,8 +568,9 @@ class Menu extends Component {
 												title="Settings"
 											/>
 										</span>
+										)}
 										{/* to relese user profile toggle  --- NOTE */}
-										{/* <p className="nav-link user_btn" onClick={this.toggleUserMenu}>
+										<p className="nav-link user_btn" onClick={this.toggleUserMenu}>
 											<img
 												className="avatar"
 												src="/assets/images/user.png"
@@ -571,7 +579,7 @@ class Menu extends Component {
 												data-placement="right"
 												title="User Menu"
 											/>
-										</p> */}
+										</p>
 										<p className="nav-link icon menu_toggle" onClick={() => this.toggleLeftMenu(!istoggleLeftMenu)}>
 											<i className="fa  fa-align-left" />
 										</p>

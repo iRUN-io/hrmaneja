@@ -129,9 +129,9 @@ const MyLeave = () => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <div className='container'>
+                <div className="section-body mt-3">
                     <div className="container-fluid">
-                        <div className="d-flex justify-content-between align-items-center">
+                    <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
                                 <li className="nav-item">
                                     <Link onClick={() => history.goBack()} className="nav-link active">
@@ -143,10 +143,6 @@ const MyLeave = () => {
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div className="section-body mt-3">
-                    <div className="container-fluid">
                         <div className="tab-content mt-3">
                             <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
                                 <div className="card">
