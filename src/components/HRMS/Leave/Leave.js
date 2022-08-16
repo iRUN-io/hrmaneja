@@ -14,7 +14,6 @@ import { emailCase } from '../../../enums/emailCase';
 import { getAllEmployees, getEmployee } from '../../../services/employee';
 import { Link, useHistory } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
-import { array } from 'yup';
 
 const Leave = () => {
     const [leaves, setLeaves] = useState([]);

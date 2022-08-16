@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import data from '../../config/data';
@@ -5,16 +6,20 @@ import Country from '../common/country';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUser } from '../../config/common';
-import { getEmployee } from '../../services/employee';
+import { getAllEmployees, getEmployee } from '../../services/employee';
 import { getActivity } from '../../services/activities';
 import Skeleton from 'react-loading-skeleton';
 import moment from 'moment';
+import { getAllLeaves } from '../../services/leave';
 
 function Profile(props) {
     const { fixNavbar } = props;
     const [user, setUser] = useState({});
     const [employee, setEmployee] = useState({});
     const [activity, setActivity] = useState([]);
+    const [myTeamMembers, setTeamMembers] = useState([]);
+    const [myTotalLeaves, setTotalLeaves] = useState(0);
+
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         async function fetchData() {
@@ -23,10 +28,18 @@ function Profile(props) {
             if (user) {
                 const user = getUser();
                 const employee = await getEmployee(user.employee_id);
+                console.log(employee);
                 const activity = await getActivity(user.employee_id);
+                const allEmployee = await getAllEmployees(user.company_id);
+                console.log(allEmployee);
+                const allLeaves = await getAllLeaves(user.company_id);
+                const teamMembers = allEmployee.filter(mYemployee => mYemployee.department === employee.department).filter(employee => employee.id !== user.employee_id);
+                const totalLeaves = allLeaves.filter(leave => leave.employee_id === user.employee_id).length;
                 setUser(user);
+                setTotalLeaves(totalLeaves);
                 setActivity(activity);
                 setEmployee(employee);
+                setTeamMembers(teamMembers);
                 setLoading(false);
             }
         }
@@ -78,6 +91,7 @@ function Profile(props) {
         });
     };
 
+    console.log('myTeamMembers', myTeamMembers);
 
     return (
         <>
@@ -461,7 +475,7 @@ function Profile(props) {
                                                 </div>
                                                 <div className="details">
                                                     <h6 className="mb-0 font600">Total Leave</h6>
-                                                    <span className="mb-0">1</span>
+                                                    <span className="mb-0">{myTotalLeaves}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -476,78 +490,22 @@ function Profile(props) {
                                         </div>
                                         <div className="card-body">
                                             <ul className="right_chat list-unstyled mb-0">
-                                                <li className="online">
-                                                    <a href="fake_url;">
+                                                {myTeamMembers.map((member, index) => (
+                                                <li key={index} className="online">
+                                                    <a href="#">
                                                         <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar4.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Donald Gardner</span>
-                                                                <span className="message">Designer, Blogger</span>
+                                                        <span className="avatar avatar-orange" data-toggle="tooltip" title="Avatar Name">
+                                                            {member.name.charAt(0).toUpperCase()}
+                                                            </span>
+                                                            <div className="media-body" style={{marginLeft: '20px'}}>
+                                                                <span className="name">{member.name}</span>
+                                                                <span className="message">{member.role}</span>
                                                                 <span className="badge badge-outline status" />
                                                             </div>
                                                         </div>
                                                     </a>
                                                 </li>
-                                                <li className="offline">
-                                                    <a href="fake_url;">
-                                                        <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar1.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Nancy Flanary</span>
-                                                                <span className="message">Art director, Movie Cut</span>
-                                                                <span className="badge badge-outline status" />
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li className="online">
-                                                    <a href="fake_url;">
-                                                        <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar3.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Phillip Smith</span>
-                                                                <span className="message">Writter, Mag Editor</span>
-                                                                <span className="badge badge-outline status" />
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li className="online">
-                                                    <a href="fake_url;">
-                                                        <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar4.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Donald Gardner</span>
-                                                                <span className="message">Designer, Blogger</span>
-                                                                <span className="badge badge-outline status" />
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li className="offline">
-                                                    <a href="fake_url;">
-                                                        <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar1.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Nancy Flanary</span>
-                                                                <span className="message">Art director, Movie Cut</span>
-                                                                <span className="badge badge-outline status" />
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
-                                                <li className="online">
-                                                    <a href="fake_url;">
-                                                        <div className="media">
-                                                            <img className="media-object " src="../assets/images/xs/avatar3.jpg" alt="fake_url" />
-                                                            <div className="media-body">
-                                                                <span className="name">Phillip Smith</span>
-                                                                <span className="message">Writter, Mag Editor</span>
-                                                                <span className="badge badge-outline status" />
-                                                            </div>
-                                                        </div>
-                                                    </a>
-                                                </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
