@@ -370,9 +370,10 @@ const Users = (navStatus) => {
 													onChange={updateForm}
 												>
 													<option>Select Role Type</option>
-													<option>Super Admin</option>
-													<option>Admin</option>
-													<option>Employee</option>
+													<option value={'HR Manager'}>Hr Manager</option>
+													<option value={'Super Admin'}>Super Admin</option>
+													<option value={'Admin'}>Admin</option>
+													<option value={'Employee'}>Employee</option>
 												</select>
 											</div>
 										</div>

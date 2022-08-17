@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { getUser } from '../../config/common.js';
-import { totalDepartments, totalEmployees, totalLeaves, totalUsers } from '../../services/setting.js';
+import { totalDepartments, totalEmployees, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
 
 const Settings = () => {
 	const [company, setCompany] = useState({});
@@ -13,19 +13,20 @@ const Settings = () => {
 
 	useEffect(() => {
 		async function fetchData() {
-			// get user
 			const userData = await getUser(id);
 			const company_id = userData.company_id;
 			const totalDepartmentsResponse = await totalDepartments(company_id);
 			const totalUsersResponse = await totalUsers(company_id);
 			const totalEmployeesResponse = await totalEmployees(company_id);
 			const totalLeavesResponse = await totalLeaves(company_id);
+			const totalRequisitionsResponse = await totalRequisition(company_id);
 			if (totalDepartmentsResponse && totalUsersResponse && totalEmployeesResponse && totalLeavesResponse) {
 			setCompany({
 				totalDepartments: totalDepartmentsResponse.totalDepartments,
 				totalUsers: totalUsersResponse.totalUsers,
 				totalEmployees: totalEmployeesResponse.totalEmployees,
 				totalLeaves: totalLeavesResponse.totalLeaves,
+				totalRequisitions: totalRequisitionsResponse.totalRequisitions,
 			});
 			}
 		}
@@ -123,6 +124,17 @@ const Settings = () => {
 										<Link to="#" className="my_sort_cut text-muted">
 											<i className="fa fa-folder-open-o	" />
 											<span>Documents</span>
+										</Link>
+									</div>
+								</div>
+							</div>
+							<div className="col-6 col-md-4 col-xl-3">
+								<div className="card">
+									<div className="card-body ribbon">
+									<div className="ribbon-box green">{company.totalRequisitions}</div> 
+										<Link to="/hr-requisition" className="my_sort_cut text-muted">
+											<i className="fa fa-money" />
+											<span>Requisition</span>
 										</Link>
 									</div>
 								</div>

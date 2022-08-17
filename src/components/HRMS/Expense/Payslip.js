@@ -1,109 +1,220 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { getAllEmployees } from "../../../services/employee";
-// import { getAllUsers } from "../../../services/user";
 import { getUser } from "../../../config/common";
-import CountUp from 'react-countup';
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
+import { Link, useHistory } from 'react-router-dom';
+import { approveRequisition, disapproveRequisition, getRequisition } from '../../../services/expense';
+import moment from 'moment';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import { createActivity } from '../../../services/activities';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
+import { toast } from 'react-toastify';
 
 
 function Payroll(props) {
-	const { fixNavbar } = props;
-	const [employees, setEmployee] = useState([]);
-	// const [user, setUser] = useState([]);
-	// const [users, setUsers] = useState([]);
-	// const [departments, setDepartments] = useState([]);
-	const [loading, setLoading] = useState(false);
-	const comingSoon = false;
-	useEffect(() => {
+    const { fixNavbar } = props;
+    const id = window.location.pathname.split('/')[2];
+    const history = useHistory();
+    const [requisition, setRequisition] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState({});
+    const comingSoon = false;
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const user = await getUser();
+            if (user) {
+                const expense = await getRequisition(id);
+                setRequisition(expense);
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const toggleRequisition = async (reqId, type) => {
+		try {
+			let response;
+
+			if (type === 'approve') {
+
+				response = await approveRequisition(reqId);
+
+			} else {
+
+				response = await disapproveRequisition(reqId);
+			}
+
+			if (!response.error) {
+
+				const logActivity = await createActivity(
+					{
+						name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
+						employee_id: user.employee_id,
+						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
+						activity_name: type === 'approve' ? 'Approval' : 'Rejection',
+						user: user.name,
+						company_id: user.company_id,
+					}
+				)
+
+				if (logActivity.id) {
+					if (type === 'approve') {
+						sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
+						const newRequisition = { ...requisition, status: 'approve' };
+
+                        setRequisition(newRequisition);
+					} else {
+                        const newRequisition = { ...requisition, status: 'disapprove' };
+                        setRequisition(newRequisition);
+
+						sendEmail(user.emailAddress, user.name, emailCase.rejectRequisition);
+					}
+					toast.info(response.message);
+				}
+			}
+
+		} catch (err) {
+			toast.error("Error, try again");
+		}
+
+	};
+
+    useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
-				// const userId = user.id;
-				// const userResponse = await getAllUsers(userId);
-				const response = await getAllEmployees();
-				setEmployee(response);
+				setUser(user)
 				setLoading(false);
 			}
 		}
 		fetchData();
 	}, []);
 
-	return (
-		<>
+    return (
+        <>
 
-			<div>
-				{comingSoon ?
-					<ComingSoon />
-					:
-					<>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
-						<div className="container-fluid">
-							<div className="d-flex justify-content-between align-items-center">
+            <div>
+                {comingSoon ?
+                    <ComingSoon />
+                    :
+                    <>
+                        <div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
+                            <div className="container-fluid">
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <ul className="nav nav-tabs page-header-tab">
+                                        <li className="nav-item">
 
-							</div>
-						</div>
-					</div><div className="section-body mt-3">
-							<div className="container-fluid">
-								<div className="tab-content mt-3">
-									<div id="Payroll-Payslip" role="tabpanel">
-										<div className="card">
-											<div className="card-body">
-												<div className="media mb-4">
-													<div className="mr-3">
-														<img
-															className="rounded"
-															src="../assets/images/xs/avatar4.jpg"
-															alt="fake_url" />
-													</div>
-													<div className="media-body">
-														<div className="content">
-															<span>
-																<strong>Order ID: </strong> C09
-															</span>
-															<p className="h5">
-																John Smith{' '}
-																<small className="float-right badge badge-primary">
-																	Jun 15, 2019
-																</small>
-															</p>
-															<p>795 Folsom Ave, Suite 546 San Francisco, CA 54656</p>
-														</div>
-														<nav className="d-flex text-muted">
-															<a href="fake_url" className="icon mr-3">
-																<i className="icon-envelope text-info" />
-															</a>
-															<a href="fake_url" className="icon mr-3">
-																<i className="icon-printer" />
-															</a>
-														</nav>
-													</div>
-												</div>
-												<div className="table-responsive">
-													<table className="table table-hover table-striped table-vcenter">
-														<thead className="dark-mode">
-															<tr>
-																<th className="w60">#</th>
-																<th />
-																<th className="w100">Earnings</th>
-																<th className="w100">Deductions</th>
-																<th className="w100 text-right">Total</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr>
-																<td>01</td>
-																<td>
-																	<span>Basic Salary</span>
-																</td>
-																<td>$1,500</td>
-																<td>-</td>
-																<td className="text-right">$380</td>
-															</tr>
-															<tr>
+                                            <Link onClick={() => history.goBack()} className="nav-link active">
+                                                <i className="fa fa-arrow-left"></i>
+                                            </Link>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </div>
+                        </div><div className="section-body mt-3">
+                            <div className="container-fluid">
+                                <div className="tab-content mt-3">
+                                    <div id="Payroll-Payslip" role="tabpanel">
+                                        <div className="card">
+                                            <div className="card-body">
+                                                <div className="media mb-4">
+                                                    <div className="mr-3">
+                                                    <i className="fa fa-user-circle-o fa-5x" style={{color: "#999"}} aria-hidden="true"></i>
+                                                    </div>
+                                                    <div className="media-body">
+                                                        <div className="content">
+                                                            <span>
+                                                                <strong>Requisition ID: RQ-{requisition.id && requisition.id.slice(0, 8)} </strong>
+                                                            </span>
+                                                            <p className="h5">
+                                                                {requisition.employee}{' '}
+                                                                {requisition.status === 'approve' && (
+                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                    overlay={
+                                                                        <Popover id="popover-basic">
+                                                                            <Popover.Header as="p">Confirm Decline</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <div className="clearfix" >
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                </div>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }>
+                                                                    <button type="button" style={{borderColor: '10px'}} className="btn btn-sm btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning fa-2x" /></button>
+                                                                </OverlayTrigger>
+                                                            )}
+                                                            {(requisition.status === 'pending' || requisition.status === 'disapprove') && (
+                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                    overlay={
+                                                                        <Popover id="popover-basic">
+                                                                            <Popover.Header as="p">Confirm Approval</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <div className="clearfix" >
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button>
+                                                                                </div>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }>
+                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success fa-2x" /></button>
+                                                                </OverlayTrigger>
+                                                            )}
+                                                                <small className="float-right badge badge-primary">
+                                                                    {moment(requisition.createdAt).format('MMM Do YYYY')}
+                                                                </small>
+
+                                                            </p>
+                                                            <p>
+                                                                {requisition.status === 'approve' && (
+                                                                    <span className="badge badge-success">approved</span>
+                                                                )}
+                                                                {requisition.status === 'disapprove' && (
+                                                                    <span className="badge badge-warning">rejected</span>
+                                                                )}
+                                                                {requisition.status === 'pending' && (
+                                                                    <span className="badge badge-primary">pending</span>
+                                                                )}
+                                                            </p>
+                                                        </div>
+                                                        <nav className="d-flex text-muted">
+                                                            <a href="fake_url" className="icon mr-3">
+                                                                <i className="icon-envelope text-info" />
+                                                            </a>
+                                                            <a href="fake_url" className="icon mr-3">
+                                                                <i className="icon-printer" />
+                                                            </a>
+                                                        </nav>
+                                                    </div>
+                                                </div>
+                                                <div className="table-responsive">
+                                                    <table className="table table-hover table-striped table-vcenter">
+                                                        <thead className="light-mode">
+                                                            <tr>
+                                                                <th className="w60">#</th>
+                                                                <th className="w100">Amount</th>
+                                                                <th className="w100">Category</th>
+                                                                <th className="w100">Quantity</th>
+                                                                <th className="w100 text-right">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>01</td>
+                                                                <td>
+                                                                    <span>{requisition.amount}</span>
+                                                                </td>
+
+                                                                <td>{requisition.category}</td>
+                                                                <td>1</td>
+                                                                <td className="text-right">${requisition.amount}</td>
+                                                            </tr>
+                                                            {/* <tr>
 																<td>02</td>
 																<td>
 																	<span>House Rent Allowance (H.R.A.)</span>
@@ -111,8 +222,8 @@ function Payroll(props) {
 																<td>$62</td>
 																<td>-</td>
 																<td className="text-right">$250</td>
-															</tr>
-															<tr>
+															</tr> */}
+                                                            {/* <tr>
 																<td>03</td>
 																<td>
 																	<span>Tax Deducted at Source (T.D.S.)</span>
@@ -138,43 +249,42 @@ function Payroll(props) {
 																<td>$121</td>
 																<td>-</td>
 																<td className="text-right">$120</td>
-															</tr>
-														</tbody>
-														<tfoot>
-															<tr>
-																<td colSpan={2}>
-																	<span>
-																		<strong>Note:</strong> Ipsum is simply dummy text of the
-																		printing and typesetting industry.
-																	</span>
-																</td>
-																<td>$1683</td>
-																<td>$200</td>
-																<td className="text-right">
-																	<strong className="text-success">$1483.00</strong>
-																</td>
-															</tr>
-														</tfoot>
-													</table>
-													<button className="btn btn-info float-right">
-														<i className="icon-printer" /> Print
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</>
-				}
+															</tr> */}
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colSpan={2}>
+                                                                    <span>
+                                                                        <strong>Note: {' '}</strong>{requisition.note}
+                                                                    </span>
+                                                                </td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td className="text-right">
+                                                                    <strong className="text-success">{requisition.amount}</strong>
+                                                                </td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                    <button className="btn btn-info float-right">
+                                                        <i className="icon-printer" /> Print
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                }
 
-			</div>
-		</>
-	);
+            </div>
+        </>
+    );
 }
 const mapStateToProps = state => ({
-	fixNavbar: state.settings.isFixNavbar
+    fixNavbar: state.settings.isFixNavbar
 })
 
 const mapDispatchToProps = dispatch => ({})

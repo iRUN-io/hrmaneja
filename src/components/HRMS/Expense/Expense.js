@@ -199,6 +199,10 @@ function Expense(props) {
 		return totalAmount;
 	}
 
+	const viewRequisition = (id) => {
+        history.push(`/payslip/${id}`);
+    }
+
 	return (
 		<>
 
@@ -225,22 +229,22 @@ function Expense(props) {
 									<div className="tab-pane fade show active" id="Expense-Salary" role="tabpanel">
 										<div className="row clearfix">
 											{departments.map((department, index) => (
-											<div key={index} className="col-lg-3 col-md-6">
-												<div className="card">
-													<div className="card-body">
-														<h6>{department.name.toUpperCase()}</h6>
-														<h3 className="pt-3">
-															N<span className="counter"><CountUp end={getRequisitionByDepartment(department.id)} /></span>
-														</h3>
-														<span>
-															<span className="text-danger mr-2">
-																<i className="fa fa-long-arrow-down" /> 5.27%
-															</span>{' '}
-															Since last month
-														</span>
+												<div key={index} className="col-lg-3 col-md-6">
+													<div className="card">
+														<div className="card-body">
+															<h6>{department.name.toUpperCase()}</h6>
+															<h3 className="pt-3">
+																N<span className="counter"><CountUp end={getRequisitionByDepartment(department.id)} /></span>
+															</h3>
+															<span>
+																<span className="text-danger mr-2">
+																	<i className="fa fa-long-arrow-down" /> 5.27%
+																</span>{' '}
+																Since last month
+															</span>
+														</div>
 													</div>
 												</div>
-											</div>
 											))}
 										</div>
 										<div className="card">
@@ -273,6 +277,7 @@ function Expense(props) {
 																<thead>
 																	<tr>
 																		<th className="w200">Employee</th>
+																		<th className="w200">Amount</th>
 																		<th className="w200">Category</th>
 																		<th className="w60">Due Date</th>
 																		<th className="w60">Status</th>
@@ -301,6 +306,7 @@ function Expense(props) {
 																					</div>
 																				</div>
 																			</td>
+																			<td>{request.amount}</td>
 																			<td>{request.category}</td>
 																			<td>{moment(request.dueDate).format('MMM Do YYYY')}</td>
 																			<td>
@@ -322,10 +328,12 @@ function Expense(props) {
 																					title="Print"
 																					data-toggle="tooltip"
 																					data-placement="top"
+																					onClick={()=> viewRequisition(request.id)}
 																				>
 																					<i className="icon-printer" />
 																				</button>
-
+																				{request.employee_id !== user.employee_id && (
+																				<>
 																				{request.status === 'approve' && (
 																					<OverlayTrigger trigger="focus" placement="bottom" delay={1}
 																						overlay={
@@ -357,6 +365,8 @@ function Expense(props) {
 																						}>
 																						<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
 																					</OverlayTrigger>
+																				)}
+																				</>
 																				)}
 
 																			</td>

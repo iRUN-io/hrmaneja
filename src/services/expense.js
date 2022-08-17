@@ -22,6 +22,16 @@ export async function getEmployeeRequisition(employeeId) {
     });
   }
 
+  export async function getRequisition(requsitionId) {
+    return request(`${API_URL}/requisitions/details/${requsitionId}`, {
+      method: 'get',
+      headers: {
+         'Content-Type': 'application/json',
+         'Authorization': USER_TOKEN,
+      },
+    });
+  }
+
 export async function createRequisition(body, userId) {
   return request(`${API_URL}/requisitions/create`, {
     method: 'post',

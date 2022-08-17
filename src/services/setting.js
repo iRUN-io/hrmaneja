@@ -107,3 +107,14 @@ export async function totalCompanies(companyId) {
       },
   });
 }
+
+export async function totalRequisition(companyId) {
+  return request(`${API_URL}/setting/totalRequisitions/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+

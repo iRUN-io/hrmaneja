@@ -305,7 +305,7 @@ class Menu extends Component {
 					{
 						"id": 11,
 						"label": "Requisition",
-						"to": "/expense-requisition"
+						"to": "/my-requisition"
 					},
 
 					// {
@@ -511,9 +511,10 @@ class Menu extends Component {
 		const { darkMinSidebar, istoggleLeftMenu, friendListOpen, statisticsOpen, statisticsClose, friendListClose } = this.props
 		const pageHeading = Routes.filter((route) => route.path === this.props.location.pathname)
 
-		// if route is not found in Routes, then return 404
 		if (pageHeading.length === 0) {
-			return <NotFound />
+			if (!this.props.location.pathname.includes('/payslip/')) {
+				return <NotFound />
+			}
 		}
 		return (
 			<>

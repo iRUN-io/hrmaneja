@@ -70,6 +70,7 @@ import Settings from './Settings/Settings';
 import { getUser } from '../config/common';
 import MyLeave from './HRMS/Myleave/Leave';
 import Payslip from './HRMS/Expense/Payslip';
+import MyExpense from './HRMS/Expense/MyExpense';
 
 const user = getUser();
 
@@ -84,6 +85,32 @@ const Routes = [
         pageTitle: "HR Dashboard",
         component: Dashboard
     },
+   
+    {
+        path: "/hr-holidays",
+        name: 'holidays',
+        exact: true,
+        pageTitle: "Holidays",
+        component: Holidays
+    },
+    {
+        path: "/my-leaves",
+        name: 'myLeaves',
+        exact: true,
+        pageTitle: "My Leaves",
+        component: MyLeave
+    },
+    {
+        path: "/hr-events",
+        name: 'events',
+        exact: true,
+        pageTitle: "Events",
+        component: Events
+    },
+    
+
+    // Admin 
+
     isAdmin && {
         path: "/hr-users",
         name: 'hr-users',
@@ -126,29 +153,9 @@ const Routes = [
         pageTitle: "Activities",
         component: Activities
     },
-    {
-        path: "/hr-holidays",
-        name: 'holidays',
-        exact: true,
-        pageTitle: "Holidays",
-        component: Holidays
-    },
-    {
-        path: "/my-leaves",
-        name: 'myLeaves',
-        exact: true,
-        pageTitle: "My Leaves",
-        component: MyLeave
-    },
-    {
-        path: "/hr-events",
-        name: 'events',
-        exact: true,
-        pageTitle: "Events",
-        component: Events
-    },
-    {
-        path: "/expense-requisition",
+
+    isAdmin && {
+        path: "/hr-requisition",
         name: 'expense',
         exact: true,
         pageTitle: "Requisition",
@@ -160,13 +167,6 @@ const Routes = [
         exact: true,
         pageTitle: "Payroll",
         component: Payroll
-    },
-    isAdmin && {
-        path: "/hr-expense",
-        name: 'expense',
-        exact: true,
-        pageTitle: "Expense",
-        component: Expense
     },
     isAdmin && {
         path: "/hr-accounts",
@@ -189,8 +189,6 @@ const Routes = [
         pageTitle: "Excel",
         component: Excel
     },
-
-    // Admin 
 
     isAdmin && {
         path: "/admin/billing",
@@ -341,11 +339,18 @@ const Routes = [
         component: NotFound
     },
     {
-        path: "/payslip",
+        path: "/payslip/:id",
         name: 'payslip',
         exact: true,
         pageTitle: "Payslip",
         component: Payslip
+    },
+    {
+        path: "/my-requisition",
+        name: 'my-requisition',
+        exact: true,
+        pageTitle: "My Requisition",
+        component: MyExpense
     },
     // {
     //     path: "/internalserver",
