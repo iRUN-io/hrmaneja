@@ -60,9 +60,10 @@ import Profile from './Profile/Profile';
 // import Gallery from './Gallery/Gallery';
 // import Login from './Authentication/login';
 // import Signup from './Authentication/signup';
-// import ForgotPassword from './Authentication/forgotpassword';
+// import ForgotPassword from './Authentication/forgotPassword';
 import NotFound from './Authentication/404';
 import ChangePassword from './Authentication/changePassword';
+import Support from './HRMS/Support/Support';
 // import InternalServer from './Authentication/500';
 import EmployeeDetails from './HRMS/Employee/EmployeeDetails';
 import Leave from './HRMS/Leave/Leave';
@@ -318,12 +319,19 @@ const Routes = [
     //     component: Signup
     // },
     // {
-    //     path: "/forgotpassword",
-    //     name: 'forgotpassword',
+    //     path: "/forgotPassword",
+    //     name: 'forgotPassword',
     //     exact: true,
     //     pageTitle: "Tables",
     //     component: ForgotPassword
     // },
+    {
+        path: "/support",
+        name: 'support',
+        exact: true,
+        pageTitle: "Support",
+        component: Support
+    },
         {
         path: "/change-password/:token",
         name: 'changePassword',
