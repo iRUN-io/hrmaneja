@@ -69,6 +69,7 @@ import Leave from './HRMS/Leave/Leave';
 import Settings from './Settings/Settings';
 import { getUser } from '../config/common';
 import MyLeave from './HRMS/Myleave/Leave';
+import Payslip from './HRMS/Expense/Payslip';
 
 const user = getUser();
 
@@ -339,6 +340,13 @@ const Routes = [
         pageTitle: "Tables",
         component: NotFound
     },
+    {
+        path: "/payslip",
+        name: 'payslip',
+        exact: true,
+        pageTitle: "Payslip",
+        component: Payslip
+    },
     // {
     //     path: "/internalserver",
     //     name: 'internalserver',
@@ -346,20 +354,20 @@ const Routes = [
     //     pageTitle: "Tables",
     //     component: InternalServer
     // },
-    {
-        path: "/icons",
-        name: 'icons',
-        exact: true,
-        pageTitle: "Icons",
-        component: Icons
-    },
-    {
-        path: "/icons-feather",
-        name: 'icons-feather',
-        exact: true,
-        pageTitle: "Icons",
-        component: IconsFeather
-    },
+    // {
+    //     path: "/icons",
+    //     name: 'icons',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: Icons
+    // },
+    // {
+    //     path: "/icons-feather",
+    //     name: 'icons-feather',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: IconsFeather
+    // },
     // {
     //     path: "/icons-line",
     //     name: 'icons-line',
