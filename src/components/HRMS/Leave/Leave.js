@@ -299,10 +299,10 @@ const Leave = () => {
                                                                     <span className="badge badge-success">approved</span>
                                                                     )}
                                                                     {leave.status === 'disapprove' && (
-                                                                    <span className="badge badge-warning">rejected</span>
+                                                                    <span className="badge badge-danger">rejected</span>
                                                                     )}
                                                                     {leave.status === 'pending' && (
-                                                                    <span className="badge badge-primary">pending</span>
+                                                                    <span className="badge badge-grey">pending</span>
                                                                     )}
                                                                     </td>
 

@@ -220,10 +220,10 @@ function Expense(props) {
 																					<span className="badge badge-success">approved</span>
 																				)}
 																				{request.status === 'disapprove' && (
-																					<span className="badge badge-warning">rejected</span>
+																					<span className="badge badge-danger">rejected</span>
 																				)}
 																				{request.status === 'pending' && (
-																					<span className="badge badge-primary">pending</span>
+																					<span className="badge badge-grey">pending</span>
 																				)}
 																			</td>
 																		</tr>
@@ -291,7 +291,7 @@ function Expense(props) {
 									</div>
 									<div className="modal-footer">
 										<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button onClick={() => makeRequisition()} className="btn btn-primary">Save changes</button>
+										<button onClick={() => makeRequisition()} className="btn btn-primary">Make Request</button>
 									</div>
 								</div>
 							</div>

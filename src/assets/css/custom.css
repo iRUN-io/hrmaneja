@@ -51,3 +51,33 @@ div.rtl{
 .disabled-card {
     opacity: .4 !important;
 }
+
+.btn-hrmaneja-success{
+    background-color: #74b16f!important;
+    color: white;
+    border-color: #74b16f!important;
+}
+
+.btn-hrmaneja-success:hover {
+    color: #fff !important;
+    background-color: #377c71 !important;
+    border-color: #fff !important;
+    
+  }
+
+  .badge-grey{
+    background-color: #BABDBF!important;
+    color: white;
+    width: 70px;
+    padding: 5px;
+  }
+
+  .badge-success{
+    width: 70px !important;
+    padding: 5px !important;
+  }
+
+  .badge-danger{
+    width: 70px !important;
+    padding: 5px !important;
+  }

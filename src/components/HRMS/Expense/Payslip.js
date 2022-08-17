@@ -53,7 +53,7 @@ function Payroll(props) {
 					{
 						name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
 						employee_id: user.employee_id,
-						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
+						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a requisition request`,
 						activity_name: type === 'approve' ? 'Approval' : 'Rejection',
 						user: user.name,
 						company_id: user.company_id,
@@ -66,6 +66,8 @@ function Payroll(props) {
 						const newRequisition = { ...requisition, status: 'approve' };
 
                         setRequisition(newRequisition);
+						sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
+
 					} else {
                         const newRequisition = { ...requisition, status: 'disapprove' };
                         setRequisition(newRequisition);
@@ -133,38 +135,7 @@ function Payroll(props) {
                                                             </span>
                                                             <p className="h5">
                                                                 {requisition.employee}{' '}
-                                                                {requisition.status === 'approve' && (
-                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                    overlay={
-                                                                        <Popover id="popover-basic">
-                                                                            <Popover.Header as="p">Confirm Decline</Popover.Header>
-                                                                            <Popover.Body>
-                                                                                <div className="clearfix" >
-                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
-                                                                                </div>
-                                                                            </Popover.Body>
-                                                                        </Popover>
-                                                                    }>
-                                                                    <button type="button" style={{borderColor: '10px'}} className="btn btn-sm btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning fa-2x" /></button>
-                                                                </OverlayTrigger>
-                                                            )}
-                                                            {(requisition.status === 'pending' || requisition.status === 'disapprove') && (
-                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                    overlay={
-                                                                        <Popover id="popover-basic">
-                                                                            <Popover.Header as="p">Confirm Approval</Popover.Header>
-                                                                            <Popover.Body>
-                                                                                <div className="clearfix" >
-                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button>
-                                                                                </div>
-                                                                            </Popover.Body>
-                                                                        </Popover>
-                                                                    }>
-                                                                    <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success fa-2x" /></button>
-                                                                </OverlayTrigger>
-                                                            )}
+                                                               
                                                                 <small className="float-right badge badge-primary">
                                                                     {moment(requisition.createdAt).format('MMM Do YYYY')}
                                                                 </small>
@@ -175,10 +146,10 @@ function Payroll(props) {
                                                                     <span className="badge badge-success">approved</span>
                                                                 )}
                                                                 {requisition.status === 'disapprove' && (
-                                                                    <span className="badge badge-warning">rejected</span>
+                                                                    <span className="badge badge-danger">rejected</span>
                                                                 )}
                                                                 {requisition.status === 'pending' && (
-                                                                    <span className="badge badge-primary">pending</span>
+                                                                    <span className="badge badge-grey">pending</span>
                                                                 )}
                                                             </p>
                                                         </div>
@@ -214,42 +185,6 @@ function Payroll(props) {
                                                                 <td>1</td>
                                                                 <td className="text-right">${requisition.amount}</td>
                                                             </tr>
-                                                            {/* <tr>
-																<td>02</td>
-																<td>
-																	<span>House Rent Allowance (H.R.A.)</span>
-																</td>
-																<td>$62</td>
-																<td>-</td>
-																<td className="text-right">$250</td>
-															</tr> */}
-                                                            {/* <tr>
-																<td>03</td>
-																<td>
-																	<span>Tax Deducted at Source (T.D.S.)</span>
-																</td>
-																<td>-</td>
-																<td>$80</td>
-																<td className="text-right">$120</td>
-															</tr>
-															<tr>
-																<td>04</td>
-																<td>
-																	<span>C/Bank Loan</span>
-																</td>
-																<td>-</td>
-																<td>$120</td>
-																<td className="text-right">$120</td>
-															</tr>
-															<tr>
-																<td>05</td>
-																<td>
-																	<span>Other Allowance</span>
-																</td>
-																<td>$121</td>
-																<td>-</td>
-																<td className="text-right">$120</td>
-															</tr> */}
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
@@ -266,9 +201,47 @@ function Payroll(props) {
                                                             </tr>
                                                         </tfoot>
                                                     </table>
-                                                    <button className="btn btn-info float-right">
+                                                    {(requisition.status === 'pending' || requisition.status === 'approve') && (
+                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                    overlay={
+                                                                        <Popover id="popover-basic">
+                                                                            <Popover.Header as="p">Confirm Decline</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <div className="clearfix" >
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                </div>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }>
+                                                                          <button type="button" style={{marginRight: '10px'}} className="btn btn-info js-sweetalert" title="Approve" data-type="confirm">
+                                                                            <i className="icon-close" /> Reject
+                                                                        </button>
+
+                                                                </OverlayTrigger>
+                                                            )}
+                                                            {(requisition.status === 'pending' || requisition.status === 'disapprove') && (
+                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                    overlay={
+                                                                        <Popover id="popover-basic">
+                                                                            <Popover.Header as="p">Confirm Approval</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <div className="clearfix" >
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button>
+                                                                                </div>
+                                                                            </Popover.Body>
+                                                                        </Popover>
+                                                                    }>
+                                                                        <button type="button" className="btn btn-success btn-hrmaneja-success js-sweetalert" title="Approve" data-type="confirm">
+                                                                            <i className="icon-check" /> Approve
+                                                                        </button>
+
+                                                                </OverlayTrigger>
+                                                            )}
+                                                    {/* <button className="btn btn-info float-right">
                                                         <i className="icon-printer" /> Print
-                                                    </button>
+                                                    </button> */}
                                                 </div>
                                             </div>
                                         </div>

@@ -152,7 +152,7 @@ function Expense(props) {
 					{
 						name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
 						employee_id: user.employee_id,
-						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
+						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a requisition request`,
 						activity_name: type === 'approve' ? 'Approval' : 'Rejection',
 						user: user.name,
 						company_id: user.company_id,
@@ -314,10 +314,10 @@ function Expense(props) {
 																					<span className="badge badge-success">approved</span>
 																				)}
 																				{request.status === 'disapprove' && (
-																					<span className="badge badge-warning">rejected</span>
+																					<span className="badge badge-danger">rejected</span>
 																				)}
 																				{request.status === 'pending' && (
-																					<span className="badge badge-primary">pending</span>
+																					<span className="badge badge-grey">pending</span>
 																				)}
 																			</td>
 																			<td className='align-items-center'>
@@ -334,7 +334,7 @@ function Expense(props) {
 																				</button>
 																				{request.employee_id !== user.employee_id && (
 																				<>
-																				{request.status === 'approve' && (
+																				{ (request.status === 'pending' || request.status === 'approve') && (
 																					<OverlayTrigger trigger="focus" placement="bottom" delay={1}
 																						overlay={
 																							<Popover id="popover-basic">
@@ -347,7 +347,7 @@ function Expense(props) {
 																								</Popover.Body>
 																							</Popover>
 																						}>
-																						<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+																						<button type="button" className="btn btn-icon js-sweetalert" title="Reject" data-type="confirm"><i className="fa fa-close text-warning" /></button>
 																					</OverlayTrigger>
 																				)}
 																				{(request.status === 'pending' || request.status === 'disapprove') && (
@@ -435,7 +435,7 @@ function Expense(props) {
 									</div>
 									<div className="modal-footer">
 										<button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button onClick={() => makeRequisition()} className="btn btn-primary">Save changes</button>
+										<button onClick={() => makeRequisition()} className="btn btn-primary">Make Request</button>
 									</div>
 								</div>
 							</div>
