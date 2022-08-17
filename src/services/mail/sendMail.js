@@ -166,7 +166,12 @@ const emailSwitch = {
   }
   , rejectRequisition: () => {
     return {
-      subject: 'Requisition rejected', body: `Your request for a requisition has been rejected. You can now proceed in making your purchase.
+      subject: 'Requisition rejected', body: `Your request for a requisition has been rejected.
+    Thanks,` };
+  },
+  createSupportTicket: () => {
+    return {
+      subject: 'Support ticket created', body: `We have received your support ticket. Your ticket would be reviewed and an email would be sent to you upon update.
     Thanks,` };
   }
 

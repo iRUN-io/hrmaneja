@@ -100,7 +100,7 @@ function Employee(props) {
         toast.error("Please fill all the fields");
         return;
       }
-      const response = await createEmployee(body, user.id);
+      const response = await createEmployee(body, user.employee_id);
 
       if (response.id) {
         setEmployees([...employees, response])

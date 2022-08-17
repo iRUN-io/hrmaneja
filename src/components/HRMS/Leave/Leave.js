@@ -56,7 +56,7 @@ const Leave = () => {
                 toast.error('Please fill all the fields');
                 return;
             }
-            const response = await createLeave(body, user.id);
+            const response = await createLeave(body, user.employee_id);
 
             if (!response.error) {
                 const logActivity = await createActivity(
@@ -265,9 +265,8 @@ const Leave = () => {
                                                             <tr>
                                                                 <th>#</th>
                                                                 <th>Name</th>
-                                                                {/* <th>Employee ID</th> */}
                                                                 <th>Leave Type</th>
-                                                                <th>Date</th>
+                                                                <th>Duration</th>
                                                                 <th>Reason</th>
                                                                 <th>Status</th>
                                                                 <th>Action</th>

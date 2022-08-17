@@ -55,7 +55,7 @@ class Header extends Component {
 												<i className="dropdown-icon fe fe-send" /> Message
 											</a>
 											<div className="dropdown-divider" />
-											<a className="dropdown-item" >
+											<a href='/support' className="dropdown-item" >
 												<i className="dropdown-icon fe fe-help-circle" /> Need help?
 											</a>
 											<NavLink to="/login" onClick={logout} className="dropdown-item">

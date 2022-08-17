@@ -39,7 +39,7 @@ const Department = () => {
                 toast.error('Please fill all the fields');
                 return;
             }
-            const response = await createDepartment(body, user.id);
+            const response = await createDepartment(body, user.employee_id);
 
             if (response.id) {
                 const logActivity = await createActivity(

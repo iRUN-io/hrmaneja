@@ -45,7 +45,7 @@ const EditUsers = (userData) => {
             }
             const response = await updateUser(body, user.id);
 
-            if (response.id) {
+            if (response) {
                 setUsers([...users, response]);
 
                 const logActivity = await createActivity(

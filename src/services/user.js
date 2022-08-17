@@ -24,9 +24,9 @@ export async function createUser(body) {
   });
 }
 
-export async function updateUser(body) {
-  return request(`${API_URL}/user/${USER_ID}?id=${USER_ID}`, {
-    method: 'patch',
+export async function updateUser(body, userId) {
+  return request(`${API_URL}/user/update/${userId}`, {
+    method: 'put',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': USER_TOKEN,

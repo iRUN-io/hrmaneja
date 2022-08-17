@@ -21,4 +21,6 @@ export const emailCase = {
     makeRequisition:    'makeRequisition',
     approveRequisition: 'approveRequisition',
     rejectRequisition:  'rejectRequisition',
+    createSupportTicket:'createSupportTicket',
+
 }

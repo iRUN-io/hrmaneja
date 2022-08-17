@@ -56,7 +56,7 @@ const Users = (navStatus) => {
 			}
 			const response = await createUser(body, currentUser.id);
 
-			if (response.id) {
+			if (response) {
 
 				const logActivity = await createActivity(
 					{

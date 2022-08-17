@@ -31,7 +31,8 @@ const EditDepartment = (departmentData) => {
                 return;
             }
             const response = await updateDepartment(body, departmentData.department.id);
-            if(response.id) {
+            if(response) {
+                console.log(response);
                 setDepartments([...departments, response])
 
                  const logActivity = await createActivity(
