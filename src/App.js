@@ -19,8 +19,8 @@ class App extends Component {
 					<Switch>
 						<Route path="/signup" component={SignUp} />
 						<Route path="/login" component={Login} />
-						<Route path="/forgot-password" component={ForgotPassword} />
 						<Route path="/change-password/:token" component={ChangePassword} />
+						<Route path="/forgot-password" component={ForgotPassword} />
 						<Route path="/internalserver" component={InternalServer} />	
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />

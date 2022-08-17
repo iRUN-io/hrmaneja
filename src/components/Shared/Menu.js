@@ -446,7 +446,7 @@ class Menu extends Component {
 			// 		{
 			// 			"id": 30,
 			// 			"label": "Forgot Password",
-			// 			"to": "/forgotpassword"
+			// 			"to": "/forgotPassword"
 			// 		},
 			// 		{
 			// 			"id": 31,
