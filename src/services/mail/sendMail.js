@@ -1,5 +1,6 @@
 
 import request from 'umi-request';
+import { getUser } from '../../config/common';
 import { API_URL, USER_TOKEN } from '../../config/config';
 
 export const sendEmail = async (email, name, caseType) => {
@@ -11,6 +12,8 @@ export const sendEmail = async (email, name, caseType) => {
 
   }
 }
+
+const user = getUser();
 
 const emailSwitch = {
   userCreation: () => {
@@ -73,7 +76,7 @@ const emailSwitch = {
   }
   , deleteDepartment: () => {
     return {
-      subject: 'Department Deleted', body: `We have received your request to delete {name} department. The department has successfully been deleted.
+      subject: 'Department Deleted', body: `We have received your request to delete a department. The department has successfully been deleted.
     If you didn’t initiate this request, please kindly send us a mail. support@hrmaneja.com
     
     Best Regards,
@@ -172,6 +175,17 @@ const emailSwitch = {
   createSupportTicket: () => {
     return {
       subject: 'Support ticket created', body: `We have received your support ticket. Your ticket would be reviewed and an email would be sent to you upon update.
+    Thanks,` };
+  }
+  ,
+  createSupportTicketAdmin: () => {
+    return {
+      subject: 'Support ticket created', body: `You have a new support request from ${user.name} with email ${user.emailAddress}` };
+  }
+  ,remindSupportTicket: () => {
+    const ticketId = localStorage.getItem('ticketId');
+    return {
+      subject: 'Support ticket reminder', body: `We are yet to receive an update on our support ticket: ${ticketId} . 
     Thanks,` };
   }
 

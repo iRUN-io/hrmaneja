@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -14,7 +15,6 @@ import { SUPPORT_MAIL } from '../../../config/config';
 
 const Support = () => {
     const [user, setUser] = useState([]);
-    const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [supports, setSupports] = useState([]);
     const [formState, setFormState] = useState({
@@ -50,10 +50,10 @@ const Support = () => {
         try {
             setFormState({ ...formState });
             const body = {
-                 category: formState.category,
-                 note: formState.note,
-                 company_id: user.company_id,
-                 employee_id: user.employee_id,
+                category: formState.category,
+                note: formState.note,
+                company_id: user.company_id,
+                employee_id: user.employee_id,
             }
             if (body.category === '' || body.note === '') {
                 toast.error('Please fill all the fields');
@@ -75,7 +75,7 @@ const Support = () => {
 
                 if (logActivity.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.createSupportTicket);
-                    sendEmail(SUPPORT_MAIL, user.name, emailCase.createSupportTicket);
+                    sendEmail(SUPPORT_MAIL, 'Customer Support', emailCase.createSupportTicketAdmin);
                     setSupports([...supports, response])
                     toast.success("Support ticket created successfully");
                 }
@@ -89,8 +89,20 @@ const Support = () => {
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
-        // console.log(body)
+
     };
+
+
+    const sendReminderNotification = async (ticketId) => {
+        try {
+            localStorage.setItem('ticketId', ticketId);
+            await sendEmail('godfredakpan@gmail.com', 'Customer Support', emailCase.remindSupportTicket);
+            localStorage.removeItem('ticketId');
+            toast.success("Reminder sent successfully");
+        } catch (err) {
+            toast.error("Error, try again");
+        }
+    }
 
     return (
         <>
@@ -99,10 +111,10 @@ const Support = () => {
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-                            <li className="nav-item">
-                                <Link  className="nav-link active">
-                                    <i className="fa fa-arrow-left"></i>
-                                </Link>
+                                <li className="nav-item">
+                                    <Link className="nav-link active">
+                                        <i className="fa fa-arrow-left"></i>
+                                    </Link>
                                 </li>
                             </ul>
                             <div className="header-action">
@@ -128,36 +140,51 @@ const Support = () => {
                                         </div>
                                     </div>
                                     {supports.length === 0 && !loading ? (
-                                        <EmptyState/>
-                                        ) : (
-                                    <div className="card-body">
-                                        <div className="table-responsive">
+                                        <EmptyState />
+                                    ) : (
+                                        <div className="card-body">
+                                            <div className="table-responsive">
 
-                                            {loading ? (
-                                                <Skeleton count={4} height={50} />
-                                            ) : (
-                                                <table className="table table-striped table-vcenter table-hover mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Category</th>
-                                                            <th>Ticket ID</th>
-                                                            <th>Note</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {supports.map((support) => (
-                                                            <tr key={support._id}>
-                                                                <td><div className="font-15">{support.category}</div></td>
-                                                                <td>{support.ticketId}</td>
-                                                                <td>{support.note}</td>
+                                                {loading ? (
+                                                    <Skeleton count={4} height={50} />
+                                                ) : (
+                                                    <table className="table table-striped table-vcenter table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Category</th>
+                                                                <th>Ticket ID</th>
+                                                                <th>Note</th>
+                                                                <th>Status</th>
+                                                                <th>Action</th>
                                                             </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                             )}
+                                                        </thead>
+                                                        <tbody>
+                                                            {supports.map((support) => (
+                                                                <tr key={support._id}>
+                                                                    <td><div className="font-15">{support.category}</div></td>
+                                                                    <td>{support.ticketId}</td>
+                                                                    <td>{support.note}</td>
+                                                                    <td> {support.status === 'approve' && (
+                                                                        <span className="badge badge-success">completed</span>
+                                                                    )}
+                                                                        {support.status === 'disapprove' && (
+                                                                            <span className="badge badge-danger">closed</span>
+                                                                        )}
+                                                                        {support.status === 'pending' && (
+                                                                            <span className="badge badge-grey">open</span>
+                                                                        )}
+                                                                    </td>
+                                                                    <td> <a href="#" onClick={() => sendReminderNotification(support.ticketId)} className="icon mr-3">
+                                                                        <i className="icon-bell" />
+                                                                    </a></td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                     )}
+                                    )}
                                 </div>
                             </div>
 
@@ -178,7 +205,7 @@ const Support = () => {
                             <div className="row clearfix">
                                 <div className="col-md-12">
                                     <div className="form-group">
-                                    <select name='category' value={formState?.category}
+                                        <select name='category' value={formState?.category}
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Category</option>
                                             <option value={'Feature Update'}>Feature Update</option>
@@ -197,7 +224,7 @@ const Support = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" onClick={createSupportAction}  className="btn btn-primary">Send Ticket</button>
+                            <button type="submit" onClick={createSupportAction} className="btn btn-primary">Send Ticket</button>
                         </div>
                     </div>
                 </div>

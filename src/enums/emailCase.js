@@ -22,5 +22,7 @@ export const emailCase = {
     approveRequisition: 'approveRequisition',
     rejectRequisition:  'rejectRequisition',
     createSupportTicket:'createSupportTicket',
+    remindSupportTicket:'remindSupportTicket',
+    createSupportTicketAdmin:'createSupportTicketAdmin',
 
 }

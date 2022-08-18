@@ -219,7 +219,6 @@ const Leave = () => {
     }, []);
 
 
-
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
