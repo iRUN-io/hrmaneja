@@ -58,6 +58,18 @@ div.rtl{
     border-color: #74b16f!important;
 }
 
+.btn-hrmaneja{
+    background-color: #38e0ca !important;
+    color: white;
+    border-color: #38e0ca!important;
+}
+
+.btn-hrmaneja:hover{
+    background-color: #38e0ca !important;
+    color: white;
+    border-color: #38e0ca!important;
+}
+
 .btn-hrmaneja-success:hover {
     color: #fff !important;
     background-color: #377c71 !important;

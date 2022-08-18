@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -17,6 +17,8 @@ const Support = () => {
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const [supports, setSupports] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [SupportPerPage] = useState(10);
     const [formState, setFormState] = useState({
         category: '',
         note: '',
@@ -104,6 +106,20 @@ const Support = () => {
         }
     }
 
+
+    const indexOfLastSupport = currentPage * SupportPerPage;
+    const indexOfFirstSupport = indexOfLastSupport - SupportPerPage;
+    const currentSupport = supports.slice(indexOfFirstSupport, indexOfLastSupport);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(supports.length / SupportPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
@@ -118,7 +134,7 @@ const Support = () => {
                                 </li>
                             </ul>
                             <div className="header-action">
-                                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
+                                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Create </button>
                             </div>
                         </div>
                     </div>
@@ -159,7 +175,7 @@ const Support = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {supports.map((support) => (
+                                                            {currentSupport.map((support) => (
                                                                 <tr key={support._id}>
                                                                     <td><div className="font-15">{support.category}</div></td>
                                                                     <td>{support.ticketId}</td>
@@ -182,6 +198,23 @@ const Support = () => {
                                                         </tbody>
                                                     </table>
                                                 )}
+                                            </div>
+                                            <div className=''>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul className="pagination justify-content-end">
+                                                        <li className="page-item" style={{ marginRight: '5px' }}>
+                                                            <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+                                                        </li>
+                                                        {pageNumbers.map(number => (
+                                                            <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                            </li>
+                                                        ))}
+                                                        <li className="page-item">
+                                                            <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
                                     )}

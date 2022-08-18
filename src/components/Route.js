@@ -12,7 +12,7 @@ import Expense from './HRMS/Expense/Expense';
 import Report from './HRMS/Report/Report';
 import Accounts from './HRMS/Accounts/Accounts';
 import Excel from './HRMS/Excel/Excel';
-// import ProjectDashboard from './Project/Dashboard/Dashboard';
+import ProjectDashboard from './Project/Dashboard/Dashboard';
 // import ProjectList from './Project/ProjectList/Projectlist';
 // import Taskboard from './Project/Taskboard/Taskboard';
 // import TicketList from './Project/TicketList/TicketList';
@@ -211,13 +211,13 @@ const Routes = [
 
     //project
 
-    // {
-    //     path: "/project-dashboard",
-    //     name: 'projectDashboard',
-    //     exact: true,
-    //     pageTitle: "'Project Dashboard",
-    //     component: ProjectDashboard
-    // },
+    {
+        path: "/project-dashboard",
+        name: 'projectDashboard',
+        exact: true,
+        pageTitle: "'Project Dashboard",
+        component: ProjectDashboard
+    },
     // {
     //     path: "/project-list",
     //     name: 'project-list',
