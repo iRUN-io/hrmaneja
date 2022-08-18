@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 const Activities = () => {
 	const [activities, setActivities] = useState([]);
 	const history = useHistory();
+	
 	useEffect(() => {
 		async function fetchData() {
 			const user = await getUser();
@@ -64,7 +65,6 @@ const Activities = () => {
 														className="collapse p-4 section-gray mt-2"
 														id="collapseExample"
 													>
-
 													</div>
 												</div>
 											</div>
