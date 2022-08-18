@@ -5,7 +5,6 @@ import { getAllUsers, createUser, deleteUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import { getUser, formatDate } from '../../../config/common';
 import EditUsers from './EditUsers';
-import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { Link, useHistory } from 'react-router-dom';
@@ -18,6 +17,8 @@ const Users = (navStatus) => {
 	const [userData, setUserData] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [employees, setEmployees] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+    const [UserPerPage] = useState(10);
 	const [loading, setLoading] = useState(false);
 	const [formState, setFormState] = useState({
 		employeeID: '',
@@ -29,6 +30,8 @@ const Users = (navStatus) => {
 		password: '',
 		confirmPassword: '',
 	});
+
+	
 	const history = useHistory();
 	const createUsersAction = async () => {
 		try {
@@ -58,7 +61,7 @@ const Users = (navStatus) => {
 
 			if (response) {
 
-				const logActivity = await createActivity(
+				const logUser = await createUser(
 					{
 						name: 'Create User',
 						employee_id: currentUser.id,
@@ -69,7 +72,7 @@ const Users = (navStatus) => {
 					}
 				)
 
-				if (logActivity.id) {
+				if (logUser.id) {
 					sendEmail(currentUser.emailAddress, currentUser.name, emailCase.userCreation);
 					setUsers([...users, response])
 					toast.success("User created successfully");
@@ -124,7 +127,7 @@ const Users = (navStatus) => {
 				const newUsers = users.filter(user => user.id !== userId);
 
 				// create activity
-				const logActivity = await createActivity(
+				const logUser = await createUser(
 					{
 						name: 'Delete User',
 						employee_id: currentUser.id,
@@ -135,7 +138,7 @@ const Users = (navStatus) => {
 					}
 				)
 
-				if (logActivity.id) {
+				if (logUser.id) {
 					sendEmail(currentUser.emailAddress, currentUser.name, emailCase.deleteUser);
 					setUsers(newUsers);
 					toast.info(response.message);
@@ -166,6 +169,18 @@ const Users = (navStatus) => {
 		}
 		fetchData();
 	}, []);
+	const indexOfLastUser = currentPage * UserPerPage;
+    const indexOfFirstUser = indexOfLastUser - UserPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(users.length / UserPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
 	return (
 		<>
@@ -212,7 +227,7 @@ const Users = (navStatus) => {
 											</form>
 										</div>
 									</div>
-									{users.length === 0 && !loading ? (
+									{currentPage.length === 0 && !loading ? (
 										<EmptyState/>
 										) : (
 									<div className="card-body">
@@ -233,7 +248,7 @@ const Users = (navStatus) => {
 															</tr>
 														</thead>
 														<tbody>
-															{users.map((user) => (
+															{currentUsers.map((user) => (
 																<tr key={user.id}>
 																	<td className="width45">
 																		<span
@@ -295,6 +310,23 @@ const Users = (navStatus) => {
 													</table>
 												</>
 											)}
+										</div>
+										<div className=''>
+											<nav aria-label="Page navigation example">
+												<ul className="pagination justify-content-end">
+													<li className="page-item" style={{ marginRight: '5px' }}>
+														<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+													</li>
+													{pageNumbers.map(number => (
+														<li key={number} className="page-item" style={{ marginRight: '5px' }}>
+															<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+														</li>
+													))}
+													<li className="page-item">
+														<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+													</li>
+												</ul>
+											</nav>
 										</div>
 									</div>
 										)}

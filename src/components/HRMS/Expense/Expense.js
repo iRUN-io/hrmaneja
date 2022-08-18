@@ -9,18 +9,21 @@ import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
 import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createActivity } from '../../../services/activities';
+
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { approveRequisition, createRequisition, disapproveRequisition, getAllRequisitions } from '../../../services/expense';
 import moment from 'moment';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { getAllDepartments } from '../../../services/department';
+import { createActivity } from '../../../services/activities';
 
 
 function Expense(props) {
 	const [loading, setLoading] = useState(false);
 	const [requisitions, setRequisitions] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+    const [RequisitionsPerPage] = useState(10);
 	const [departments, setDepartments] = useState([]);
 	const [user, setUser] = useState({});
 	const comingSoon = false;
@@ -35,6 +38,8 @@ function Expense(props) {
 		amount: '',
 		department: '',
 	});
+
+	
 	const history = useHistory();
 
 	const makeRequisition = async () => {
@@ -60,7 +65,7 @@ function Expense(props) {
 			const response = await createRequisition(body, user.employee_id);
 
 			if (!response.error) {
-				const logActivity = await createActivity(
+				const logRequisitions = await createActivity(
 					{
 						name: 'Sent Requisition',
 						employee_id: user.employee_id,
@@ -71,7 +76,7 @@ function Expense(props) {
 					}
 				)
 
-				if (logActivity.id) {
+				if (logRequisitions.id) {
 					sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
 					if (body.notifyEmployee) {
 						const notifyEmployee = await getEmployee(body.notifyEmployee);
@@ -148,7 +153,7 @@ function Expense(props) {
 
 			if (!response.error) {
 
-				const logActivity = await createActivity(
+				const logRequisitions = await createActivity(
 					{
 						name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
 						employee_id: user.employee_id,
@@ -159,7 +164,7 @@ function Expense(props) {
 					}
 				)
 
-				if (logActivity.id) {
+				if (logRequisitions.id) {
 					if (type === 'approve') {
 						sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
 						const newRequisitions = requisitions.map(request => {
@@ -201,6 +206,19 @@ function Expense(props) {
 
 	const viewRequisition = (id) => {
         history.push(`/payslip/${id}`);
+    }
+
+	const indexOfLastRequisitions = currentPage * RequisitionsPerPage;
+    const indexOfFirstRequisitions = indexOfLastRequisitions - RequisitionsPerPage;
+    const currentRequisitions = requisitions.slice(indexOfFirstRequisitions, indexOfLastRequisitions);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(requisitions.length / RequisitionsPerPage); i++) {
+        pageNumbers.push(i);
     }
 
 	return (
@@ -286,7 +304,7 @@ function Expense(props) {
 																</thead>
 																<tbody>
 
-																	{requisitions.map((request, index) => (
+																	{currentRequisitions.map((request, index) => (
 																		<tr key={index}>
 																			<td>
 																				<div className="d-flex align-items-center">
@@ -375,6 +393,23 @@ function Expense(props) {
 																</tbody>
 															</table>
 														)}
+												</div>
+												<div className=''>
+													<nav aria-label="Page navigation example">
+														<ul className="pagination justify-content-end">
+															<li className="page-item" style={{ marginRight: '5px' }}>
+																<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+															</li>
+															{pageNumbers.map(number => (
+																<li key={number} className="page-item" style={{ marginRight: '5px' }}>
+																	<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+																</li>
+															))}
+															<li className="page-item">
+																<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+															</li>
+														</ul>
+													</nav>
 												</div>
 											</div>
 										</div>

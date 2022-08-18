@@ -8,7 +8,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
-import { createActivity } from '../../../services/activities';
+// import { createDepartment } from '../../../services/departments';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { Link, useHistory } from 'react-router-dom';
@@ -20,11 +20,27 @@ const Department = () => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [department, setDepartment] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [DepartmentPerPage] = useState(10);
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
         allEmployee: '',
     });
+
+    const indexOfLastDepartment = currentPage * DepartmentPerPage;
+    const indexOfFirstDepartment = indexOfLastDepartment - DepartmentPerPage;
+    const currentDepartment = departments.slice(indexOfFirstDepartment, indexOfLastDepartment);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(departments.length / DepartmentPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
     
 	const history = useHistory();
     const createDepartmentAction = async () => {
@@ -42,7 +58,7 @@ const Department = () => {
             const response = await createDepartment(body, user.employee_id);
 
             if (response.id) {
-                const logActivity = await createActivity(
+                const logDepartment = await createDepartment(
                     {
                         name: 'Create Department',
                         employee_id: user.employee_id,
@@ -53,7 +69,7 @@ const Department = () => {
                     }
                 )
 
-                if (logActivity.id) {
+                if (logDepartment.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
                     setDepartments([...departments, response])
                     toast.success("Department created successfully");
@@ -87,7 +103,7 @@ const Department = () => {
 
             if (response.id) {
                 
-                const logActivity = await createActivity(
+                const logDepartment = await createDepartment(
                     {
                         name: 'Delete Department',
                         employee_id: user.employee_id,
@@ -98,7 +114,7 @@ const Department = () => {
                     }
                 )
            
-            if (logActivity.id) {
+            if (logDepartment.id) {
                 sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
                 const newDepartments = departments.filter(department => department.id !== departmentId);
                 setDepartments(newDepartments);
@@ -204,7 +220,7 @@ const Department = () => {
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {departments.map((department) => (
+                                                        {currentDepartment.map((department) => (
                                                             <tr key={department.id}>
                                                                 {/* <td>0{department.id}</td> */}
                                                                 <td><div className="font-15">{department.name}</div></td>
@@ -235,6 +251,24 @@ const Department = () => {
                                                 </table>
                                             )}
                                         </div>
+                                        <div className=''>
+                                            <nav aria-label="Page navigation example">
+                                                <ul className="pagination justify-content-end">
+                                                    <li className="page-item" style={{ marginRight: '5px' }}>
+                                                        <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+                                                    </li>
+                                                    {pageNumbers.map(number => (
+                                                        <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                            <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                        </li>
+                                                    ))}
+                                                    <li className="page-item">
+                                                        <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+
                                     </div>
                                         )}
                                 </div>

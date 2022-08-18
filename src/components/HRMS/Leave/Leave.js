@@ -7,7 +7,6 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import EditLeaves from './EditLeave';
 import moment from 'moment';
-import { createActivity } from '../../../services/activities';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
@@ -19,6 +18,8 @@ const Leave = () => {
     const [leaves, setLeaves] = useState([]);
     const [user, setUser] = useState([]);
     const [employees, setUsers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [LeavePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
     const [leave, setLeave] = useState([]);
     const [formState, setFormState] = useState({
@@ -30,6 +31,7 @@ const Leave = () => {
         notifyEmployee: '',
         leaveReason: '',
     });
+    
     const history = useHistory();
     useEffect(() => {
         const user = getUser();
@@ -59,7 +61,7 @@ const Leave = () => {
             const response = await createLeave(body, user.employee_id);
 
             if (!response.error) {
-                const logActivity = await createActivity(
+                const logLeave = await createLeave(
                     {
                         name: 'Create Leave',
                         employee_id: user.employee_id,
@@ -70,7 +72,7 @@ const Leave = () => {
                     }
                 )
 
-                if (logActivity.id) {
+                if (logLeave.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.createLeave);
                     if (body.notifyEmployee) {
                         const notifyEmployee = await getEmployee(body.notifyEmployee);
@@ -112,7 +114,7 @@ const Leave = () => {
 
             if (!response.error) {
 
-                const logActivity = await createActivity(
+                const logLeave = await createLeave(
                     {
                         name: 'Delete Leave',
                         employee_id: user.employee_id,
@@ -127,7 +129,7 @@ const Leave = () => {
 
                 toast.info("Leave request deleted successfully");
 
-                if (logActivity.id) {
+                if (logLeave.id) {
                     const newLeaves = leaves.filter(leave => leave.id !== leaveId);
                     setLeaves(newLeaves);
                     sendEmail(user.emailAddress, user.name, emailCase.deleteLeave);
@@ -157,7 +159,7 @@ const Leave = () => {
 
             if (!response.error) {
 
-                const logActivity = await createActivity(
+                const logLeave = await createLeave(
                     {
                         name: type === 'approve' ? 'Approve Leave' : 'Reject Leave',
                         employee_id: user.employee_id,
@@ -168,7 +170,7 @@ const Leave = () => {
                     }
                 )
 
-                if (logActivity.id) {
+                if (logLeave.id) {
                     if (type === 'approve') {
                         sendEmail(user.emailAddress, user.name, emailCase.approveLeave);
                         const newLeaves = leaves.map(leave => {
@@ -218,6 +220,18 @@ const Leave = () => {
 
     }, []);
 
+    const indexOfLastLeave = currentPage * LeavePerPage;
+    const indexOfFirstLeave = indexOfLastLeave - LeavePerPage;
+    const currentLeaves = leaves.slice(indexOfFirstLeave, indexOfLastLeave);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(leaves.length / LeavePerPage); i++) {
+        pageNumbers.push(i);
+    }
 
     return (
         <>
@@ -272,7 +286,7 @@ const Leave = () => {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {leaves.map((leave) => (
+                                                            {currentLeaves.map((leave) => (
                                                                 <tr key={leave.id}>
                                                                     <td className="width45">
                                                                         <span
@@ -280,7 +294,7 @@ const Leave = () => {
                                                                             data-toggle="tooltip"
                                                                             title="Avatar Name"
                                                                         >
-                                                                            {leave.employee.charAt(0).toUpperCase()}
+                                                                            {leave.employee?.charAt(0).toUpperCase()}
                                                                         </span>
                                                                     </td>
                                                                     <td>
@@ -357,6 +371,23 @@ const Leave = () => {
                                                         </tbody>
                                                     </table>
                                                 )}
+                                            </div>
+                                            <div className=''>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul className="pagination justify-content-end">
+                                                        <li className="page-item" style={{ marginRight: '5px' }}>
+                                                            <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+                                                        </li>
+                                                        {pageNumbers.map(number => (
+                                                            <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                            </li>
+                                                        ))}
+                                                        <li className="page-item">
+                                                            <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
                                             </div>
                                         </div>
                                     )}

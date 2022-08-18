@@ -199,6 +199,7 @@ const Support = () => {
                                                     </table>
                                                 )}
                                             </div>
+                                            {/* pagination here */}
                                             <div className=''>
                                                 <nav aria-label="Page navigation example">
                                                     <ul className="pagination justify-content-end">

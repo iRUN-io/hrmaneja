@@ -18,6 +18,8 @@ function Profile(props) {
     const [user, setUser] = useState({});
     const [employee, setEmployee] = useState({});
     const [activity, setActivity] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ActivityPerPage] = useState(10);
     const [myTeamMembers, setTeamMembers] = useState([]);
     const [myTotalLeaves, setTotalLeaves] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -89,6 +91,20 @@ function Profile(props) {
             [name]: value
         });
     };
+
+    const indexOfLastActivity = currentPage * ActivityPerPage;
+    const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
+    const currentActivity = activity.slice(indexOfFirstActivity, indexOfLastActivity);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(activity.length / ActivityPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
 
 
     return (
@@ -165,7 +181,7 @@ function Profile(props) {
                                                     </div>
                                                 </div>
                                                 <div className="card-body">
-                                                    {activity.map((activity, index) => (
+                                                    {currentActivity.map((activity, index) => (
                                                         <div className="timeline_item " key={index}>
                                                             <img className="tl_avatar" src="../assets/images/xs/avatar1.jpg" alt="fake_url" />
                                                             <span><a href="fake_url;">{activity.name}</a>  <small className="float-right text-right">{moment(activity.created_at).format('MMMM Do YYYY, h:mm:ss a')}</small></span>
@@ -195,6 +211,23 @@ function Profile(props) {
                                                             </div>
                                                         </div>
                                                     ))}
+                                                </div>
+                                                <div className=''>
+                                                    <nav aria-label="Page navigation example">
+                                                        <ul className="pagination justify-content-end">
+                                                            <li className="page-item" style={{ marginRight: '5px' }}>
+                                                                <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+                                                            </li>
+                                                            {pageNumbers.map(number => (
+                                                                <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                    <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                                </li>
+                                                            ))}
+                                                            <li className="page-item">
+                                                                <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
                                                 </div>
                                             </div>
                                         </div>

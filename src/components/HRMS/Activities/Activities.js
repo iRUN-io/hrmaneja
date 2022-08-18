@@ -6,7 +6,10 @@ import { Link, useHistory } from 'react-router-dom';
 const Activities = () => {
 	const [activities, setActivities] = useState([]);
 	const history = useHistory();
+	const [currentPage, setCurrentPage] = useState(1);
+    const [ActivityPerPage] = useState(10);
 	useEffect(() => {
+
 		async function fetchData() {
 			const user = await getUser();
 			if (user) {
@@ -17,6 +20,20 @@ const Activities = () => {
 		}
 		fetchData();
 	}, []);
+
+	
+    const indexOfLastActivity = currentPage * ActivityPerPage;
+    const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
+    const currentActivity = activities.slice(indexOfFirstActivity, indexOfLastActivity);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(activities.length / ActivityPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
 	return (
 		<>
@@ -39,7 +56,7 @@ const Activities = () => {
 										<h3 className="card-title">Timeline Activity</h3>
 									</div>
 									<div className="card-body">
-										{activities.map((activity) => (
+										{currentActivity.map((activity) => (
 											<div key={activity.id} className="timeline_item ">
 												<img
 													className="tl_avatar"
@@ -69,8 +86,25 @@ const Activities = () => {
 												</div>
 											</div>
 										))}
-
+										<div className=''>
+											<nav aria-label="Page navigation example">
+												<ul className="pagination justify-content-end">
+													<li className="page-item" style={{ marginRight: '5px' }}>
+														<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+													</li>
+													{pageNumbers.map(number => (
+														<li key={number} className="page-item" style={{ marginRight: '5px' }}>
+															<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+														</li>
+													))}
+													<li className="page-item">
+														<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+													</li>
+												</ul>
+											</nav>
+										</div>
 									</div>
+									
 								</div>
 							</div>
 						</div>

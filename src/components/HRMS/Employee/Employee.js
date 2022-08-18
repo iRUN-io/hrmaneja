@@ -15,7 +15,6 @@ import { getAllDepartments } from "../../../services/department";
 import "react-loading-skeleton/dist/skeleton.css";
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditEmployee from "./EditEmployee";
-import { createActivity } from "../../../services/activities";
 import { sendEmail } from "../../../services/mail/sendMail";
 import { emailCase } from "../../../enums/emailCase";
 import Skeleton from "react-loading-skeleton";
@@ -33,9 +32,12 @@ export const getEmployeeById = (employeeId) => {
 };
 
 function Employee(props) {
+
   const { fixNavbar } = props;
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [EmployeePerPage] = useState(10);
   const [user, setUser] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +67,18 @@ function Employee(props) {
     start_date: ""
   });
 
+  const indexOfLastEmployee = currentPage * EmployeePerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - EmployeePerPage;
+  const currentEmployee = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
 
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const nextPage = () => setCurrentPage(currentPage + 1);
+  const prevPage = () => setCurrentPage(currentPage - 1);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(employees.length / EmployeePerPage); i++) {
+      pageNumbers.push(i);
+  }
 
   const createEmployeeAction = async () => {
     try {
@@ -104,7 +117,7 @@ function Employee(props) {
 
       if (response.id) {
         setEmployees([...employees, response])
-        const logActivity = await createActivity(
+        const logEmployee = await createEmployee(
           {
             name: 'Create Employee',
             employee_id: user.employee_id,
@@ -115,7 +128,7 @@ function Employee(props) {
           }
         )
 
-        if (logActivity.id) {
+        if (logEmployee.id) {
           setEmployees([...employees, response])
           sendEmail(user.emailAddress, user.name, emailCase.createEmployee)
           toast.success("Employee created successfully");
@@ -177,7 +190,7 @@ function Employee(props) {
       const response = await deleteEmployee(employeeID);
 
       if (response.message) {
-        const logActivity = await createActivity(
+        const logEmployee = await createEmployee(
           { 
             name: 'Delete Employee',
             employee_id: user.employee_id,
@@ -187,7 +200,7 @@ function Employee(props) {
             company_id: user.company_id
           }
         )
-        if (logActivity.id) {
+        if (logEmployee.id) {
           const newEmployees = employees.filter(employee => employee.id !== employeeID);
           sendEmail(user.emailAddress, user.name, emailCase.deleteEmployee)
           setEmployees(newEmployees);
@@ -281,7 +294,7 @@ function Employee(props) {
                               </tr>
                             </thead>
                             <tbody>
-                              {employees.map((employee, index) => (
+                              {currentEmployee.map((employee, index) => (
                                 <tr key={index}>
                                   <td className="w40">
                                     <label className="custom-control custom-checkbox">
@@ -365,6 +378,23 @@ function Employee(props) {
                           </table>
                         </>
                          )}
+                      </div>
+                      <div className=''>
+                        <nav aria-label="Page navigation example">
+                          <ul className="pagination justify-content-end">
+                            <li className="page-item" style={{ marginRight: '5px' }}>
+                              <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+                            </li>
+                            {pageNumbers.map(number => (
+                              <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                              </li>
+                            ))}
+                            <li className="page-item">
+                              <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+                            </li>
+                          </ul>
+                        </nav>
                       </div>
                     </div>
                     )}

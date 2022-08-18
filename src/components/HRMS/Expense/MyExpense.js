@@ -21,6 +21,8 @@ import { getAllDepartments } from '../../../services/department';
 function Expense(props) {
 	const [loading, setLoading] = useState(false);
 	const [requisitions, setRequisitions] = useState([]);
+	const [currentPage, setCurrentPage] = useState(1);
+    const [RequisitionsPerPage] = useState(10);
 	const [user, setUser] = useState({});
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
@@ -129,6 +131,18 @@ function Expense(props) {
 			[name]: value,
 		});
 	};
+	const indexOfLastRequisitions = currentPage * RequisitionsPerPage;
+    const indexOfFirstRequisitions = indexOfLastRequisitions - RequisitionsPerPage;
+    const currentRequisitions = requisitions.slice(indexOfFirstRequisitions, indexOfLastRequisitions);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(requisitions.length / RequisitionsPerPage); i++) {
+        pageNumbers.push(i);
+    }
 
 
 	return (
@@ -231,6 +245,23 @@ function Expense(props) {
 																</tbody>
 															</table>
 														)}
+												</div>
+												<div className=''>
+													<nav aria-label="Page navigation example">
+														<ul className="pagination justify-content-end">
+															<li className="page-item" style={{ marginRight: '5px' }}>
+																<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}>Previous</button>
+															</li>
+															{pageNumbers.map(number => (
+																<li key={number} className="page-item" style={{ marginRight: '5px' }}>
+																	<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+																</li>
+															))}
+															<li className="page-item">
+																<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}>Next</button>
+															</li>
+														</ul>
+													</nav>
 												</div>
 											</div>
 										</div>
