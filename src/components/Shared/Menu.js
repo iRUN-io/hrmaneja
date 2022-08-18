@@ -76,6 +76,7 @@ class Menu extends Component {
 			childlink: null,
 			activityLogs: [],
 			user: [],
+			activityChecked: false,
 		};
 	}
 
@@ -229,6 +230,9 @@ class Menu extends Component {
 			const company_id = user.company_id;
 			const getActivity = await getAllActivities(company_id);
 			this.setState({
+				activityChecked: true,
+				});
+			this.setState({
 				activityLogs: getActivity,
 			});
 		}
@@ -244,7 +248,7 @@ class Menu extends Component {
 	}
 
 	render() {
-		if (this.state.activityLogs.length === 0) {
+		if (this.state.activityLogs.length === 0 && this.state.activityChecked === false) {
 			this.getActivity();
 		}
 		if (this.state.user.length === 0) {

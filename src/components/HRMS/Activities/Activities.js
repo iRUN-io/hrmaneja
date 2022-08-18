@@ -7,7 +7,8 @@ const Activities = () => {
 	const [activities, setActivities] = useState([]);
 	const history = useHistory();
 	const [currentPage, setCurrentPage] = useState(1);
-    const [ActivityPerPage] = useState(10);
+  const [ActivityPerPage] = useState(10);
+
 	useEffect(() => {
 
 		async function fetchData() {
@@ -81,7 +82,6 @@ const Activities = () => {
 														className="collapse p-4 section-gray mt-2"
 														id="collapseExample"
 													>
-
 													</div>
 												</div>
 											</div>
