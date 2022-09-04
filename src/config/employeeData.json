@@ -1,0 +1,43 @@
+
+[
+    {
+        "firstname": "Frank",
+        "name": "Frank Remmy",
+        "lastname": "Remmy",
+        "email": "Remmyjuice@gmail.com",
+        "emailId": 1234,
+        "id": 1234,
+        "role": "Software Engineer",
+        "username": "Godfredo",
+        "phone": 2349063843098,
+        "start_date": "24th July, 2014"
+
+    },
+    {
+        "firstname": "Ani",
+        "name": "Ani Udom",
+        "lastname": "Udom",
+        "email": "Remmyjuice@gmail.com",
+        "emailId": 1234,
+        "id": 1234,
+        "role": "Software Engineer",
+        "username": "Godfredo",
+        "gender": "male",
+        "phone": 2349063843098,
+        "start_date": "24th July, 2014"
+
+    } ,
+    {
+        "firstname": "Ani",
+        "name": "Ani Udom",
+        "lastname": "Udom",
+        "email": "Remmyjuice@gmail.com",
+        "emailId": 1234,
+        "id": 1234,
+        "role": "Software Engineer",
+        "username": "Godfredo",
+        "phone": 2349063843098,
+        "start_date": "24th July, 2014"
+
+    }  
+]

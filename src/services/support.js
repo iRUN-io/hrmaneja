@@ -1,9 +1,29 @@
 import request from 'umi-request';
-import { API_URL } from '../config/config';
+import { API_URL, USER_TOKEN } from '../config/config';
 
+export async function getAllSupports(COMPANY_ID) {
+  return request(`${API_URL}/supports/${COMPANY_ID}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+  });
+}
 
-export async function createSession(body, userId) {
-  return request(`${API_URL}/demos/create`, {
+export async function getEmployeeSupport(employeeId) {
+    return request(`${API_URL}/supports/employee/${employeeId}`, {
+      method: 'get',
+      headers: {
+         'Content-Type': 'application/json',
+         'Authorization': USER_TOKEN,
+      },
+    });
+  }
+
+export async function createSupport(body, userId) {
+  return request(`${API_URL}/supports/create`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json',
@@ -14,16 +34,16 @@ export async function createSession(body, userId) {
   });
 }
 
-export async function subscribe(body) {
-  return request(`${API_URL}/subscribtion/create`, { // should pss to body of email in params ?
-    method: 'post',
+export async function updateSupport(body, leaveId) {
+  return request(`${API_URL}/supports/update/${leaveId}`, {
+    method: 'put',
     headers: {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });
 }
+
 
 

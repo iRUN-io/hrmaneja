@@ -1,0 +1,31 @@
+
+[
+    {
+        "avatar": "GA",
+        "name": "Godfred Archer",
+        "email": "godfred@gmail.com",
+        "emailId": 1234,
+        "employeeID": 1234,
+        "roleType": "Software Engineer",
+        "username": "Godfredo",
+        "password": 1234,
+        "confirmPassword": 1234,
+        "phone": 2349063843098,
+        "date": "24th July, 2014"
+
+    },
+    {
+        "avatar": "FA",
+        "name": "Felicity Essien",
+        "email": "felz@gmail.com",
+        "emailId": 1234,
+        "employeeID": 1234,
+        "roleType": "Junior FRontend developer",
+        "username": "felz",
+        "password": 1234,
+        "confirmPassword": 1234,
+        "phone": 2349063843098,
+        "date": "24th July, 2014"
+
+    }  
+]
