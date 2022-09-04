@@ -369,6 +369,9 @@ body {
     .pageof{
       margin: 0 2rem 0 2rem;
     }
+    .upgrade-button{
+      margin-top: 10px !important;
+  }
   }
   
   /* Small devices (portrait tablets and large phones, 600px and up) */
@@ -538,7 +541,6 @@ body {
     height: 150px;
   }
 
-  /* loader */
   .upgrade-button{
     margin-top: 60px;
 }
