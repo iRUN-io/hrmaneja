@@ -218,6 +218,9 @@ class Subscribe extends React.Component {
               if (logBilling.id) {
                   sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
                   toast.success("Payment Successful");
+                  setTimeout(() => {
+                  window.location.reload();
+                  }, 2000);
                   closePaymentModal()
               }
 
