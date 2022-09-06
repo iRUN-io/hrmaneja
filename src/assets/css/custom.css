@@ -714,7 +714,7 @@ input[type="range"]::-moz-focus-outer {
 }
 .pricing-item-features-list li {
   margin-bottom: 0;
-  padding: 14px 0;
+  padding: 10px 0;
   position: relative;
   display: flex;
   align-items: center;
@@ -734,7 +734,7 @@ input[type="range"]::-moz-focus-outer {
   display: block;
   width: 24px;
   height: 24px;
-  margin-right: 12px;
+  margin-right: 15px;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%2011h14v2H5z%22%20fill%3D%22%239298B8%22%20fill-rule%3D%22nonzero%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   -webkit-box-ordinal-group: 0;
