@@ -2,6 +2,11 @@
 import React from "react";
 import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
 import { getUser } from "../../config/common";
+import { toast } from "material-react-toastify";
+import { createBilling } from "../../services/billing";
+import { createActivity } from "../../services/activities";
+import { sendEmail } from "../../services/mail/sendMail";
+import { emailCase } from "../../enums/emailCase";
 
 class Subscribe extends React.Component {
   state = {
@@ -182,8 +187,43 @@ class Subscribe extends React.Component {
     const fwConfig = {
       ...config,
       text: 'Subscribe',
-      callback: (response) => {
-         console.log(response);
+      callback: async (response) => {
+         if (response.status === 'successful') {
+            const body = {
+              amount: response.amount,
+              paidBy: user.id,
+              company_id: user.company_id,
+              plan: 'plan1',
+              expiryDate: new Date().setMonth(new Date().getMonth() + 1),
+              status: 'active',
+          }
+          if (body.amount === '') {
+              toast.error('Please select a plan');
+              return;
+          }
+          const billing = await createBilling(body, user.employee_id);
+
+          if (billing.data.id) {
+              const logBilling = await createActivity(
+                  {
+                      name: 'Paid for subscription' + 'with amount' + response.amount,
+                      employee_id: user.employee_id,
+                      activity: `${user.name} Paid for subscription`,
+                      activity_name: 'Paid for subscription',
+                      user: user.name,
+                      company_id: user.company_id,
+                  }
+              )
+
+              if (logBilling.id) {
+                  sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
+                  toast.success("Payment Successful");
+                  closePaymentModal()
+              }
+
+          }
+            // this.props.history.push('/dashboard');
+         }
         closePaymentModal() // this will close the modal programmatically
       },
       onClose: () => {},

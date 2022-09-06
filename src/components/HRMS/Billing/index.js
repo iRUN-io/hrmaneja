@@ -23,9 +23,9 @@ const Billing = () => {
 				const response = await getAllBillings(company_id);
 				const currentMonth = new Date().getMonth();
 				const currentYear = new Date().getFullYear();
-				if (response?.data?.length > 0) {
-					const billingMonth = new Date(response[0]?.created_at).getMonth();
-					const billingYear = new Date(response[0]?.created_at).getFullYear();
+				if (response?.length > 0) {
+					const billingMonth = new Date(response[0]?.createdAt).getMonth();
+					const billingYear = new Date(response[0]?.createdAt).getFullYear();
 					if (currentMonth === billingMonth && currentYear === billingYear) {
 						setBillingExists(true);
 					}
