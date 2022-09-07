@@ -27,7 +27,7 @@ function Payroll(props) {
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
     const [EmployeesPerPage] = useState(10);
-	const comingSoon = true;
+	const comingSoon = false;
     const history = useHistory();
 
 	useEffect(() => {

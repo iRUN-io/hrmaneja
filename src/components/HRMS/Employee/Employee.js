@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
 import {
   statisticsAction,
@@ -6,7 +6,7 @@ import {
 } from "../../../actions/settingsAction";
 import { getAllEmployees, createEmployee, deleteEmployee } from "../../../services/employee";
 import { getCompanyData, getUser } from "../../../config/common";
-import {  toast } from "material-react-toastify";
+import { toast } from "material-react-toastify";
 //import "react-toastify/dist/ReactToastify.css";
 import EmployeeCounter from "./EmployeeCounter";
 import Currency from "../../common/currency";
@@ -41,9 +41,10 @@ function Employee(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [EmployeePerPage] = useState(10);
   const [user, setUser] = useState([]);
+  const [searchEmployee, setSearchEmployee] = useState('');
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(false);
-	const [featureEnabled, setFeatureEnabled] = useState(false);
+  const [featureEnabled, setFeatureEnabled] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
     email: "",
@@ -70,25 +71,13 @@ function Employee(props) {
     start_date: ""
   });
 
-  const indexOfLastEmployee = currentPage * EmployeePerPage;
-  const indexOfFirstEmployee = indexOfLastEmployee - EmployeePerPage;
-  const currentEmployee = employees.slice(indexOfFirstEmployee, indexOfLastEmployee);
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage(currentPage + 1);
-  const prevPage = () => setCurrentPage(currentPage - 1);
-
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(employees.length / EmployeePerPage); i++) {
-      pageNumbers.push(i);
-  }
 
   const createEmployeeAction = async () => {
     try {
       if (!featureEnabled) {
         toast.error('Feature not enabled');
         return;
-    }
+      }
       setFormState({ ...formState });
       const body = {
         name: formState.name,
@@ -116,7 +105,7 @@ function Employee(props) {
         start_date: formState.start_date
       };
 
-      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.line_manager === "" || body.department === "" ) {
+      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.line_manager === "" || body.department === "") {
         toast.error("Please fill all the fields");
         console.log(body);
         return;
@@ -198,12 +187,12 @@ function Employee(props) {
       if (!featureEnabled) {
         toast.error('Feature not enabled');
         return;
-    }
+      }
       const response = await deleteEmployee(employeeID);
 
       if (response.message) {
         const logEmployee = await createActivity(
-          { 
+          {
             name: 'Delete Employee',
             employee_id: user.employee_id,
             activity: `${user.name} deleted an employee with id; ${employeeID}`,
@@ -234,7 +223,7 @@ function Employee(props) {
       if (user) {
         const company_id = user.company_id;
         const companyData = await getCompanyData();
-				companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+        companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
         const departmentResponse = await getAllDepartments(company_id);
         const response = await getAllEmployees(company_id);
         setDepartments(departmentResponse);
@@ -246,10 +235,48 @@ function Employee(props) {
     fetchData();
   }, []);
 
+
+  const setSearch = (e) => {
+    const { value } = e.target;
+    setSearchEmployee(value);
+  };
+
+  const getEmployeeBySearchQuery = (
+    employees,
+    searchQuery,
+  ) => {
+    return employees.filter(employee =>
+      employee.name.toLowerCase().includes(searchQuery.toLowerCase()),
+    );
+  };
+
+  const allEmployeesArray = useMemo(() => {
+    let allEmployees = employees;
+    if (searchEmployee) {
+      allEmployees = getEmployeeBySearchQuery(allEmployees, searchEmployee);
+    }
+
+    return allEmployees || [];
+  }, [employees, searchEmployee]);
+
+
+  
+  const indexOfLastEmployee = currentPage * EmployeePerPage;
+  const indexOfFirstEmployee = indexOfLastEmployee - EmployeePerPage;
+  const currentEmployee = allEmployeesArray.slice(indexOfFirstEmployee, indexOfLastEmployee);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const nextPage = () => setCurrentPage(currentPage + 1);
+  const prevPage = () => setCurrentPage(currentPage - 1);
+
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(allEmployeesArray.length / EmployeePerPage); i++) {
+    pageNumbers.push(i);
+  }
+
   if (!featureEnabled && !loading) {
     return <FeatureNotAvailable />
-}
-
+  }
   return (
     <>
       <div>
@@ -276,6 +303,8 @@ function Employee(props) {
                               type="text"
                               className="form-control form-control-sm"
                               placeholder="Search Employee..."
+                              onChange={setSearch}
+                              value={searchEmployee}
                               name="s"
                             />
                             <span className="input-group-btn ml-2">
@@ -290,75 +319,75 @@ function Employee(props) {
                         </form>
                       </div>
                     </div>
-                    {employees.length === 0 && !loading ? (
-                      <EmptyState/>
+                    {allEmployeesArray.length === 0 && !loading ? (
+                      <EmptyState />
                     ) : (
-                    <div className="card-body">
-                      <div className="table-responsive">
-                        {loading ? (
-                          <Skeleton count={4} height={50} />
-                        ) : (
-                        <>
-                          <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
-                            <thead>
-                              <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                {/* <th>Employee ID</th> */}
-                                <th>Phone</th>
-                                <th>Join Date</th>
-                                <th>Role</th>
-                                <th>Action</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {currentEmployee.map((employee, index) => (
-                                <tr key={index}>
-                                  <td className="w40">
-                                    <label className="custom-control custom-checkbox">
-                                      <input
-                                        type="checkbox"
-                                        className="custom-control-input"
-                                        name="example-checkbox1"
-                                        defaultValue="option1"
-                                      />
-                                      <span className="custom-control-label">
-                                        &nbsp;
-                                      </span>
-                                    </label>
-                                  </td>
-                                  <td className="d-flex">
-                                    <span
-                                      className="avatar avatar-blue"
-                                      data-toggle="tooltip"
-                                      data-original-title="Avatar Name"
-                                    >
+                      <div className="card-body">
+                        <div className="table-responsive">
+                          {loading ? (
+                            <Skeleton count={4} height={50} />
+                          ) : (
+                            <>
+                              <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                <thead>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    {/* <th>Employee ID</th> */}
+                                    <th>Phone</th>
+                                    <th>Join Date</th>
+                                    <th>Role</th>
+                                    <th>Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {currentEmployee.map((employee, index) => (
+                                    <tr key={index}>
+                                      <td className="w40">
+                                        <label className="custom-control custom-checkbox">
+                                          <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            name="example-checkbox1"
+                                            defaultValue="option1"
+                                          />
+                                          <span className="custom-control-label">
+                                            &nbsp;
+                                          </span>
+                                        </label>
+                                      </td>
+                                      <td className="d-flex">
+                                        <span
+                                          className="avatar avatar-blue"
+                                          data-toggle="tooltip"
+                                          data-original-title="Avatar Name"
+                                        >
 
-                                      {(
-                                        employee?.name[0] + employee?.name[1]
-                                      ).toUpperCase()}
-                                    </span>
-                                    <div className="ml-3">
-                                      <h6 className="mb-0">
+                                          {(
+                                            employee?.name[0] + employee?.name[1]
+                                          ).toUpperCase()}
+                                        </span>
+                                        <div className="ml-3">
+                                          <h6 className="mb-0">
 
-                                        {employee?.name}
-                                      </h6>
-                                      <span className="text-muted">
+                                            {employee?.name}
+                                          </h6>
+                                          <span className="text-muted">
 
-                                        {employee?.email}
-                                      </span>
-                                    </div>
-                                  </td>
-                                  {/* <td>
+                                            {employee?.email}
+                                          </span>
+                                        </div>
+                                      </td>
+                                      {/* <td>
                                     <span>{employee?.id}</span>
                                   </td> */}
-                                  <td>
-                                    <span>{employee?.phone}</span>
-                                  </td>
-                                  <td>{employee?.start_date}</td>
-                                  <td>{employee?.role}</td>
-                                  <td>
-                                    {/* <button
+                                      <td>
+                                        <span>{employee?.phone}</span>
+                                      </td>
+                                      <td>{employee?.start_date}</td>
+                                      <td>{employee?.role}</td>
+                                      <td>
+                                        {/* <button
                                       type="button"
                                       className="btn btn-icon btn-sm"
                                       title="View"
@@ -366,55 +395,55 @@ function Employee(props) {
                                     >
                                       <i className="fa fa-eye" />
                                     </button> */}
-                                    <button
-                                      onClick={() => setEmployee(employee)}
-                                      data-toggle="modal" data-target="#editModal"
-                                      type="button"
-                                      className="btn btn-icon btn-sm"
-                                      title="Edit"
-                                    >
-                                      <i className="fa fa-edit" />
-                                    </button>
-                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                      overlay={
-                                        <Popover id="popover-basic">
-                                          <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                          <Popover.Body>
-                                            <div className="clearfix" >
-                                              <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                              <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                            </div>
-                                          </Popover.Body>
-                                        </Popover>
-                                      }>
-                                      <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                    </OverlayTrigger>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </>
-                         )}
-                      </div>
-                      <div className=''>
-                        <nav aria-label="Page navigation example">
-                          <ul className="pagination justify-content-end">
-                            <li className="page-item" style={{ marginRight: '5px' }}>
-                              <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
-                            </li>
-                            {pageNumbers.map(number => (
-                              <li key={number} className="page-item" style={{ marginRight: '5px' }}>
-                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                        <button
+                                          onClick={() => setEmployee(employee)}
+                                          data-toggle="modal" data-target="#editModal"
+                                          type="button"
+                                          className="btn btn-icon btn-sm"
+                                          title="Edit"
+                                        >
+                                          <i className="fa fa-edit" />
+                                        </button>
+                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                          overlay={
+                                            <Popover id="popover-basic">
+                                              <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                              <Popover.Body>
+                                                <div className="clearfix" >
+                                                  <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                  <button style={{ margin: '10px' }} onClick={() => removeEmployee(employee.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                </div>
+                                              </Popover.Body>
+                                            </Popover>
+                                          }>
+                                          <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                        </OverlayTrigger>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </>
+                          )}
+                        </div>
+                        <div className=''>
+                          <nav aria-label="Page navigation example">
+                            <ul className="pagination justify-content-end">
+                              <li className="page-item" style={{ marginRight: '5px' }}>
+                                <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
                               </li>
-                            ))}
-                            <li className="page-item">
-                              <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
-                            </li>
-                          </ul>
-                        </nav>
+                              {pageNumbers.map(number => (
+                                <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                  <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                </li>
+                              ))}
+                              <li className="page-item">
+                                <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
                       </div>
-                    </div>
                     )}
                   </div>
                 </div>
@@ -454,7 +483,7 @@ function Employee(props) {
               <br />
               <div className="row clearfix">
                 <div className="col-md-6 col-sm-6">
-                  <label style={{fontSize: '12px'}}>Name</label>
+                  <label style={{ fontSize: '12px' }}>Name</label>
                   <div className="form-group">
                     <input
                       type="text"
@@ -469,7 +498,7 @@ function Employee(props) {
                 </div>
 
                 <div className="col-md-6 col-sm-6">
-                  <label style={{fontSize: '12px'}}>Phone</label>
+                  <label style={{ fontSize: '12px' }}>Phone</label>
                   <div className="form-group">
                     <input
                       type="number"
@@ -484,7 +513,7 @@ function Employee(props) {
                 </div>
 
                 <div className="col-md-6 col-sm-6">
-                  <label style={{fontSize: '12px'}}>Gender</label>
+                  <label style={{ fontSize: '12px' }}>Gender</label>
                   <div className="form-group">
                     <select
                       className="form-control"
@@ -502,7 +531,7 @@ function Employee(props) {
 
                 <div className="col-md-6 col-sm-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Email</label>
+                    <label style={{ fontSize: '12px' }}>Email</label>
                     <input
                       type="text"
                       name="email"
@@ -515,7 +544,7 @@ function Employee(props) {
                 </div>
 
                 <div className="col-md-12 col-sm-12">
-                  <label style={{fontSize: '12px'}}>Address</label>
+                  <label style={{ fontSize: '12px' }}>Address</label>
                   <div className="form-group">
                     <input
                       type="text"
@@ -537,7 +566,7 @@ function Employee(props) {
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Salary</label>
+                    <label style={{ fontSize: '12px' }}>Salary</label>
                     <input
                       type="number"
                       name="salary"
@@ -551,7 +580,7 @@ function Employee(props) {
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Salary Currency</label>
+                    <label style={{ fontSize: '12px' }}>Salary Currency</label>
                     <select
                       className="form-control"
                       name="currency"
@@ -565,7 +594,7 @@ function Employee(props) {
                 </div>
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Department</label>
+                    <label style={{ fontSize: '12px' }}>Department</label>
                     <select
                       onChange={updateForm}
                       value={formState?.department}
@@ -585,7 +614,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Line Manager</label>
+                    <label style={{ fontSize: '12px' }}>Line Manager</label>
                     <select
                       onChange={updateForm}
                       value={formState?.line_manager}
@@ -605,7 +634,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Start Date</label>
+                    <label style={{ fontSize: '12px' }}>Start Date</label>
                     <input
                       type="date"
                       name="start_date"
@@ -620,7 +649,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Employment Type</label>
+                    <label style={{ fontSize: '12px' }}>Employment Type</label>
                     <input
                       type="text"
                       name="employment_type"
@@ -635,7 +664,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Salary Frequency</label>
+                    <label style={{ fontSize: '12px' }}>Salary Frequency</label>
 
                     <input
                       type="text"
@@ -652,7 +681,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Salary Start Date</label>
+                    <label style={{ fontSize: '12px' }}>Salary Start Date</label>
                     <input
                       type="date"
                       name="salary_start_date"
@@ -667,7 +696,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Date of Birth</label>
+                    <label style={{ fontSize: '12px' }}>Date of Birth</label>
                     <input
                       type="date"
                       name="dob"
@@ -682,7 +711,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Country</label>
+                    <label style={{ fontSize: '12px' }}>Country</label>
                     <select
                       className="form-control"
                       name="country"
@@ -696,7 +725,7 @@ function Employee(props) {
                 </div>
 
                 <div className="col-md-6 col-sm-6">
-                  <label style={{fontSize: '12px'}}>Role</label>
+                  <label style={{ fontSize: '12px' }}>Role</label>
                   <div className="form-group">
                     <input
                       type="text"
@@ -718,7 +747,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Bank Name</label>
+                    <label style={{ fontSize: '12px' }}>Bank Name</label>
                     <input
                       type="text"
                       name="bank_name"
@@ -733,7 +762,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Bank Account Number</label>
+                    <label style={{ fontSize: '12px' }}>Bank Account Number</label>
                     <input
                       type="text"
                       name="bank_account_number"
@@ -748,7 +777,7 @@ function Employee(props) {
 
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
-                    <label style={{fontSize: '12px'}}>Bank Account Name</label>
+                    <label style={{ fontSize: '12px' }}>Bank Account Name</label>
                     <input
                       type="text"
                       name="bank_account_name"
@@ -775,7 +804,7 @@ function Employee(props) {
                 className="btn btn-primary"
                 onClick={() => createEmployeeAction()}
               >
-                Add 
+                Add
               </button>
             </div>
           </div>

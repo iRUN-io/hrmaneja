@@ -17,6 +17,7 @@ import {  getAllPayrolls } from '../../../services/payroll';
 // import { sendEmail } from '../../../services/mail/sendMail';
 // import { emailCase } from '../../../enums/emailCase';
 import EmptyState from '../../EmptyState';
+import moment from 'moment';
 
 
 function PastPayroll(props) {
@@ -28,7 +29,7 @@ function PastPayroll(props) {
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
     const [PayrollPerPage] = useState(10);
-	const comingSoon = true;
+	const comingSoon = false;
     const history = useHistory();
 
 	useEffect(() => {
@@ -138,6 +139,7 @@ function PastPayroll(props) {
 																		<th className="w200">Departments</th>
 																		<th className="w60">Employees</th>
 																		<th className="w60">Status</th>
+																		<th className="w60">Date Initiated</th>
 																		<th className="w200">Action</th>
 																	</tr>
 																</thead>
@@ -165,6 +167,9 @@ function PastPayroll(props) {
 
 																			<td>
 																				<span className="tag tag-success ml-0 mr-0">{payroll.status}</span>
+																			</td>
+																			<td>
+																				<span>{moment(payroll.createdAt).format('MMM Do YYYY')}</span>
 																			</td>
 																			<td>
 																				<button
