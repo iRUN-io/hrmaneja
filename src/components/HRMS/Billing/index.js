@@ -84,10 +84,10 @@ const Billing = () => {
 										</div>
 									</div>
 									<div className="col-6 col-md-4 col-xl-6">
-										<div className="card  more-cards card-white">
+										<div className="card next-plan-card  more-cards card-white">
 											<div className="card-body">
-												<div className='card-icon card-icon-yellow' style={{ float: 'right' }}>
-													<h5 className="mb-0 font-weight-bold" style={{ color: 'gold' }}><i className='fe fe-credit-card'></i></h5>
+												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
 												</div>
 												<p>Next Payment</p>
 												<h3>$25.00</h3>

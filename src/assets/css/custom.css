@@ -743,3 +743,9 @@ input[type="range"]::-moz-focus-outer {
 .pricing-item-features-list li.is-checked::after {
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill-rule%3D%22nonzero%22%20fill%3D%22none%22%3E%3Ccircle%20fill%3D%22%2300C2A9%22%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%2212%22%2F%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M10.5%2012.267l-2.5-1.6-1%201.066L10.5%2016%2017%209.067%2016%208z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
 }
+
+.next-plan-card{
+background-color: #ffffff;
+opacity: 1.9;
+background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #ffffff 23px ), repeating-linear-gradient( #4356A555, #4356A5 );
+}
