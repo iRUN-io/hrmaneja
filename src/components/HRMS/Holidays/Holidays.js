@@ -1,13 +1,31 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { getUser } from '../../../config/common';
+import { getHolidays } from '../../../services/setting';
 
-class Holidays extends Component {
-	render() {
-		const { fixNavbar } = this.props;
+const Holidays = () => {
+	const [loading, setLoading] = useState(false);
+    const [user, setUser] = useState({});
+	const [holidays, setHolidays] = useState([]);
+	
+	useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const user = await getUser();
+            if (user) {
+                const holiday = await getHolidays('NG','2022');
+                setHolidays(holiday);
+                setLoading(false);
+                setUser(user)
+            }
+        }
+        fetchData();
+    });
+	
+	console.log('url', holidays)
 		return (
 			<>
 				<div>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
+					<div className={`section-body`}>
 						<div className="container-fluid">
 							<div className="row">
 								<div className="col-12">
@@ -147,10 +165,5 @@ class Holidays extends Component {
 			</>
 		);
 	}
-}
-const mapStateToProps = state => ({
-	fixNavbar: state.settings.isFixNavbar
-})
-
-const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Holidays);
+	
+export default Holidays;

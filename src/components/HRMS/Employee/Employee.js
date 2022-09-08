@@ -173,14 +173,14 @@ function Employee(props) {
 
   };
 
-  // const employeeDetails = id => {
-  //   try {
-  //     const employee = employees.filter(employee => employee.id === id);
-  //     props.history.push("/hr-employee-details", { employee });
-  //   } catch (err) {
-  //     toast.error("Error, try again");
-  //   }
-  // };
+  const employeeDetails = id => {
+    try {
+      const employee = employees.filter(employee => employee.id === id);
+      props.history.push("/hr-employee-details", { employee });
+    } catch (err) {
+      toast.error("Error, try again");
+    }
+  };
 
   const removeEmployee = async (employeeID) => {
     try {
@@ -387,14 +387,14 @@ function Employee(props) {
                                       <td>{employee?.start_date}</td>
                                       <td>{employee?.role}</td>
                                       <td>
-                                        {/* <button
+                                        <button
                                       type="button"
                                       className="btn btn-icon btn-sm"
                                       title="View"
                                       onClick={() => employeeDetails(employee?.id)}
                                     >
                                       <i className="fa fa-eye" />
-                                    </button> */}
+                                    </button>
                                         <button
                                           onClick={() => setEmployee(employee)}
                                           data-toggle="modal" data-target="#editModal"

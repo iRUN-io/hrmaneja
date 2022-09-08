@@ -18,8 +18,20 @@ const Features = () => {
         fetchData();
     }, []);
 
+    const icons = [
+        {
+            icon: 'fas fa-users',
+            name: 'expense',
+        },
+        {
+            icon: 'fas fa-money',
+            name: 'payroll',
+        },
+    ]
+
     const features = Object.keys(company.settings?.features || []).map((key) => {
-        return { name: key, value: company.settings?.features[key] };
+        const icon = icons.find((icon) => icon.name === key);
+        return { name: key, value: company.settings?.features[key], icon: icon?.icon };
     });
 
 

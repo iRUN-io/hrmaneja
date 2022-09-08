@@ -118,3 +118,13 @@ export async function totalRequisition(companyId) {
   });
 }
 
+export async function getHolidays(country, year) {
+  return request(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+      },
+  });
+}

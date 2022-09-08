@@ -5,3 +5,4 @@ export const API_URL = 'https://hrmaneja-api.herokuapp.com/api/v1';
 export const USER_ID = getUser.id;
 export const USER_TOKEN = getUser.token;
 export const SUPPORT_MAIL = 'support@hrmaneja.com';
+export const HOLIDAY_API_KEY = 'cf3d4336adf647378398f766648304d7'

@@ -209,9 +209,9 @@ const Department = () => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <div className='container'>
+                <div className='section-body mt-3'>
                     <div className="container-fluid">
-                        <div className="d-flex justify-content-between align-items-center">
+                     <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
                                 <li className="nav-item">
                                     <Link onClick={() => history.goBack()} className="nav-link active">

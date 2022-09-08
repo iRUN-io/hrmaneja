@@ -129,7 +129,7 @@ function Expense(props) {
 			}
 		}
 		fetchData();
-	});
+	}, []);
 
 	const updateForm = (e) => {
 		const { value, name } = e.target;
