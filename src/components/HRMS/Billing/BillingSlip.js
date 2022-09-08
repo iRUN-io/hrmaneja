@@ -31,7 +31,9 @@ function BillingSlip(props) {
                 const companyData = await getCompanyData();
 				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const billingResponse = await getBilling(id);
+                console.log(billingResponse)
                 setBilling(billingResponse);
+                
                 setLoading(false);
                 setUser(user)
             }
@@ -96,7 +98,7 @@ function BillingSlip(props) {
                                                                     <span className="badge badge-success">approved</span>
                                                                 )}
                                                                 {billing.status === 'disapprove' && (
-                                                                    <span className="badge badge-danger">rejectedssss</span>
+                                                                    <span className="badge badge-danger">rejected</span>
                                                                 )}
                                                                 {billing.status === 'pending' && (
                                                                     <span className="badge badge-grey">pending</span>

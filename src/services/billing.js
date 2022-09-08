@@ -12,16 +12,13 @@ export async function getAllBillings(company_id) {
 }
 
 export async function getBilling(id) {
-  return request(`${API_URL}/billing/${USER_ID}?id=${id}`, {
+  return request(`${API_URL}/billing/${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
-    params: {
-      userId: USER_ID,
-      id: id,
-    },
+    
   });
 }
 

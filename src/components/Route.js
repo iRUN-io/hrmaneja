@@ -386,13 +386,7 @@ const Routes = [
         pageTitle: "Payslip",
         component: Payslip
     },
-    {
-        path: "/billing-receipt/:id",
-        name: 'billing-receipt',
-        exact: true,
-        pageTitle: "Billing Slip",
-        component: BillingSlip
-    },
+    
     {
         path: "/payslip/:id",
         name: 'payslip',
