@@ -206,6 +206,7 @@ class Subscribe extends React.Component {
           if (billing.data.id) {
               const logBilling = await createActivity(
                   {
+                      // eslint-disable-next-line no-useless-concat
                       name: 'Paid for subscription' + 'with amount' + response.amount,
                       employee_id: user.employee_id,
                       activity: `${user.name} Paid for subscription`,

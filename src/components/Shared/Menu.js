@@ -357,11 +357,11 @@ class Menu extends Component {
 				"label": "Admin",
 				"to": "#!",
 				content: [ 
-					{
-						"id": 16,
-						"label": "Payroll",
-						"to": "/hr-payroll"
-					},
+					// {
+					// 	"id": 16,
+					// 	"label": "Payroll",
+					// 	"to": "/hr-payroll"
+					// },
 					{
 						"id": 17,
 						"label": "General",

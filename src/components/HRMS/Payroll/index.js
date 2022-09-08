@@ -11,7 +11,7 @@ const Dashboard = () => {
 		const [featureEnabled, setFeatureEnabled] = useState(false);
 		const [loading, setLoading] = useState(false);
 		const isAdmin = user?.role === "HR Manager";
-		const comingSoon = true;
+		const comingSoon = false;
 		useEffect(() => {
 			async function fetchData() {
 				setLoading(true);

@@ -386,7 +386,7 @@ const Routes = [
         pageTitle: "Payslip",
         component: Payslip
     },
-    
+   
     {
         path: "/payslip/:id",
         name: 'payslip',
