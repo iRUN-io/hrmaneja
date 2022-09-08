@@ -78,6 +78,7 @@ import Features from './HRMS/Features';
 import PastPayroll from './HRMS/Payroll/PastPayroll';
 import PayrollReceipt from './HRMS/Payroll/PayrollReceipt';
 import Billing from './HRMS/Billing';
+import BillingSlip from './HRMS/Billing/BillingSlip';
 
 const user = getUser();
 
@@ -221,6 +222,13 @@ const Routes = [
         exact: true,
         pageTitle: "Billing",
         component: Billing // update this component
+    },
+    isAdmin && {
+        path: "/admin/billing-receipt/:id",
+        name: 'billing receipt',
+        exact: true,
+        pageTitle: "Billing",
+        component: BillingSlip // update this component
     },
 
     
@@ -370,12 +378,20 @@ const Routes = [
         pageTitle: "Tables",
         component: NotFound
     },
+    
     {
         path: "/req-payslip/:id",
         name: 'req-payslip',
         exact: true,
         pageTitle: "Payslip",
         component: Payslip
+    },
+    {
+        path: "/billing-receipt/:id",
+        name: 'billing-receipt',
+        exact: true,
+        pageTitle: "Billing Slip",
+        component: BillingSlip
     },
     {
         path: "/payslip/:id",

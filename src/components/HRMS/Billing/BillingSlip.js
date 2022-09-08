@@ -4,7 +4,6 @@ import { formatMoney, getCompanyData, getUser } from "../../../config/common";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
 import { Link, useHistory } from 'react-router-dom';
-import { approveRequisition, disapproveRequisition, getRequisition } from '../../../services/expense';
 import moment from 'moment';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { createActivity } from '../../../services/activities';
@@ -12,13 +11,14 @@ import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { toast } from 'material-react-toastify';
 import FeatureNotAvailable from '../../common/featureDisabled';
+import { getBilling } from '../../../services/billing';
 
 
-function Payroll(props) {
+function BillingSlip(props) {
     const { fixNavbar } = props;
     const id = window.location.pathname.split('/')[2];
     const history = useHistory();
-    const [requisition, setRequisition] = useState({});
+    const [billing, setBilling] = useState({});
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
 	const [featureEnabled, setFeatureEnabled] = useState(false);
@@ -30,8 +30,8 @@ function Payroll(props) {
             if (user) {
                 const companyData = await getCompanyData();
 				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
-                const expense = await getRequisition(id);
-                setRequisition(expense);
+                const billingResponse = await getBilling(id);
+                setBilling(billingResponse);
                 setLoading(false);
                 setUser(user)
             }
@@ -39,55 +39,7 @@ function Payroll(props) {
         fetchData();
     }, []);
 
-    const toggleRequisition = async (reqId, type) => {
-		try {
-			let response;
-
-			if (type === 'approve') {
-
-				response = await approveRequisition(reqId);
-
-			} else {
-
-				response = await disapproveRequisition(reqId);
-			}
-
-			if (!response.error) {
-
-				const logActivity = await createActivity(
-					{
-						name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
-						employee_id: user.employee_id,
-						activity: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a requisition request`,
-						activity_name: type === 'approve' ? 'Approval' : 'Rejection',
-						user: user.name,
-						company_id: user.company_id,
-					}
-				)
-
-				if (logActivity.id) {
-					if (type === 'approve') {
-						sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
-						const newRequisition = { ...requisition, status: 'approve' };
-
-                        setRequisition(newRequisition);
-						sendEmail(user.emailAddress, user.name, emailCase.approveRequisition);
-
-					} else {
-                        const newRequisition = { ...requisition, status: 'disapprove' };
-                        setRequisition(newRequisition);
-
-						sendEmail(user.emailAddress, user.name, emailCase.rejectRequisition);
-					}
-					toast.info(response.message);
-				}
-			}
-
-		} catch (err) {
-			toast.error("Error, try again");
-		}
-
-	};
+   
 
     if (!featureEnabled && !loading ) {
 		return <FeatureNotAvailable />
@@ -129,24 +81,24 @@ function Payroll(props) {
                                                     <div className="media-body">
                                                         <div className="content">
                                                             <span>
-                                                                <strong>Requisition ID: RQ-{requisition.id && requisition.id.slice(0, 8)} </strong>
+                                                                <strong>BILLING ID: RQ-{billing.id} </strong>
                                                             </span>
                                                             <p className="h5">
-                                                                {requisition.employee}{' '}
+                                                                {billing.employee}{' '}
                                                                
                                                                 <small className="float-right badge badge-primary">
-                                                                    {moment(requisition.createdAt).format('MMM Do YYYY')}
+                                                                    {moment(billing.createdAt).format('MMM Do YYYY')}
                                                                 </small>
 
                                                             </p>
                                                             <p>
-                                                                {requisition.status === 'approve' && (
+                                                                {billing.status === 'approve' && (
                                                                     <span className="badge badge-success">approved</span>
                                                                 )}
-                                                                {requisition.status === 'disapprove' && (
+                                                                {billing.status === 'disapprove' && (
                                                                     <span className="badge badge-danger">rejectedssss</span>
                                                                 )}
-                                                                {requisition.status === 'pending' && (
+                                                                {billing.status === 'pending' && (
                                                                     <span className="badge badge-grey">pending</span>
                                                                 )}
                                                             </p>
@@ -176,32 +128,32 @@ function Payroll(props) {
                                                             <tr>
                                                                 <td>01</td>
                                                                 <td>
-                                                                    <span>{formatMoney(requisition.amount)}</span>
+                                                                    <span>{formatMoney(billing.amount)}</span>
                                                                 </td>
 
-                                                                <td>{requisition.category}</td>
+                                                                <td>{billing.category}</td>
                                                                 <td>1</td>
-                                                                <td className="text-right">{formatMoney(requisition.amount)}</td>
+                                                                <td className="text-right">{formatMoney(billing.amount)}</td>
                                                             </tr>
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
                                                                 <td colSpan={2}>
                                                                     <span>
-                                                                        <strong>Note: {' '}</strong>{requisition.note}
+                                                                        <strong>Note: {' '}</strong>{billing.note}
                                                                     </span>
                                                                 </td>
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td className="text-right">
-                                                                    <strong className="text-success">{formatMoney(requisition.amount)}</strong>
+                                                                    <strong className="text-success">{formatMoney(billing.amount)}</strong>
                                                                 </td>
                                                             </tr>
                                                         </tfoot>
                                                     </table>
-                                                    {requisition.employee_id !== user.employee_id && (
+                                                    {billing.employee_id !== user.employee_id && (
                                                         <>
-                                                    {(requisition.status === 'pending' || requisition.status === 'approve') && (
+                                                    {(billing.status === 'pending' || billing.status === 'approve') && (
                                                                 <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                     overlay={
                                                                         <Popover id="popover-basic">
@@ -209,7 +161,7 @@ function Payroll(props) {
                                                                             <Popover.Body>
                                                                                 <div className="clearfix" >
                                                                                     <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                    {/* <button style={{ margin: '10px' }} onClick={() => toggleRequisition(billing.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button> */}
                                                                                 </div>
                                                                             </Popover.Body>
                                                                         </Popover>
@@ -220,7 +172,7 @@ function Payroll(props) {
 
                                                                 </OverlayTrigger>
                                                             )}
-                                                            {(requisition.status === 'pending' || requisition.status === 'disapprove') && (
+                                                            {(billing.status === 'pending' || billing.status === 'disapprove') && (
                                                                 <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                     overlay={
                                                                         <Popover id="popover-basic">
@@ -228,7 +180,7 @@ function Payroll(props) {
                                                                             <Popover.Body>
                                                                                 <div className="clearfix" >
                                                                                     <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                    <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button>
+                                                                                    {/* <button style={{ margin: '10px' }} onClick={() => toggleRequisition(billing.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button> */}
                                                                                 </div>
                                                                             </Popover.Body>
                                                                         </Popover>
@@ -263,4 +215,4 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Payroll);
+export default connect(mapStateToProps, mapDispatchToProps)(BillingSlip);
