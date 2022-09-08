@@ -241,7 +241,7 @@ const Department = () => {
                                             </form>
                                         </div>
                                     </div>
-                                    {departments.length === 0 && !loading ? (
+                                    {currentDepartment.length === 0 && !loading ? (
                                         <EmptyState />
                                     ) : (
                                         <div className="card-body">
