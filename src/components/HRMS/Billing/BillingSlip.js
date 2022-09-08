@@ -1,51 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { formatMoney, getCompanyData, getUser } from "../../../config/common";
+import { formatMoney, getUser } from "../../../config/common";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { createActivity } from '../../../services/activities';
-import { sendEmail } from '../../../services/mail/sendMail';
-import { emailCase } from '../../../enums/emailCase';
-import { toast } from 'material-react-toastify';
-import FeatureNotAvailable from '../../common/featureDisabled';
 import { getBilling } from '../../../services/billing';
 
 
 function BillingSlip(props) {
     const { fixNavbar } = props;
-    const id = window.location.pathname.split('/')[2];
+    const id = window.location.pathname.split('/')[3];
     const history = useHistory();
     const [billing, setBilling] = useState({});
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
-	const [featureEnabled, setFeatureEnabled] = useState(false);
     const comingSoon = false;
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
             if (user) {
-                const companyData = await getCompanyData();
-				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const billingResponse = await getBilling(id);
                 console.log(billingResponse)
                 setBilling(billingResponse);
-                
                 setLoading(false);
                 setUser(user)
             }
         }
         fetchData();
     }, []);
-
-   
-
-    if (!featureEnabled && !loading ) {
-		return <FeatureNotAvailable />
-	}
 
 
     return (

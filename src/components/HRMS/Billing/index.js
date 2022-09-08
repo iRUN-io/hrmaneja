@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { Link, useHistory } from 'react-router-dom';
-
 import {  getUser } from "../../../config/common";
 
 import { getAllBillings } from '../../../services/billing';
@@ -61,7 +59,6 @@ const Billing = () => {
 		return <Subscribe />
 	}
 
-	console.log('billings are')
 
 	const viewBilling = (id) => {
 		history.push(`/admin/billing-receipt/${id}`);
@@ -88,7 +85,7 @@ const Billing = () => {
 								
 								<div className="row clearfix">
 									{billings.map((billing) => (
-										<div className="col-6 col-md-4 col-xl-6">
+										<div key={billing._id} className="col-6 col-md-4 col-xl-6">
 											<div className="card  more-cards card-blue">
 												<div className="card-body">
 													<div className='card-icon card-icon-white' style={{ float: 'right' }}>
@@ -105,7 +102,6 @@ const Billing = () => {
 										</div>
 									))}
 									{billings.map((billing) => (
-										
 									<div className="col-6 col-md-4 col-xl-6">
 										<div className="card next-plan-card  more-cards card-white">
 

@@ -1,5 +1,5 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
+import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllBillings(company_id) {
   return request(`${API_URL}/billing/${company_id}`, {
@@ -12,13 +12,12 @@ export async function getAllBillings(company_id) {
 }
 
 export async function getBilling(id) {
-  return request(`${API_URL}/billing/${id}`, {
+  return request(`${API_URL}/billing/detail/${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
-    
   });
 }
 
