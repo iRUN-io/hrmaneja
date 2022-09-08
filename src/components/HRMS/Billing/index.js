@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
+
+import { Link, useHistory } from 'react-router-dom';
+
 import {  getUser } from "../../../config/common";
+
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
 import Loader from '../../common/loader';
@@ -101,8 +105,10 @@ const Billing = () => {
 										</div>
 									))}
 									{billings.map((billing) => (
-										<div className="col-6 col-md-4 col-xl-6">
-										<div className="card card next-plan-card more-cards card-white">
+										
+									<div className="col-6 col-md-4 col-xl-6">
+										<div className="card next-plan-card  more-cards card-white">
+
 											<div className="card-body">
 												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
 													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
