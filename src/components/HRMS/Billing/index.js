@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getCompanyData, getUser } from "../../../config/common";
+import {  getUser } from "../../../config/common";
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
 import Loader from '../../common/loader';
 import Subscribe from '../../common/subscribe';
 const Billing = () => {
-	const [billings, setBillings] = useState([]);
+	const [, setBillings] = useState([]);
 	const user = getUser();
 	const [billingExists, setBillingExists] = useState(false);
 	const [loading, setLoading] = useState(false);

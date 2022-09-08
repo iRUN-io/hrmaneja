@@ -173,14 +173,14 @@ function Employee(props) {
 
   };
 
-  const employeeDetails = id => {
-    try {
-      const employee = employees.filter(employee => employee.id === id);
-      props.history.push("/hr-employee-details", { employee });
-    } catch (err) {
-      toast.error("Error, try again");
-    }
-  };
+  // const employeeDetails = id => {
+  //   try {
+  //     const employee = employees.filter(employee => employee.id === id);
+  //     props.history.push("/hr-employee-details", { employee });
+  //   } catch (err) {
+  //     toast.error("Error, try again");
+  //   }
+  // };
 
   const removeEmployee = async (employeeID) => {
     try {

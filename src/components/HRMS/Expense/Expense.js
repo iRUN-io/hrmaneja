@@ -27,7 +27,7 @@ function Expense(props) {
 	const [RequisitionsPerPage] = useState(10);
 	const [departments, setDepartments] = useState([]);
 	const [user, setUser] = useState({});
-    const [searchExpense, setSearchExpense] = useState('');
+	const [searchExpense, setSearchExpense] = useState('');
 	const [featureEnabled, setFeatureEnabled] = useState(false);
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
@@ -137,7 +137,7 @@ function Expense(props) {
 			}
 		}
 		fetchData();
-	}, []);
+	});
 
 	const updateForm = (e) => {
 		const { value, name } = e.target;
@@ -221,32 +221,32 @@ function Expense(props) {
 		history.push(`/req-payslip/${id}`);
 	}
 
-	
-    const setSearch = (e) => {
-        const { value } = e.target;
-        setSearchExpense(value);
-    };
 
-    const getExpenseBySearchQuery = (
-        expenses,
-        searchQuery,
-    ) => {
-        return expenses.filter(expense =>
-			expense.amount.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase()) 
+	const setSearch = (e) => {
+		const { value } = e.target;
+		setSearchExpense(value);
+	};
+
+	const getExpenseBySearchQuery = (
+		expenses,
+		searchQuery,
+	) => {
+		return expenses.filter(expense =>
+			expense.amount.toLowerCase().includes(searchQuery.toLowerCase())
+			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase())
 			|| expense.status.toLowerCase().includes(searchQuery.toLowerCase())
 			|| expense.note.toLowerCase().includes(searchQuery.toLowerCase())
-        );
-    };
+		);
+	};
 
-    const allExpensesArray = useMemo(() => {
-        let allExpenses = requisitions;
-        if (searchExpense) {
-            allExpenses = getExpenseBySearchQuery(allExpenses, searchExpense);
-        }
+	const allExpensesArray = useMemo(() => {
+		let allExpenses = requisitions;
+		if (searchExpense) {
+			allExpenses = getExpenseBySearchQuery(allExpenses, searchExpense);
+		}
 
-        return allExpenses || [];
-    }, [requisitions, searchExpense]);
+		return allExpenses || [];
+	}, [requisitions, searchExpense]);
 
 	const indexOfLastRequisitions = currentPage * RequisitionsPerPage;
 	const indexOfFirstRequisitions = indexOfLastRequisitions - RequisitionsPerPage;

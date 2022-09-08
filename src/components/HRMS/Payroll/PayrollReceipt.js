@@ -28,7 +28,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    }, []);
+    });
 
     if(loading){
         return <Loader />

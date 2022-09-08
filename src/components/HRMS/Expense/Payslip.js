@@ -37,7 +37,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    }, []);
+    });
 
     const toggleRequisition = async (reqId, type) => {
 		try {
