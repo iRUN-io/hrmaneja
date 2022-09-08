@@ -4,7 +4,6 @@ import { calPercentage, formatMoney, getCompanyData, getUser } from "../../../co
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
 import { Link, useHistory } from 'react-router-dom';
-import moment from 'moment';
 import months from '../../../config/month.json';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import Loader from '../../common/loader';
@@ -29,7 +28,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    }, []);
+    });
 
     const month = months;
 

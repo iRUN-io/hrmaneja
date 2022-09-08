@@ -1,34 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
-// import { getAllEmployees } from "../../../services/employee";
-// import { getAllUsers } from "../../../services/user";
 import { formatMoney, getCompanyData, getUser } from "../../../config/common";
-// import CountUp from 'react-countup';
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
-// import { getAllDepartments } from '../../../services/department';
 import { Link, useHistory } from 'react-router-dom';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import {  getAllPayrolls } from '../../../services/payroll';
-// import { toast } from 'material-react-toastify';
-// import { createActivity } from '../../../services/activities';
-// import { sendEmail } from '../../../services/mail/sendMail';
-// import { emailCase } from '../../../enums/emailCase';
 import EmptyState from '../../EmptyState';
+import moment from 'moment';
 
 
 function PastPayroll(props) {
 	const { fixNavbar } = props;
 	// const [employees, setEmployees] = useState([]);
 	const [featureEnabled, setFeatureEnabled] = useState(false); // 
-	const [user, setUser] = useState({});
+	const [, setUser] = useState({});
 	const [payrolls, setPayrolls] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [searchPayroll, setSearchPayroll] = useState('');
 	const [currentPage, setCurrentPage] = useState(1);
     const [PayrollPerPage] = useState(10);
-	const comingSoon = true;
+	const comingSoon = false;
     const history = useHistory();
 
 	useEffect(() => {
@@ -50,17 +44,42 @@ function PastPayroll(props) {
 		
 	}, []);
 
+	const setSearch = (e) => {
+		const { value } = e.target;
+		setSearchPayroll(value);
+	};
+
+	const getPayrollBySearchQuery = (
+		payrolls,
+		searchQuery,
+	) => {
+		return payrolls.filter(payroll =>
+			payroll.month.toLowerCase().includes(searchQuery.toLowerCase())
+			|| payroll.year.toLowerCase().includes(searchQuery.toLowerCase())
+			|| payroll.status.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+	};
+
+	const allPayrollsArray = useMemo(() => {
+		let allPayrolls = payrolls;
+		if (searchPayroll) {
+			allPayrolls = getPayrollBySearchQuery(allPayrolls, searchPayroll);
+		}
+
+		return allPayrolls || [];
+	}, [payrolls, searchPayroll]);
+
 
 	const indexOfLastPayroll = currentPage * PayrollPerPage;
     const indexOfFirstPayroll = indexOfLastPayroll - PayrollPerPage;
-    const currentPayroll = payrolls.slice(indexOfFirstPayroll, indexOfLastPayroll);
+    const currentPayroll = allPayrollsArray.slice(indexOfFirstPayroll, indexOfLastPayroll);
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
 
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(payrolls.length / PayrollPerPage); i++) {
+    for (let i = 1; i <= Math.ceil(allPayrollsArray.length / PayrollPerPage); i++) {
         pageNumbers.push(i);
     }
 
@@ -110,7 +129,9 @@ function PastPayroll(props) {
 															<input
 																type="text"
 																className="form-control form-control-sm"
-																placeholder="Search something..."
+																placeholder="Search Payroll..."
+																value={searchPayroll}
+																onChange={setSearch}
 																name="s" />
 															<span className="input-group-btn ml-2">
 																<button className="btn btn-icon" type="submit">
@@ -121,7 +142,7 @@ function PastPayroll(props) {
 													</form>
 												</div>
 											</div>
-											{payrolls.length === 0 && !loading ? (
+											{currentPayroll.length === 0 && !loading ? (
 												<EmptyState/>
 												) : (
 											<div className="card-body">
@@ -138,12 +159,13 @@ function PastPayroll(props) {
 																		<th className="w200">Departments</th>
 																		<th className="w60">Employees</th>
 																		<th className="w60">Status</th>
+																		<th className="w60">Date Initiated</th>
 																		<th className="w200">Action</th>
 																	</tr>
 																</thead>
 																<tbody>
 
-																	{currentPayroll?.map((payroll, index) => (
+																	{currentPayroll.map((payroll, index) => (
 																		<tr key={index}>
 																			<td style={{cursor: 'pointer'}}>
 																				<div className="d-flex align-items-center">
@@ -165,6 +187,9 @@ function PastPayroll(props) {
 
 																			<td>
 																				<span className="tag tag-success ml-0 mr-0">{payroll.status}</span>
+																			</td>
+																			<td>
+																				<span className="tag tag-success ml-0 mr-0">{moment(payroll.createdAt).format('MMM Do YYYY')}</span>
 																			</td>
 																			<td>
 																				<button

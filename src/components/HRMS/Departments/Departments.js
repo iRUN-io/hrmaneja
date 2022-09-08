@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { getAllDepartments, createDepartment, deleteDepartment } from '../../../services/department'
 import { getAllUsers } from '../../../services/user'
 import { getCompanyData, getUser } from '../../../config/common';
@@ -23,28 +23,16 @@ const Department = () => {
     const [department, setDepartment] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [DepartmentPerPage] = useState(10);
-	const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [searchDepartment, setSearchDepartment] = useState('');
+    const [featureEnabled, setFeatureEnabled] = useState(false);
     const [formState, setFormState] = useState({
         departmentHead: '',
         departmentName: '',
         allEmployee: '',
     });
 
-    const indexOfLastDepartment = currentPage * DepartmentPerPage;
-    const indexOfFirstDepartment = indexOfLastDepartment - DepartmentPerPage;
-    const currentDepartment = departments.slice(indexOfFirstDepartment, indexOfLastDepartment);
 
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(departments.length / DepartmentPerPage); i++) {
-        pageNumbers.push(i);
-    }
-
-    
-	const history = useHistory();
+    const history = useHistory();
     const createDepartmentAction = async () => {
         if (!featureEnabled) {
             toast.error('Feature not enabled');
@@ -112,7 +100,7 @@ const Department = () => {
             const response = await deleteDepartment(departmentId);
 
             if (response.id) {
-                
+
                 const logDepartment = await createActivity(
                     {
                         name: 'Delete Department',
@@ -123,13 +111,13 @@ const Department = () => {
                         company_id: user.company_id,
                     }
                 )
-           
-            if (logDepartment.id) {
-                sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
-                const newDepartments = departments.filter(department => department.id !== departmentId);
-                setDepartments(newDepartments);
+
+                if (logDepartment.id) {
+                    sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
+                    const newDepartments = departments.filter(department => department.id !== departmentId);
+                    setDepartments(newDepartments);
+                }
             }
-        }
 
         } catch (err) {
             toast.error("Error, try again");
@@ -145,7 +133,7 @@ const Department = () => {
             if (user) {
                 const company_id = user.company_id;
                 const companyData = await getCompanyData();
-				companyData.settings?.features['department'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                companyData.settings?.features['department'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getAllDepartments(company_id);
                 const userResponse = await getAllUsers(company_id);
                 setDepartments(response);
@@ -174,9 +162,48 @@ const Department = () => {
         return 'No Employee';
     }
 
-    if (!featureEnabled && !loading ) {
-		return <FeatureNotAvailable />
-	}
+
+    const setSearch = (e) => {
+        const { value } = e.target;
+        setSearchDepartment(value);
+    };
+
+    const getDepartmentBySearchQuery = (
+        departments,
+        searchQuery,
+    ) => {
+        return departments.filter(department =>
+            department.name.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
+    };
+
+    const allDepartmentsArray = useMemo(() => {
+        let allDepartments = departments;
+        if (searchDepartment) {
+            allDepartments = getDepartmentBySearchQuery(allDepartments, searchDepartment);
+        }
+
+        return allDepartments || [];
+    }, [departments, searchDepartment]);
+
+
+    const indexOfLastDepartment = currentPage * DepartmentPerPage;
+    const indexOfFirstDepartment = indexOfLastDepartment - DepartmentPerPage;
+    const currentDepartment = allDepartmentsArray.slice(indexOfFirstDepartment, indexOfLastDepartment);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(allDepartmentsArray.length / DepartmentPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+
+    if (!featureEnabled && !loading) {
+        return <FeatureNotAvailable />
+    }
 
 
     return (
@@ -186,10 +213,10 @@ const Department = () => {
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
-                            <li className="nav-item">
-                                <Link onClick={() => history.goBack()} className="nav-link active">
-                                    <i className="fa fa-arrow-left"></i>
-                                </Link>
+                                <li className="nav-item">
+                                    <Link onClick={() => history.goBack()} className="nav-link active">
+                                        <i className="fa fa-arrow-left"></i>
+                                    </Link>
                                 </li>
                             </ul>
                             <div className="header-action">
@@ -208,83 +235,83 @@ const Department = () => {
                                         <div className="card-options">
                                             <form>
                                                 <div className="input-group">
-                                                    <input type="text" className="form-control form-control-sm" placeholder="Search something..." name="s" />
+                                                    <input onChange={setSearch} value={searchDepartment} type="text" className="form-control form-control-sm" placeholder="Search department..." name="s" />
                                                     <span className="input-group-btn ml-2"><button className="btn btn-icon"><span className="fe fe-search" /></button></span>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    {departments.length === 0 && !loading ? (
-                                        <EmptyState/>
-                                        ) : (
-                                    <div className="card-body">
-                                        <div className="table-responsive">
+                                    {currentDepartment.length === 0 && !loading ? (
+                                        <EmptyState />
+                                    ) : (
+                                        <div className="card-body">
+                                            <div className="table-responsive">
 
-                                            {loading ? (
-                                                <Skeleton count={4} height={50} />
-                                            ) : (
-                                                <table className="table table-striped table-vcenter table-hover mb-0">
-                                                    <thead>
-                                                        <tr>
-                                                            {/* <th>#</th> */}
-                                                            <th>Department Name</th>
-                                                            <th>Department Head</th>
-                                                            <th>Total Employee</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {currentDepartment.map((department) => (
-                                                            <tr key={department.id}>
-                                                                {/* <td>0{department.id}</td> */}
-                                                                <td><div className="font-15">{department.name}</div></td>
-                                                                <td>{getDepartmentHead(department.department_head)}</td>
-                                                                <td>{getAllEmployees(department.id)}</td>
-                                                                <td>
-
-                                                                    <button type="button" className="btn btn-icon" title="Edit" onClick={() => setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
-                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                        overlay={
-                                                                            <Popover id="popover-basic">
-                                                                                <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                                                                <Popover.Body>
-                                                                                    <div className="clearfix" >
-                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                        <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                                                                    </div>
-                                                                                </Popover.Body>
-                                                                            </Popover>
-                                                                        }>
-                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                    </OverlayTrigger>
-
-                                                                </td>
+                                                {loading ? (
+                                                    <Skeleton count={4} height={50} />
+                                                ) : (
+                                                    <table className="table table-striped table-vcenter table-hover mb-0">
+                                                        <thead>
+                                                            <tr>
+                                                                {/* <th>#</th> */}
+                                                                <th>Department Name</th>
+                                                                <th>Department Head</th>
+                                                                <th>Total Employee</th>
+                                                                <th>Action</th>
                                                             </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            )}
-                                        </div>
-                                        <div className=''>
-                                            <nav aria-label="Page navigation example">
-                                                <ul className="pagination justify-content-end">
-                                                    <li className="page-item" style={{ marginRight: '5px' }}>
-                                                        <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
-                                                    </li>
-                                                    {pageNumbers.map(number => (
-                                                        <li key={number} className="page-item" style={{ marginRight: '5px' }}>
-                                                            <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
-                                                        </li>
-                                                    ))}
-                                                    <li className="page-item">
-                                                        <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
-                                                    </li>
-                                                </ul>
-                                            </nav>
-                                        </div>
+                                                        </thead>
+                                                        <tbody>
+                                                            {currentDepartment.map((department) => (
+                                                                <tr key={department.id}>
+                                                                    {/* <td>0{department.id}</td> */}
+                                                                    <td><div className="font-15">{department.name}</div></td>
+                                                                    <td>{getDepartmentHead(department.department_head)}</td>
+                                                                    <td>{getAllEmployees(department.id)}</td>
+                                                                    <td>
 
-                                    </div>
-                                        )}
+                                                                        <button type="button" className="btn btn-icon" title="Edit" onClick={() => setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>
+                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                            overlay={
+                                                                                <Popover id="popover-basic">
+                                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                                    <Popover.Body>
+                                                                                        <div className="clearfix" >
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => removeDepartment(department.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                                                        </div>
+                                                                                    </Popover.Body>
+                                                                                </Popover>
+                                                                            }>
+                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                                        </OverlayTrigger>
+
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                )}
+                                            </div>
+                                            <div className=''>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul className="pagination justify-content-end">
+                                                        <li className="page-item" style={{ marginRight: '5px' }}>
+                                                            <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
+                                                        </li>
+                                                        {pageNumbers.map(number => (
+                                                            <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                            </li>
+                                                        ))}
+                                                        <li className="page-item">
+                                                            <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -316,7 +343,7 @@ const Department = () => {
                                             onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
                                             <option>Departments Head</option>
                                             {users.map((user) => (
-                                                    <option key={user.id} value={user.id}>{user.name}</option>
+                                                <option key={user.id} value={user.id}>{user.name}</option>
                                             ))}
                                         </select>
                                     </div>

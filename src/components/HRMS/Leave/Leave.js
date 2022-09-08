@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { getAllLeaves, createLeave, deleteLeave, approveLeave, disapproveLeave } from '../../../services/leave'
 import { getCompanyData, getUser } from '../../../config/common';
 import { toast } from 'material-react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import EditLeaves from './EditLeave';
@@ -23,7 +22,8 @@ const Leave = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [LeavePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
-    const [leave, setLeave] = useState([]);
+    const [leave,] = useState([]);
+    const [searchLeave, setSearchLeave] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
     const [formState, setFormState] = useState({
         employeeId: '',
@@ -39,6 +39,7 @@ const Leave = () => {
     useEffect(() => {
         const user = getUser();
         setFormState({ ...formState, employeeId: user.employee_id, employeeName: user.name });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -237,16 +238,43 @@ const Leave = () => {
 
     }, []);
 
+
+	const setSearch = (e) => {
+        const { value } = e.target;
+        setSearchLeave(value);
+    };
+
+    const getLeaveBySearchQuery = (
+        expenses,
+        searchQuery,
+    ) => {
+        return expenses.filter(expense =>
+			expense.amount.toLowerCase().includes(searchQuery.toLowerCase()) 
+			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase()) 
+			|| expense.status.toLowerCase().includes(searchQuery.toLowerCase())
+			|| expense.note.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    };
+
+    const allLeavesArray = useMemo(() => {
+        let allLeaves = leaves;
+        if (searchLeave) {
+            allLeaves = getLeaveBySearchQuery(allLeaves, searchLeave);
+        }
+
+        return allLeaves || [];
+    }, [leaves, searchLeave]);
+
     const indexOfLastLeave = currentPage * LeavePerPage;
     const indexOfFirstLeave = indexOfLastLeave - LeavePerPage;
-    const currentLeaves = leaves.slice(indexOfFirstLeave, indexOfLastLeave);
+    const currentLeaves = allLeavesArray.slice(indexOfFirstLeave, indexOfLastLeave);
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const nextPage = () => setCurrentPage(currentPage + 1);
     const prevPage = () => setCurrentPage(currentPage - 1);
 
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(leaves.length / LeavePerPage); i++) {
+    for (let i = 1; i <= Math.ceil(allLeavesArray.length / LeavePerPage); i++) {
         pageNumbers.push(i);
     }
 
@@ -279,13 +307,13 @@ const Leave = () => {
                                         <div className="card-options">
                                             <form>
                                                 <div className="input-group">
-                                                    <input type="text" className="form-control form-control-sm" placeholder="Search something..." name="s" />
+                                                    <input value={searchLeave} onChange={setSearch} type="text" className="form-control form-control-sm" placeholder="Search Leave..." name="s" />
                                                     <span className="input-group-btn ml-2"><button className="btn btn-icon"><span className="fe fe-search" /></button></span>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    {leaves.length === 0 && !loading ? (
+                                    {currentLeaves.length === 0 && !loading ? (
                                         <EmptyState />
                                     ) : (
                                         <div className="card-body">

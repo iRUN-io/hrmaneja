@@ -5,7 +5,7 @@ import configureStore from './store';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { getUser } from './config/common';
+// import { getUser } from './config/common';
 // import registerServiceWorker from './registerServiceWorker';
 // logout if user is not logged in
 

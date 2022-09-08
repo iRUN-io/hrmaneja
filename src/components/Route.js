@@ -8,7 +8,7 @@ import Holidays from './HRMS/Holidays/Holidays';
 import Events from './HRMS/Events/Events';
 import Activities from './HRMS/Activities/Activities';
 import PayrollStats from './HRMS/Payroll/Payroll';
-import Payroll from './HRMS/Payroll/';
+import Payroll from './HRMS/Payroll/Payroll';
 import PayrollPaySlip from './HRMS/Payroll/Payslip';
 import Expense from './HRMS/Expense/Expense';
 import Report from './HRMS/Report/Report';

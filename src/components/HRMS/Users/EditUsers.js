@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ToastContainer, toast } from 'material-react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'material-react-toastify';
 import { updateUser } from '../../../services/user'
 import { getAllEmployees } from '../../../services/employee'
 import 'react-loading-skeleton/dist/skeleton.css'

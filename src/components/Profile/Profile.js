@@ -1,9 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import data from '../../config/data';
-import Country from '../common/country';
-import { ToastContainer, toast } from "material-react-toastify";
+import { toast } from "material-react-toastify";
 //import "react-toastify/dist/ReactToastify.css";
 import { formatMoney, getUser, removeUserSession } from '../../config/common';
 import { getAllEmployees, getEmployee } from '../../services/employee';

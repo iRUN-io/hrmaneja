@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
+
 import { Link, useHistory } from 'react-router-dom';
 import { getCompanyData, getUser } from "../../../config/common";
+
+import {  getUser } from "../../../config/common";
+
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
 import Loader from '../../common/loader';
 import Subscribe from '../../common/subscribe';
 
 const Billing = () => {
-	const [billings, setBillings] = useState([]);
+	const [, setBillings] = useState([]);
 	const user = getUser();
 	const [billingExists, setBillingExists] = useState(false);
 	const [loading, setLoading] = useState(false);
@@ -97,13 +101,19 @@ const Billing = () => {
 												</div>
 											</div>
 										</div>
+
 									))}
 									{billings.map((billing) => (
 										<div className="col-6 col-md-4 col-xl-6">
 										<div className="card  more-cards card-white">
+
+									</div>
+									<div className="col-6 col-md-4 col-xl-6">
+										<div className="card next-plan-card  more-cards card-white">
+
 											<div className="card-body">
-												<div className='card-icon card-icon-yellow' style={{ float: 'right' }}>
-													<h5 className="mb-0 font-weight-bold" style={{ color: 'gold' }}><i className='fe fe-credit-card'></i></h5>
+												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
 												</div>
 												<p>Next Payment</p>
 												<h3>${billing.amount}</h3>

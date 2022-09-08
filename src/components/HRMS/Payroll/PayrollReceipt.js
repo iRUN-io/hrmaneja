@@ -14,7 +14,7 @@ function Payroll(props) {
     const [payroll, setPayroll] = useState({});
     const [loading, setLoading] = useState(false);
     const [featureEnabled, setFeatureEnabled] = useState(false); // 
-    const comingSoon = true;
+    const comingSoon = false;
     const routeState = history.location?.state;
     useEffect(() => {
         async function fetchData() {
@@ -28,7 +28,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    }, []);
+    });
 
     if(loading){
         return <Loader />

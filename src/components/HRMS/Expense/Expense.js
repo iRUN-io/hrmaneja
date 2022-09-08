@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { getEmployee } from "../../../services/employee";
 import { formatMoney, getCompanyData, getUser } from "../../../config/common";
@@ -27,6 +27,7 @@ function Expense(props) {
 	const [RequisitionsPerPage] = useState(10);
 	const [departments, setDepartments] = useState([]);
 	const [user, setUser] = useState({});
+	const [searchExpense, setSearchExpense] = useState('');
 	const [featureEnabled, setFeatureEnabled] = useState(false);
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
@@ -136,7 +137,7 @@ function Expense(props) {
 			}
 		}
 		fetchData();
-	}, []);
+	});
 
 	const updateForm = (e) => {
 		const { value, name } = e.target;
@@ -220,16 +221,43 @@ function Expense(props) {
 		history.push(`/req-payslip/${id}`);
 	}
 
+
+	const setSearch = (e) => {
+		const { value } = e.target;
+		setSearchExpense(value);
+	};
+
+	const getExpenseBySearchQuery = (
+		expenses,
+		searchQuery,
+	) => {
+		return expenses.filter(expense =>
+			expense.amount.toLowerCase().includes(searchQuery.toLowerCase())
+			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase())
+			|| expense.status.toLowerCase().includes(searchQuery.toLowerCase())
+			|| expense.note.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+	};
+
+	const allExpensesArray = useMemo(() => {
+		let allExpenses = requisitions;
+		if (searchExpense) {
+			allExpenses = getExpenseBySearchQuery(allExpenses, searchExpense);
+		}
+
+		return allExpenses || [];
+	}, [requisitions, searchExpense]);
+
 	const indexOfLastRequisitions = currentPage * RequisitionsPerPage;
 	const indexOfFirstRequisitions = indexOfLastRequisitions - RequisitionsPerPage;
-	const currentRequisitions = requisitions.slice(indexOfFirstRequisitions, indexOfLastRequisitions);
+	const currentRequisitions = allExpensesArray.slice(indexOfFirstRequisitions, indexOfLastRequisitions);
 
 	const paginate = pageNumber => setCurrentPage(pageNumber);
 	const nextPage = () => setCurrentPage(currentPage + 1);
 	const prevPage = () => setCurrentPage(currentPage - 1);
 
 	const pageNumbers = [];
-	for (let i = 1; i <= Math.ceil(requisitions.length / RequisitionsPerPage); i++) {
+	for (let i = 1; i <= Math.ceil(allExpensesArray.length / RequisitionsPerPage); i++) {
 		pageNumbers.push(i);
 	}
 
@@ -284,8 +312,10 @@ function Expense(props) {
 														<div className="input-group">
 															<input
 																type="text"
+																onChange={setSearch}
+																value={searchExpense}
 																className="form-control form-control-sm"
-																placeholder="Search something..."
+																placeholder="Search Expense..."
 																name="s" />
 															<span className="input-group-btn ml-2">
 																<button className="btn btn-icon" type="submit">

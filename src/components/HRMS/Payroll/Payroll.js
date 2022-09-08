@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { connect } from 'react-redux';
 import { getAllEmployees } from "../../../services/employee";
 // import { getAllUsers } from "../../../services/user";
@@ -23,12 +23,13 @@ function Payroll(props) {
 	const [employees, setEmployee] = useState([]);
 	const [featureEnabled, setFeatureEnabled] = useState(false); // 
 	const [user, setUser] = useState({});
+	const [searchEmployee, setSearchEmployee] = useState('');
 	const [departments, setDepartments] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
-    const [EmployeesPerPage] = useState(10);
-	const comingSoon = true;
-    const history = useHistory();
+	const [EmployeesPerPage] = useState(10);
+	const comingSoon = false;
+	const history = useHistory();
 
 	useEffect(() => {
 		async function fetchData() {
@@ -38,7 +39,7 @@ function Payroll(props) {
 				// const userId = user.id;
 				// const userResponse = await getAllUsers(userId);
 				const companyData = await getCompanyData();
-        		companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+				companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const response = await getAllEmployees(user.company_id);
 				const allDepartments = await getAllDepartments(user.company_id);
 				setDepartments(allDepartments);
@@ -48,7 +49,7 @@ function Payroll(props) {
 			}
 		}
 		fetchData();
-		
+
 	}, []);
 
 	const getPayrollByDepartment = (department) => {
@@ -64,91 +65,122 @@ function Payroll(props) {
 		return department.name;
 	}
 
-	const indexOfLastEmployees = currentPage * EmployeesPerPage;
-    const indexOfFirstEmployees = indexOfLastEmployees - EmployeesPerPage;
-    const currentEmployees = employees.slice(indexOfFirstEmployees, indexOfLastEmployees);
-
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(employees.length / EmployeesPerPage); i++) {
-        pageNumbers.push(i);
-    }
 
 	const employeePayslip = (employee, id) => {
-        history.push({
-            pathname: `/payslip/${id}`,
-            state: { employee: employee }
-        });
+		history.push({
+			pathname: `/payslip/${id}`,
+			state: { employee: employee }
+		});
 
-    };
+	};
 
-	if (!featureEnabled && !loading ) {
-		return <FeatureNotAvailable />
-	}
+
 
 	const runPayroll = async () => {
 		try {
 			setLoading(true); // godfred:archer
 			const allDepartments = departments.map(department => {
-			const total = getPayrollByDepartment(department.id);
-			return { department: department.name, total: total };
-		}).sort((a, b) => b.total - a.total);
+				const total = getPayrollByDepartment(department.id);
+				return { department: department.name, total: total };
+			}).sort((a, b) => b.total - a.total);
 
-		const allEmployees = employees.map(employee => {
-			sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
-			return { 
-				name: employee.name, 
-				department: getEmployeeDepartment(employee.department), 
-				salary: employee.salary,
-				role: employee.role,
-				id: employee.id 
-			};
-		}).sort((a, b) => b.total - a.total);
+			const allEmployees = employees.map(employee => {
+				sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
+				return {
+					name: employee.name,
+					department: getEmployeeDepartment(employee.department),
+					salary: employee.salary,
+					role: employee.role,
+					id: employee.id
+				};
+			}).sort((a, b) => b.total - a.total);
 
-		sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
-		const totalSalary = allEmployees.reduce((acc, curr) => {
-			return acc + Number(curr.salary);
-		} , 0);
+			sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
+			const totalSalary = allEmployees.reduce((acc, curr) => {
+				return acc + Number(curr.salary);
+			}, 0);
 
-		const body = { 
-			departments: allDepartments, 
-			employees: allEmployees, 
-			totalSalary: totalSalary,
-			company_id: user.company_id,
-			totalDepartments: allDepartments.length,
-			totalEmployees: allEmployees.length,
-			month: new Date().toLocaleString('default', { month: 'long' }),
-			year: new Date().getFullYear()
-		};
-
-		const initiateSalary = await createPayroll(body);
-
-		if (initiateSalary.data) {
-			const activity = {
-				user_id: user.id,
+			const body = {
+				departments: allDepartments,
+				employees: allEmployees,
+				totalSalary: totalSalary,
 				company_id: user.company_id,
-				activity: `${user.name} has created a payroll for the month of ${new Date().toLocaleString('default', { month: 'long' })}`,
-				name: 'Create Employee',
-				employee_id: user.employee_id,
-				activity_name: 'Creation',
-				user: user.name,
+				totalDepartments: allDepartments.length,
+				totalEmployees: allEmployees.length,
+				month: new Date().toLocaleString('default', { month: 'long' }),
+				year: new Date().getFullYear()
 			};
-			const logEmployee = await createActivity(activity);
-			if (logEmployee) {
-				toast.success('Payroll has been created successfully');
+
+			const initiateSalary = await createPayroll(body);
+
+			if (initiateSalary.data) {
+				const activity = {
+					user_id: user.id,
+					company_id: user.company_id,
+					activity: `${user.name} has created a payroll for the month of ${new Date().toLocaleString('default', { month: 'long' })}`,
+					name: 'Create Employee',
+					employee_id: user.employee_id,
+					activity_name: 'Creation',
+					user: user.name,
+				};
+				const logEmployee = await createActivity(activity);
+				if (logEmployee) {
+					toast.success('Payroll has been created successfully');
+				}
+			} else {
+				toast.error(initiateSalary.message);
 			}
-		}else{
-			toast.error(initiateSalary.message);
-		}
-		setLoading(false);
+			setLoading(false);
 		} catch (error) {
 			console.log(error);
 			toast.error(error.message || 'Something went wrong');
 		}
 
+	}
+
+
+	const setSearch = (e) => {
+		const { value } = e.target;
+		setSearchEmployee(value);
+	};
+
+	const getEmployeeBySearchQuery = (
+		employees,
+		searchQuery,
+	) => {
+		return employees.filter(employee =>
+			employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+			|| employee.email.toLowerCase().includes(searchQuery.toLowerCase())
+			|| employee.role.toLowerCase().includes(searchQuery.toLowerCase())
+			|| employee.salary.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+	};
+
+	const allEmployeesArray = useMemo(() => {
+		let allEmployees = employees;
+		if (searchEmployee) {
+			allEmployees = getEmployeeBySearchQuery(allEmployees, searchEmployee);
+		}
+
+		return allEmployees || [];
+	}, [employees, searchEmployee]);
+
+
+	const indexOfLastEmployees = currentPage * EmployeesPerPage;
+	const indexOfFirstEmployees = indexOfLastEmployees - EmployeesPerPage;
+	const currentEmployees = allEmployeesArray.slice(indexOfFirstEmployees, indexOfLastEmployees);
+
+	const paginate = pageNumber => setCurrentPage(pageNumber);
+	const nextPage = () => setCurrentPage(currentPage + 1);
+	const prevPage = () => setCurrentPage(currentPage - 1);
+
+	const pageNumbers = [];
+	for (let i = 1; i <= Math.ceil(allEmployeesArray.length / EmployeesPerPage); i++) {
+		pageNumbers.push(i);
+	}
+
+	if (!featureEnabled && !loading) {
+		return <FeatureNotAvailable />
 	}
 
 	return (
@@ -158,32 +190,32 @@ function Payroll(props) {
 					<ComingSoon />
 					:
 					<>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
+						<div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
 
-					</div>
-					<div className="section-body mt-3">
+						</div>
+						<div className="section-body mt-3">
 							<div className="container-fluid">
-							<div className="d-flex justify-content-between align-items-center">
-                                    <ul className="nav nav-tabs page-header-tab">
-                                        <li className="nav-item">
+								<div className="d-flex justify-content-between align-items-center">
+									<ul className="nav nav-tabs page-header-tab">
+										<li className="nav-item">
 
-                                            <Link onClick={() => history.goBack()} className="nav-link active">
-                                                <i className="fa fa-arrow-left"></i>
-                                            </Link>
-                                        </li>
-                                    </ul>
+											<Link onClick={() => history.goBack()} className="nav-link active">
+												<i className="fa fa-arrow-left"></i>
+											</Link>
+										</li>
+									</ul>
 
-                                </div>
+								</div>
 								<div className="tab-content mt-3">
 									<div className="tab-pane fade show active" id="Payroll-Salary" role="tabpanel">
 										<div className="row clearfix">
-										{departments.map((department, index) => (
+											{departments.map((department, index) => (
 												<div key={index} className="col-lg-3 col-md-6">
-													<div className="card">
+													<div className="card card-blue">
 														<div className="card-body">
 															<h6>{department.name.toUpperCase()}</h6>
 															<h3 className="pt-3">
-															₦<span className="counter"><CountUp end={getPayrollByDepartment(department.id)} /></span>
+																₦<span className="counter"><CountUp end={getPayrollByDepartment(department.id)} /></span>
 															</h3>
 														</div>
 													</div>
@@ -196,12 +228,14 @@ function Payroll(props) {
 												<div className="card-options">
 													<form>
 														<div className="input-group">
-															<button style={{marginRight: '10px'}} type="button" className="btn btn-primary btn-sm" onClick={runPayroll}>{loading ? <i className="fa fa-spinner" aria-hidden="true"></i> : 'Run Payroll'}</button>
-															<Link to="/hr-past-payroll" style={{marginRight: '10px'}} type="button" className="btn btn-outline-primary text-primary btn-sm">Payroll Records</Link>
+															<button style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm" onClick={runPayroll}>{loading ? <i className="fa fa-spinner" aria-hidden="true"></i> : 'Run Payroll'}</button>
+															<Link to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary text-primary btn-sm">Payroll Records</Link>
 															<input
 																type="text"
 																className="form-control form-control-sm"
-																placeholder="Search something..."
+																placeholder="Search employee..."
+																value={searchEmployee}
+																onChange={setSearch}
 																name="s" />
 															<span className="input-group-btn ml-2">
 																<button className="btn btn-icon" type="submit">
@@ -233,7 +267,7 @@ function Payroll(props) {
 
 																	{currentEmployees.map((employee, index) => (
 																		<tr key={index}>
-																			<td onClick={() => employeePayslip(employee, employee.id)} style={{cursor: 'pointer'}}>
+																			<td onClick={() => employeePayslip(employee, employee.id)} style={{ cursor: 'pointer' }}>
 																				<div className="d-flex align-items-center">
 																					<span
 																						className="avatar avatar-pink"
@@ -251,15 +285,15 @@ function Payroll(props) {
 																					</div>
 																				</div>
 																			</td>
-																			<td onClick={() => employeePayslip(employee, employee.id)} style={{cursor: 'pointer'}}>
-																			<div>
-																				{getEmployeeDepartment(employee.department)}
-																			</div>
+																			<td onClick={() => employeePayslip(employee, employee.id)} style={{ cursor: 'pointer' }}>
+																				<div>
+																					{getEmployeeDepartment(employee.department)}
+																				</div>
 																			</td>
 
 																			<td>{employee.role}</td>
 
-																			<td onClick={() => employeePayslip(employee, employee.id)} style={{cursor: 'pointer'}}>{formatMoney(employee.salary)}</td>
+																			<td onClick={() => employeePayslip(employee, employee.id)} style={{ cursor: 'pointer' }}>{formatMoney(employee.salary)}</td>
 																			<td>
 																				<span className="tag tag-success ml-0 mr-0">Paid</span>
 																			</td>
