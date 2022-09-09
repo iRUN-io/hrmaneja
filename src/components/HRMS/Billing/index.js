@@ -12,7 +12,6 @@ import { useHistory } from 'react-router-dom';
 const Billing = () => {
 	const [billings, setBillings] = useState([]);
 	const user = getUser();
-	
 	const [billingExists, setBillingExists] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const isAdmin = user?.role === "HR Manager";
@@ -63,6 +62,13 @@ const Billing = () => {
 	const viewBilling = (id) => {
 		history.push(`/admin/billing-receipt/${id}`);
 	}
+
+	// get next billing date
+	const getNextBillingDate = () => {
+		const currentBillingDate = new Date(billings[0]?.createdAt);
+		const nextBillingDate = new Date(currentBillingDate.setMonth(currentBillingDate.getMonth() + 1));
+		return `${nextBillingDate.getDate()} ${nextBillingDate.toLocaleString('default', { month: 'long' })}`;
+	}
 	
 
 	return (
@@ -111,7 +117,7 @@ const Billing = () => {
 												</div>
 												<p>Next Payment</p>
 												<h3>${billing.amount}</h3>
-												<h5>on {billing.expiryDate}</h5>
+												<h5>on {getNextBillingDate()}</h5>
 												<div className='upgrade-button'>
 													<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
 												</div>
@@ -159,15 +165,6 @@ const Billing = () => {
 															</tr>
 														))}
 														
-														{/* <tr>
-															<td>$2,500</td>
-															<td>Company Starter</td>
-															<td>Nov 2022</td>
-															<td>Godfred Archer</td>
-															<td>Done</td>
-															<td><button className="btn btn-secondary btn-sm">Generate Receipt</button></td>
-
-														</tr> */}
 													</tbody>
 												</table>
 											</div>
