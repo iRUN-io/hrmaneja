@@ -45,6 +45,9 @@ class Header extends Component {
 		const billingExist = this.state.billingExist;
 		const checked = this.state.checked;
 		const { time } = this.state; // retrieve the time from state
+
+		const companyData = sessionStorage.getItem('hrmanejaCompany');
+		const company = JSON.parse(companyData);
 		return (
 			<div>
 				<div
@@ -74,7 +77,7 @@ class Header extends Component {
 											className="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-1"
 											data-toggle="dropdown"
 										>
-											<span>{user?.name ?? 'Guest '} </span> <i className="fa fa-5 fa-angle-down" />
+											<span style={{fontWeight: '500'}}>{user?.name ?? 'Guest '} | {company.name} </span> <i className="fa fa-5 fa-angle-down" />
 										</a>
 										<div className="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
 											<NavLink to="/hr-profile" className="dropdown-item">

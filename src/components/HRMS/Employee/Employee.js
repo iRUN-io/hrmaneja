@@ -105,7 +105,7 @@ function Employee(props) {
         start_date: formState.start_date
       };
 
-      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.line_manager === "" || body.department === "") {
+      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "") {
         toast.error("Please fill all the fields");
         console.log(body);
         return;
@@ -387,14 +387,14 @@ function Employee(props) {
                                       <td>{employee?.start_date}</td>
                                       <td>{employee?.role}</td>
                                       <td>
-                                        <button
+                                        {/* <button
                                       type="button"
                                       className="btn btn-icon btn-sm"
                                       title="View"
                                       onClick={() => employeeDetails(employee?.id)}
                                     >
                                       <i className="fa fa-eye" />
-                                    </button>
+                                    </button> */}
                                         <button
                                           onClick={() => setEmployee(employee)}
                                           data-toggle="modal" data-target="#editModal"

@@ -55,7 +55,7 @@ const Settings = () => {
 						<div className="d-flex justify-content-between align-items-center">
 							<ul className="nav nav-tabs page-header-tab">
 								<li className="nav-item">
-									<Link onClick={() => history.goBack()} className="nav-link active">
+									<Link to={'/'} className="nav-link active">
 										<i className="fa fa-arrow-left"></i>
 									</Link>
 								</li>

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { toast } from "material-react-toastify";
 //import "react-toastify/dist/ReactToastify.css";
-import { formatMoney, getUser, removeUserSession } from '../../config/common';
+import { formatMoney, getCompanyData, getUser, removeUserSession } from '../../config/common';
 import { getAllEmployees, getEmployee } from '../../services/employee';
 import { createActivity, getActivity } from '../../services/activities';
 import Skeleton from 'react-loading-skeleton';
@@ -18,6 +18,7 @@ function Profile(props) {
     const { fixNavbar } = props;
     const [user, setUser] = useState({});
     const [employee, setEmployee] = useState({});
+    const [company, setCompany] = useState({});
     const [activity, setActivity] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [ActivityPerPage] = useState(10);
@@ -34,12 +35,14 @@ function Profile(props) {
                 const activity = await getActivity(user.employee_id);
                 const allEmployee = await getAllEmployees(user.company_id);
                 const allLeaves = await getAllLeaves(user.company_id);
+                const companyData = await getCompanyData();
                 const teamMembers = allEmployee.filter(mYemployee => mYemployee.department === employee.department).filter(employee => employee.id !== user.employee_id);
                 const totalLeaves = allLeaves.filter(leave => leave.employee_id === user.employee_id).length;
                 setUser(user);
                 setTotalLeaves(totalLeaves);
                 setActivity(activity);
                 setEmployee(employee);
+                setCompany(companyData);
                 setTeamMembers(teamMembers);
                 setLoading(false);
             }
@@ -336,8 +339,9 @@ function Profile(props) {
                                                                     placeholder="Company"
                                                                     name='company'
                                                                     id='company'
-                                                                    value={formState?.company}
+                                                                    value={company.name}
                                                                     onChange={updateForm}
+                                                                    readOnly
 
                                                                 />
                                                             </div>
@@ -426,7 +430,7 @@ function Profile(props) {
                                                     </div>
                                                 </div>
                                                 <div className="card-footer text-right">
-                                                    <button type="submit" onClick={() => createProfileAction()} className="btn btn-primary" >Update Profile</button>
+                                                    <button type="submit" onClick={() => createProfileAction()} className="btn btn-primary" disabled >Update Profile</button>
                                                 </div>
                                             </div>
                                         </div>

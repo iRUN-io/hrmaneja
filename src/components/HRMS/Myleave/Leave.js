@@ -140,14 +140,14 @@ const MyLeave = () => {
     };
 
     const getLeaveBySearchQuery = (
-        expenses,
+        leaves,
         searchQuery,
     ) => {
-        return expenses.filter(expense =>
-			expense.amount.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| expense.status.toLowerCase().includes(searchQuery.toLowerCase())
-			|| expense.note.toLowerCase().includes(searchQuery.toLowerCase())
+        return leaves.filter(leave =>
+			leave.employee.toLowerCase().includes(searchQuery.toLowerCase()) 
+			|| leave.leave_type.toLowerCase().includes(searchQuery.toLowerCase()) 
+			|| leave.status.toLowerCase().includes(searchQuery.toLowerCase())
+			|| leave.reason.toLowerCase().includes(searchQuery.toLowerCase())
         );
     };
 
