@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {  getUser } from "../../../config/common";
+import {  getBillingData, getUser } from "../../../config/common";
 
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
@@ -28,15 +28,8 @@ const Billing = () => {
 			if (user) {
 				const company_id = user.company_id;
 				const response = await getAllBillings(company_id);
-				const currentMonth = new Date().getMonth();
-				const currentYear = new Date().getFullYear();
-				if (response?.length > 0) {
-					const billingMonth = new Date(response[0]?.createdAt).getMonth();
-					const billingYear = new Date(response[0]?.createdAt).getFullYear();
-					if (currentMonth === billingMonth && currentYear === billingYear) {
-						setBillingExists(true);
-					}
-				}
+				const billingExist = await getBillingData();
+				setBillingExists(billingExist);
 				setBillings(response);
 				setLoading(false);
 			}
@@ -69,7 +62,6 @@ const Billing = () => {
 		const nextBillingDate = new Date(currentBillingDate.setMonth(currentBillingDate.getMonth() + 1));
 		return `${nextBillingDate.getDate()} ${nextBillingDate.toLocaleString('default', { month: 'long' })}`;
 	}
-	
 
 	return (
 		<>

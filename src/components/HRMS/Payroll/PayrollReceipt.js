@@ -28,7 +28,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    });
+    }, []);
 
     if(loading){
         return <Loader />
@@ -56,7 +56,7 @@ function Payroll(props) {
                                 <div className="d-flex justify-content-between align-items-center">
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
-                                            <Link onClick={() => history.goBack()} className="nav-link active">
+                                            <Link to={'/hr-past-payroll'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -108,7 +108,7 @@ function Payroll(props) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {payroll?.employees?.map((employee, index) => (
+                                                            {payroll.employees?.map((employee, index) => (
                                                                 <tr key={index}>
                                                                     <td>
                                                                         <span>{employee.name}</span>

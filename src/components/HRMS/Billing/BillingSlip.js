@@ -23,7 +23,6 @@ function BillingSlip(props) {
             const user = await getUser();
             if (user) {
                 const billingResponse = await getBilling(id);
-                console.log(billingResponse)
                 setBilling(billingResponse);
                 setLoading(false);
                 setUser(user)
@@ -55,7 +54,8 @@ function BillingSlip(props) {
 
                                 </div>
                             </div>
-                        </div><div className="section-body mt-3">
+                        </div>
+                        <div className="section-body mt-3">
                             <div className="container-fluid">
                                 <div className="tab-content mt-3">
                                     <div id="Payroll-Payslip" role="tabpanel">

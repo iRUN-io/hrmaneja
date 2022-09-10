@@ -5,11 +5,12 @@ import { totalDepartments, totalEmployees, totalLeaves, totalRequisition, totalU
 const Dashboard = () => {
   		const [company, setCompany] = useState([]);
 		const user = getUser();
-
+		const [loading, setLoading] = useState(false);
 		const isAdmin = user?.role === "HR Manager";
 
 		useEffect(() => {
 			async function fetchData() {
+				setLoading(true);
 				const company_id = user.company_id;
 				const totalDepartmentsResponse = await totalDepartments(company_id);
 				const totalUsersResponse = await totalUsers(company_id);
@@ -24,10 +25,12 @@ const Dashboard = () => {
 					totalLeaves: totalLeavesResponse.totalLeaves,
 					totalRequisitions: totalRequisitionsResponse.totalRequisitions,
 				});
+				setLoading(false);
 				}
 			}
 			if(isAdmin){
 			fetchData();
+			
 			}
 		}, [isAdmin, user.company_id]);
 
@@ -111,8 +114,11 @@ const Dashboard = () => {
 												<div className="card">
 													<div className="card-body">
 														<span>Total Users</span>
+														{loading ? (
+															<h3><i className="fa text-primary fa-spinner fa-spin" /></h3>
+														) : (
 														<h3 className="mb-0 font-weight-bold">{company.totalUsers}</h3>
-
+														)}
 													</div>
 												</div>
 											</Link>
@@ -122,7 +128,11 @@ const Dashboard = () => {
 												<div className="card">
 													<div className="card-body">
 														<span>Total Requisition</span>
+														{loading ? (
+															<h3><i className="fa text-primary fa-spinner fa-spin" /></h3>
+														) : (
 														<h3 className="mb-0 font-weight-bold">{company.totalRequisitions}</h3>
+														)}
 
 													</div>
 												</div>

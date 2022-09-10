@@ -1,169 +1,115 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { getUser } from '../../../config/common';
 import { getHolidays } from '../../../services/setting';
+import Loader from '../../common/loader';
 
 const Holidays = () => {
 	const [loading, setLoading] = useState(false);
-    const [user, setUser] = useState({});
+	const [, setUser] = useState({});
 	const [holidays, setHolidays] = useState([]);
-	
+    const history = useHistory();
 	useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            const user = await getUser();
-            if (user) {
-                const holiday = await getHolidays('NG','2022');
-                setHolidays(holiday);
-                setLoading(false);
-                setUser(user)
-            }
-        }
-        fetchData();
-    });
+		async function fetchData() {
+			setLoading(true);
+			const user = await getUser();
+			if (user) {
+				const holiday = await getHolidays('NG', '2022');
+				setHolidays(holiday);
+				setLoading(false);
+				setUser(user)
+			}
+		}
+		fetchData();
+	}, []);
+
+	if (loading) {
+		return <Loader />
+	}
 	
-	console.log('url', holidays)
-		return (
-			<>
-				<div>
-					<div className={`section-body`}>
-						<div className="container-fluid">
-							<div className="row">
-								<div className="col-12">
-									<div className="card">
-										<div className="card-body">
-											<div className="table-responsive">
-												<table className="table table_custom spacing5 border-style mb-0">
-													<thead>
-														<tr>
-															<th>DAY</th>
-															<th>DATE</th>
-															<th>HOLIDAY</th>
-														</tr>
-													</thead>
-													<tbody>
-														<tr>
-															<td>
-																<span>Tuesday</span>
-															</td>
-															<td>
-																<span>Jan 01, 2019</span>
-															</td>
-															<td>
-																<span>New Year's Day</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Monday</span>
-															</td>
-															<td>
-																<span>Jan 14, 2019</span>
-															</td>
-															<td>
-																<span>Makar Sankranti / Pongal</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Saturday</span>
-															</td>
-															<td>
-																<span>Jan 26, 2019</span>
-															</td>
-															<td>
-																<span>Republic Day</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Monday</span>
-															</td>
-															<td>
-																<span>Mar 04, 2019</span>
-															</td>
-															<td>
-																<span>Maha Shivaratri</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Thursday</span>
-															</td>
-															<td>
-																<span>Mar 21, 2019</span>
-															</td>
-															<td>
-																<span>Holi</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Friday</span>
-															</td>
-															<td>
-																<span>Apr 19, 2019</span>
-															</td>
-															<td>
-																<span>Good Friday</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Wednesday</span>
-															</td>
-															<td>
-																<span>Jun 05, 2019</span>
-															</td>
-															<td>
-																<span>Eid-ul-Fitar</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Thursday</span>
-															</td>
-															<td>
-																<span>Aug 15, 2019</span>
-															</td>
-															<td>
-																<span>Independence Day</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Wednesday</span>
-															</td>
-															<td>
-																<span>Oct 02, 2019</span>
-															</td>
-															<td>
-																<span>Mathatma Gandhi Jayanti</span>
-															</td>
-														</tr>
-														<tr>
-															<td>
-																<span>Wednesday</span>
-															</td>
-															<td>
-																<span>Dec 25, 2019</span>
-															</td>
-															<td>
-																<span>Christmas</span>
-															</td>
-														</tr>
-													</tbody>
-												</table>
-											</div>
+
+	// if date is in the past, add a class to it
+	const isPast = (date) => {
+		const today = moment().format('YYYY-MM-DD');
+		return moment(date).isBefore(today);
+	}
+
+	return (
+		<>
+			<div className={`section-body`}>
+				<div className="container-fluid">
+					<div className="d-flex justify-content-between align-items-center">
+						<ul className="nav nav-tabs page-header-tab">
+							<li className="nav-item">
+							<Link to={'/'} className="nav-link active">
+							<i className="fa fa-arrow-left"></i>
+							</Link>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+			</div>
+			<div>
+				<div className={`section-body`}>
+					<div className="container-fluid">
+						<div className="row">
+							<div className="col-12">
+								<div className="card">
+									<div className="card-body">
+										<div className="table-responsive">
+											<table className="table table_custom spacing5 border-style mb-0">
+												<thead>
+													<tr>
+														<th>DAY</th>
+														<th>DATE</th>
+														<th>HOLIDAY</th>
+													</tr>
+												</thead>
+												<tbody>
+													{holidays?.map((holiday, index) => (
+														<>
+															{isPast(holiday.date) ? (
+																<tr key={index} className="disabled-card">
+																	<td>
+																		<span>{moment(holiday.date).format('dddd')}</span>
+																	</td>
+																	<td>
+																		<span>{moment(holiday.date).format('MMM Do YYYY')}</span>
+																	</td>
+																	<td>
+																		<span>{holiday.name}</span>
+																	</td>
+																</tr>
+															) : (
+																<tr key={index}>
+																	<td>
+																		<span>{moment(holiday.date).format('dddd')}</span>
+																	</td>
+																	<td>
+																		<span>{moment(holiday.date).format('MMM Do YYYY')}</span>
+																	</td>
+																	<td>
+																		<span>{holiday.name}</span>
+																	</td>
+																</tr>
+															)}
+														</>
+													))}
+												</tbody>
+											</table>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
 				</div>
-			</>
-		);
-	}
-	
+
+			</div>
+		</>
+	);
+}
+
 export default Holidays;

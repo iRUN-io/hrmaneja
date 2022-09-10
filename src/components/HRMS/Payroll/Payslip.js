@@ -14,7 +14,7 @@ function Payroll(props) {
     const [employee, setEmpoyee] = useState({});
     const [loading, setLoading] = useState(false);
 	const [featureEnabled, setFeatureEnabled] = useState(false); // 
-    const comingSoon = true;
+    const comingSoon = false;
     const routeState = history.location?.state;
     useEffect(() => {
         async function fetchData() {
@@ -28,7 +28,7 @@ function Payroll(props) {
             }
         }
         fetchData();
-    });
+    }, []);
 
     const month = months;
 
@@ -71,7 +71,7 @@ function Payroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link onClick={() => history.goBack()} className="nav-link active">
+                                            <Link to={'/hr-past-payroll'}className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -169,8 +169,7 @@ function Payroll(props) {
 															<tr>
 																<td colSpan={2}>
 																	<span>
-																		<strong>Note:</strong> Ipsum is simply dummy text of the
-																		printing and typesetting industry.
+																		<strong>Note:</strong> Break down of {employee.name}'s salary for the month of {currentMonth} {currentYear}
 																	</span>
 																</td>
 																<td>{formatMoney(totalEarnings)}</td>

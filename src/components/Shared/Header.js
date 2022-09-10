@@ -1,14 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { getUser, removeUserSession } from '../../config/common';
+import { Link, NavLink } from 'react-router-dom';
+import { getBillingData, getUser, removeUserSession } from '../../config/common';
 
 class Header extends Component {
 
 	constructor() {
         super();
-        this.state = { time: new Date() }; 
+        this.state = { 
+			time: new Date(),
+			billingExist: false, 
+			checked: false,
+		}; 
     }
 
     componentDidMount() {
@@ -20,6 +24,14 @@ class Header extends Component {
     componentWillUnmount() { 
         clearInterval(this.update);
     }
+	
+	getCompanyBilling = async function () {
+		const billingStatus = await getBillingData();
+			this.setState({
+				billingExist: billingStatus,
+				checked: true,
+			});
+	}
 
 	render() {
 		const { fixNavbar, darkHeader } = this.props;
@@ -27,6 +39,11 @@ class Header extends Component {
 			removeUserSession();
 		};
 		const user = getUser();
+		if (this.state.checked === false) {
+			this.getCompanyBilling();
+		}
+		const billingExist = this.state.billingExist;
+		const checked = this.state.checked;
 		const { time } = this.state; // retrieve the time from state
 		return (
 			<div>
@@ -39,6 +56,10 @@ class Header extends Component {
 						<div className="page-header">
 							<div className="left">
 								<h1 className="page-title">{this.props.dataFromSubParent}</h1>
+								{checked && !billingExist && (
+								<><span className='text-white bg-danger btn  btn-sm'>Plan activation is required </span>
+								<Link to="/admin/billing" className="btn btn-primary btn-sm ml-2">Activate Plan</Link></>
+								)}
 							</div>
 							<div className="right">
 								<ul className="nav nav-pills">

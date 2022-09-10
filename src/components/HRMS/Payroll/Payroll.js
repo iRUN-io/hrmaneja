@@ -199,7 +199,7 @@ function Payroll(props) {
 									<ul className="nav nav-tabs page-header-tab">
 										<li className="nav-item">
 
-											<Link onClick={() => history.goBack()} className="nav-link active">
+											<Link to={'/admin/settings'} className="nav-link active">
 												<i className="fa fa-arrow-left"></i>
 											</Link>
 										</li>
@@ -228,7 +228,7 @@ function Payroll(props) {
 												<div className="card-options">
 													<form>
 														<div className="input-group">
-															<button style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm" onClick={runPayroll}>{loading ? <i className="fa fa-spinner" aria-hidden="true"></i> : 'Run Payroll'}</button>
+															<button style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm" onClick={runPayroll}>{loading ? <i className="fa text-white fa-spinner fa-spin" aria-hidden="true"></i> : 'Run Payroll'}</button>
 															<Link to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary text-primary btn-sm">Payroll Records</Link>
 															<input
 																type="text"
@@ -295,7 +295,7 @@ function Payroll(props) {
 
 																			<td onClick={() => employeePayslip(employee, employee.id)} style={{ cursor: 'pointer' }}>{formatMoney(employee.salary)}</td>
 																			<td>
-																				<span className="tag tag-success ml-0 mr-0">Paid</span>
+																				<span className="tag tag-secondary ml-0 mr-0">Paid</span>
 																			</td>
 																			<td>
 																				<button

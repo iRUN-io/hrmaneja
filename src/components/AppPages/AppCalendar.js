@@ -1,16 +1,46 @@
 import React, { Component } from 'react';
 import Fullcalender from '../common/fullcalender';
 import { connect } from 'react-redux';
+import { getUser } from '../../config/common';
+import { Link } from 'react-router-dom';
 class AppCalender extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			user: [],
+		};
+	}
 
+	getUser = async function () {
+		const user = getUser();
+		if (user) {
+			this.setState({
+				user: user,
+			});
+		}
+	}
 	render() {
 		const { fixNavbar } = this.props;
+		if (this.state.user.length === 0) {
+			this.getUser();
+		}
+		const user = this.state.user;
 		return (
 			<>
 				{/* <link rel="stylesheet" href="/assets/css/custom.css" /> */}
 				<div>
 					<div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
 						<div className="container-fluid">
+						<div className="d-flex justify-content-between align-items-center">
+                                    <ul className="nav nav-tabs page-header-tab">
+                                        <li className="nav-item">
+                                            <Link to={'/admin/settings'} className="nav-link active">
+                                                <i className="fa fa-arrow-left"></i>
+                                            </Link>
+                                        </li>
+                                    </ul>
+
+                                </div>
 							<div className="row clearfix row-deck">
 								<div className="col-lg-4 col-md-12">
 									<div className="card">
@@ -100,7 +130,7 @@ class AppCalender extends Component {
 								<div className="col-lg-8 col-md-12">
 									<div className="card">
 										<div className="card-header bline">
-											<h3 className="card-title">Sara Hopkins</h3>
+											<h3 className="card-title">{user.name}</h3>
 											<div className="card-options">
 												<a
 													href="/#"

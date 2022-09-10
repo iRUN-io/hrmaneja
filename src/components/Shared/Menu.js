@@ -32,7 +32,7 @@ import {
 import Routes from '../Route';
 import { createOrUpdateSetting } from '../../services/setting';
 import { toast } from 'material-react-toastify';
-import { getCompanyData, getUser } from '../../config/common';
+import { getBillingData, getCompanyData, getUser } from '../../config/common';
 import { getAllActivities } from '../../services/activities';
 import NotFound from '../Authentication/404';
 
@@ -81,11 +81,13 @@ class Menu extends Component {
 		};
 	}
 
+	
+
 	componentDidMount() {
 		const { location } = this.props;
-		const links = location.pathname.substring(1).split(/-(.+)/);
-		const parentlink = links[0];
-		const nochildlink = links[1];
+		const links = location?.pathname.substring(1).split(/-(.+)/);
+		const parentlink = links[0] || 'hr';
+		const nochildlink = links[1] || 'dashboard';
 
 		if (parentlink && nochildlink && nochildlink === 'dashboard') {
 			this.handler(parentlink, `${parentlink}${nochildlink}`);
@@ -100,9 +102,9 @@ class Menu extends Component {
 
 	componentDidUpdate(prevprops, prevstate) {
 		const { location } = this.props;
-		const links = location.pathname.substring(1).split(/-(.+)/);
-		const parentlink = links[0];
-		const nochildlink = links[1];
+		const links = location?.pathname.substring(1).split(/-(.+)/);
+		const parentlink = links[0] || 'hr';
+		const nochildlink = links[1] || 'dashboard';
 		if (prevprops.location !== location) {
 			if (parentlink && nochildlink && nochildlink === 'dashboard') {
 				this.handler(parentlink, `${parentlink}${nochildlink}`);
@@ -207,11 +209,12 @@ class Menu extends Component {
 	toggleUserMenu() {
 		this.setState({ isOpenUserMenu: !this.state.isOpenUserMenu })
 	}
+	
 	toggleSubMenu(e) {
 		let menucClass = ''
 		if (e.itemId) {
 			const subClass = e.items.map((menuItem, i) => {
-				if (menuItem.to === this.props.location.pathname) {
+				if (menuItem.to === this.props.location?.pathname) {
 					menucClass = "in"; // change this to in when you add more labels
 				} else {
 					menucClass = ""; // fix this
@@ -258,6 +261,7 @@ class Menu extends Component {
 		}
 	}
 
+
 	render() {
 		if (this.state.activityLogs.length === 0 && this.state.activityChecked === false) {
 			this.getActivity();
@@ -268,10 +272,14 @@ class Menu extends Component {
 		if (this.state.features.length === 0) {
 			this.getCompanyData();
 		}
+
+		const {checked, billinExists} = this.props;
+
 		const activityLogs = this.state.activityLogs; // Use this for the map
 		// const features = this.state.features; 
 		const user = this.state.user;
 		const isAdmin = user?.role === "HR Manager";
+
 		// console.log('featuresdd', features)
 		const content = [
 			{
@@ -529,13 +537,13 @@ class Menu extends Component {
 		];
 		const { isOpenRightSidebar, isOpenUserMenu } = this.state
 		const { darkMinSidebar, istoggleLeftMenu, friendListOpen, statisticsOpen, statisticsClose, friendListClose } = this.props
-		const pageHeading = Routes.filter((route) => route?.path === this.props.location.pathname)
+		const pageHeading = Routes.filter((route) => route?.path === this.props.location?.pathname)
 
 		if (pageHeading.length === 0) {
-			if (!this.props.location.pathname.includes('/payslip/') 
-			&& !this.props.location.pathname.includes('/req-payslip/') 
-			&& !this.props.location.pathname.includes('/billing-receipt/') 
-			&& !this.props.location.pathname.includes('/single-payroll/')) {
+			if (!this.props.location?.pathname.includes('/payslip/') 
+			&& !this.props.location?.pathname.includes('/req-payslip/') 
+			&& !this.props.location?.pathname.includes('/billing-receipt/') 
+			&& !this.props.location?.pathname.includes('/single-payroll/')) {
 				return <NotFound />
 			}
 		}
@@ -559,10 +567,10 @@ class Menu extends Component {
 											<i className="fa fa-search" />
 										</NavLink> */}
 										{/* to enable this when we are ready to release them each one */}
-										{/* <NavLink to="/app-calendar" className="nav-link icon app_inbox">
+										<NavLink to="/hr-calendar" className="nav-link icon app_inbox">
 											<i className="fa fa-calendar" />
 										</NavLink>
-										<NavLink to="/app-contact" className="nav-link icon xs-hide">
+										{/* <NavLink to="/app-contact" className="nav-link icon xs-hide">
 											<i className="fa fa-id-card-o" />
 										</NavLink>
 										<NavLink to="/app-chat" className="nav-link icon xs-hide">

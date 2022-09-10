@@ -8,7 +8,7 @@ import Holidays from './HRMS/Holidays/Holidays';
 import Events from './HRMS/Events/Events';
 import Activities from './HRMS/Activities/Activities';
 import PayrollStats from './HRMS/Payroll/Payroll';
-import Payroll from './HRMS/Payroll/';
+import Payroll from './HRMS/Payroll/Payroll';
 import PayrollPaySlip from './HRMS/Payroll/Payslip';
 import Expense from './HRMS/Expense/Expense';
 import Report from './HRMS/Report/Report';
@@ -20,7 +20,7 @@ import ProjectDashboard from './Project/Dashboard/Dashboard';
 // import TicketList from './Project/TicketList/TicketList';
 // import TicketDetails from './Project/TicketDetails/TicketDetails';
 // import Clients from './Project/Clients/Clients';
-// import TodoList from './Project/TodoList/TodoList';
+import TodoList from './Project/TodoList/TodoList';
 // import JobPortalDashboard from './JobPortal/Dashboard/Dashboard';
 // import Applicants from './JobPortal/Applicants/Applicants';
 // import Positions from './JobPortal/Positions/Positions';
@@ -53,7 +53,7 @@ import IconsPayments from './Icons/IconsPayments';
 // import WOther from './Widgets/WOther';
 // import Search from './Search/Search';
 import Profile from './Profile/Profile';
-// import AppCalendar from './AppPages/AppCalendar';
+import AppCalendar from './AppPages/AppCalendar';
 // import AppContact from './AppPages/AppContact';
 // import AppChart from './AppPages/AppChart';
 // import AppFilemanager from './AppPages/AppFilemanager';
@@ -289,13 +289,13 @@ const Routes = [
     //     component: Clients
     // },
 
-    // {
-    //     path: "/project-todo",
-    //     name: 'project-todo',
-    //     exact: true,
-    //     pageTitle: "Todo List",
-    //     component: TodoList
-    // },
+    {
+        path: "/hr-todo",
+        name: 'hr-todo',
+        exact: true,
+        pageTitle: "Todo List",
+        component: TodoList
+    },
 
     // //job portal
 
@@ -607,13 +607,13 @@ const Routes = [
     //     pageTitle: "Search",
     //     component: Search
     // },
-    // {
-    //     path: "/app-calendar",
-    //     name: 'app-calendar',
-    //     exact: true,
-    //     pageTitle: "Calendar",
-    //     component: AppCalendar
-    // },
+    {
+        path: "/hr-calendar",
+        name: 'hr-calendar',
+        exact: true,
+        pageTitle: "Calendar",
+        component: AppCalendar
+    },
     // {
     //     path: "/app-contact",
     //     name: 'app-contact',

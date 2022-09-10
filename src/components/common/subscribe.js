@@ -234,7 +234,7 @@ class Subscribe extends React.Component {
     };
 
     return (
-      <div className="pricing">
+      <div className="pricing" style={{margin: '100px'}}>
         <div className="pricing-slider center-content">
           <label className="form-slider">
             <span>How many users do you have?</span>

@@ -1,4 +1,5 @@
 import moment from "moment";
+import { getAllBillings } from "../services/billing";
 import { getCompany } from "../services/company";
 
 
@@ -42,6 +43,24 @@ import { getCompany } from "../services/company";
       if (companyData) return JSON.parse(companyData);
       else return null;
       } else return null;
+  }
+
+  export const getBillingData = async () => {
+    const user = getUser();
+      if(user) {
+      const response = await getAllBillings(user.company_id);
+				const currentMonth = new Date().getMonth();
+				const currentYear = new Date().getFullYear();
+				if (response?.length > 0) {
+					const billingMonth = new Date(response[0]?.createdAt).getMonth();
+					const billingYear = new Date(response[0]?.createdAt).getFullYear();
+					if (currentMonth === billingMonth && currentYear === billingYear) {
+						return true;
+					}else{
+            return false;
+          }
+			}
+  } else return null;
   }
 
   export const getCompanyFeatures = () => {

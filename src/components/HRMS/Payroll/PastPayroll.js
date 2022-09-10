@@ -111,7 +111,7 @@ function PastPayroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link onClick={() => history.goBack()} className="nav-link active">
+                                            <Link to={'/hr-payroll'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -186,10 +186,10 @@ function PastPayroll(props) {
 																			</td>
 
 																			<td>
-																				<span className="tag tag-success ml-0 mr-0">{payroll.status}</span>
+																				<span className="tag tag-secondary ml-0 mr-0">{payroll.status}</span>
 																			</td>
 																			<td>
-																				<span className="tag tag-success ml-0 mr-0">{moment(payroll.createdAt).format('MMM Do YYYY')}</span>
+																				<span className="tag tag-secondary ml-0 mr-0">{moment(payroll.createdAt).format('MMM Do YYYY')}</span>
 																			</td>
 																			<td>
 																				<button
