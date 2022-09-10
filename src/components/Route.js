@@ -8,7 +8,7 @@ import Holidays from './HRMS/Holidays/Holidays';
 import Events from './HRMS/Events/Events';
 import Activities from './HRMS/Activities/Activities';
 import PayrollStats from './HRMS/Payroll/Payroll';
-import Payroll from './HRMS/Payroll/Payroll';
+import Payroll from './HRMS/Payroll/';
 import PayrollPaySlip from './HRMS/Payroll/Payslip';
 import Expense from './HRMS/Expense/Expense';
 import Report from './HRMS/Report/Report';
@@ -78,6 +78,7 @@ import Features from './HRMS/Features';
 import PastPayroll from './HRMS/Payroll/PastPayroll';
 import PayrollReceipt from './HRMS/Payroll/PayrollReceipt';
 import Billing from './HRMS/Billing';
+import BillingSlip from './HRMS/Billing/BillingSlip';
 
 const user = getUser();
 
@@ -221,6 +222,13 @@ const Routes = [
         exact: true,
         pageTitle: "Billing",
         component: Billing // update this component
+    },
+    isAdmin && {
+        path: "/admin/billing-receipt/:id",
+        name: 'billing receipt',
+        exact: true,
+        pageTitle: "Billing",
+        component: BillingSlip // update this component
     },
 
     
@@ -370,6 +378,7 @@ const Routes = [
         pageTitle: "Tables",
         component: NotFound
     },
+    
     {
         path: "/req-payslip/:id",
         name: 'req-payslip',
@@ -377,6 +386,7 @@ const Routes = [
         pageTitle: "Payslip",
         component: Payslip
     },
+   
     {
         path: "/payslip/:id",
         name: 'payslip',

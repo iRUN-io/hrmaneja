@@ -1,16 +1,24 @@
 import React, { useEffect, useState } from 'react';
+
 import {  getUser } from "../../../config/common";
+
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
 import Loader from '../../common/loader';
 import Subscribe from '../../common/subscribe';
+import { useHistory } from 'react-router-dom';
+
+
 const Billing = () => {
-	const [, setBillings] = useState([]);
+	const [billings, setBillings] = useState([]);
 	const user = getUser();
 	const [billingExists, setBillingExists] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const isAdmin = user?.role === "HR Manager";
 	const comingSoon = false;
+
+	const history = useHistory();
+	
 
 	useEffect(() => {
 
@@ -35,6 +43,8 @@ const Billing = () => {
 		}
 		fetchData();
 	}, []);
+	
+
 
 	if (loading) {
 		return <Loader />
@@ -48,6 +58,18 @@ const Billing = () => {
 		return <Subscribe />
 	}
 
+
+	const viewBilling = (id) => {
+		history.push(`/admin/billing-receipt/${id}`);
+	}
+
+	// get next billing date
+	const getNextBillingDate = () => {
+		const currentBillingDate = new Date(billings[0]?.createdAt);
+		const nextBillingDate = new Date(currentBillingDate.setMonth(currentBillingDate.getMonth() + 1));
+		return `${nextBillingDate.getDate()} ${nextBillingDate.toLocaleString('default', { month: 'long' })}`;
+	}
+	
 
 	return (
 		<>
@@ -66,37 +88,44 @@ const Billing = () => {
 										</div>
 									</div>
 								</div>
+								
 								<div className="row clearfix">
-									<div className="col-6 col-md-4 col-xl-6">
-										<div className="card  more-cards card-blue">
-											<div className="card-body">
-												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
-													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
-												</div>
-												<p>Current subscription plan</p>
-												<h3>$25.00</h3>
-												<h5>Company Starter</h5>
-												<div className='upgrade-button'>
-													<button className="btn btn-default disabled btn-sm">Upgrade</button>
+									{billings.map((billing) => (
+										<div key={billing._id} className="col-6 col-md-4 col-xl-6">
+											<div className="card  more-cards card-blue">
+												<div className="card-body">
+													<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+														<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
+													</div>
+													<p></p>
+													<h3>${billing.amount}</h3>
+													<h5>{billing.plan}</h5>
+													<div className='upgrade-button'>
+														<button className="btn btn-default disabled btn-sm">Upgrade</button>
+													</div>
 												</div>
 											</div>
 										</div>
-									</div>
+									))}
+									{billings.map((billing) => (
 									<div className="col-6 col-md-4 col-xl-6">
 										<div className="card next-plan-card  more-cards card-white">
+
 											<div className="card-body">
 												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
 													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
 												</div>
 												<p>Next Payment</p>
-												<h3>$25.00</h3>
-												<h5>on October 15, 2022</h5>
+												<h3>${billing.amount}</h3>
+												<h5>on {getNextBillingDate()}</h5>
 												<div className='upgrade-button'>
 													<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
 												</div>
 											</div>
 										</div>
 									</div>
+									))}
+									
 									<div className='card'>
 										<div className='card-header'>Payment history</div>
 										<div className="card-body">
@@ -113,24 +142,29 @@ const Billing = () => {
 														</tr>
 													</thead>
 													<tbody>
+														{billings.map((billing) => (
+															<tr key={billing.id}>
+																<td>${billing.amount}</td>
+																<td>{billing.plan}</td>
+																<td>Nov 2022</td>
+																<td>{billing.paidBy}</td>
+																<td>{billing.status}</td>
+																<td>
+																	<button 
+																		type="button"
+																		className="btn btn-icon "
+																		title="Print"
+																		data-toggle="tooltip"
+																		data-placement="top"
+																		onClick={() => viewBilling(billing.id)}
+																	>
+																	<i className="icon-printer" />
 
-														<tr>
-															<td>$2,500</td>
-															<td>Company Starter</td>
-															<td>Nov 2022</td>
-															<td>Godfred Archer</td>
-															<td>Done</td>
-															<td><button className="btn btn-secondary btn-sm">Generate Receipt</button></td>
-														</tr>
-														<tr>
-															<td>$2,500</td>
-															<td>Company Starter</td>
-															<td>Nov 2022</td>
-															<td>Godfred Archer</td>
-															<td>Done</td>
-															<td><button className="btn btn-secondary btn-sm">Generate Receipt</button></td>
-
-														</tr>
+																	</button>
+																</td>
+															</tr>
+														))}
+														
 													</tbody>
 												</table>
 											</div>
