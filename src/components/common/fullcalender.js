@@ -40,9 +40,9 @@ class Fullcalender extends Component {
                     start: '2020-05-13T07:00:00'
                 },
                 {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2020-05-28'
+                    title: 'Submit YC Application',
+                    url: 'https://apply.ycombinator.com/',
+                    start: '2022-09-10'
                 }
             ],
         }

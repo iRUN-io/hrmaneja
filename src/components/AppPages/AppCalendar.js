@@ -122,6 +122,7 @@ class AppCalender extends Component {
 																</span>
 														</label>
 													</li>
+													<li><Link to={'/hr-todo'} className="btn btn-primary btn-sm">See Todos</Link></li>
 												</ul>
 											</div>
 										</div>

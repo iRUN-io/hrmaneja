@@ -38,7 +38,6 @@ const Billing = () => {
 	}, []);
 	
 
-
 	if (loading) {
 		return <Loader />
 	}
@@ -85,19 +84,18 @@ const Billing = () => {
 								<div className="row clearfix">
 									{billings.map((billing) => (
 										<>
-										<div className="card ">
+										<div className="card disabled-card">
 											<div className="row">
-												
 												<div className="col-6">
 													<div className="">
 														<div className="card-body">
 															
 															<p></p>
-															<h3>Zenith Bank</h3>
-															<h5>4022651865</h5>
-															<h5>$ 250</h5>
+															<h3>---- Bank</h3>
+															<h5>------ Name</h5>
+															<h5>$ 0.00</h5>
 															<div className='upgrade-button'>
-																<button className="btn btn-default card-blue btn-sm">Fund Account</button>
+																<button className="btn btn-default text-white card-blue btn-sm">Fund Account</button>
 															</div>
 														</div>
 													</div>
@@ -147,7 +145,7 @@ const Billing = () => {
 										<div className="card ">
 											<div className="row">
 												
-											<div className=' col-6'>
+											<div className=' col-12'>
 											
 											<div className='card-header'>Transaction history</div>
 												<div className="card-body">
@@ -158,7 +156,7 @@ const Billing = () => {
 																	<th>Amount</th>
 																	<th>Plan</th>
 																	<th>Date</th>
-																	<th>Paid By</th>
+																	{/* <th>Paid By</th> */}
 																	<th>Status</th>
 																	<th>Action</th>
 																</tr>
@@ -169,7 +167,7 @@ const Billing = () => {
 																		<td>${billing.amount}</td>
 																		<td>{billing.plan}</td>
 																		<td>Nov 2022</td>
-																		<td>{billing.paidBy}</td>
+																		{/* <td>{billing.paidBy}</td> */}
 																		<td>{billing.status}</td>
 																		<td>
 																			<button 
@@ -192,7 +190,7 @@ const Billing = () => {
 													</div>
 												</div>
 											</div>
-											<div className=' col-6'>
+											{/* <div className=' col-6'>
 											
 											<div className='card-header'>Payment history</div>
 												<div className="card-body">
@@ -203,7 +201,6 @@ const Billing = () => {
 																	<th>Amount</th>
 																	<th>Plan</th>
 																	<th>Date</th>
-																	<th>Paid By</th>
 																	<th>Status</th>
 																	<th>Action</th>
 																</tr>
@@ -214,7 +211,6 @@ const Billing = () => {
 																		<td>${billing.amount}</td>
 																		<td>{billing.plan}</td>
 																		<td>Nov 2022</td>
-																		<td>{billing.paidBy}</td>
 																		<td>{billing.status}</td>
 																		<td>
 																			<button 
@@ -236,7 +232,7 @@ const Billing = () => {
 														</table>
 													</div>
 												</div>
-											</div>
+											</div> */}
 											
 																								
 
