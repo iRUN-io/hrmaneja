@@ -81,8 +81,33 @@ const Billing = () => {
 									</div>
 								</div>
 								
+								
 								<div className="row clearfix">
 									{billings.map((billing) => (
+										<>
+										<div className="card ">
+											<div className="row">
+												
+												<div className="col-6">
+													<div className="">
+														<div className="card-body">
+															
+															<p></p>
+															<h3>Zenith Bank</h3>
+															<h5>4022651865</h5>
+															<h5>$ 250</h5>
+															<div className='upgrade-button'>
+																<button className="btn btn-default card-blue btn-sm">Fund Account</button>
+															</div>
+														</div>
+													</div>
+												</div>
+												<div className="col-6 wallet-card">
+
+												</div>
+											</div>
+										</div>
+											
 										<div key={billing._id} className="col-6 col-md-4 col-xl-6">
 											<div className="card  more-cards card-blue">
 												<div className="card-body">
@@ -98,9 +123,8 @@ const Billing = () => {
 												</div>
 											</div>
 										</div>
-									))}
-									{billings.map((billing) => (
-									<div className="col-6 col-md-4 col-xl-6">
+
+										<div className="col-6 col-md-4 col-xl-6">
 										<div className="card next-plan-card  more-cards card-white">
 
 											<div className="card-body">
@@ -115,53 +139,115 @@ const Billing = () => {
 												</div>
 											</div>
 										</div>
-									</div>
-									))}
-									
-									<div className='card'>
-										<div className='card-header'>Payment history</div>
-										<div className="card-body">
-											<div className="table-responsive">
-												<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
-													<thead>
-														<tr>
-															<th>Amount</th>
-															<th>Plan</th>
-															<th>Date</th>
-															<th>Paid By</th>
-															<th>Status</th>
-															<th>Action</th>
-														</tr>
-													</thead>
-													<tbody>
-														{billings.map((billing) => (
-															<tr key={billing.id}>
-																<td>${billing.amount}</td>
-																<td>{billing.plan}</td>
-																<td>Nov 2022</td>
-																<td>{billing.paidBy}</td>
-																<td>{billing.status}</td>
-																<td>
-																	<button 
-																		type="button"
-																		className="btn btn-icon "
-																		title="Print"
-																		data-toggle="tooltip"
-																		data-placement="top"
-																		onClick={() => viewBilling(billing.id)}
-																	>
-																	<i className="icon-printer" />
+										</div>
 
-																	</button>
-																</td>
-															</tr>
-														))}
-														
-													</tbody>
-												</table>
+										
+
+										{/* test table */}
+										<div className="card ">
+											<div className="row">
+												
+											<div className=' col-6'>
+											
+											<div className='card-header'>Transaction history</div>
+												<div className="card-body">
+													<div className="table-responsive">
+														<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
+															<thead>
+																<tr>
+																	<th>Amount</th>
+																	<th>Plan</th>
+																	<th>Date</th>
+																	<th>Paid By</th>
+																	<th>Status</th>
+																	<th>Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																{billings.map((billing) => (
+																	<tr key={billing.id}>
+																		<td>${billing.amount}</td>
+																		<td>{billing.plan}</td>
+																		<td>Nov 2022</td>
+																		<td>{billing.paidBy}</td>
+																		<td>{billing.status}</td>
+																		<td>
+																			<button 
+																				type="button"
+																				className="btn btn-icon "
+																				title="Print"
+																				data-toggle="tooltip"
+																				data-placement="top"
+																				onClick={() => viewBilling(billing.id)}
+																			>
+																			<i className="icon-printer" />
+
+																			</button>
+																		</td>
+																	</tr>
+																))}
+																
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											<div className=' col-6'>
+											
+											<div className='card-header'>Payment history</div>
+												<div className="card-body">
+													<div className="table-responsive">
+														<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
+															<thead>
+																<tr>
+																	<th>Amount</th>
+																	<th>Plan</th>
+																	<th>Date</th>
+																	<th>Paid By</th>
+																	<th>Status</th>
+																	<th>Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																{billings.map((billing) => (
+																	<tr key={billing.id}>
+																		<td>${billing.amount}</td>
+																		<td>{billing.plan}</td>
+																		<td>Nov 2022</td>
+																		<td>{billing.paidBy}</td>
+																		<td>{billing.status}</td>
+																		<td>
+																			<button 
+																				type="button"
+																				className="btn btn-icon "
+																				title="Print"
+																				data-toggle="tooltip"
+																				data-placement="top"
+																				onClick={() => viewBilling(billing.id)}
+																			>
+																			<i className="icon-printer" />
+
+																			</button>
+																		</td>
+																	</tr>
+																))}
+																
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											
+																								
+
 											</div>
 										</div>
-									</div>
+									</>
+
+									))}
+									
+									
+									
 								</div>
 							</div>
 						</>
