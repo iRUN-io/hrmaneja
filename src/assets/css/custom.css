@@ -749,3 +749,10 @@ background-color: #ffffff;
 opacity: 1.9;
 background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #ffffff 23px ), repeating-linear-gradient( #4356A555, #4356A5 );
 }
+.wallet-card{
+  background-color: transparent;
+  background-image: url(../images/walletbg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+}
