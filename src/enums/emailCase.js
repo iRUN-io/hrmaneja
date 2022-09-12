@@ -25,4 +25,6 @@ export const emailCase = {
     remindSupportTicket:'remindSupportTicket',
     createSupportTicketAdmin:'createSupportTicketAdmin',
     employeePayrollGenerated: 'employeePayrollGenerated',
+    createTask:         'createTask',
+    updateTask:         'updateTask',
 }

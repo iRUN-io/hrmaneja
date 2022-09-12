@@ -192,6 +192,16 @@ const emailSwitch = {
     return {
       subject: 'Payroll generated', body: `Your salary for the month of ${new Date().toLocaleString('default', { month: 'long' })} has been generated, you should receive it shortly.
     Thanks` };
+  },
+  createTask: () => {
+    return {
+      subject: 'Task created', body: `Your task has been created successfully. 
+    Thanks` };
+  },
+  updateTask: () => {
+    return {
+      subject: 'Task updated', body: `Your task has been updated successfully. 
+    Thanks` };
   }
 
 }
