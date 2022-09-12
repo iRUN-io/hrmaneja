@@ -1,35 +1,98 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Fullcalender from '../common/fullcalender';
 import { connect } from 'react-redux';
 import { getUser } from '../../config/common';
 import { Link } from 'react-router-dom';
-class AppCalender extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			user: [],
-		};
+import { completeTask, getEmployeeTask, pendingTask } from '../../services/task';
+import { createActivity } from '../../services/activities';
+import { toast } from 'material-react-toastify';
+import Loader from '../common/loader';
+
+function AppCalender(props) {
+    const [tasks, setTasks] = useState([]);
+	const [user, setUser] = useState(getUser());
+	const [loading, setLoading] = useState([]);
+	
+	useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const user = getUser();
+            if (user) {
+                const allTasks = await getEmployeeTask(user.employee_id);
+				// set only 5 tasks
+				setTasks(allTasks.slice(0, 5));
+                setLoading(false);
+                setUser(user);
+
+            }
+        }
+        fetchData();
+    }, []);
+
+	const toggleTask = async (id) => {
+        const task = tasks.find(task => task.id === id);
+
+        const updatedTask = {
+            ...task,
+            status: task.status === 'pending' ? 'completed' : 'pending',
+        };
+        // if updated task is pending,
+        if (updatedTask.status === 'completed') {
+            const response = await completeTask(updatedTask, task.id);
+            if (!response.error) {
+                const logActivity = await createActivity(
+                    {
+                        name: 'Completed a task',
+                        employee_id: user.employee_id,
+                        activity: `Completed a task for ${updatedTask.employee_name}`,
+                        activity_name: 'Completion',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if (logActivity.id) {
+                    // sendEmail(user.emailAddress, user.name, emailCase.completeTask);
+                    setTasks(tasks.map(task => task.id === id ? updatedTask : task));
+                    toast.success("Task completed successfully");
+                }
+            }
+
+        }
+        // if updated task is completed
+        if (updatedTask.status === 'pending') {
+            const response = await pendingTask(updatedTask, task.id);
+            if (!response.error) {
+                const logActivity = await createActivity(
+                    {
+                        name: 'Task moved to pending',
+                        employee_id: user.employee_id,
+                        activity: `moved a task for ${updatedTask.employee_name} to pending`,
+                        activity_name: 'Pending Task',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if (logActivity.id) {
+                    // sendEmail(user.emailAddress, user.name, emailCase.pendingTask);
+                    setTasks(tasks.map(task => task.id === id ? updatedTask : task));
+                    toast.success("Task moved back to Todo");
+                }
+            }
+        }
+    };
+
+
+	if (loading) {
+		return <Loader/>
 	}
 
-	getUser = async function () {
-		const user = getUser();
-		if (user) {
-			this.setState({
-				user: user,
-			});
-		}
-	}
-	render() {
-		const { fixNavbar } = this.props;
-		if (this.state.user.length === 0) {
-			this.getUser();
-		}
-		const user = this.state.user;
 		return (
 			<>
 				{/* <link rel="stylesheet" href="/assets/css/custom.css" /> */}
 				<div>
-					<div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
+					<div className={`section-body  mt-3`}>
 						<div className="container-fluid">
 						<div className="d-flex justify-content-between align-items-center">
                                     <ul className="nav nav-tabs page-header-tab">
@@ -45,8 +108,8 @@ class AppCalender extends Component {
 								<div className="col-lg-4 col-md-12">
 									<div className="card">
 										<div className="card-body">
-											<h3 className="card-title">Events List</h3>
-											<div id="event-list" className="fc event_list">
+											{/* <h3 className="card-title">Events List</h3> */}
+											{/* <div id="event-list" className="fc event_list">
 												<div className="fc-event bg-primary" data-class="bg-primary">
 													My Event 1
 													</div>
@@ -62,67 +125,23 @@ class AppCalender extends Component {
 												<div className="fc-event bg-danger" data-class="bg-danger">
 													My Event 5
 													</div>
-											</div>
+											</div> */}
 											<div className="todo_list mt-4">
 												<h3 className="card-title">
 													ToDo List <small>This Month task list</small>
 												</h3>
 												<ul className="list-unstyled mb-0">
-													<li>
+													{tasks.map((task, index) => (
+													<li key={index}>
 														<label className="custom-control custom-checkbox">
-															<input
-																type="checkbox"
-																className="custom-control-input"
-																name="example-checkbox1"
-																defaultValue="option1"
-																defaultChecked
-															/>
+														<input onClick={()=> toggleTask(task.id)} type="checkbox" className="custom-control-input" defaultChecked={task.status === 'completed' ? true : false} />
 															<span className="custom-control-label">
-																Report Panel Usag
+																{task.note}
 																</span>
 														</label>
 													</li>
-													<li>
-														<label className="custom-control custom-checkbox">
-															<input
-																type="checkbox"
-																className="custom-control-input"
-																name="example-checkbox1"
-																defaultValue="option1"
-															/>
-															<span className="custom-control-label">
-																Report Panel Usag
-																</span>
-														</label>
-													</li>
-													<li>
-														<label className="custom-control custom-checkbox">
-															<input
-																type="checkbox"
-																className="custom-control-input"
-																name="example-checkbox1"
-																defaultValue="option1"
-																defaultChecked
-															/>
-															<span className="custom-control-label">
-																New logo design for Angular Admin
-																</span>
-														</label>
-													</li>
-													<li>
-														<label className="custom-control custom-checkbox">
-															<input
-																type="checkbox"
-																className="custom-control-input"
-																name="example-checkbox1"
-																defaultValue="option1"
-															/>
-															<span className="custom-control-label">
-																Design PSD files for Angular Admin
-																</span>
-														</label>
-													</li>
-													<li><Link to={'/hr-todo'} className="btn btn-primary btn-sm">See Todos</Link></li>
+													))}
+													<li><Link to={'/hr-todo'} className="btn btn-primary btn-sm">See More Todos</Link></li>
 												</ul>
 											</div>
 										</div>
@@ -133,13 +152,13 @@ class AppCalender extends Component {
 										<div className="card-header bline">
 											<h3 className="card-title">{user.name}</h3>
 											<div className="card-options">
-												<a
-													href="/#"
+												{/* <a
+													href="#"
 													className="card-options-fullscreen"
 													data-toggle="card-fullscreen"
 												>
 													<i className="fe fe-maximize" />
-												</a>
+												</a> */}
 											</div>
 										</div>
 										<div className="card-body">
@@ -282,7 +301,7 @@ class AppCalender extends Component {
 				</div>
 			</>
 		);
-	}
+
 }
 const mapStateToProps = state => ({
 	fixNavbar: state.settings.isFixNavbar

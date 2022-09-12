@@ -138,27 +138,6 @@ function TodoList(props) {
         );
     };
 
-    const allTasksArray = useMemo(() => {
-        let allTasks = tasks;
-        if (searchTask) {
-            allTasks = getTaskBySearchQuery(allTasks, searchTask);
-        }
-
-        return allTasks || [];
-    }, [tasks, searchTask]);
-
-    const indexOfLastTasks = currentPage * TasksPerPage;
-    const indexOfFirstTasks = indexOfLastTasks - TasksPerPage;
-    const currentTasks = allTasksArray.slice(indexOfFirstTasks, indexOfLastTasks);
-
-    const paginate = pageNumber => setCurrentPage(pageNumber);
-    const nextPage = () => setCurrentPage(currentPage + 1);
-    const prevPage = () => setCurrentPage(currentPage - 1);
-
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(allTasksArray.length / TasksPerPage); i++) {
-        pageNumbers.push(i);
-    }
 
     const toggleTask = async (id) => {
         const task = tasks.find(task => task.id === id);
@@ -213,6 +192,29 @@ function TodoList(props) {
             }
         }
     };
+
+    
+    const allTasksArray = useMemo(() => {
+        let allTasks = tasks;
+        if (searchTask) {
+            allTasks = getTaskBySearchQuery(allTasks, searchTask);
+        }
+
+        return allTasks || [];
+    }, [tasks, searchTask]);
+
+    const indexOfLastTasks = currentPage * TasksPerPage;
+    const indexOfFirstTasks = indexOfLastTasks - TasksPerPage;
+    const currentTasks = allTasksArray.slice(indexOfFirstTasks, indexOfLastTasks);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(allTasksArray.length / TasksPerPage); i++) {
+        pageNumbers.push(i);
+    }
     return (
         <>
             <div className={`section-body ${props.fixNavbar ? "marginTop" : ""} mt-3`}>

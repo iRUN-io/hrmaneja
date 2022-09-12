@@ -1,53 +1,44 @@
-import React, { Component } from 'react';
+import React, {  useEffect, useState } from 'react';
 import FullCalendar from 'fullcalendar-reactwrapper';
 import "fullcalendar-reactwrapper/dist/css/fullcalendar.min.css"
-class Fullcalender extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            events: [
-                {
-                    title: 'All Day Event',
-                    start: '2020-05-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2020-05-07',
-                    end: '2020-05-10'
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: '2020-05-09T16:00:00'
-                },
-                {
-                    id: 999,
-                    title: 'Repeating Event',
-                    start: '2020-05-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2020-05-11',
-                    end: '2020-05-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2020-05-12T10:30:00',
-                    end: '2020-05-12T12:30:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2020-05-13T07:00:00'
-                },
-                {
-                    title: 'Submit YC Application',
-                    url: 'https://apply.ycombinator.com/',
-                    start: '2022-09-10'
-                }
-            ],
+import { getUser } from '../../config/common';
+import { getEmployeeTask } from '../../services/task';
+import Loader from './loader';
+
+function Fullcalender (props) {
+
+    const [tasks, setTasks] = useState([]);
+	const [,setUser] = useState(getUser());
+	const [loading, setLoading] = useState([]);
+	
+	useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const user = getUser();
+            if (user) {
+                const allTasks = await getEmployeeTask(user.employee_id);
+				setTasks(allTasks.slice(0, 5));
+                setLoading(false);
+                setUser(user);
+
+            }
         }
-    }
-    render() {
+        fetchData();
+    }, []);
+
+    const events = tasks.map((task) => {
+        return {
+            title: task.note,
+            start: task.createdAt,
+            end: task.due_date,
+        }
+    });
+
+    if (loading) {
+		return <Loader/>
+	}
+
+    
         return (
             <div id="example-component">
                 <FullCalendar
@@ -61,11 +52,10 @@ class Fullcalender extends Component {
                     navLinks={true} // can click day/week names to navigate views
                     editable={true}
                     eventLimit={true} // allow "more" link when too many events
-                    events={this.state.events}
+                    events={events}
                 />
             </div>
         );
     }
-}
 
 export default Fullcalender;
