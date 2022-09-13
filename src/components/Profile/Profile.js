@@ -192,7 +192,20 @@ function Profile(props) {
                                     {/* card profile */}
                                     <div className="card card-profile">
                                         <div className="card-body text-center">
-                                            <img className="card-profile-img" src="../assets/images/sm/avatar1.jpg" alt="fake_url" />
+                                        {employee.gender === 'Female' ? (
+                                                <img
+                                                    className="card-profile-img"
+                                                    src="../assets/images/sm/avatar1.jpg"
+                                                    alt={employee.name}
+                                                />
+                                            ) : (
+                                                <img
+                                                    className="card-profile-img"
+                                                    src="../assets/images/sm/avatar2.jpg"
+                                                    alt={employee.name}
+
+                                                />
+                                            )}
                                             <h4 className="mb-3">{user.name}</h4>
                                             <p className="mb-4">{user.role}</p>
                                         </div>

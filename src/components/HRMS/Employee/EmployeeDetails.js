@@ -1,142 +1,232 @@
 
-import React from 'react';
+import moment from 'moment';
+import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from "react-redux";
+import { useHistory } from 'react-router-dom';
 import {
     statisticsAction,
     statisticsCloseAction
-  } from "../../../actions/settingsAction";
+} from "../../../actions/settingsAction";
+import { formatMoney, getUser } from '../../../config/common';
+import { getActivity } from '../../../services/activities';
 // import 'react-toastify/dist/ReactToastify.css';
 const EmployeeDetails = (employee) => {
 
     const { location } = employee;
     const { state } = location;
-    const  employeeData = state.employee[0];
+    const employeeData = state.employee[0];
 
-    if(!employeeData) {
+    if (!employeeData) {
         window.location.href = "/hr-employees";
     }
+
+    const [activities, setActivities] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [ActivityPerPage] = useState(8);
+    const [searchActivity, setSearchActivity] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+
+        async function fetchData() {
+            setLoading(true);
+            const user = await getUser();
+            if (user) {
+                // const company_id = user.company_id;
+                const response = await getActivity(employeeData.id);
+                // companyData.settings?.features['activity'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                setActivities(response);
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const setSearch = (e) => {
+        const { value } = e.target;
+        setSearchActivity(value);
+    };
+
+    const getActivityBySearchQuery = (
+        activities,
+        searchQuery,
+    ) => {
+        return activities.filter(activity =>
+            activity.name.toLowerCase().includes(searchQuery.toLowerCase())
+            || activity.activity.toLowerCase().includes(searchQuery.toLowerCase())
+            || activity.activity_name.toLowerCase().includes(searchQuery.toLowerCase())
+            || activity.user.toLowerCase().includes(searchQuery.toLowerCase())
+
+        );
+    };
+
+    const allActivitiesArray = useMemo(() => {
+        let allActivities = activities;
+        if (searchActivity) {
+            allActivities = getActivityBySearchQuery(allActivities, searchActivity);
+        }
+
+        return allActivities || [];
+    }, [activities, searchActivity]);
+
+
+    const indexOfLastActivity = currentPage * ActivityPerPage;
+    const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
+    const currentActivity = allActivitiesArray.slice(indexOfFirstActivity, indexOfLastActivity);
+
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+    const nextPage = () => setCurrentPage(currentPage + 1);
+    const prevPage = () => setCurrentPage(currentPage - 1);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(allActivitiesArray.length / ActivityPerPage); i++) {
+        pageNumbers.push(i);
+    }
+
+    const successActivities = [
+        'Completion',
+        'Creation',
+        'Completion',
+        'Updating',
+        'Update Password',
+        'Update Profile',
+        'Approval',
+        'Paid for subscription'
+    ];
     return (
         <>
-        <div className="section-body">
-            <div className="container-fluid">
-            <div>
-                <div className="row">
-                    <div className="col-lg-4 col-md-12">
-                        <div className="card">
-                            <div className="card-body">
-                                <div className="media mb-4">
-                                    <img
-                                        className="avatar avatar-xl mr-3"
-                                        src="../assets/images/sm/avatar1.jpg"
-                                        alt="avatar"
-                                    />
-                                    <div className="media-body">
-                                        <h5 className="m-0">{employeeData.name}</h5>
-                                        <p className="text-muted mb-0">{employeeData.role}</p>
+            <div className="section-body">
+                <div className="container-fluid">
+                    <div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-12">
+                                <div className="card">
+                                    <div className="card-body">
+                                        <div className="media mb-4">
+                                            {employeeData.gender === 'Female' ? (
+                                                <img
+                                                    className="avatar avatar-xl mr-3"
+                                                    src="../assets/images/sm/avatar1.jpg"
+                                                    alt={employeeData.name}
+                                                />
+                                            ) : (
+                                                <img
+                                                    className="avatar avatar-xl mr-3"
+                                                    src="../assets/images/sm/avatar2.jpg"
+                                                    alt={employeeData.name}
+
+                                                />
+                                            )}
+                                            <div className="media-body">
+                                                <h5 className="m-0">{employeeData.name}</h5>
+                                                <p className="text-muted mb-0">{employeeData.role}</p>
+                                            </div>
+                                        </div>
+                                        <p className="mb-4">
+                                            <span>{employeeData.phone}</span><br />
+                                            <a href={`mailto:${employeeData.email}`}>{employeeData.email}</a><br />
+                                            <span>{employeeData.country}</span>
+                                        </p>
+                                        <button style={{ marginRight: '10px' }} className="btn btn-outline-primary btn-sm">
+                                            <a href={`mailto:${employeeData.email}`}><span className="fa fa-envelope" /></a>
+                                        </button>
+
+                                        <button className="btn btn-outline-primary btn-sm">
+                                            <a href={`tel:${employeeData.phone}`}><span className="fa fa-phone" /></a>
+                                        </button>
                                     </div>
                                 </div>
-                                <p className="mb-4">
-                                    Contrary to popular belief, Lorem Ipsum is not simply random
-                                    text. It has roots in a piece of classical Latin literature
-                                    from 45 BC, making it over 2000 years old.
-                                </p>
-                                <button className="btn btn-outline-primary btn-sm">
-                                    <span className="fa fa-twitter" /> Follow
-                                </button>
-                            </div>
-                        </div>
 
-                    </div>
-                    <div className="col-lg-8 col-md-12">
-                        <div className="card">
-                            <div className="card-body">
-                                <ul className="new_timeline mt-3">
-                                    <li>
-                                        <div className="bullet pink" />
-                                        <div className="time">11:00am</div>
-                                        <div className="desc">
-                                            <h3>Attendance</h3>
-                                            <h4>Computer Class</h4>
+                                <div className="card">
+                                    <div className='card-header'>
+                                        Salary Details
+                                    </div>
+                                    <div className="card-body">
+                                        <div className="media-body">
+                                            <h5 className="m-0">{employeeData.bank_account_name}</h5>
+                                            <p className="text-muted mb-0">{employeeData.bank_account_number}</p>
+                                            <p className="text-muted mb-0">{employeeData.bank_name}</p>
+                                            <p className="text-muted mb-0">{formatMoney(employeeData.salary)}</p>
                                         </div>
-                                    </li>
-                                    <li>
-                                        <div className="bullet pink" />
-                                        <div className="time">11:30am</div>
-                                        <div className="desc">
-                                            <h3>Added an interest</h3>
-                                            <h4>“Volunteer Activities”</h4>
-                                            <p>
-                                                Contrary to popular belief, Lorem Ipsum is not
-                                                simply random text. It has roots in a piece of
-                                                classical Latin literature from 45 BC, making it
-                                                over 2000 years old.
-                                            </p>
+                                    </div>
+                                </div>
+
+                                <div className="card disabled-card">
+                                    <div className='card-header'>
+                                        Send Message
+                                    </div>
+                                    <div className="card-body">
+                                        <div className="media mb-4">
+                                            <div className="media-body">
+                                                <div className="form-group">
+                                                    <label className="form-label">Subject</label>
+                                                    <input type="text" className="form-control" placeholder="Subject" />
+
+                                                    <label className="form-label">Message</label>
+                                                    <textarea className="form-control" rows="5" placeholder="Message" />
+
+                                                    <button style={{ marginTop: '10px' }} className="btn btn-outline-primary btn-sm">
+                                                        <span className="fa fa-send" /> Send Message
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </li>
-                                    <li>
-                                        <div className="bullet green" />
-                                        <div className="time">12:00pm</div>
-                                        <div className="desc">
-                                            <h3>Developer Team</h3>
-                                            <h4>Hangouts</h4>
-                                            <ul className="list-unstyled team-info margin-0 p-t-5">
-                                                <li>
-                                                    <img
-                                                        src="../assets/images/xs/avatar1.jpg"
-                                                        alt="Avatar"
-                                                    />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div className="col-lg-8 col-md-12">
+                                <div className="card">
+                                    <div className="card-body">
+                                    <div className="card-options" style={{marginBottom: '20px', marginLeft: '10px'}}>
+                                        <form>
+                                            <div className="input-group">
+                                                <input
+                                                    type="text"
+                                                    onChange={setSearch}
+                                                    value={searchActivity}
+                                                    className="form-control form-control-sm"
+                                                    placeholder="Search Activity..."
+                                                    name="" />
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                        <ul className="new_timeline mt-3">
+                                            {currentActivity.map((activity, index) => (
+                                                <li key={index}>
+                                                    <div className={`bullet ${successActivities.includes(activity.activity_name) ? 'green' : 'pink'}`} />
+                                                    <div className="time">{moment(activity.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
+                                                    <div className="desc">
+                                                        <h3>{activity.activity_name}</h3>
+                                                        <h4>{activity.activity}</h4>
+                                                    </div>
                                                 </li>
-                                                <li>
-                                                    <img
-                                                        src="../assets/images/xs/avatar2.jpg"
-                                                        alt="Avatar"
-                                                    />
-                                                </li>
-                                                <li>
-                                                    <img
-                                                        src="../assets/images/xs/avatar3.jpg"
-                                                        alt="Avatar"
-                                                    />
-                                                </li>
-                                                <li>
-                                                    <img
-                                                        src="../assets/images/xs/avatar4.jpg"
-                                                        alt="Avatar"
-                                                    />
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="bullet green" />
-                                        <div className="time">2:00pm</div>
-                                        <div className="desc">
-                                            <h3>Responded to need</h3>
-                                            <a href="fake_url">“In-Kind Opportunity”</a>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="bullet orange" />
-                                        <div className="time">1:30pm</div>
-                                        <div className="desc">
-                                            <h3>Lunch Break</h3>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div className="bullet green" />
-                                        <div className="time">2:38pm</div>
-                                        <div className="desc">
-                                            <h3>Finish</h3>
-                                            <h4>Go to Home</h4>
-                                        </div>
-                                    </li>
-                                </ul>
+                                            ))}
+                                            <div className=''>
+                                                <nav aria-label="Page navigation example">
+                                                    <ul className="pagination justify-content-end">
+                                                        <li className="page-item" style={{ marginRight: '5px' }}>
+                                                            <button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
+                                                        </li>
+                                                        {pageNumbers.map(number => (
+                                                            <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                <button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                            </li>
+                                                        ))}
+                                                        <li className="page-item">
+                                                            <button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+                                                        </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            </div>
             </div>
         </>
     );
@@ -146,10 +236,10 @@ const mapStateToProps = state => ({
     fixNavbar: state.settings.fixNavbar,
     statisticsOpen: state.settings.isStatistics,
     statisticsClose: state.settings.isStatisticsClose
-  });
-  
-  const mapDispatchToProps = dispatch => ({
+});
+
+const mapDispatchToProps = dispatch => ({
     statisticsAction: e => dispatch(statisticsAction(e)),
     statisticsCloseAction: e => dispatch(statisticsCloseAction(e))
-  });
-  export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetails);
+});
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeeDetails);

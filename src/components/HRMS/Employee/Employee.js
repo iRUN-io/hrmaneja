@@ -387,14 +387,14 @@ function Employee(props) {
                                       <td>{employee?.start_date}</td>
                                       <td>{employee?.role}</td>
                                       <td>
-                                        {/* <button
+                                        <button
                                       type="button"
                                       className="btn btn-icon btn-sm"
                                       title="View"
                                       onClick={() => employeeDetails(employee?.id)}
                                     >
                                       <i className="fa fa-eye" />
-                                    </button> */}
+                                    </button>
                                         <button
                                           onClick={() => setEmployee(employee)}
                                           data-toggle="modal" data-target="#editModal"

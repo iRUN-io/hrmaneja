@@ -94,7 +94,7 @@ const Department = () => {
     const removeDepartment = async (departmentId) => {
         try {
             if (!featureEnabled) {
-                toast.error('Feature not ');
+                toast.error('Feature not enabled');
                 return;
             }
             const response = await deleteDepartment(departmentId);
@@ -115,6 +115,7 @@ const Department = () => {
                 if (logDepartment.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.deleteDepartment);
                     const newDepartments = departments.filter(department => department.id !== departmentId);
+                    toast.info("Department deleted successfully");
                     setDepartments(newDepartments);
                 }
             }
