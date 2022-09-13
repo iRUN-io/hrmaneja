@@ -76,8 +76,6 @@ function Payroll(props) {
 
 	};
 
-
-
 	const runPayroll = async () => {
 		try {
 			setLoading(true); // godfred:archer
