@@ -10,7 +10,7 @@ import { emailCase } from '../../../enums/emailCase';
 import { createActivity } from '../../../services/activities';
 import { getEmployee } from '../../../services/employee';
 import { sendEmail } from '../../../services/mail/sendMail';
-import { completeTask, createTask, getEmployeeTask, pendingTask, updateTask } from '../../../services/task';
+import { completeTask, createTask, getEmployeeTask, pendingTask } from '../../../services/task';
 import EmptyState from '../../EmptyState';
 // import FeatureNotAvailable from '../../common/featureDisabled';
 
@@ -193,7 +193,7 @@ function TodoList(props) {
         }
     };
 
-    
+
     const allTasksArray = useMemo(() => {
         let allTasks = tasks;
         if (searchTask) {
@@ -228,9 +228,9 @@ function TodoList(props) {
                             </li>
                         </ul>
                         {currentTasks.length === 0 && !loading ? (
-                        <div className="header-action">
-										<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add Task</button>
-							</div>
+                            <div className="header-action">
+                                <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add Task</button>
+                            </div>
                         ) : null}
 
                     </div>
@@ -240,28 +240,28 @@ function TodoList(props) {
                                 {currentTasks.length === 0 && !loading ? (
                                     <EmptyState />
                                 ) : (
-                                    
+
                                     <div className="card-body">
                                         <div className="card-header">
-										<h3 className="card-title">My Tasks</h3>
-                                        <div className="card-options">
-                                            <form>
-                                                <div className="input-group">
-                                                    <input
-                                                        type="text"
-                                                        className="form-control form-control-sm"
-                                                        placeholder="Search expense..."
-                                                        value={searchTask}
-                                                        onChange={setSearch}
-                                                        name="s" />
-                                                    <span className="input-group-btn ml-2">
-                                                        <button className="btn btn-icon" type="submit">
-                                                            <span className="fe fe-search" />
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </form>
-                                        </div>
+                                            <h3 className="card-title">My Tasks</h3>
+                                            <div className="card-options">
+                                                <form>
+                                                    <div className="input-group">
+                                                        <input
+                                                            type="text"
+                                                            className="form-control form-control-sm"
+                                                            placeholder="Search expense..."
+                                                            value={searchTask}
+                                                            onChange={setSearch}
+                                                            name="s" />
+                                                        <span className="input-group-btn ml-2">
+                                                            <button className="btn btn-icon" type="submit">
+                                                                <span className="fe fe-search" />
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </form>
+                                            </div>
                                         </div>
                                         <div className="table-responsive todo_list">
                                             {loading ? (
@@ -282,8 +282,7 @@ function TodoList(props) {
                                                                 <tr key={index}>
                                                                     <td>
                                                                         <label className="custom-control custom-checkbox">
-                                                                            {/* default check when status is completed */}
-                                                                            <input onClick={()=> toggleTask(task.id)} type="checkbox" className="custom-control-input" defaultChecked={task.status === 'completed' ? true : false} />
+                                                                            <input onClick={() => toggleTask(task.id)} type="checkbox" className="custom-control-input" defaultChecked={task.status === 'completed' ? true : false} />
 
                                                                             <span className="custom-control-label">{task.note}</span>
                                                                         </label>
@@ -304,102 +303,12 @@ function TodoList(props) {
                                                                     </td>
                                                                     <td>
                                                                         <span className="avatar avatar-pink" data-toggle="tooltip" data-placement="top" data-original-title="Avatar Name">
-                                                                            {task.employee_name.charAt(0).toUpperCase()} {task.employee_name.charAt(1).toUpperCase() }
+                                                                            {task.employee_name.charAt(0).toUpperCase()} {task.employee_name.charAt(1).toUpperCase()}
                                                                         </span>
                                                                     </td>
                                                                 </tr>
                                                             ))}
-                                                            {/* <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" />
-                                                            <span className="custom-control-label">Report Panel Usag</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">Feb 18-2019</td>
-                                                    <td><span className="tag tag-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar1.jpg" data-toggle="tooltip" data-placement="top" alt="Avatar" className="avatar" data-original-title="Avatar Name" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" defaultChecked />
-                                                            <span className="custom-control-label">New logo design for Angular Admin</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">March 02-2019</td>
-                                                    <td><span className="tag tag-success ml-0 mr-0">High</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar2.jpg" data-toggle="tooltip" data-placement="top" alt="Avatar" className="avatar" data-original-title="Avatar Name" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" defaultChecked />
-                                                            <span className="custom-control-label">Report Panel Usag</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">Feb 12-2019</td>
-                                                    <td><span className="tag tag-danger ml-0 mr-0">HIGH</span></td>
-                                                    <td>
-                                                        <span className="avatar avatar-pink" data-toggle="tooltip" data-placement="top" data-original-title="Avatar Name">NG</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" />
-                                                            <span className="custom-control-label">Report Panel Usag</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">Feb 18-2019</td>
-                                                    <td><span className="tag tag-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar3.jpg" data-toggle="tooltip" data-placement="top" alt="Avatar" className="avatar" data-original-title="Avatar Name" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" defaultChecked />
-                                                            <span className="custom-control-label">New logo design for Angular Admin</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">March 02-2019</td>
-                                                    <td><span className="tag tag-success ml-0 mr-0">High</span></td>
-                                                    <td>
-                                                        <span className="avatar avatar-blue" data-toggle="tooltip" data-placement="top" data-original-title="Avatar Name">NG</span>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" />
-                                                            <span className="custom-control-label">Design PSD files for Angular Admin</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">March 20-2019</td>
-                                                    <td><span className="tag tag-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar4.jpg" data-toggle="tooltip" data-placement="top" alt="Avatar" className="avatar" data-original-title="Avatar Name" />
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <label className="custom-control custom-checkbox">
-                                                            <input type="checkbox" className="custom-control-input" name="example-checkbox1" defaultValue="option1" />
-                                                            <span className="custom-control-label">Design PSD files for Angular Admin</span>
-                                                        </label>
-                                                    </td>
-                                                    <td className="text-right">March 20-2019</td>
-                                                    <td><span className="tag tag-warning ml-0 mr-0">MED</span></td>
-                                                    <td>
-                                                        <img src="../assets/images/xs/avatar5.jpg" data-toggle="tooltip" data-placement="top" alt="Avatar" className="avatar" data-original-title="Avatar Name" />
-                                                    </td>
-                                                </tr> */}
+
                                                         </tbody>
                                                     </table>
                                                 )}
