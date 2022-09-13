@@ -16,6 +16,7 @@ import { toast } from 'material-react-toastify';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
+import { getAllBanks } from '../../../services/flutterwave';
 
 
 function Payroll(props) {
@@ -39,6 +40,7 @@ function Payroll(props) {
 				// const userId = user.id;
 				// const userResponse = await getAllUsers(userId);
 				const companyData = await getCompanyData();
+				const banks = await getAllBanks();
 				companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const response = await getAllEmployees(user.company_id);
 				const allDepartments = await getAllDepartments(user.company_id);

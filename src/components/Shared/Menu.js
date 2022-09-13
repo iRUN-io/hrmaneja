@@ -81,7 +81,7 @@ class Menu extends Component {
 		};
 	}
 
-	
+
 
 	componentDidMount() {
 		const { location } = this.props;
@@ -209,7 +209,7 @@ class Menu extends Component {
 	toggleUserMenu() {
 		this.setState({ isOpenUserMenu: !this.state.isOpenUserMenu })
 	}
-	
+
 	toggleSubMenu(e) {
 		let menucClass = ''
 		if (e.itemId) {
@@ -238,7 +238,7 @@ class Menu extends Component {
 			});
 			this.setState({
 				activityChecked: true,
-				});
+			});
 		}
 	}
 
@@ -273,7 +273,7 @@ class Menu extends Component {
 			this.getCompanyData();
 		}
 
-		const {checked, billinExists} = this.props;
+		const { checked, billinExists } = this.props;
 
 		const activityLogs = this.state.activityLogs; // Use this for the map
 		// const features = this.state.features; 
@@ -364,7 +364,7 @@ class Menu extends Component {
 				"icon": "fa fa-cogs",
 				"label": "Admin",
 				"to": "#!",
-				content: [ 
+				content: [
 					// {
 					// 	"id": 16,
 					// 	"label": "Payroll",
@@ -540,10 +540,10 @@ class Menu extends Component {
 		const pageHeading = Routes.filter((route) => route?.path === this.props.location?.pathname)
 
 		if (pageHeading.length === 0) {
-			if (!this.props.location?.pathname.includes('/payslip/') 
-			&& !this.props.location?.pathname.includes('/req-payslip/') 
-			&& !this.props.location?.pathname.includes('/billing-receipt/') 
-			&& !this.props.location?.pathname.includes('/single-payroll/')) {
+			if (!this.props.location?.pathname.includes('/payslip/')
+				&& !this.props.location?.pathname.includes('/req-payslip/')
+				&& !this.props.location?.pathname.includes('/billing-receipt/')
+				&& !this.props.location?.pathname.includes('/single-payroll/')) {
 				return <NotFound />
 			}
 		}
@@ -592,14 +592,14 @@ class Menu extends Component {
 										></i>
 									</a> */}
 										{isAdmin && (
-										<span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
-											<i
-												className="fa fa-gear fa-spin"
-												data-toggle="tooltip"
-												data-placement="right"
-												title="Settings"
-											/>
-										</span>
+											<span className="nav-link icon settingbar" onClick={this.toggleRightSidebar}>
+												<i
+													className="fa fa-gear fa-spin"
+													data-toggle="tooltip"
+													data-placement="right"
+													title="Settings"
+												/>
+											</span>
 										)}
 										{/* to relese user profile toggle  --- NOTE */}
 										{/* <p className="nav-link user_btn" onClick={this.toggleUserMenu}>
@@ -642,11 +642,11 @@ class Menu extends Component {
 									id="Settings"
 									aria-expanded="true"
 								>
-									
+
 									<div>
 										<h6 className="font-14 font-weight-bold mt-4 text-muted">General Settings</h6>
 										<ul className="setting-list list-unstyled mt-1 setting_switch">
-											
+
 											<li>
 												<label className="custom-switch">
 													<span className="custom-switch-description">Email Nofications</span>
@@ -765,20 +765,24 @@ class Menu extends Component {
 								{/* loop through activity here */}
 
 								<div role="tabpanel" className="tab-pane vivify fadeIn" id="activity" aria-expanded="false">
-									{activityLogs.splice(0, 5).map((activity) => (
-										<ul key={activity.id} className="new_timeline mt-3">
-											<li>
-												<div className="bullet pink" />
-												<div className="time">{moment(activity.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
-												<div className="desc">
-													<h3>{activity.name}</h3>
-													<h4>{activity.activity}</h4>
-												</div>
-											</li>
+									{isAdmin && (
+										<>
+											{activityLogs.splice(0, 5).map((activity) => (
+												<ul key={activity.id} className="new_timeline mt-3">
+													<li>
+														<div className="bullet pink" />
+														<div className="time">{moment(activity.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</div>
+														<div className="desc">
+															<h3>{activity.name}</h3>
+															<h4>{activity.activity}</h4>
+														</div>
+													</li>
 
 
-										</ul>
-									))}
+												</ul>
+											))}
+										</>
+									)}
 									<a href='/hr-activities' className='desc'>
 										...see more
 									</a>

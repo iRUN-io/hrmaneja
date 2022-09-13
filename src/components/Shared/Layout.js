@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Menu from './Menu';
 import { getBillingData, getUser } from "../../config/common";
 import { ToastContainer } from 'material-react-toastify';
-// import Subscribe from '../common/subscribe';
+import Subscribe from '../common/subscribe';
 // import 'react-toastify/dist/ReactToastify.css';
 export default class Layout extends Component {
 	constructor() {
@@ -40,6 +40,13 @@ export default class Layout extends Component {
 			<div id="main_content">
 			<ToastContainer />
 			<Menu {...props} />
+			{/* {!checked && !billingExist ? (
+				<Menu {...props} />
+			) : (
+				<div>
+				<Subscribe />
+				</div>
+			)} */}
 			</div>
 		);
 	}
