@@ -2,6 +2,7 @@
 import { toast } from 'material-react-toastify';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react'
+import { OverlayTrigger, Popover } from 'react-bootstrap';
 import Skeleton from 'react-loading-skeleton';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -10,7 +11,7 @@ import { emailCase } from '../../../enums/emailCase';
 import { createActivity } from '../../../services/activities';
 import { getEmployee } from '../../../services/employee';
 import { sendEmail } from '../../../services/mail/sendMail';
-import { completeTask, createTask, getEmployeeTask, pendingTask, updateTask } from '../../../services/task';
+import { completeTask, createTask, getEmployeeTask, pendingTask, updateTask, deleteTask } from '../../../services/task';
 import EmptyState from '../../EmptyState';
 // import FeatureNotAvailable from '../../common/featureDisabled';
 
@@ -193,6 +194,32 @@ function TodoList(props) {
         }
     };
 
+    // delete task
+    const removeTask = async (id) => {
+        const task = tasks.find(task => task.id === id);
+
+        const response = await deleteTask(id)
+
+        if (response.message) {
+            const logTask = await createActivity(
+              {
+                name: 'Delete Task',
+                employee_id: user.employee_id,
+                activity: `${user.name} deleted a task with id; ${id}`,
+                activity_name: 'Deletion',
+                user: user.name,
+                company_id: user.company_id
+              }
+            )
+            if (logTask.id) {
+                const newTasks = tasks.filter(task => task.id !== id);
+                setTasks(newTasks);
+                toast.info(response.message);
+              }
+          }
+        
+    }
+    
     
     const allTasksArray = useMemo(() => {
         let allTasks = tasks;
@@ -275,6 +302,8 @@ function TodoList(props) {
                                                                 <th className="w150 text-right">Due</th>
                                                                 <th className="w100">Priority</th>
                                                                 <th className="w80"><i className="icon-user" /></th>
+                                                                <th className="w100">Action</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -306,6 +335,22 @@ function TodoList(props) {
                                                                         <span className="avatar avatar-pink" data-toggle="tooltip" data-placement="top" data-original-title="Avatar Name">
                                                                             {task.employee_name.charAt(0).toUpperCase()} {task.employee_name.charAt(1).toUpperCase() }
                                                                         </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        overlay={
+                                                                            <Popover id="popover-basic">
+                                                                            <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                            <Popover.Body>
+                                                                                <div className="clearfix" >
+                                                                                <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                <button style={{ margin: '10px' }}  type="button" className="btn btn-sm btn-danger" onClick={() => removeTask(task.id)}>Delete</button>
+                                                                                </div>
+                                                                            </Popover.Body>
+                                                                            </Popover>
+                                                                        }>
+                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                                        </OverlayTrigger>
                                                                     </td>
                                                                 </tr>
                                                             ))}
