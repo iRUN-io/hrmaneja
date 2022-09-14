@@ -37,7 +37,6 @@ function Expense(props) {
 		amount: '',
 		department: '',
 	});
-	const history = useHistory();
 
 	const makeRequisition = async () => {
 		if (!featureEnabled) {

@@ -108,7 +108,7 @@ function Payroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/my-requisition'} className="nav-link active">
+                                            <Link to={'/hr-requisition'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -144,7 +144,7 @@ function Payroll(props) {
                                                                     <span className="badge badge-success">approved</span>
                                                                 )}
                                                                 {requisition.status === 'disapprove' && (
-                                                                    <span className="badge badge-danger">rejectedssss</span>
+                                                                    <span className="badge badge-danger">rejected</span>
                                                                 )}
                                                                 {requisition.status === 'pending' && (
                                                                     <span className="badge badge-grey">pending</span>

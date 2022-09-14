@@ -91,6 +91,13 @@ function PastPayroll(props) {
 
     };
 
+	const payrollStatus = (payroll, batchId) => {
+		history.push({
+			pathname: `/payroll-status/${batchId}`,
+			state: { payroll: payroll }
+		});
+	};
+
 	if (!featureEnabled && !loading ) {
 		return <FeatureNotAvailable />
 	}
@@ -213,13 +220,23 @@ function PastPayroll(props) {
 																				</button>
 																				<button
 																					type="button"
+																					onClick={() => payrollStatus(payroll, payroll.batchId)}
+																					className="btn btn-icon "
+																					title="Payment Status"
+																					data-toggle="tooltip"
+																					data-placement="top"
+																				>
+																					<i className="icon-eye" />
+																				</button>
+																				{/* <button
+																					type="button"
 																					className="btn btn-icon"
 																					title="Delete"
 																					data-toggle="tooltip"
 																					data-placement="top"
 																				>
 																					<i className="icon-trash text-danger" />
-																				</button>
+																				</button> */}
 																			</td>
 																		</tr>
 																	))}

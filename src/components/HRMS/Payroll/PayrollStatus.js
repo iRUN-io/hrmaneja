@@ -7,15 +7,18 @@ import { Link, useHistory } from 'react-router-dom';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import Loader from '../../common/loader';
 import EmptyState from '../../EmptyState';
+import { getPayrollStatus } from '../../../services/payroll';
 
 
-function Payroll(props) {
+function PayrollStatus(props) {
     const history = useHistory();
+    const [payrollStatement, setPayrollStatement] = useState([]);
     const [payroll, setPayroll] = useState({});
     const [loading, setLoading] = useState(false);
     const [featureEnabled, setFeatureEnabled] = useState(false); // 
     const comingSoon = false;
-    const routeState = history.location?.state;
+    const batchId = history.location.pathname.split('/')[2];
+    const routeState = history.location.state;
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -23,7 +26,9 @@ function Payroll(props) {
             companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
             const user = await getUser();
             if (user) {
+                const response = await getPayrollStatus(batchId);
                 setPayroll(routeState.payroll);
+                setPayrollStatement(response);
                 setLoading(false);
             }
         }
@@ -38,9 +43,11 @@ function Payroll(props) {
         return <FeatureNotAvailable />
     }
 
-    if(payroll.length === 0){
+    if(payrollStatement.length === 0){
         return <EmptyState />
     }
+
+    console.log(payrollStatement);
 
 
     return (
@@ -101,23 +108,32 @@ function Payroll(props) {
                                                     <table className="table table-hover table-striped table-vcenter">
                                                         <thead className="light-mode">
                                                             <tr>
-                                                                <th className="w200">Employee Name</th>
-                                                                <th className="w200">Department</th>
-                                                                <th className="w200">Salary</th>
-                                                                <th className="w150">Role</th>
+                                                                <th className="w200">Account Number</th>
+                                                                <th className="w200">Message</th>
+                                                                <th className="w200">Amount</th>
+                                                                <th className="w200">Narration</th>
+                                                                <th className="w150">Status</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {payroll.employees?.map((employee, index) => (
+                                                            {payrollStatement.map((payroll, index) => (
                                                                 <tr key={index}>
                                                                     <td>
-                                                                        <span>{employee.name}</span>
+                                                                        <span>{payroll.account_number}</span>
                                                                     </td>
                                                                     <td>
-                                                                        <span>{employee.department}</span>
+                                                                        <span>{payroll.complete_message}</span>
                                                                     </td>
-                                                                    <td>{formatMoney(employee.salary)}</td>
-                                                                    <td>{employee.role}</td>
+                                                                    <td>{formatMoney(payroll.amount)}</td>
+                                                                    <td>{payroll.narration}</td>
+                                                                    <td>
+                                                                    {payroll.status === 'SUCCESS' && (
+                                                                    <span className="badge badge-success">Successful</span>
+                                                                    )}
+                                                                    {payroll.status === 'FAILED' && (
+                                                                        <span className="badge badge-danger">Failed</span>
+                                                                    )}
+                                                                    </td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
@@ -133,7 +149,7 @@ function Payroll(props) {
                                                             </tr>
                                                         </tfoot>
                                                     </table>
-                                                    <button className="btn disabled-card btn-info float-right">
+                                                    <button className="btn btn-info disabled-card float-right">
                                                         <i className="icon-printer" /> Print
                                                     </button>
                                                 </div>
@@ -155,4 +171,4 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Payroll);
+export default connect(mapStateToProps, mapDispatchToProps)(PayrollStatus);

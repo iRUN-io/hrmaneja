@@ -107,7 +107,7 @@ function Employee(props) {
 
       if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "") {
         toast.error("Please fill all the fields");
-        console.log(body);
+
         return;
       }
       const response = await createEmployee(body, user.employee_id);
@@ -118,7 +118,7 @@ function Employee(props) {
           {
             name: 'Create Employee',
             employee_id: user.employee_id,
-            activity: `${user.name} created a new employee with naem; ${body.name}`,
+            activity: `${user.name} created a new employee with name; ${body.name}`,
             activity_name: 'Creation',
             user: user.name,
             company_id: user.company_id
@@ -127,7 +127,7 @@ function Employee(props) {
 
         if (logEmployee.id) {
           setEmployees([...employees, response])
-          sendEmail(user.emailAddress, user.name, emailCase.createEmployee)
+          sendEmail(body.email, body.name, emailCase.createEmployee)
           toast.success("Employee created successfully");
         }
 

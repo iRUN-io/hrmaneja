@@ -16,7 +16,6 @@ import { toast } from 'material-react-toastify';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
-import { getAllBanks } from '../../../services/flutterwave';
 
 
 function Payroll(props) {
@@ -40,7 +39,6 @@ function Payroll(props) {
 				// const userId = user.id;
 				// const userResponse = await getAllUsers(userId);
 				const companyData = await getCompanyData();
-				const banks = await getAllBanks();
 				companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const response = await getAllEmployees(user.company_id);
 				const allDepartments = await getAllDepartments(user.company_id);
@@ -84,6 +82,8 @@ function Payroll(props) {
 				return { department: department.name, total: total };
 			}).sort((a, b) => b.total - a.total);
 
+			const department = allDepartments.filter(req => req.total > 0);
+
 			const allEmployees = employees.map(employee => {
 				sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
 				return {
@@ -101,11 +101,11 @@ function Payroll(props) {
 			}, 0);
 
 			const body = {
-				departments: allDepartments,
+				departments: department,
 				employees: allEmployees,
 				totalSalary: totalSalary,
 				company_id: user.company_id,
-				totalDepartments: allDepartments.length,
+				totalDepartments: department.length,
 				totalEmployees: allEmployees.length,
 				month: new Date().toLocaleString('default', { month: 'long' }),
 				year: new Date().getFullYear()
@@ -259,7 +259,7 @@ function Payroll(props) {
 																		<th className="w200">Department</th>
 																		<th className="w200">Role</th>
 																		<th className="w60">Salary</th>
-																		<th className="w60">Status</th>
+																		{/* <th className="w60">Status</th> */}
 																		<th className="w200">Action</th>
 																	</tr>
 																</thead>
@@ -294,9 +294,9 @@ function Payroll(props) {
 																			<td>{employee.role}</td>
 
 																			<td onClick={() => employeePayslip(employee, employee.id)} style={{ cursor: 'pointer' }}>{formatMoney(employee.salary)}</td>
-																			<td>
+																			{/* <td>
 																				<span className="tag tag-secondary ml-0 mr-0">Paid</span>
-																			</td>
+																			</td> */}
 																			<td>
 																				<button
 																					type="button"
@@ -317,7 +317,7 @@ function Payroll(props) {
 																				>
 																					<i className="icon-printer" />
 																				</button>
-																				<button
+																				{/* <button
 																					type="button"
 																					className="btn btn-icon"
 																					title="Delete"
@@ -325,7 +325,7 @@ function Payroll(props) {
 																					data-placement="top"
 																				>
 																					<i className="icon-trash text-danger" />
-																				</button>
+																				</button> */}
 																			</td>
 																		</tr>
 																	))}

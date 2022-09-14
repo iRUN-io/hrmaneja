@@ -79,6 +79,7 @@ import PastPayroll from './HRMS/Payroll/PastPayroll';
 import PayrollReceipt from './HRMS/Payroll/PayrollReceipt';
 import Billing from './HRMS/Billing';
 import BillingSlip from './HRMS/Billing/BillingSlip';
+import PayrollStatus from './HRMS/Payroll/PayrollStatus';
 
 const user = getUser();
 
@@ -401,6 +402,14 @@ const Routes = [
         pageTitle: "Payroll Receipt",
         component: PayrollReceipt
     },
+    {
+        path: "/payroll-status/:id",
+        name: 'payroll-status',
+        exact: true,
+        pageTitle: "Payroll Status",
+        component: PayrollStatus
+    },
+    
      {
         path: "/my-requisition",
         name: 'my-requisition',

@@ -1,5 +1,5 @@
 import request from 'umi-request';
-import { API_URL, USER_TOKEN, USER_ID } from '../config/config';
+import { API_URL, USER_TOKEN } from '../config/config';
 
 export async function getAllPayrolls(company_id) {
   return request(`${API_URL}/payroll/${company_id}`, {
@@ -12,15 +12,21 @@ export async function getAllPayrolls(company_id) {
 }
 
 export async function getPayroll(id) {
-  return request(`${API_URL}/payroll/${USER_ID}?id=${id}`, {
+  return request(`${API_URL}/payroll/details/${id}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
        'Authorization': USER_TOKEN,
     },
-    params: {
-      userId: USER_ID,
-      id: id,
+  });
+}
+
+export async function getPayrollStatus(batchId) {
+  return request(`${API_URL}/payroll/status/${batchId}`, {
+    method: 'get',
+    headers: {
+       'Content-Type': 'application/json',
+       'Authorization': USER_TOKEN,
     },
   });
 }
