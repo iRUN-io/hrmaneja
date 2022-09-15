@@ -39,9 +39,11 @@ const EditEmployee = (employeeData) => {
     bank_account_number: "",
     bank_account_name: "",
     company_admin: "",
-    start_date: ""
+    start_date: "",
+    bank_code: "",
   });
 
+  const banks = employeeData.banks;
   const employeeInfo = employeeData.employee;
   const editEmployeesAction = async () => {
     if (!featureEnabled) {
@@ -73,7 +75,8 @@ const EditEmployee = (employeeData) => {
         bank_account_number: formState.bank_account_number,
         bank_account_name: formState.bank_account_name,
         company_admin: formState.company_admin,
-        start_date: formState.start_date
+        start_date: formState.start_date,
+        bank_code: formState.bank_code,
       };
 
       if (body.name === "" || body.email === "") {
@@ -132,7 +135,7 @@ const EditEmployee = (employeeData) => {
       bank_account_number: employeeInfo.bank_account_number,
       bank_account_name: employeeInfo.bank_account_name,
       company_admin: employeeInfo.company_admin,
-      start_date: employeeInfo.start_date
+      start_date: employeeInfo.start_date,
     })
   }, [employeeInfo]);
 
@@ -163,6 +166,15 @@ const EditEmployee = (employeeData) => {
 
   if (!featureEnabled) {
     return <FeatureNotAvailable />
+}
+
+const updateBankInfo = e => {
+  const {value, name} = e.target;
+  const bankInfo = value.split(' - ');
+  const bankCode = bankInfo[0];
+  const bankName = bankInfo[1];
+  setFormState({ ...formState, [name]: bankName, bank_code: bankCode });
+
 }
 
   return (
@@ -422,19 +434,25 @@ const EditEmployee = (employeeData) => {
             </div>
 
             <div className="col-lg-6 col-md-6">
-              <div className="form-group">
-                <label>Bank Name</label>
-                <input
-                  type="text"
-                  name="bank_name"
-                  id="bank_name"
-                  value={formState?.bank_name}
-                  onChange={updateForm}
-                  className="form-control"
-                  placeholder="Bank Name"
-                />
-              </div>
-            </div>
+                  <div className="form-group">
+                    <label style={{ fontSize: '12px' }}>Bank Name</label>
+                    <select
+                      onChange={updateBankInfo}
+                      value={formState?.bank_name}
+                      className="form-control"
+                      name="bank_name"
+                      id="bank_name"
+                    >
+                      <option value="">{formState?.bank_name === '' ? 'Select Bank' : formState?.bank_name}</option>
+                      {banks.map((bank, index) => (
+                        <option key={index} value={bank.id + " - " + bank.name}>
+                          {bank.name}
+                        </option>
+                      ))}
+                    </select>
+                    
+                  </div>
+                </div>
 
             <div className="col-lg-6 col-md-6">
               <div className="form-group">

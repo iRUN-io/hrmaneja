@@ -21,6 +21,7 @@ import Skeleton from "react-loading-skeleton";
 import EmptyState from "../../EmptyState";
 import { createActivity } from "../../../services/activities";
 import FeatureNotAvailable from "../../common/featureDisabled";
+import { getAllBanks } from "../../../services/flutterwave";
 
 
 export const getEmployeeById = (employeeId) => {
@@ -36,6 +37,7 @@ export const getEmployeeById = (employeeId) => {
 function Employee(props) {
 
   const { fixNavbar } = props;
+  const [banks, setBanks] = useState([]);
   const [employee, setEmployee] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -68,7 +70,8 @@ function Employee(props) {
     bank_account_number: "",
     bank_account_name: "",
     company_admin: "",
-    start_date: ""
+    start_date: "",
+    bank_code: ""
   });
 
 
@@ -102,10 +105,11 @@ function Employee(props) {
         bank_account_number: formState.bank_account_number,
         bank_account_name: formState.bank_account_name,
         company_admin: formState.company_admin,
-        start_date: formState.start_date
+        start_date: formState.start_date,
+        bank_code: formState.bank_code
       };
 
-      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "") {
+      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "" || body.bank_account_number === "" || body.bank_account_name === "" || body.bank_name === "" || body.bank_code === "") {
         toast.error("Please fill all the fields");
 
         return;
@@ -156,7 +160,8 @@ function Employee(props) {
         bank_account_number: "",
         bank_account_name: "",
         company_admin: "",
-        start_date: ""
+        start_date: "",
+        bank_code: ""
       });
     } catch (err) {
       toast.error("Error, try again");
@@ -172,6 +177,15 @@ function Employee(props) {
     });
 
   };
+
+  const updateBankInfo = e => {
+    const {value, name} = e.target;
+    const bankInfo = value.split(' - ');
+    const bankCode = bankInfo[0];
+    const bankName = bankInfo[1];
+    setFormState({ ...formState, [name]: bankName, bank_code: bankCode });
+
+  }
 
   const employeeDetails = id => {
     try {
@@ -223,12 +237,15 @@ function Employee(props) {
       if (user) {
         const company_id = user.company_id;
         const companyData = await getCompanyData();
+        const flutterwaveBanks = await getAllBanks();
         companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
         const departmentResponse = await getAllDepartments(company_id);
         const response = await getAllEmployees(company_id);
         setDepartments(departmentResponse);
         setEmployees(response);
         setUser(user);
+        const sortedBanks = flutterwaveBanks.sort((a, b) => a.name.localeCompare(b.name));
+        setBanks(sortedBanks);
         setLoading(false);
       }
     }
@@ -277,6 +294,8 @@ function Employee(props) {
   if (!featureEnabled && !loading) {
     return <FeatureNotAvailable />
   }
+
+  console.log('formSTATE', formState)
   return (
     <>
       <div>
@@ -748,15 +767,21 @@ function Employee(props) {
                 <div className="col-lg-6 col-md-6">
                   <div className="form-group">
                     <label style={{ fontSize: '12px' }}>Bank Name</label>
-                    <input
-                      type="text"
+                    <select
+                      onChange={updateBankInfo}
+                      value={formState?.bank_name}
+                      className="form-control"
                       name="bank_name"
                       id="bank_name"
-                      value={formState?.bank_name}
-                      onChange={updateForm}
-                      className="form-control"
-                      placeholder="Bank Name"
-                    />
+                    >
+                      <option value="">{formState?.bank_name === '' ? 'Select Bank' : formState?.bank_name}</option>
+                      {banks.map((bank, index) => (
+                        <option key={index} value={bank.id + " - " + bank.name}>
+                          {bank.name}
+                        </option>
+                      ))}
+                    </select>
+                    
                   </div>
                 </div>
 
@@ -818,7 +843,7 @@ function Employee(props) {
               <h5 className="modal-title" id="exampleModalLabel">Edit Employee</h5>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
             </div>
-            <EditEmployee employee={employee} />
+            <EditEmployee banks={banks} employee={employee} />
           </div>
         </div>
       </div>

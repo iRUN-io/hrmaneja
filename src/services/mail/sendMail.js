@@ -30,26 +30,20 @@ const emailSwitch = {
     I promise to also keep in touch with you because your business productivity is my utmost priority.
     
     Welcome to IRun once again.
-    
-    Your HR guide,
-    Abasiama`
+    `
     };
   }
   , passwordResetRequest: () => {
     return {
       subject: 'Password reset', body: `
-    You initiated a request to reset your password. Please click on the button below to change your password.
-
-    This link is valid for <no of hours> after which you would have to resubmit the request for a password reset.
-
-    <Button for password change> 
-    Thanks` };
+    You initiated a request to reset your password.  
+    ` };
   }
   , passwordChange: () => {
     return {
       subject: 'Changed Password', body: `This email is to notify you that your password had been changed on your HR Maneja account.
        If you did not perform this action, you can recover access by entering <your email> into <password reset link>
-    Thanks` };
+    ` };
   }
   , deleteUser: () => {
     return {
@@ -61,51 +55,35 @@ const emailSwitch = {
     return {
       subject: 'Department created', body: `
     We have successfully received your details to create “department” department. You can update and include employees in your department.
-    If you need any assistance, we are always at your service. Best regards,
-    HRManeja
-    Support Team` };
+    If you need any assistance, please reach out to us @ support@hrmaneja.com.` };
   }
   , updateDepartment: () => {
     return {
       subject: 'Department Updated', body: `
     Your employee account has successfully been updated. 
-    Thanks for choosing HR Maneja, if in need of assistance, reach out to our support team. 
-    support@hrmaneja.com
-    Best regards,
-    HR Maneja` };
+     for choosing HR Maneja, if in need of assistance, please reach out to us @ support@hrmaneja.com.` };
   }
   , deleteDepartment: () => {
     return {
       subject: 'Department Deleted', body: `We have received your request to delete a department. The department has successfully been deleted.
-    If you didn’t initiate this request, please kindly send us a mail. support@hrmaneja.com
-    
-    Best Regards,
-    HR support team` };
+    If you didn’t initiate this request,please reach out to us @ support@hrmaneja.com.` };
   }
   , createEmployee: () => {
     return {
       subject: 'Employee created', body: `
     Your employee account has successfully been created.
-    Thanks for choosing HR Maneja, if in need of assistance, reach out to our support team. 
-    support@hrmaneja.com
-    Best regards,
-    HR Maneja`
+     for choosing HR Maneja, if in need of assistance, please reach out to us @ support@hrmaneja.com.`
     };
   }
   , updateEmployee: () => {
     return {
       subject: 'Employee Updated', body: `Your employee account has successfully been updated. 
-    Thanks for choosing HR Maneja, if in need of assistance, reach out to our support team. support@hrmaneja.com
-    Best regards,
-    HR Maneja` };
+     for choosing HR Maneja, if in need of assistance, please reach out to us @ support@hrmaneja.com.` };
   }
   , deleteEmployee: () => {
     return {
       subject: 'Employee Deleted', body: `Your request to delete your employee account is successful. 
-    We look forward to working with you in subsequent time. 
-    Thanks for choosing HR Maneja.
-    Best regards,
-    HR Maneja Team` };
+    We look forward to working with you in subsequent time. ` };
   }
   , createLeave: () => {
     return {
@@ -117,14 +95,12 @@ const emailSwitch = {
   }
   , approveLeave: () => {
     return {
-      subject: 'Leave Approved', body: `Your application for a leave has been granted by the management, you can proceed in handing over your responsibilities to the <name of replacement> as a replacement.
-     We wish you the best holidays!
-    Thanks` };
+      subject: 'Leave Approved', body: `Your application for a leave has been granted by the management !
+    ` };
   }
   , rejectLeave: () => {
     return {
-      subject: 'Rejection of leave', body: `Your application for a <type of leave> has been denied by the management <reason for denial> for the period you request; you may wish to reapply in future date within the year.
-    Sorry for the inconveniences this may cause.` };
+      subject: 'Rejection of leave', body: `Your application for leave has been denied by the management !` };
   }
   , deleteLeave: () => {
     return { subject: 'Leave Deleted', body: `Leave deleted` };
@@ -133,26 +109,18 @@ const emailSwitch = {
     return {
       subject: 'Payroll created', body: `Your payroll has successfully been created. 
     You can now make updates and explore amazing services using our payroll system.
-    If you need assistance, we are always at your service. 
-    support@hrmaneja.com
-    Best Regards,
-   HRManeja support team` };
+    If you need assistance, please reach out to us @ support@hrmaneja.com.` };
   }
   , updatePayroll: () => {
     return {
       subject: 'Payroll Updated', body: `We received your updates in the payroll system, your updates have successfully been implemented. You can now manage your payroll system.
-    If you need any assistance, reach out to us. support@hrmaneja.com Best regards,
-    HR Maneja
-    Support Team` };
+    If you need any assistance, please reach out to us @ support@hrmaneja.com.` };
   }
   , deletePayroll: () => {
     return {
       subject: 'Payroll Deleted', body: `!
     Your request to delete your payroll has been approved and your payroll has been deleted. If you did not initiate this request, kindly send us a mail. If you need assistance to create a new payroll
-    system, please reach out to us. support@hrmaneja.com
-    Best regards,
-    HR Maneja 
-    Support Team` };
+    system, please reach out to us @ support@hrmaneja.com.` };
   }
   , userLoggedIn: () => {
     return { subject: 'User logged in', body: `User logged in` };
@@ -160,22 +128,22 @@ const emailSwitch = {
   , makeRequisition: () => {
     return {
       subject: 'Requisition made', body: `We have received your request for a requisition. Your request would be reviewed and an email would be sent to you upon approval or rejection.
-    Thanks` };
+    ` };
   }
   , approveRequisition: () => {
     return {
       subject: 'Requisition approved', body: `Your request for a requisition has been approved. You can now proceed in making your purchase.
-    Thanks` };
+    ` };
   }
   , rejectRequisition: () => {
     return {
       subject: 'Requisition rejected', body: `Your request for a requisition has been rejected.
-    Thanks` };
+    ` };
   },
   createSupportTicket: () => {
     return {
       subject: 'Support ticket created', body: `We have received your support ticket. Your ticket would be reviewed and an email would be sent to you upon update.
-    Thanks` };
+    ` };
   }
   ,
   createSupportTicketAdmin: () => {
@@ -186,22 +154,22 @@ const emailSwitch = {
     const ticketId = localStorage.getItem('ticketId');
     return {
       subject: 'Support ticket reminder', body: `We are yet to receive an update on our support ticket: ${ticketId} . 
-    Thanks` };
+    ` };
   }
   , employeePayrollGenerated: () => {
     return {
       subject: 'Payroll generated', body: `Your salary for the month of ${new Date().toLocaleString('default', { month: 'long' })} has been generated, you should receive it shortly.
-    Thanks` };
+    ` };
   },
   createTask: () => {
     return {
       subject: 'Task created', body: `Your task has been created successfully. 
-    Thanks` };
+    ` };
   },
   updateTask: () => {
     return {
       subject: 'Task updated', body: `Your task has been updated successfully. 
-    Thanks` };
+    ` };
   }
 
 }
