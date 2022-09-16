@@ -312,7 +312,7 @@ function Employee(props) {
                   id="Employee-list"
                   role="tabpanel"
                 >
-                  <div className="card">
+                  <div className="card loading">
                     <div className="card-header">
                       <h3 className="card-title">Employees</h3>
                       <div className="card-options">

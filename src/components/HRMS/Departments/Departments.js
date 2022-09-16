@@ -10,7 +10,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditDepartments from './EditDepartment';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
@@ -32,7 +32,6 @@ const Department = () => {
     });
 
 
-    const history = useHistory();
     const createDepartmentAction = async () => {
         if (!featureEnabled) {
             toast.error('Feature not enabled');
@@ -230,7 +229,7 @@ const Department = () => {
                     <div className="container-fluid">
                         <div className="tab-content mt-3">
                             <div className="tab-pane fade show active" id="Departments-list" role="tabpanel">
-                                <div className="card">
+                                <div className="card table-card">
                                     <div className="card-header">
                                         <h3 className="card-title">Departments List</h3>
                                         <div className="card-options">

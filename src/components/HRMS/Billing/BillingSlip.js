@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { formatMoney, getUser } from "../../../config/common";
@@ -7,6 +8,7 @@ import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { getBilling } from '../../../services/billing';
+import Loader from '../../common/loader';
 
 
 function BillingSlip(props) {
@@ -32,6 +34,9 @@ function BillingSlip(props) {
     }, []);
 
 
+    if (loading) {
+        return <Loader />
+    }
     return (
         <>
 
@@ -59,7 +64,7 @@ function BillingSlip(props) {
                             <div className="container-fluid">
                                 <div className="tab-content mt-3">
                                     <div id="Payroll-Payslip" role="tabpanel">
-                                        <div className="card">
+                                        <div className="card table-card">
                                             <div className="card-body">
                                                 <div className="media mb-4">
                                                     <div className="mr-3">

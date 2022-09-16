@@ -111,6 +111,10 @@ div.rtl{
         color: white;
 }
 
+.table-card {
+  border-left: 20px solid #855aff !important;
+}
+
 .card-hrmaneja{
     background-color: #855aff !important;
     color: white;
@@ -443,7 +447,7 @@ body {
   }
   
   .high{
-    background: red;
+    background: #a80808;
   }
   .low{ background: #FEC400}
   .medium{background: #29CC97;}
@@ -503,7 +507,7 @@ body {
   }
   
   .badge-danger{
-    background: #FF4949 !important;
+    background: #a80808 !important;
   }
   
   .badge-grey{
@@ -514,7 +518,7 @@ body {
   }
   
   .badge-success{
-    width: 70px !important;
+    width: 80px !important;
     padding: 5px !important;
   }
   

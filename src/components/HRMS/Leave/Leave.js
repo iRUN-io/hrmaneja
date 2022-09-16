@@ -10,7 +10,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getAllEmployees, getEmployee } from '../../../services/employee';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
@@ -35,7 +35,6 @@ const Leave = () => {
         leaveReason: '',
     });
     
-    const history = useHistory();
     useEffect(() => {
         const user = getUser();
         setFormState({ ...formState, employeeId: user.employee_id, employeeName: user.name });
@@ -301,7 +300,7 @@ const Leave = () => {
                         </div>
                         <div className="tab-content mt-3">
                             <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
-                                <div className="card">
+                                <div className="card table-card">
                                     <div className="card-header">
                                         <h3 className="card-title">Employee Leave Record</h3>
                                         <div className="card-options">

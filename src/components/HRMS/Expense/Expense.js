@@ -292,7 +292,7 @@ function Expense(props) {
 										<div className="row clearfix">
 											{departments.map((department, index) => (
 												<div key={index} className="col-lg-3 col-md-6">
-													<div className="card">
+													<div className="card ">
 														<div className="card-body">
 															<h6>{department.name.toUpperCase()}</h6>
 															<h3 className="pt-3">
@@ -304,7 +304,7 @@ function Expense(props) {
 												</div>
 											))}
 										</div>
-										<div className="card">
+										<div className="card table-card">
 											<div className="card-header">
 												<h3 className="card-title">Expenses</h3>
 												<div className="card-options">

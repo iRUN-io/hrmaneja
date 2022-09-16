@@ -19,7 +19,6 @@ const Billing = () => {
 
 	const history = useHistory();
 	
-
 	useEffect(() => {
 
 		async function fetchData() {
@@ -142,7 +141,7 @@ const Billing = () => {
 										
 
 										{/* test table */}
-										<div className="card ">
+										<div className="card table-card">
 											<div className="row">
 												
 											<div className=' col-12'>

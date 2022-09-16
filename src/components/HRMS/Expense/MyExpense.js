@@ -205,7 +205,7 @@ function Expense(props) {
 								</div>
 								<div className="tab-content mt-3">
 									<div className="tab-pane fade show active" id="Expense-Salary" role="tabpanel">
-										<div className="card">
+										<div className="card table-card">
 											<div className="card-header">
 												<h3 className="card-title">My Expenses</h3>
 												<div className="card-options">

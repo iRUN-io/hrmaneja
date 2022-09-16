@@ -20,7 +20,7 @@ import { emailCase } from '../../../enums/emailCase';
 
 function Payroll(props) {
 	const { fixNavbar } = props;
-	const [employees, setEmployee] = useState([]);
+	const [employees, setEmployees] = useState([]);
 	const [featureEnabled, setFeatureEnabled] = useState(false); // 
 	const [user, setUser] = useState({});
 	const [searchEmployee, setSearchEmployee] = useState('');
@@ -43,7 +43,7 @@ function Payroll(props) {
 				const response = await getAllEmployees(user.company_id);
 				const allDepartments = await getAllDepartments(user.company_id);
 				setDepartments(allDepartments);
-				setEmployee(response);
+				setEmployees(response);
 				setLoading(false);
 				setUser(user);
 			}
@@ -108,7 +108,8 @@ function Payroll(props) {
 				totalDepartments: department.length,
 				totalEmployees: allEmployees.length,
 				month: new Date().toLocaleString('default', { month: 'long' }),
-				year: new Date().getFullYear()
+				year: new Date().getFullYear(),
+				employee_id: user.employee_id,
 			};
 
 			const initiateSalary = await createPayroll(body);

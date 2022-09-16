@@ -207,7 +207,7 @@ const Users = (navStatus) => {
 					<div className="container-fluid">
 						<div className="tab-content mt-3">
 							<div className="tab-pane fade show active" id="user-list" role="tabpanel">
-								<div className="card">
+								<div className="card table-card">
 									<div className="card-header">
 										<h3 className="card-title">User List</h3>
 										<div className="card-options">

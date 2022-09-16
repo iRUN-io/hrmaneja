@@ -2,12 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { getAllActivities } from '../../../services/activities'
 import { getCompanyData, getUser } from '../../../config/common';
 import moment from 'moment';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import EmptyState from '../../EmptyState';
 const Activities = () => {
 	const [activities, setActivities] = useState([]);
-	const history = useHistory();
 	const [currentPage, setCurrentPage] = useState(1);
 	const [ActivityPerPage] = useState(15);
 	const [searchActivity, setSearchActivity] = useState('');
@@ -90,7 +89,7 @@ const Activities = () => {
 						</div>
 						<div className="row clearfix">
 							<div className="col-md-12">
-								<div className="card">
+								<div className="card table-card table-card">
 									<div className="card-header">
 										<h3 className="card-title">Timeline Activity</h3>
 										<div className="card-options">
