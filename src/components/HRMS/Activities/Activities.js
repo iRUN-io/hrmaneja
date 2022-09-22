@@ -42,8 +42,8 @@ const Activities = () => {
 		return activities.filter(activity =>
 			activity.name.toLowerCase().includes(searchQuery.toLowerCase())
 			|| activity.activity.toLowerCase().includes(searchQuery.toLowerCase())
-			|| activity.activity_name.toLowerCase().includes(searchQuery.toLowerCase())
 			|| activity.user.toLowerCase().includes(searchQuery.toLowerCase())
+			|| activity.activity_name?.toLowerCase().includes(searchQuery.toLowerCase())
 
 		);
 	};

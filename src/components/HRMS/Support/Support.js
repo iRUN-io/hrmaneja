@@ -123,7 +123,7 @@ const Support = () => {
     return (
         <>
             <div style={{ marginBottom: '50px' }}>
-                <div className='container'>
+                <div className='section-body mt-3'>
                     <div className="container-fluid">
                         <div className="d-flex justify-content-between align-items-center">
                             <ul className="nav nav-tabs page-header-tab">
@@ -143,7 +143,7 @@ const Support = () => {
                     <div className="container-fluid">
                         <div className="tab-content mt-3">
                             <div className="tab-pane fade show active" id="Departments-list" role="tabpanel">
-                                <div className="card">
+                                <div className="card table-card">
                                     <div className="card-header">
                                         <h3 className="card-title">Tickets</h3>
                                         <div className="card-options">

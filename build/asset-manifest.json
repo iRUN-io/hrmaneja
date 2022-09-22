@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.b2c8b1fb.chunk.css",
-    "main.js": "/static/js/main.ce6376ca.chunk.js",
-    "main.js.map": "/static/js/main.ce6376ca.chunk.js.map",
+    "main.css": "/static/css/main.477e4d37.chunk.css",
+    "main.js": "/static/js/main.52e45410.chunk.js",
+    "main.js.map": "/static/js/main.52e45410.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.caf00cf3.js",
     "runtime-main.js.map": "/static/js/runtime-main.caf00cf3.js.map",
     "static/css/2.e722437f.chunk.css": "/static/css/2.e722437f.chunk.css",
-    "static/js/2.b2b50cc0.chunk.js": "/static/js/2.b2b50cc0.chunk.js",
-    "static/js/2.b2b50cc0.chunk.js.map": "/static/js/2.b2b50cc0.chunk.js.map",
+    "static/js/2.af6b0b4f.chunk.js": "/static/js/2.af6b0b4f.chunk.js",
+    "static/js/2.af6b0b4f.chunk.js.map": "/static/js/2.af6b0b4f.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.384fe2058afb8a224a24fd1028f4f3fb.js": "/precache-manifest.384fe2058afb8a224a24fd1028f4f3fb.js",
+    "precache-manifest.ca6ed9412474a64832dc270dc8a5753f.js": "/precache-manifest.ca6ed9412474a64832dc270dc8a5753f.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.e722437f.chunk.css.map": "/static/css/2.e722437f.chunk.css.map",
-    "static/css/main.b2c8b1fb.chunk.css.map": "/static/css/main.b2c8b1fb.chunk.css.map",
-    "static/js/2.b2b50cc0.chunk.js.LICENSE.txt": "/static/js/2.b2b50cc0.chunk.js.LICENSE.txt",
-    "static/js/main.ce6376ca.chunk.js.LICENSE.txt": "/static/js/main.ce6376ca.chunk.js.LICENSE.txt",
+    "static/css/main.477e4d37.chunk.css.map": "/static/css/main.477e4d37.chunk.css.map",
+    "static/js/2.af6b0b4f.chunk.js.LICENSE.txt": "/static/js/2.af6b0b4f.chunk.js.LICENSE.txt",
+    "static/js/main.52e45410.chunk.js.LICENSE.txt": "/static/js/main.52e45410.chunk.js.LICENSE.txt",
     "static/media/App.css": "/static/media/zw.e223cee5.svg",
     "static/media/analysis.svg": "/static/media/analysis.2ec3162b.svg",
     "static/media/comingsoon.svg": "/static/media/comingsoon.c023658b.svg",
@@ -26,8 +26,8 @@
   "entrypoints": [
     "static/js/runtime-main.caf00cf3.js",
     "static/css/2.e722437f.chunk.css",
-    "static/js/2.b2b50cc0.chunk.js",
-    "static/css/main.b2c8b1fb.chunk.css",
-    "static/js/main.ce6376ca.chunk.js"
+    "static/js/2.af6b0b4f.chunk.js",
+    "static/css/main.477e4d37.chunk.css",
+    "static/js/main.52e45410.chunk.js"
   ]
 }

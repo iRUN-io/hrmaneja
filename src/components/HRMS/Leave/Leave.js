@@ -68,7 +68,7 @@ const Leave = () => {
             const response = await createLeave(body, user.employee_id);
 
             if (!response.error) {
-                const logLeave = await createLeave(
+                const logLeave = await createActivity(
                     {
                         name: 'Create Leave',
                         employee_id: user.employee_id,
