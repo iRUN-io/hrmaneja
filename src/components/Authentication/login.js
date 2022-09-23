@@ -109,6 +109,10 @@ const Login = () => {
 								<button type='submit' onClick={() => handleSubmit()} className="btn btn-primary btn-block">
 									Click to login
 								</button>
+
+								<div className="text-center text-muted" style={{marginTop: '10px'}}>
+									No Account Yet? <Link to="/register">Create One</Link>
+								</div>
 							</div>
 						</div>
 				</div>
