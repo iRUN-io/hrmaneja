@@ -74,6 +74,18 @@ export async function changePassword(body) {
 }
 
 
+export async function createNormalUser(body) {
+  return request(`${API_URL}/user/create`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+
 // confirm token 
 export async function confirmToken(body) {
   return request(`${API_URL}/user/confirm-token`, {

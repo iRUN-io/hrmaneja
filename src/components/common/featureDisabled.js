@@ -1,11 +1,13 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 import React from 'react'
 import { useHistory } from 'react-router-dom';
+import { getUser } from '../../config/common';
 // import 'react-toastify/dist/ReactToastify.css';
 import Image from "../elements/Image";
 
 const FeatureNotAvailable = () => {
 	const history = useHistory();
+    const user = getUser();
     return (
         <>
             <div className="container-fluid">
@@ -23,9 +25,13 @@ const FeatureNotAvailable = () => {
                     </div>
 
                     <div className="col-md-12 align-center">
-                        <button onClick={()=> history.push('/support')} type="button" className="btn btn-primary btn-lg">
+                        {user.role ===  "HR Manager" ? (
+                        <button onClick={()=> history.push('/admin/billing')} type="button" className="btn btn-primary btn-lg">
                             Subscribe
                         </button>
+                        ) : (
+                            <span className="badge badge-pill badge-primary">Contact your admin to subscribe</span>
+                        )}
                     </div>
                 </div>
             </div>

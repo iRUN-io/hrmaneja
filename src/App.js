@@ -12,26 +12,27 @@ import InternalServer from './components/Authentication/500';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'material-react-toastify';
 import 'material-react-toastify/dist/ReactToastify.css';
+import EmailConfirmation from './components/Authentication/emailConfirmation';
 
 class App extends Component {
 	render() {
 		const { darkMode, boxLayout, darkSidebar, iconColor, gradientColor, rtl, fontType } = this.props
 		return (
-			<div className={`${darkMode ? "dark-mode" : ""}${darkSidebar ? "sidebar_dark" : ""} ${iconColor ? "iconcolor" : ""} ${gradientColor ? "gradient" : ""} ${rtl ? "rtl" : ""} ${fontType ? fontType : ""}${boxLayout ? "boxlayout" : ""}`}>
-				<ToastContainer />
+			<><ToastContainer /><div className={`${darkMode ? "dark-mode" : ""}${darkSidebar ? "sidebar_dark" : ""} ${iconColor ? "iconcolor" : ""} ${gradientColor ? "gradient" : ""} ${rtl ? "rtl" : ""} ${fontType ? fontType : ""}${boxLayout ? "boxlayout" : ""}`}>
 				<Router>
 					<Switch>
 						<Route path="/signup" component={SignUp} />
 						<Route path="/register" component={Register} />
 						<Route path="/login" component={Login} />
 						<Route path="/change-password/:token" component={ChangePassword} />
+						<Route path="/verify-email/:token" component={EmailConfirmation} />
 						<Route path="/forgot-password" component={ForgotPassword} />
-						<Route path="/internalserver" component={InternalServer} />	
+						<Route path="/internalserver" component={InternalServer} />
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />
 					</Switch>
 				</Router>
-			</div>
+			</div></>
 		);
 		// let navHeader = this.state.visibility ? <Layout /> : <Login />;
 		// return (

@@ -59,7 +59,7 @@ import AppCalendar from './AppPages/AppCalendar';
 // import AppFilemanager from './AppPages/AppFilemanager';
 // import AppSetting from './AppPages/AppSetting';
 // import Maps from './Maps/Maps';
-// import Gallery from './Gallery/Gallery';
+import Gallery from './Gallery/Gallery';
 // import Login from './Authentication/login';
 // import Signup from './Authentication/signup';
 // import ForgotPassword from './Authentication/forgotPassword';
@@ -80,6 +80,7 @@ import PayrollReceipt from './HRMS/Payroll/PayrollReceipt';
 import Billing from './HRMS/Billing';
 import BillingSlip from './HRMS/Billing/BillingSlip';
 import PayrollStatus from './HRMS/Payroll/PayrollStatus';
+import EmailConfirmation from './Authentication/emailConfirmation';
 
 const user = getUser();
 
@@ -371,6 +372,13 @@ const Routes = [
         exact: true,
         pageTitle: "Change Password",
         component: ChangePassword
+    },
+    {
+        path: "/verify-email/:token",
+        name: 'emailVerification',
+        exact: true,
+        pageTitle: "Verify Email",
+        component: EmailConfirmation
     },
     {
         path: "/notfound",

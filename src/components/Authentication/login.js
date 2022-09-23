@@ -38,10 +38,10 @@ const Login = () => {
 			setProgress(100);
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			if (response.data) {
-				toast.success(response.message)
 				sendEmail(response.data.emailAddress, response.data.name, emailCase.userLoggedIn); 
 				const company =  await getCompany(response.data.company_id);
 				setUserSession(response.data.token, response.data);
+				toast.success(response.message)
 				setCompanySession(company);
 				window.location.href = "/";
 			} else {
@@ -111,7 +111,7 @@ const Login = () => {
 								</button>
 
 								<div className="text-center text-muted" style={{marginTop: '10px'}}>
-									No Account Yet? <Link to="/register">Create One</Link>
+									No account yet? <Link to="/register">create one</Link>
 								</div>
 							</div>
 						</div>

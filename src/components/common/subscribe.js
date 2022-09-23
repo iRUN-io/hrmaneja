@@ -156,7 +156,7 @@ class Subscribe extends React.Component {
 
   subscribe = (amount) => {
     this.setState({ amount: amount });
-    console.log(amount);
+    // console.log(amount);
   };
 
 

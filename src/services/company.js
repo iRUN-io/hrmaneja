@@ -10,3 +10,27 @@ export async function getCompany(id) {
       },
     });
   }
+
+
+export async function createCompany(body) {
+  return request(`${API_URL}/companies/create`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
+
+export async function verifyEmail(token) {
+  return request(`${API_URL}/companies/verify-email/${token}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+  });
+}
+
