@@ -4,6 +4,7 @@ import './App.css';
 import Layout from './components/Shared/Layout';
 import Login from './components/Authentication/login';
 import SignUp from './components/Authentication/signup';
+import Register from './components/Authentication/register';
 import ForgotPassword from './components/Authentication/forgotPassword';
 import ChangePassword from './components/Authentication/changePassword';
 import NotFound from './components/Authentication/404';
@@ -21,6 +22,7 @@ class App extends Component {
 				<Router>
 					<Switch>
 						<Route path="/signup" component={SignUp} />
+						<Route path="/register" component={Register} />
 						<Route path="/login" component={Login} />
 						<Route path="/change-password/:token" component={ChangePassword} />
 						<Route path="/forgot-password" component={ForgotPassword} />
