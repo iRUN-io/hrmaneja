@@ -1,8 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { toast } from 'material-react-toastify';
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { getBillingData, getUser, removeUserSession } from '../../config/common';
+import { resendConfirmationEmail } from '../../services/company';
 
 class Header extends Component {
 
@@ -48,6 +51,18 @@ class Header extends Component {
 
 		const companyData = sessionStorage.getItem('hrmanejaCompany');
 		const company = JSON.parse(companyData);
+
+		// resend confirmation email
+		const resendEmail = async () => {
+			const body = { email: user.emailAddress };
+			const response = await resendConfirmationEmail(body);
+			if (response.status === 200) {
+				toast.success(response.message)
+			} else {
+				toast.error(response.message)
+			}
+		};
+
 		return (
 			<div>
 				<div
@@ -60,7 +75,10 @@ class Header extends Component {
 							<div className="left">
 								<h1 className="page-title">{this.props.dataFromSubParent}</h1>
 								{checked && company.settings.emailVerification &&  !company.settings.emailVerified ? (
-									<span className='text-white bg-danger btn  btn-sm'>Email confirmation is required. </span>
+									<><span className='text-white bg-danger btn  btn-sm'>Email confirmation is required.</span>
+									<Button onClick={()=> resendEmail()} className="btn btn-primary btn-sm ml-2">Resend</Button>
+									</>
+
 								) : (
 									<>
 										{checked && !billingExist && (

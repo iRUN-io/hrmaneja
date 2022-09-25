@@ -34,3 +34,15 @@ export async function verifyEmail(token) {
   });
 }
 
+
+export async function resendConfirmationEmail(body) {
+  return request(`${API_URL}/companies/resend-confirmation`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
