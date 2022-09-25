@@ -95,13 +95,18 @@ const Register = () => {
 				}
 			}
 
-			if (body.name === '' || body.email === '' || body.password === '' || body.confirmPassword === '' || body.phone === '') {
+			if (body.name === '' || body.email === '' || formState.password === '' || formState.confirmPassword === '' || body.phone === '') {
 				toast.error('Please fill all the fields');
 				return;
 			}
 
-			if (body.password !== body.confirmPassword) {
+			if (formState.password !== formState.confirmPassword) {
 				toast.error('Password does not match');
+				return;
+			}
+
+			if(formState.password.length < 6){
+				toast.error('Password must be at least 6 characters');
 				return;
 			}
 
