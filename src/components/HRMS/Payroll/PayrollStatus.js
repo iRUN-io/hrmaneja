@@ -47,8 +47,6 @@ function PayrollStatus(props) {
         return <EmptyState />
     }
 
-    console.log(payrollStatement);
-
 
     return (
         <>

@@ -16,6 +16,7 @@ import { toast } from 'material-react-toastify';
 import { createActivity } from '../../../services/activities';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
+import EmptyState from '../../EmptyState';
 
 
 function Payroll(props) {
@@ -94,6 +95,12 @@ function Payroll(props) {
 					id: employee.id
 				};
 			}).sort((a, b) => b.total - a.total);
+
+			// if allEmployees is empty, return
+			if (allEmployees.length === 0) {
+				setLoading(false);
+				return toast.error('Please add employees to run payroll');
+			}
 
 			sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
 			const totalSalary = allEmployees.reduce((acc, curr) => {
@@ -247,6 +254,9 @@ function Payroll(props) {
 													</form>
 												</div>
 											</div>
+											{currentEmployees.length === 0 && !loading ? (
+												<EmptyState/>
+											) : (
 											<div className="card-body">
 												<div className="table-responsive">
 													{loading ? (
@@ -353,6 +363,7 @@ function Payroll(props) {
 												</div>
 
 											</div>
+											)}
 										</div>
 									</div>
 								</div>
