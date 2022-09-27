@@ -8,6 +8,7 @@ export async function getAllSupports(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -29,6 +30,7 @@ export async function createSupport(body, userId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });

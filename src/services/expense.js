@@ -8,6 +8,7 @@ export async function getAllRequisitions(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -39,6 +40,7 @@ export async function createRequisition(body, userId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });
@@ -63,6 +65,7 @@ export async function deleteRequisition(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -75,6 +78,7 @@ export async function approveRequisition(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -87,6 +91,7 @@ export async function disapproveRequisition(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }

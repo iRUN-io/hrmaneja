@@ -123,7 +123,7 @@ const emailSwitch = {
     system, please reach out to us @ support@hrmaneja.com.` };
   }
   , userLoggedIn: () => {
-    return { subject: 'User logged in', body: `User logged in` };
+    return { subject: 'User logged in', body: `Someone just logged in using your access, if this was not you, send a mail to support@hrmaneja.com.` };
   }
   , makeRequisition: () => {
     return {

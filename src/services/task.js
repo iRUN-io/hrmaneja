@@ -8,6 +8,7 @@ export async function getAllTasks(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -29,6 +30,7 @@ export async function createTask(body, userId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });
@@ -74,6 +76,7 @@ export async function completeTask(body, taskId) {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
+        'Authorization': USER_TOKEN,
       },
     });
   }

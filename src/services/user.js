@@ -8,6 +8,7 @@ export async function getAllUsers(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }

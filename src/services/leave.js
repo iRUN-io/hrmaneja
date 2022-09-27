@@ -8,6 +8,8 @@ export async function getAllLeaves(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
+
     },
   });
 }
@@ -29,6 +31,8 @@ export async function createLeave(body, userId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
+
     },
     body: JSON.stringify(body),
   });
@@ -53,6 +57,7 @@ export async function deleteLeave(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -65,6 +70,7 @@ export async function approveLeave(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -77,6 +83,7 @@ export async function disapproveLeave(leaveId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }

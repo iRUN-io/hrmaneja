@@ -8,6 +8,7 @@ export async function getAllSetting(COMPANY_ID) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -29,6 +30,7 @@ export async function createOrUpdateSetting(body) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });
@@ -53,6 +55,7 @@ export async function deleteSetting(settingId) {
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
     },
   });
 }
@@ -125,6 +128,7 @@ export async function getHolidays(country, year) {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Headers': '*',
+          'Authorization': USER_TOKEN,
       },
   });
 }
