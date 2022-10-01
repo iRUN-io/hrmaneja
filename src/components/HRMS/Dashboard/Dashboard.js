@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUser } from "../../../config/common";
 import { totalDepartments, totalEmployees, totalLeaves, totalRequisition, totalUsers } from '../../../services/setting';
+import Image from '../../elements/Image';
 const Dashboard = () => {
   		const [company, setCompany] = useState([]);
 		const user = getUser();
@@ -39,6 +40,25 @@ const Dashboard = () => {
 				<div>
 					<div className={`section-body  mt-3`}>
 						<div className="container-fluid">
+						<div className="row clearfix">
+								
+								<div className="col-lg-12">
+									<div className={`mb-4`}>
+										<h6>
+											Watch Demo{' '}
+										</h6>
+										<div className='card' style={{height: '400px'}}>
+										<div className='card-body row'>
+										<div className="col-lg-12">
+										<iframe height="100%" width={'100%'} src="https://www.youtube.com/embed/V0QBU9dIhFo" title="HR-MANEJA DEMO" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen >
+											
+											</iframe>
+										</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
 							<div className="row clearfix">
 								
 								<div className="col-lg-12">

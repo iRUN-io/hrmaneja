@@ -96,7 +96,6 @@ function Payroll(props) {
 				};
 			}).sort((a, b) => b.total - a.total);
 
-			// if allEmployees is empty, return
 			if (allEmployees.length === 0) {
 				setLoading(false);
 				return toast.error('Please add employees to run payroll');
