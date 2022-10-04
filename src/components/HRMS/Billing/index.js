@@ -7,6 +7,7 @@ import ComingSoon from '../../common/comingSoon';
 import Loader from '../../common/loader';
 import Subscribe from '../../common/subscribe';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 
 const Billing = () => {
@@ -158,7 +159,7 @@ const Billing = () => {
 																	<tr key={billing.id}>
 																		<td>${billing.amount}</td>
 																		<td>{billing.plan}</td>
-																		<td>Nov 2022</td>
+																		<td>{moment(billing.createdAt).format('MMM Do YYYY')}</td>
 																		{/* <td>{billing.paidBy}</td> */}
 																		<td>{billing.status}</td>
 																		<td>
