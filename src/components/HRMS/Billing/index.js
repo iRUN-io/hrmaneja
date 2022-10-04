@@ -81,8 +81,6 @@ const Billing = () => {
 								
 								
 								<div className="row clearfix">
-									{billings.map((billing) => (
-										<>
 										<div className="card disabled-card">
 											<div className="row">
 												<div className="col-6">
@@ -105,36 +103,31 @@ const Billing = () => {
 											</div>
 										</div>
 											
-										<div key={billing._id} className="col-6 col-md-4 col-xl-6">
-											<div className="card  more-cards card-blue">
-												<div className="card-body">
+										<div  className="card card-blue col-md-6 col-xl-6">
+											<div className="card-body">
 													<div className='card-icon card-icon-white' style={{ float: 'right' }}>
 														<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
 													</div>
 													<p></p>
-													<h3>${billing.amount}</h3>
-													<h5>{billing.plan}</h5>
+													<h3>${billings[0].amount}</h3>
+													<h5>{billings[0].plan}</h5>
 													<div className='upgrade-button'>
 														<button className="btn btn-default disabled btn-sm">Upgrade</button>
 													</div>
-												</div>
 											</div>
 										</div>
 
-										<div className="col-6 col-md-4 col-xl-6">
-										<div className="card next-plan-card  more-cards card-white">
-
-											<div className="card-body">
+										<div className="card next-plan-card  more-cards card-white col-lg-6 col-md-6 col-xl-6">
+										<div className="card-body">
 												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
 													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
 												</div>
 												<p>Next Payment</p>
-												<h3>${billing.amount}</h3>
+												<h3>${billings[0].amount}</h3>
 												<h5>on {getNextBillingDate()}</h5>
 												<div className='upgrade-button'>
 													<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
 												</div>
-											</div>
 										</div>
 										</div>
 
@@ -237,9 +230,6 @@ const Billing = () => {
 
 											</div>
 										</div>
-									</>
-
-									))}
 									
 									
 									
