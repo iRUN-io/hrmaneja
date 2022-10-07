@@ -280,7 +280,6 @@ class Menu extends Component {
 		const user = this.state.user;
 		const isAdmin = user?.role === "HR Manager";
 
-		// console.log('featuresdd', features)
 		const content = [
 			{
 				"id": 1,
@@ -334,6 +333,11 @@ class Menu extends Component {
 						"id": 11,
 						"label": "Requisition",
 						"to": "/my-requisition"
+					},
+					{
+						"id": 12,
+						"label": "Time Sheet",
+						"to": "/my-timesheet"
 					},
 
 					// {

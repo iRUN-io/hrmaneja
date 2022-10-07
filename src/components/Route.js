@@ -14,7 +14,7 @@ import Expense from './HRMS/Expense/Expense';
 import Report from './HRMS/Report/Report';
 import Accounts from './HRMS/Accounts/Accounts';
 import Excel from './HRMS/Excel/Excel';
-import ProjectDashboard from './Project/Dashboard/Dashboard';
+// import ProjectDashboard from './Project/Dashboard/Dashboard';
 // import ProjectList from './Project/ProjectList/Projectlist';
 // import Taskboard from './Project/Taskboard/Taskboard';
 // import TicketList from './Project/TicketList/TicketList';
@@ -26,21 +26,21 @@ import TodoList from './Project/TodoList/TodoList';
 // import Positions from './JobPortal/Positions/Positions';
 // import Resumes from './JobPortal/Resumes/Resumes';
 // import JobSettings from './JobPortal/Settings/Settings';
-import Icons from './Icons/icons';
-import IconsFeather from './Icons/IconsFeather';
-import IconsLine from './Icons/IconsLine';
-import IconsFlags from './Icons/IconsFlags';
-import IconsPayments from './Icons/IconsPayments';
+// import Icons from './Icons/icons';
+// import IconsFeather from './Icons/IconsFeather';
+// import IconsLine from './Icons/IconsLine';
+// import IconsFlags from './Icons/IconsFlags';
+// import IconsPayments from './Icons/IconsPayments';
 // import Charts from './Charts/Charts';
 // import ChartsE from './Charts/ChartsE';
 // import ChartsC3 from './Charts/ChartsC3';
 // import ChartsKnob from './Charts/ChartsKnob';
 // import ChartsSparkline from './Charts/ChartsSparkline';
-// import Forms from './Forms/Forms';
-// import FormAdvanced from './Forms/FormAdvanced';
-// import FormValidation from './Forms/FormValidation';
-// import FormWizard from './Forms/FormWizard';
-// import FormSummernote from './Forms/FormSummernote';
+import Forms from './Forms/Forms';
+import FormAdvanced from './Forms/FormAdvanced';
+import FormValidation from './Forms/FormValidation';
+import FormWizard from './Forms/FormWizard';
+import FormSummernote from './Forms/FormSummernote';
 // import Tables from './Tables/Tables';
 // import DataTables from './Tables/DataTables';
 // import TablesColor from './Tables/TablesColor';
@@ -59,7 +59,7 @@ import AppCalendar from './AppPages/AppCalendar';
 // import AppFilemanager from './AppPages/AppFilemanager';
 // import AppSetting from './AppPages/AppSetting';
 // import Maps from './Maps/Maps';
-import Gallery from './Gallery/Gallery';
+// import Gallery from './Gallery/Gallery';
 // import Login from './Authentication/login';
 // import Signup from './Authentication/signup';
 // import ForgotPassword from './Authentication/forgotPassword';
@@ -81,6 +81,7 @@ import Billing from './HRMS/Billing';
 import BillingSlip from './HRMS/Billing/BillingSlip';
 import PayrollStatus from './HRMS/Payroll/PayrollStatus';
 import EmailConfirmation from './Authentication/emailConfirmation';
+import MyTimesheet from './HRMS/Expense/MyTimesheet';
 
 const user = getUser();
 
@@ -245,13 +246,13 @@ const Routes = [
 
     //project
 
-    {
-        path: "/project-dashboard",
-        name: 'projectDashboard',
-        exact: true,
-        pageTitle: "'Project Dashboard",
-        component: ProjectDashboard
-    },
+    // {
+    //     path: "/project-dashboard",
+    //     name: 'projectDashboard',
+    //     exact: true,
+    //     pageTitle: "'Project Dashboard",
+    //     component: ProjectDashboard
+    // },
     // {
     //     path: "/project-list",
     //     name: 'project-list',
@@ -426,6 +427,13 @@ const Routes = [
         component: MyExpense
     },
     {
+        path: "/my-timesheet",
+        name: 'my-timesheet',
+        exact: true,
+        pageTitle: "My Timesheet",
+        component: MyTimesheet
+    },
+    {
         path: "/hr-features",
         name: 'hr-features',
         exact: true,
@@ -439,41 +447,41 @@ const Routes = [
     //     pageTitle: "Tables",
     //     component: InternalServer
     // },
-    {
-        path: "/icons",
-        name: 'icons',
-        exact: true,
-        pageTitle: "Icons",
-        component: Icons
-    },
-    {
-        path: "/icons-feather",
-        name: 'icons-feather',
-        exact: true,
-        pageTitle: "Icons",
-        component: IconsFeather
-    },
-    {
-        path: "/icons-line",
-        name: 'icons-line',
-        exact: true,
-        pageTitle: "Icons",
-        component: IconsLine
-    },
-    {
-        path: "/icons-flag",
-        name: 'icons-flag',
-        exact: true,
-        pageTitle: "Icons",
-        component: IconsFlags
-    },
-    {
-        path: "/icons-payments",
-        name: 'icons-payments',
-        exact: true,
-        pageTitle: "Icons",
-        component: IconsPayments
-    },
+    // {
+    //     path: "/icons",
+    //     name: 'icons',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: Icons
+    // },
+    // {
+    //     path: "/icons-feather",
+    //     name: 'icons-feather',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: IconsFeather
+    // },
+    // {
+    //     path: "/icons-line",
+    //     name: 'icons-line',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: IconsLine
+    // },
+    // {
+    //     path: "/icons-flag",
+    //     name: 'icons-flag',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: IconsFlags
+    // },
+    // {
+    //     path: "/icons-payments",
+    //     name: 'icons-payments',
+    //     exact: true,
+    //     pageTitle: "Icons",
+    //     component: IconsPayments
+    // },
     // {
     //     path: "/charts",
     //     name: 'charts',
@@ -510,41 +518,41 @@ const Routes = [
     //     component: ChartsSparkline
     // },
 
-    // {
-    //     path: "/forms",
-    //     name: 'forms',
-    //     exact: true,
-    //     pageTitle: "Forms Elements",
-    //     component: Forms
-    // },
-    // {
-    //     path: "/form-advanced",
-    //     name: 'form-advanced',
-    //     exact: true,
-    //     pageTitle: "Forms Elements",
-    //     component: FormAdvanced
-    // },
-    // {
-    //     path: "/form-validation",
-    //     name: 'form-validation',
-    //     exact: true,
-    //     pageTitle: "Forms Elements",
-    //     component: FormValidation
-    // },
-    // {
-    //     path: "/form-wizard",
-    //     name: 'form-wizard',
-    //     exact: true,
-    //     pageTitle: "Forms Elements",
-    //     component: FormWizard
-    // },
-    // {
-    //     path: "/form-summernote",
-    //     name: 'form-summernote',
-    //     exact: true,
-    //     pageTitle: "Forms Elements",
-    //     component: FormSummernote
-    // },
+    {
+        path: "/forms",
+        name: 'forms',
+        exact: true,
+        pageTitle: "Forms Elements",
+        component: Forms
+    },
+    {
+        path: "/form-advanced",
+        name: 'form-advanced',
+        exact: true,
+        pageTitle: "Forms Elements",
+        component: FormAdvanced
+    },
+    {
+        path: "/form-validation",
+        name: 'form-validation',
+        exact: true,
+        pageTitle: "Forms Elements",
+        component: FormValidation
+    },
+    {
+        path: "/form-wizard",
+        name: 'form-wizard',
+        exact: true,
+        pageTitle: "Forms Elements",
+        component: FormWizard
+    },
+    {
+        path: "/form-summernote",
+        name: 'form-summernote',
+        exact: true,
+        pageTitle: "Forms Elements",
+        component: FormSummernote
+    },
 
     // {
     //     path: "/tables",

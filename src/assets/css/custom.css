@@ -555,6 +555,19 @@ body {
   color: #ffffff !important;
 }
 
+.btn-outline-primary:hover{
+  color: #fff !important;
+}
+
+.btn-outline-primary{
+  color: #855aff !important;
+}
+
+.w60 p{
+  font-weight: 600 !important;
+  color: #855aff;
+}
+
 *,
 *:before,
 *:after {
