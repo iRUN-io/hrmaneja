@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getEmployee } from "../../../services/employee";
-import { formatMoney, getCompanyData, getUser } from "../../../config/common";
+import {  getCompanyData, getUser } from "../../../config/common";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
@@ -11,23 +11,22 @@ import { toast } from 'material-react-toastify';
 import { createActivity } from '../../../services/activities';
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
-import { createRequisition, getEmployeeRequisition } from '../../../services/expense';
 import moment from 'moment';
 import FeatureNotAvailable from '../../common/featureDisabled';
-import { createAttendance } from '../../../services/attendance';
+import { createAttendance, getAttendance } from '../../../services/attendance';
 
 
 function Timesheet(props) {
     const [loading, setLoading] = useState(false);
-    const [requisitions, setRequisitions] = useState([]);
+    const [requisitions, setAttendance] = useState([]);
     const [user, setUser] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(false);
     const comingSoon = false;
 
     const [formState, setFormState] = useState({
-        week: moment().week(),
-        month: moment().month(),
-        year: moment().year(),
+        week: moment().week().toString(),
+        month: moment().month().toString(),
+        year: moment().year().toString(),
         date: moment().format('YYYY-MM-DD'),
         employeeName: '',
         companyId: '',
@@ -123,7 +122,7 @@ function Timesheet(props) {
 
                 if (logActivity.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
-                    setRequisitions([...requisitions, response])
+                    setAttendance([...requisitions, response])
                     toast.success("Requisition request sent successfully");
                 }
             }
@@ -145,14 +144,44 @@ function Timesheet(props) {
                 const companyData = await getCompanyData();
                 companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const employeeRecord = await getEmployee(user.employee_id);
-                const allRequisition = await getEmployeeRequisition(user.employee_id);
-                setRequisitions(allRequisition);
-                setFormState({
-                    ...formState,
-                    employeeId: employeeRecord.id,
-                    employeeName: employeeRecord.name,
-                    companyId: employeeRecord.company_id,
-                });
+                const allAttendance = await getAttendance(user.employee_id);
+                setAttendance(allAttendance);
+                const thisWeekAttendance = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
+                const savedData = thisWeekAttendance[0].timeSheet[0];
+
+                if (savedData) {
+                    setFormState({
+                        week: moment().week().toString(),
+                        month: moment().month().toString(),
+                        year: moment().year().toString(),
+                        date: moment().format('YYYY-MM-DD'),
+                        employeeId: employeeRecord.id,
+                        employeeName: employeeRecord.name,
+                        companyId: employeeRecord.company_id,
+                        mondayStartTime: savedData.monday.startTime,
+                        mondayEndTime: savedData.monday.endTime,
+                        mondayHours: savedData.monday.hours,
+                        mondayNote: savedData.monday.note,
+                        tuesdayStartTime: savedData.tuesday.startTime,
+                        tuesdayEndTime: savedData.tuesday.endTime,
+                        tuesdayHours: savedData.tuesday.hours,
+                        tuesdayNote: savedData.tuesday.note,
+                        wednesdayStartTime: savedData.wednesday.startTime,
+                        wednesdayEndTime: savedData.wednesday.endTime,
+                        wednesdayHours: savedData.wednesday.hours,
+                        wednesdayNote: savedData.wednesday.note,
+                        thursdayStartTime: savedData.thursday.startTime,
+                        thursdayEndTime: savedData.thursday.endTime,
+                        thursdayHours: savedData.thursday.hours,
+                        thursdayNote: savedData.thursday.note,
+                        fridayStartTime: savedData.friday.startTime,
+                        fridayEndTime: savedData.friday.endTime,
+                        fridayHours: savedData.friday.hours,
+                        fridayNote: savedData.friday.note,
+
+                    });
+                }
+
                 setLoading(false);
                 setUser(user);
 
@@ -196,7 +225,6 @@ function Timesheet(props) {
 
     const week = getWeek()[0];
 
-    console.log('formstate', formState);
     return (
         <>
 
