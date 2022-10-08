@@ -282,7 +282,7 @@ const Register = () => {
 						</Link>
 					</div>
 					<div className="card-body">
-							<div className="card-title">Create new account</div>
+							{/* <div className="card-title">Create new account</div> */}
 							<div className="form-group">
 								<label className="form-label">Company</label>
 								<input type="text" name='name' value={formState?.name} onChange={updateForm}  className="form-control" placeholder="Enter Company Name" />

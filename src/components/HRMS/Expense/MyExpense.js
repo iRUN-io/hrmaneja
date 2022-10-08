@@ -259,9 +259,7 @@ function Expense(props) {
 																						data-placement="top"
 																						title="Avatar Name"
 																					>
-																						{(
-																							request.employee[0] + request.employee[1]
-																						).toUpperCase()}
+																						{(request.employee ? request.employee[0] + request.employee[1] : '').toUpperCase()}
 																					</span>
 																					<div className="ml-3">
 																						<a href="#">{request.employee}</a>

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { getEmployee } from "../../../services/employee";
-import {  getCompanyData, getUser } from "../../../config/common";
+import { getCompanyData, getUser } from "../../../config/common";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ComingSoon from '../../common/comingSoon';
@@ -12,8 +12,8 @@ import { createActivity } from '../../../services/activities';
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
 import moment from 'moment';
-import FeatureNotAvailable from '../../common/featureDisabled';
-import { createAttendance, getAttendance } from '../../../services/attendance';
+// import FeatureNotAvailable from '../../common/featureDisabled';
+import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../../services/attendance';
 
 
 function Timesheet(props) {
@@ -22,7 +22,8 @@ function Timesheet(props) {
     const [user, setUser] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(false);
     const comingSoon = false;
-
+    const [timeSheetId, setTimeSheetId] = useState();
+    const [timeSheetStatus, setTimeSheetStatus] = useState();
     const [formState, setFormState] = useState({
         week: moment().week().toString(),
         month: moment().month().toString(),
@@ -136,6 +137,40 @@ function Timesheet(props) {
         }
     };
 
+    const approvalRequest = async (timeSheetId) => {
+        try {
+            if (!featureEnabled) {
+                toast.error('Feature not enabled');
+                return;
+            }
+            let response;
+            response = await approveTimeSheetRequest(timeSheetId);
+            if (!response.error) {
+
+                const logLeave = await createActivity(
+                    {
+                        name: 'Approve Timesheet',
+                        employee_id: user.employee_id,
+                        activity: `Timesheet approval request for week ${formState.week} of ${formState.year}`,
+                        activity_name: 'Update',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+
+                if (logLeave.id) {
+                    // sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
+                    toast.info(response.message);
+                }
+            }
+
+        } catch (err) {
+            toast.error("Error, try again");
+            setFormState({ ...formState });
+        }
+
+    };
+
     useEffect(() => {
         async function fetchData() {
             setLoading(false);
@@ -147,8 +182,9 @@ function Timesheet(props) {
                 const allAttendance = await getAttendance(user.employee_id);
                 setAttendance(allAttendance);
                 const thisWeekAttendance = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
-                const savedData = thisWeekAttendance[0].timeSheet[0];
-
+                const savedData = thisWeekAttendance[0]?.timeSheet[0];
+                setTimeSheetId(thisWeekAttendance[0]?.id);
+                setTimeSheetStatus(thisWeekAttendance[0]?.status);
                 if (savedData) {
                     setFormState({
                         week: moment().week().toString(),
@@ -244,8 +280,8 @@ function Timesheet(props) {
                                         </li>
                                     </ul>
                                     {/* <div className="header-action">
-                    <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Make Requisition</button>
-                </div> */}
+                                            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Make Requisition</button>
+                                        </div> */}
                                 </div>
                                 <div className="tab-content mt-3">
                                     <div className="tab-pane fade show active" role="tabpanel">
@@ -253,8 +289,8 @@ function Timesheet(props) {
                                             <div className="card-header">
                                                 <h3 className="card-title">TimeSheet</h3>
                                                 <div className="card-options">
-                                                    <button to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Past timesheets</button>
-                                                    <button to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Pending timesheets</button>
+                                                    <button disabled to="#" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Past timesheets</button>
+                                                    <button disabled to="#" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Pending timesheets</button>
                                                 </div>
                                             </div>
                                             <div className="card-body">
@@ -338,7 +374,7 @@ function Timesheet(props) {
                                                                             </div>
                                                                         </td>
                                                                         <td>
-                                                                        <div className="align-items-center">
+                                                                            <div className="align-items-center">
                                                                                 <div className="form-group">
                                                                                     <label className="form-label">Start Time</label>
                                                                                     <input type="time" name="wednesdayStartTime" value={formState.wednesdayStartTime} onChange={updateForm} className="form-control"
@@ -356,7 +392,7 @@ function Timesheet(props) {
                                                                             </div>
                                                                         </td>
                                                                         <td>
-                                                                        <div className="align-items-center">
+                                                                            <div className="align-items-center">
                                                                                 <div className="form-group">
                                                                                     <label className="form-label">Start Time</label>
                                                                                     <input type="time" name="thursdayStartTime" value={formState.thursdayStartTime} onChange={updateForm} className="form-control"
@@ -374,7 +410,7 @@ function Timesheet(props) {
                                                                             </div>
                                                                         </td>
                                                                         <td>
-                                                                        <div className="align-items-center">
+                                                                            <div className="align-items-center">
                                                                                 <div className="form-group">
                                                                                     <label className="form-label">Start Time</label>
                                                                                     <input type="time" name="fridayStartTime" value={formState.fridayStartTime} onChange={updateForm} className="form-control"
@@ -432,8 +468,12 @@ function Timesheet(props) {
                                                             </table>
 
                                                                 <div style={{ float: 'right' }}>
-                                                                    <Link onClick={() => updateTimesheet()} style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Save</Link>
-                                                                    <Link to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm">Submit</Link>
+                                                                    {timeSheetStatus === 'pending' ?
+                                                                        <>
+                                                                            <Link onClick={() => updateTimesheet()} style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Save</Link>
+                                                                            <Link onClick={() => approvalRequest(timeSheetId)} style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm">Submit</Link>
+                                                                        </>
+                                                                        : <small className='text-success'>Timesheet Submitted</small>}
                                                                 </div>
                                                             </>
                                                         )}

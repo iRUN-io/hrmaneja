@@ -81,7 +81,7 @@ import Billing from './HRMS/Billing';
 import BillingSlip from './HRMS/Billing/BillingSlip';
 import PayrollStatus from './HRMS/Payroll/PayrollStatus';
 import EmailConfirmation from './Authentication/emailConfirmation';
-import MyTimesheet from './HRMS/Expense/MyTimesheet';
+import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
 
 const user = getUser();
 

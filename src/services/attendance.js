@@ -43,6 +43,30 @@ export async function updateAttendance(body, userId, myUserId) {
   });
 }
 
+export async function approveTimesheet(timeSheetId) {
+  return request(`${API_URL}/attendance/approve/${timeSheetId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
+    },
+  });
+}
+
+export async function approveTimeSheetRequest(timeSheetId) {
+  return request(`${API_URL}/attendance/approveRequest/${timeSheetId}`, {
+    method: 'put',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
+    },
+  });
+}
+
 
 export async function deleteAttendance(userId, myUserId, ref) {
   return request(`${API_URL}/attendance/${userId}?id=${myUserId}`, {

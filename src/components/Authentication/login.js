@@ -57,7 +57,7 @@ const Login = () => {
 	};
 	return (
 		<>
-		<LoadingBar progress={progress} color='#8759ff' height={7} />
+		<LoadingBar progress={progress} color='#8759ff' height={5} />
 		<div className="auth">
 			<ToastContainer />
 			<div className="auth_left">
@@ -72,9 +72,10 @@ const Login = () => {
 						</Link>
 					</div>
 						<div className="card-body">
-							<div className="card-title">Login to your account</div>
+							{/* <div className="card-title">Login to your account</div> */}
 				
 							<div className="form-group">
+								<label className="form-label">Email</label>
 								<input
 									type="email"
 									className="form-control"
@@ -88,7 +89,7 @@ const Login = () => {
 								<label className="form-label">
 									Password
 									<Link className="float-right small" to="/forgot-password">
-										I forgot password
+										forgot password ?
 									</Link>
 								</label>
 								<input
@@ -99,12 +100,12 @@ const Login = () => {
 									required
 									onChange={e => setPassword(e.target.value)} />
 							</div>
-							<div className="form-group">
+							{/* <div className="form-group">
 								<label className="custom-control custom-checkbox">
 									<input type="checkbox" className="custom-control-input" />
 									<span className="custom-control-label">Remember me</span>
 								</label>
-							</div>
+							</div> */}
 							<div className="form-footer">
 								<button type='submit' onClick={() => handleSubmit()} className="btn btn-primary btn-block">
 									Click to login
