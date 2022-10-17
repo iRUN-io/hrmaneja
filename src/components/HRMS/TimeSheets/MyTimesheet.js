@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { getEmployee } from "../../../services/employee";
 import { getCompanyData, getUser } from "../../../config/common";
@@ -12,18 +12,20 @@ import { createActivity } from '../../../services/activities';
 import { emailCase } from '../../../enums/emailCase';
 import { sendEmail } from '../../../services/mail/sendMail';
 import moment from 'moment';
-// import FeatureNotAvailable from '../../common/featureDisabled';
+import FeatureNotAvailable from '../../common/featureDisabled';
 import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../../services/attendance';
 
 
 function Timesheet(props) {
     const [loading, setLoading] = useState(false);
-    const [requisitions, setAttendance] = useState([]);
+    const [allAttendance, setAttendance] = useState([]);
     const [user, setUser] = useState({});
-    const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [employee, setEmployee] = useState({});
+    const [featureEnabled, setFeatureEnabled] = useState(true);
     const comingSoon = false;
     const [timeSheetId, setTimeSheetId] = useState();
-    const [timeSheetStatus, setTimeSheetStatus] = useState();
+    const [currentWeek, setCurrentWeekState] = useState({});
+    const [timeSheetStatus, setTimeSheetStatus] = useState('');
     const [formState, setFormState] = useState({
         week: moment().week().toString(),
         month: moment().month().toString(),
@@ -67,7 +69,7 @@ function Timesheet(props) {
             setFormState({ ...formState });
 
             const body = {
-                employee_id: formState.employeeId,
+                employee_id: user.employee_id,
                 company_id: formState.companyId,
                 week: formState.week,
                 year: formState.year,
@@ -106,7 +108,6 @@ function Timesheet(props) {
                 },
 
             }
-
             const response = await createAttendance(body);
 
             if (!response.error) {
@@ -122,9 +123,9 @@ function Timesheet(props) {
                 )
 
                 if (logActivity.id) {
-                    sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
-                    setAttendance([...requisitions, response])
-                    toast.success("Requisition request sent successfully");
+                    // sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
+                    setAttendance([...allAttendance, response])
+                    toast.success("Timesheet updated successfully");
                 }
             }
 
@@ -171,13 +172,47 @@ function Timesheet(props) {
 
     };
 
+    const setFormFunction = useCallback((dateData, formData) => {
+        setFormState({
+            ...formState,
+            week: dateData?.week ? dateData.week : moment().week().toString(),
+            month: dateData?.month ? dateData.month : moment().month().toString(),
+            year: dateData?.year ? dateData.year : moment().year().toString(),
+            date: dateData?.date ? dateData.date : moment().format('YYYY-MM-DD'),
+            employeeId: user.employee_id,
+            employeeName: employee.name,
+            companyId: employee.company_id,
+            mondayStartTime: formData.monday.startTime,
+            mondayEndTime: formData.monday.endTime,
+            mondayHours: formData.monday.hours,
+            mondayNote: formData.monday.note,
+            tuesdayStartTime: formData.tuesday.startTime,
+            tuesdayEndTime: formData.tuesday.endTime,
+            tuesdayHours: formData.tuesday.hours,
+            tuesdayNote: formData.tuesday.note,
+            wednesdayStartTime: formData.wednesday.startTime,
+            wednesdayEndTime: formData.wednesday.endTime,
+            wednesdayHours: formData.wednesday.hours,
+            wednesdayNote: formData.wednesday.note,
+            thursdayStartTime: formData.thursday.startTime,
+            thursdayEndTime: formData.thursday.endTime,
+            thursdayHours: formData.thursday.hours,
+            thursdayNote: formData.thursday.note,
+            fridayStartTime: formData.friday.startTime,
+            fridayEndTime: formData.friday.endTime,
+            fridayHours: formData.friday.hours,
+            fridayNote: formData.friday.note,
+
+        });
+    }, [formState, employee, user]);
+
     useEffect(() => {
         async function fetchData() {
-            setLoading(false);
+            setLoading(true);
             const user = getUser();
             if (user) {
                 const companyData = await getCompanyData();
-                companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                // companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const employeeRecord = await getEmployee(user.employee_id);
                 const allAttendance = await getAttendance(user.employee_id);
                 setAttendance(allAttendance);
@@ -185,46 +220,18 @@ function Timesheet(props) {
                 const savedData = thisWeekAttendance[0]?.timeSheet[0];
                 setTimeSheetId(thisWeekAttendance[0]?.id);
                 setTimeSheetStatus(thisWeekAttendance[0]?.status);
+                setEmployee(employeeRecord);
                 if (savedData) {
-                    setFormState({
-                        week: moment().week().toString(),
-                        month: moment().month().toString(),
-                        year: moment().year().toString(),
-                        date: moment().format('YYYY-MM-DD'),
-                        employeeId: employeeRecord.id,
-                        employeeName: employeeRecord.name,
-                        companyId: employeeRecord.company_id,
-                        mondayStartTime: savedData.monday.startTime,
-                        mondayEndTime: savedData.monday.endTime,
-                        mondayHours: savedData.monday.hours,
-                        mondayNote: savedData.monday.note,
-                        tuesdayStartTime: savedData.tuesday.startTime,
-                        tuesdayEndTime: savedData.tuesday.endTime,
-                        tuesdayHours: savedData.tuesday.hours,
-                        tuesdayNote: savedData.tuesday.note,
-                        wednesdayStartTime: savedData.wednesday.startTime,
-                        wednesdayEndTime: savedData.wednesday.endTime,
-                        wednesdayHours: savedData.wednesday.hours,
-                        wednesdayNote: savedData.wednesday.note,
-                        thursdayStartTime: savedData.thursday.startTime,
-                        thursdayEndTime: savedData.thursday.endTime,
-                        thursdayHours: savedData.thursday.hours,
-                        thursdayNote: savedData.thursday.note,
-                        fridayStartTime: savedData.friday.startTime,
-                        fridayEndTime: savedData.friday.endTime,
-                        fridayHours: savedData.friday.hours,
-                        fridayNote: savedData.friday.note,
-
-                    });
+                    setFormFunction(null, savedData);
                 }
-
-                setLoading(false);
-                setUser(user);
-
             }
+            setLoading(false);
+            setUser(user);
         }
         fetchData();
+
     }, []);
+
 
     const updateForm = (e) => {
         const { value, name } = e.target;
@@ -234,8 +241,9 @@ function Timesheet(props) {
         });
     };
 
-    const getWeek = () => {
-        const today = new Date();
+    useEffect(() => {
+        const currentTimesheetById = allAttendance.filter(attendance => attendance.id === timeSheetId);
+        const today = new Date(currentTimesheetById[0]?.updatedAt);
         const day = today.getDay();
         const diff = today.getDate() - day + (day === 0 ? -6 : 1);
         const monday = new Date(today.setDate(diff));
@@ -247,6 +255,10 @@ function Timesheet(props) {
         const sunday = new Date(today.setDate(diff + 6));
         const week = [
             {
+                week: moment(monday).week().toString(),
+                year: moment(monday).year().toString(),
+                month: moment(monday).month().toString(),
+                date: moment(monday).format('YYYY-MM-DD'),
                 monday: monday,
                 tuesday: tuesday,
                 wednesday: wednesday,
@@ -256,10 +268,49 @@ function Timesheet(props) {
                 sunday: sunday,
             }
         ];
-        return week;
+
+        setCurrentWeekState(week[0]);
+    }, [allAttendance, timeSheetId]);
+
+    const week = currentWeek;
+
+    const pastWeeks = useMemo(() => {
+        const pastWeeks = allAttendance.filter(attendance => attendance.week !== formState.week && attendance.year === formState.year);
+        return (
+            <>
+                {!loading && pastWeeks.length > 0 && (
+                    <>
+                        {allAttendance.map((week, index) => (
+                            <option className='' key={index} value={week.id}>
+                                {moment().week(week.week).startOf('week').format('Do MMM YYYY')} - {moment().week(week.week).endOf('week').format('Do MMM YYYY')} {' '}
+                            </option>
+                        ))}
+                    </>
+                )}
+
+            </>
+        )
+    }, [allAttendance, loading, formState.week, formState.year]);
+
+    const setCurrentWeek = useCallback((id) => {
+        setTimeSheetId(id);
+        const currentTimesheetById = allAttendance.filter(attendance => attendance.id === id);
+        const currentTimesheet = currentTimesheetById[0];
+        const timeSheet = currentTimesheet.timeSheet[0];
+        setFormFunction(currentTimesheet, timeSheet);
+    }, [allAttendance, setFormFunction]);
+
+    const resetDate = useCallback(() => {
+        const latestTimesheet = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
+        setTimeSheetId(latestTimesheet[0].id);
+        const timeSheet = latestTimesheet[0].timeSheet[0];
+        setFormFunction(null, timeSheet);
+    }, [allAttendance, formState.week, formState.year, setFormFunction]);
+
+    if (!featureEnabled && !loading) {
+        return <FeatureNotAvailable />
     }
 
-    const week = getWeek()[0];
 
     return (
         <>
@@ -289,8 +340,18 @@ function Timesheet(props) {
                                             <div className="card-header">
                                                 <h3 className="card-title">TimeSheet</h3>
                                                 <div className="card-options">
-                                                    <button disabled to="#" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Past timesheets</button>
-                                                    <button disabled to="#" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Pending timesheets</button>
+                                                    <div className="item-action dropdown">
+                                                        <select className="form-control form-control btn btn-primary dropdown-toggle" name="week"
+                                                            onChange={
+                                                                (e) => {
+                                                                    setCurrentWeek(e.target.value);
+                                                                }
+                                                            }
+                                                        >
+                                                            {pastWeeks}
+                                                        </select>
+                                                    </div>
+                                                    <button onClick={() => resetDate()} style={{ marginLeft: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Current timesheet</button>
                                                 </div>
                                             </div>
                                             <div className="card-body">
@@ -468,7 +529,7 @@ function Timesheet(props) {
                                                             </table>
 
                                                                 <div style={{ float: 'right' }}>
-                                                                    {timeSheetStatus === 'pending' ?
+                                                                    {timeSheetStatus === 'pending' || timeSheetStatus === undefined ?
                                                                         <>
                                                                             <Link onClick={() => updateTimesheet()} style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Save</Link>
                                                                             <Link onClick={() => approvalRequest(timeSheetId)} style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm">Submit</Link>

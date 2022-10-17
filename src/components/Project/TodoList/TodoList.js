@@ -71,8 +71,8 @@ function TodoList(props) {
             }
 
             setFormState({
-                employeeId: '',
-                employeeName: '',
+                employeeId: formState.employeeId,
+                employeeName: formState.employeeName,
                 category: '',
                 fromDate: '',
                 dueDate: '',
