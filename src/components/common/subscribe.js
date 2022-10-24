@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
 import { FlutterWaveButton, closePaymentModal } from 'flutterwave-react-v3';
-import { getUser } from "../../config/common";
+import { formatMoney, getUser } from "../../config/common";
 import { toast } from "material-react-toastify";
 import { createBilling } from "../../services/billing";
 import { createActivity } from "../../services/activities";
@@ -126,13 +126,13 @@ class Subscribe extends React.Component {
   }
 
   getUser = async function () {
-		const user = getUser();
-		if (user) {
-			this.setState({
-				user: user,
-			});
-		}
-	}
+    const user = getUser();
+    if (user) {
+      this.setState({
+        user: user,
+      });
+    }
+  }
 
   handlePricingSlide = e => {
     this.setState({ priceInputValue: e.target.value });
@@ -160,11 +160,12 @@ class Subscribe extends React.Component {
   };
 
 
+
   render() {
 
     if (this.state.user.length === 0) {
-			this.getUser();
-		}
+      this.getUser();
+    }
     const user = this.state.user;
     const config = {
       public_key: 'FLWPUBK_TEST-89880cda230ec7985180ef3b677c8fd0-X',
@@ -183,58 +184,58 @@ class Subscribe extends React.Component {
         logo: 'https://irunauto.com/static/media/logo-dark.80bc83d8.png',
       },
     };
-  
+
     const fwConfig = {
       ...config,
       text: 'Subscribe',
       callback: async (response) => {
-         if (response.status === 'successful') {
-            const body = {
-              amount: response.amount,
-              paidBy: user.id,
-              company_id: user.company_id,
-              plan: 'Company Starter',
-              expiryDate: new Date().setMonth(new Date().getMonth() + 1),
-              status: 'active',
+        if (response.status === 'successful') {
+          const body = {
+            amount: response.amount,
+            paidBy: user.id,
+            company_id: user.company_id,
+            plan: 'Company Starter',
+            expiryDate: new Date().setMonth(new Date().getMonth() + 1),
+            status: 'active',
           }
           if (body.amount === '') {
-              toast.error('Please select a plan');
-              return;
+            toast.error('Please select a plan');
+            return;
           }
           const billing = await createBilling(body, user.employee_id);
 
           if (billing.data.id) {
-              const logBilling = await createActivity(
-                  {
-                      // eslint-disable-next-line no-useless-concat
-                      name: 'Paid for subscription' + 'with amount' + response.amount,
-                      employee_id: user.employee_id,
-                      activity: `${user.name} Paid for subscription`,
-                      activity_name: 'Paid for subscription',
-                      user: user.name,
-                      company_id: user.company_id,
-                  }
-              )
-
-              if (logBilling.id) {
-                  sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
-                  toast.success("Payment Successful");
-                  setTimeout(() => {
-                  window.location.reload();
-                  }, 2000);
-                  closePaymentModal()
+            const logBilling = await createActivity(
+              {
+                // eslint-disable-next-line no-useless-concat
+                name: 'Paid for subscription' + 'with amount' + response.amount,
+                employee_id: user.employee_id,
+                activity: `${user.name} Paid for subscription`,
+                activity_name: 'Paid for subscription',
+                user: user.name,
+                company_id: user.company_id,
               }
+            )
+
+            if (logBilling.id) {
+              sendEmail(user.emailAddress, user.name, emailCase.createDepartment);
+              toast.success("Payment Successful");
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
+              closePaymentModal()
+            }
 
           }
-            // this.props.history.push('/dashboard');
-         }
+          // this.props.history.push('/dashboard');
+        }
         closePaymentModal() // this will close the modal programmatically
       },
-      onClose: () => {},
+      onClose: () => { },
     };
 
     return (
-      <div className="pricing" style={{margin: '100px'}}>
+      <><div className="pricing" style={{ margin: '100px' }}>
         <div className="pricing-slider center-content">
           <label className="form-slider">
             <span>How many users do you have?</span>
@@ -243,8 +244,7 @@ class Subscribe extends React.Component {
               ref={this.slider}
               defaultValue={this.state.priceInputValue}
               onChange={this.handlePricingSlide}
-              style={{ "--thumb-size": "30px", backgroundColor: "#f5f5f5" }}
-            />
+              style={{ "--thumb-size": "30px", backgroundColor: "#f5f5f5" }} />
           </label>
           <div ref={this.sliderValue} className="pricing-slider-value">
             {this.getPricingData(this.state.priceInput)}
@@ -270,13 +270,15 @@ class Subscribe extends React.Component {
                 <div className="pricing-item-features">
                   <ul className="pricing-item-features-list">
                     {this.features[0].map((feature, index) => (
-                    <li key={index} className="is-checked">{feature}</li>
+                      <li key={index} className="is-checked">{feature}</li>
                     ))}
                   </ul>
                 </div>
               </div>
-              <div onClick={()=> this.subscribe(this.getPricingData(this.state.priceOutput.plan1, 1))} className="pricing-item-cta">
-              <FlutterWaveButton  className="btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan1, 1)}  />
+              <div onClick={() => this.subscribe(this.getPricingData(this.state.priceOutput.plan1, 1))} className="pricing-item-cta">
+                <button className="button button-primary button-block" data-toggle="modal" data-target="#paymentModal"> Subscribe </button>
+
+                {/* <FlutterWaveButton  className="button button-primary button-block btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan1, 1)}  /> */}
               </div>
             </div>
           </div>
@@ -298,14 +300,16 @@ class Subscribe extends React.Component {
                 </div>
                 <div className="pricing-item-features">
                   <ul className="pricing-item-features-list">
-                  {this.features[1].map((feature, index) => (
-                    <li key={index} className="is-checked"> {feature}</li>
+                    {this.features[1].map((feature, index) => (
+                      <li key={index} className="is-checked"> {feature}</li>
                     ))}
                   </ul>
                 </div>
               </div>
-              <div onClick={()=> this.subscribe(this.getPricingData(this.state.priceOutput.plan2, 1))} className="pricing-item-cta">
-              <FlutterWaveButton  className="btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan2, 1)}  />
+              <div onClick={() => this.subscribe(this.getPricingData(this.state.priceOutput.plan2, 1))} className="pricing-item-cta">
+                <button className="button button-primary button-block" data-toggle="modal" data-target="#paymentModal"> Subscribe </button>
+
+                {/* <FlutterWaveButton className="btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan2, 1)} /> */}
               </div>
             </div>
           </div>
@@ -326,19 +330,46 @@ class Subscribe extends React.Component {
                 </div>
                 <div className="pricing-item-features">
                   <ul className="pricing-item-features-list">
-                  {this.features[2].map((feature, index) => (
-                    <li key={index} className="is-checked">{feature}</li>
+                    {this.features[2].map((feature, index) => (
+                      <li key={index} className="is-checked">{feature}</li>
                     ))}
                   </ul>
                 </div>
               </div>
-              <div onClick={()=> this.subscribe(this.getPricingData(this.state.priceOutput.plan3, 1))} className="pricing-item-cta">
-              <FlutterWaveButton  className="btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan3, 1)}  />
+              <div onClick={() => this.subscribe(this.getPricingData(this.state.priceOutput.plan3, 1))} className="pricing-item-cta">
+                <button className="button button-primary button-block" data-toggle="modal" data-target="#paymentModal"> Subscribe </button>
+                {/* <FlutterWaveButton className="btn btn-primary" {...fwConfig} amount={this.getPricingData(this.state.priceOutput.plan3, 1)} /> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+
+        <div className="modal fade" id="paymentModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id="exampleModalLabel">Make Payment</h5>
+                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+              </div>
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col-md-12">
+                    <p>Make payment to the account below;</p>
+                    <p>Account Name: <strong>Irun Technology LTD</strong></p>
+                    <p>Account Number: <strong>0123555629</strong></p>
+                    <p>Bank: <strong>Wema Bank</strong></p>
+                    <p>Amount: <strong>{formatMoney(this.state.amount * 750)}</strong></p>
+                    <p>After payment, create a support ticket with payment details.</p>
+                    <p>Click <a href="/support">here</a> to create a support ticket.</p>
+                    <p>Thank you</p>
+                  </div>
+                </div>
+              </div>
+              {/* <EditLeaves leave={leave} /> */}
+            </div>
+          </div>
+        </div></>
     );
   }
 }

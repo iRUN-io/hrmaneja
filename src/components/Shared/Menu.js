@@ -32,7 +32,7 @@ import {
 import Routes from '../Route';
 import { createOrUpdateSetting } from '../../services/setting';
 import { toast } from 'material-react-toastify';
-import { getBillingData, getCompanyData, getUser } from '../../config/common';
+import { getBillingData, getCompanyData, getUser, removeUserSession } from '../../config/common';
 import { getAllActivities } from '../../services/activities';
 import NotFound from '../Authentication/404';
 
@@ -200,7 +200,6 @@ class Menu extends Component {
 		this.props.boxLayoutAction(e.target.checked)
 	}
 	toggleLeftMenu(e) {
-		console.log(e, 'asdasdada')
 		this.props.toggleLeftMenuAction(e)
 	}
 	toggleRightSidebar() {
@@ -262,6 +261,7 @@ class Menu extends Component {
 	}
 
 
+
 	render() {
 		if (this.state.activityLogs.length === 0 && this.state.activityChecked === false) {
 			this.getActivity();
@@ -274,6 +274,11 @@ class Menu extends Component {
 		}
 
 		const { checked, billinExists } = this.props;
+
+
+		const logout = () => {
+			removeUserSession();
+		};
 
 		const activityLogs = this.state.activityLogs; // Use this for the map
 		// const features = this.state.features; 
@@ -584,6 +589,9 @@ class Menu extends Component {
 										<NavLink to="/app-filemanager" className="nav-link icon app_file xs-hide">
 											<i className="fa fa-folder-o" />
 										</NavLink> */}
+										{/* <NavLink to="/page-search" className="nav-link icon">
+											<i className="fa fa-search" />
+										</NavLink> */}
 									</div>
 								</div>
 								<div className="hright">
@@ -606,7 +614,6 @@ class Menu extends Component {
 												/>
 											</span>
 										)}
-										{/* to relese user profile toggle  --- NOTE */}
 										{/* <p className="nav-link user_btn" onClick={this.toggleUserMenu}>
 											<img
 												className="avatar"
@@ -657,6 +664,11 @@ class Menu extends Component {
 													<span className="custom-switch-description">Email Nofications</span>
 													<input type="checkbox" name="custom-switch-checkbox" className="custom-switch-input" defaultChecked={this.handleEmailNotificationCheckbox()} onChange={(e) => this.handleEmailNotification(e)} />
 													<span className="custom-switch-indicator" />
+												</label>
+												<br></br>
+												<label className="custom-switch">
+													<span className="custom-switch-description">Logout</span>
+													<button onClick={logout} className="btn btn-sm btn-danger">Logout</button>
 												</label>
 											</li>
 											{/* <li>

@@ -20,6 +20,7 @@ import { getCompany } from "../services/company";
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
     sessionStorage.removeItem('hrmanejaCompany');
+    window.location.href = "/login";
   }
    
   // set the token and user from the session storage

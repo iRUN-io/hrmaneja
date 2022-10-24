@@ -63,7 +63,7 @@ const Login = () => {
 			<div className="auth_left">
 				<div className="card" style={{marginTop: '40px'}}>
 					<div className="text-center mb-2">
-						<Link className="header-brand" to="/">
+						<Link className="header-brand" to="https://hrmaneja.com">
 							<Image
 								src={require("../../assets/images/hr-manager-logo.png")}
 								alt="Open"

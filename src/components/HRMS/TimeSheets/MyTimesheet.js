@@ -108,6 +108,7 @@ function Timesheet(props) {
                 },
 
             }
+
             const response = await createAttendance(body);
 
             if (!response.error) {
@@ -275,12 +276,12 @@ function Timesheet(props) {
     const week = currentWeek;
 
     const pastWeeks = useMemo(() => {
-        const pastWeeks = allAttendance.filter(attendance => attendance.week !== formState.week && attendance.year === formState.year);
+        const pastWeeks = allAttendance;
         return (
             <>
                 {!loading && pastWeeks.length > 0 && (
                     <>
-                        {allAttendance.map((week, index) => (
+                        {pastWeeks.map((week, index) => (
                             <option className='' key={index} value={week.id}>
                                 {moment().week(week.week).startOf('week').format('Do MMM YYYY')} - {moment().week(week.week).endOf('week').format('Do MMM YYYY')} {' '}
                             </option>
@@ -290,19 +291,21 @@ function Timesheet(props) {
 
             </>
         )
-    }, [allAttendance, loading, formState.week, formState.year]);
+    }, [allAttendance, loading]);
 
     const setCurrentWeek = useCallback((id) => {
         setTimeSheetId(id);
         const currentTimesheetById = allAttendance.filter(attendance => attendance.id === id);
         const currentTimesheet = currentTimesheetById[0];
         const timeSheet = currentTimesheet.timeSheet[0];
+        setTimeSheetStatus(currentTimesheetById[0].status);
         setFormFunction(currentTimesheet, timeSheet);
     }, [allAttendance, setFormFunction]);
 
     const resetDate = useCallback(() => {
         const latestTimesheet = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
         setTimeSheetId(latestTimesheet[0].id);
+        console.log(latestTimesheet[0].id);
         const timeSheet = latestTimesheet[0].timeSheet[0];
         setFormFunction(null, timeSheet);
     }, [allAttendance, formState.week, formState.year, setFormFunction]);
@@ -331,8 +334,8 @@ function Timesheet(props) {
                                         </li>
                                     </ul>
                                     {/* <div className="header-action">
-                                            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Make Requisition</button>
-                                        </div> */}
+                                    <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Make Requisition</button>
+                                </div> */}
                                 </div>
                                 <div className="tab-content mt-3">
                                     <div className="tab-pane fade show active" role="tabpanel">
@@ -384,20 +387,19 @@ function Timesheet(props) {
                                                                             <small>{moment(week.friday).format('Do MMM YYYY')}</small>
                                                                         </th>
                                                                         {/* <th className="w60 disabled-card">
-                                                                            <p>Saturday</p>
-                                                                            <small>{moment(week.saturday).format('Do MMM YYYY')}</small>
-                                                                        </th>
-                                                                        <th className="w60 disabled-card">
-                                                                            <p>Sunday</p>
-                                                                            <small>{moment(week.sunday).format('Do MMM YYYY')}</small>
-                                                                        </th> */}
+                                                                    <p>Saturday</p>
+                                                                    <small>{moment(week.saturday).format('Do MMM YYYY')}</small>
+                                                                </th>
+                                                                <th className="w60 disabled-card">
+                                                                    <p>Sunday</p>
+                                                                    <small>{moment(week.sunday).format('Do MMM YYYY')}</small>
+                                                                </th> */}
                                                                         {/* <th className="w200">Action</th> */}
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
 
                                                                     <tr style={{ lineHeight: '50px' }}>
-                                                                        {/* Monday */}
                                                                         <td>
                                                                             <div className="align-items-center">
                                                                                 <div className="form-group">
@@ -489,41 +491,41 @@ function Timesheet(props) {
                                                                             </div>
                                                                         </td>
                                                                         {/* <td>
-                                                                            <div className="align-items-center disabled-card">
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">Start Time</label>
-                                                                                    <input disabled type="time" name="time"
-                                                                                        min="08:00" max="18:00" className="form-control" required />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">End Time</label>
-                                                                                    <input disabled type="time" name="time"
-                                                                                        min="08:00" max="18:00" className="form-control" required />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">Notes</label>
-                                                                                    <textarea disabled name='note' className="form-control" rows={3} />
-                                                                                </div>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td>
-                                                                            <div className="align-items-center disabled-card">
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">Start Time</label>
-                                                                                    <input disabled type="time" name="time"
-                                                                                        min="08:00" max="18:00" className="form-control" required />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">End Time</label>
-                                                                                    <input disabled type="time" name="time"
-                                                                                        min="08:00" max="18:00" className="form-control" required />
-                                                                                </div>
-                                                                                <div className="form-group">
-                                                                                    <label className="form-label">Notes</label>
-                                                                                    <textarea disabled name='note' className="form-control" rows={3} />
-                                                                                </div>
-                                                                            </div>
-                                                                        </td> */}
+                                                                    <div className="align-items-center disabled-card">
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">Start Time</label>
+                                                                            <input disabled type="time" name="time"
+                                                                                min="08:00" max="18:00" className="form-control" required />
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">End Time</label>
+                                                                            <input disabled type="time" name="time"
+                                                                                min="08:00" max="18:00" className="form-control" required />
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">Notes</label>
+                                                                            <textarea disabled name='note' className="form-control" rows={3} />
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div className="align-items-center disabled-card">
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">Start Time</label>
+                                                                            <input disabled type="time" name="time"
+                                                                                min="08:00" max="18:00" className="form-control" required />
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">End Time</label>
+                                                                            <input disabled type="time" name="time"
+                                                                                min="08:00" max="18:00" className="form-control" required />
+                                                                        </div>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label">Notes</label>
+                                                                            <textarea disabled name='note' className="form-control" rows={3} />
+                                                                        </div>
+                                                                    </div>
+                                                                </td> */}
                                                                     </tr>
                                                                 </tbody>
                                                             </table>

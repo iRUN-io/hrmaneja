@@ -698,8 +698,8 @@ input[type="range"]::-moz-focus-outer {
   margin-top: -12px;
 }
 .pricing-item {
-  flex-basis: 280px;
-  max-width: 280px;
+  /* flex-basis: 280px; */
+  /* max-width: 300px; */
   box-sizing: content-box;
   padding: 12px;
 }
@@ -708,6 +708,7 @@ input[type="range"]::-moz-focus-outer {
   flex-wrap: wrap;
   flex-direction: column;
   height: 100%;
+  text-align: center;
   padding: 24px;
   box-shadow: 0 8px 16px rgba(46, 52, 88, 0.16);
 }
@@ -773,4 +774,16 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   background-size: contain;
   background-position: center;
   
+}
+
+@media (max-width: 767px) {
+  .pricing-item-inner {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 100%;
+    width: 400px;
+    padding: 24px;
+    box-shadow: 0 8px 16px rgba(46, 52, 88, 0.16);
+  }
 }
