@@ -123,35 +123,45 @@ const Login = () => {
 					<div className="carousel-inner">
 						<div className="carousel-item">
 							<Image
-								src={require("../../assets/images/login/organize.svg")}
+								src={require("../../assets/images/slider/manage_employees.svg")}
 								alt="Manage"
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Manage</h4>
-								<p>The intelligent way to manage employees.</p>
+								<h4>Manage Employees</h4>
 							</div>
 						</div>
 						<div className="carousel-item active">
 							<Image
-								src={require("../../assets/images/login/analysis.svg")}
+								src={require("../../assets/images/slider/leave.svg")}
 								alt="Manage"
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>HR Data & Analysis</h4>
-								<p>We provide you a quality interactive work platform that enhances productivity.</p>
+								<h4>Leave & Time Off</h4>
+								{/* <p>Leave % Time Off</p> */}
 							</div>
 						</div>
 						<div className="carousel-item">
 							<Image
-								src={require("../../assets/images/login/expense.svg")}
+								src={require("../../assets/images/slider/requisition.svg")}
 								alt="Manage"
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Expense Management</h4>
-								<p>Have the ultimate visibility of expenses in your company..</p>
+								<h4>Requisition</h4>
+								{/* <p>Requisition</p> */}
+							</div>
+						</div>
+						<div className="carousel-item">
+							<Image
+								src={require("../../assets/images/slider/payroll.svg")}
+								alt="Manage"
+								className="img-fluid"
+								width={100} />
+							<div className="px-4 mt-4">
+								<h4>Payroll</h4>
+								{/* <p>Payroll</p> */}
 							</div>
 						</div>
 					</div>
