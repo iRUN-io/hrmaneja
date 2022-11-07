@@ -31,6 +31,18 @@ export async function getPayrollStatus(batchId) {
   });
 }
 
+// retry payment
+export async function retryPayroll(paymentId) {
+  return request(`${API_URL}/payroll/retryTransfer`, {
+    method: 'post',
+    headers: {
+       'Content-Type': 'application/json',
+       'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify({ paymentId: paymentId }),
+  });
+}
+
 export async function createPayroll(body) {
   return request(`${API_URL}/payroll/create`, {
     method: 'post',

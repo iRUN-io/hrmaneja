@@ -7,7 +7,8 @@ import { Link, useHistory } from 'react-router-dom';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import Loader from '../../common/loader';
 import EmptyState from '../../EmptyState';
-import { getPayrollStatus } from '../../../services/payroll';
+import { getPayrollStatus, retryPayroll } from '../../../services/payroll';
+import { toast } from 'material-react-toastify';
 
 
 function PayrollStatus(props) {
@@ -34,6 +35,17 @@ function PayrollStatus(props) {
         }
         fetchData();
     }, []);
+
+    const resendPayment = async (paymentId) => {
+        setLoading(true);
+        const response = await retryPayroll(paymentId);
+        setLoading(false);
+        if (response.status === 200) {
+            toast.success(response.data.message);
+        } else {
+            toast.error(response.data.message);
+        }
+    }
 
     if(loading){
         return <Loader />
@@ -147,7 +159,12 @@ function PayrollStatus(props) {
                                                                         <span className="badge badge-warning">Pending</span>
                                                                     )}
                                                                     </td>
-                                                                    {/* <td> <Link to={`/hr-payroll-statement/${payroll.id}`} className="btn btn-primary btn-sm">View</Link></td> */}
+                                                                    <td>
+                                                                        {payroll.status === 'FAILED' && (
+                                                                            <button className="btn btn-sm btn-info" onClick={() => resendPayment(payroll.id)}>Retry</button>
+                                                                        )}
+
+                                                                    </td>
                                                                 </tr>
                                                             ))}
                                                         </tbody>
