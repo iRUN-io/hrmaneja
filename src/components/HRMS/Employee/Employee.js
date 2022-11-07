@@ -137,6 +137,8 @@ function Employee(props) {
 
       }
 
+      toast.info(response.message);
+
       setFormState({
         name: "",
         email: "",
@@ -776,7 +778,7 @@ function Employee(props) {
                     >
                       <option value="">{formState?.bank_name === '' ? 'Select Bank' : formState?.bank_name}</option>
                       {banks.map((bank, index) => (
-                        <option key={index} value={bank.id + " - " + bank.name}>
+                        <option key={index} value={bank.code + " - " + bank.name}>
                           {bank.name}
                         </option>
                       ))}

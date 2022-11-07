@@ -101,7 +101,7 @@ function Payroll(props) {
 				return toast.error('Please add employees to run payroll');
 			}
 
-			sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
+			
 			const totalSalary = allEmployees.reduce((acc, curr) => {
 				return acc + Number(curr.salary);
 			}, 0);
@@ -121,11 +121,12 @@ function Payroll(props) {
 			const initiateSalary = await createPayroll(body);
 
 			if (initiateSalary.data) {
+				sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
 				const activity = {
 					user_id: user.id,
 					company_id: user.company_id,
 					activity: `${user.name} has created a payroll for the month of ${new Date().toLocaleString('default', { month: 'long' })}`,
-					name: 'Create Employee',
+					name: 'Create Payroll',
 					employee_id: user.employee_id,
 					activity_name: 'Creation',
 					user: user.name,
@@ -139,7 +140,7 @@ function Payroll(props) {
 			}
 			setLoading(false);
 		} catch (error) {
-			console.log(error);
+			// console.log(error);
 			toast.error(error.message || 'Something went wrong');
 		}
 

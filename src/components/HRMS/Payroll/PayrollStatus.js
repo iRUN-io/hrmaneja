@@ -107,10 +107,15 @@ function PayrollStatus(props) {
                                                         <thead className="light-mode">
                                                             <tr>
                                                                 <th className="w200">Account Number</th>
+                                                                <th className="w200">Bank</th>
+                                                                <th className="w200">Employee</th>
                                                                 <th className="w200">Message</th>
                                                                 <th className="w200">Amount</th>
+                                                                <th className="w200">Fee</th>
                                                                 <th className="w200">Narration</th>
                                                                 <th className="w150">Status</th>
+                                                                <th className="w150">Action</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -120,18 +125,29 @@ function PayrollStatus(props) {
                                                                         <span>{payroll.account_number}</span>
                                                                     </td>
                                                                     <td>
+                                                                        <span>{payroll.bank_name}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span>{payroll.full_name}</span>
+                                                                    </td>
+                                                                    <td>
                                                                         <span>{payroll.complete_message}</span>
                                                                     </td>
                                                                     <td>{formatMoney(payroll.amount)}</td>
+                                                                    <td>{formatMoney(payroll.fee)}</td>
                                                                     <td>{payroll.narration}</td>
                                                                     <td>
-                                                                    {payroll.status === 'SUCCESS' && (
+                                                                    {payroll.status === 'SUCCESSFUL' && (
                                                                     <span className="badge badge-success">Successful</span>
                                                                     )}
                                                                     {payroll.status === 'FAILED' && (
                                                                         <span className="badge badge-danger">Failed</span>
                                                                     )}
+                                                                    {payroll.status === 'PENDING' && (
+                                                                        <span className="badge badge-warning">Pending</span>
+                                                                    )}
                                                                     </td>
+                                                                    {/* <td> <Link to={`/hr-payroll-statement/${payroll.id}`} className="btn btn-primary btn-sm">View</Link></td> */}
                                                                 </tr>
                                                             ))}
                                                         </tbody>
