@@ -111,7 +111,6 @@ function Employee(props) {
 
       if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "" || body.bank_account_number === "" || body.bank_account_name === "" || body.bank_name === "" || body.bank_code === "") {
         toast.error("Please fill all the fields");
-
         return;
       }
       const response = await createEmployee(body, user.employee_id);
@@ -165,6 +164,7 @@ function Employee(props) {
         start_date: "",
         bank_code: ""
       });
+
     } catch (err) {
       toast.error("Error, try again");
       setFormState({ ...formState });

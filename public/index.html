@@ -25,8 +25,23 @@ html {
 }
 </style>
 <body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  <script src="%PUBLIC_URL%/assets/bundles/app.bundle.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-CNY3YNHV6X"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-CNY3YNHV6X');
+</script>
 
   <div id="root"> </div>
+
 
 </body>
 

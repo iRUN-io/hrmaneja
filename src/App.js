@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 import './App.css';
 import Layout from './components/Shared/Layout';
@@ -21,7 +21,7 @@ class App extends Component {
 			<><ToastContainer /><div className={`${darkMode ? "dark-mode" : ""}${darkSidebar ? "sidebar_dark" : ""} ${iconColor ? "iconcolor" : ""} ${gradientColor ? "gradient" : ""} ${rtl ? "rtl" : ""} ${fontType ? fontType : ""}${boxLayout ? "boxlayout" : ""}`}>
 				<Router>
 					<Switch>
-						<Route path="/signup" component={SignUp} />
+						{/* <Route path="/signup" component={SignUp} /> */}
 						<Route path="/register" component={Register} />
 						<Route path="/login" component={Login} />
 						<Route path="/change-password/:token" component={ChangePassword} />
@@ -42,6 +42,11 @@ class App extends Component {
 		// )
 	}
 }
+
+// useEffect(() => {
+// 	ReactGA.pageview(window.location.pathname + window.location.search);
+//   }, []);
+
 const mapStateToProps = state => ({
 	darkMode: state.settings.isDarkMode,
 	darkSidebar: state.settings.isDarkSidebar,

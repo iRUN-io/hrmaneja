@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from "../../services/auth";
 import { setUserSession, setCompanySession } from '../../config/common';
@@ -13,7 +13,11 @@ import PasswordStrengthBar from 'react-password-strength-bar';
 import { createNormalUser } from '../../services/user';
 import { createEmployee } from '../../services/employee';
 import { Button } from 'react-bootstrap';
+import ReactGA from 'react-ga';
+import { GOOGLE_ANALYTICS_ID } from '../../config/config';
 
+
+ReactGA.initialize(GOOGLE_ANALYTICS_ID);
 const Register = () => {
 	const [password, setPassword] = useState();
 	const [progress, setProgress] = useState(0)
@@ -265,6 +269,10 @@ const Register = () => {
             [name]: value,
         });
     };
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	  }, []);
 
 	return (
 		<>

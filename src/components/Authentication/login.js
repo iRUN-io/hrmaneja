@@ -9,7 +9,11 @@ import LoadingBar from 'react-top-loading-bar';
 import { sendEmail } from '../../services/mail/sendMail';
 import { emailCase } from '../../enums/emailCase';
 import { getCompany } from '../../services/company';
+import ReactGA from 'react-ga';
+import { GOOGLE_ANALYTICS_ID } from '../../config/config';
 
+
+ReactGA.initialize(GOOGLE_ANALYTICS_ID);
 const Login = () => {
 	const [email, setUserName] = useState();
 	const [password, setPassword] = useState();
@@ -55,6 +59,11 @@ const Login = () => {
 			else toast.error("Something went wrong. Please try again later.");
 		}
 	};
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search);
+	  }, []);
+
 	return (
 		<>
 		<LoadingBar progress={progress} color='#8759ff' height={5} />
