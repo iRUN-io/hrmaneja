@@ -482,7 +482,7 @@ function Employee(props) {
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog" role="document">
+        <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
@@ -498,11 +498,13 @@ function Employee(props) {
               </button>
             </div>
             <div className="modal-body">
-              <small id="fileHelp" className="form-text text-muted">
-                Basic Details
-              </small>
-              <br />
-              <div className="row clearfix">
+              <div className="row clearfix card-body">
+              <div className="col-12">
+                  <small id="fileHelp" className="form-text text-muted">
+                  Basic Details
+                  </small>
+                  <br />
+                </div>
                 <div className="col-md-6 col-sm-6">
                   <label style={{ fontSize: '12px' }}>Name</label>
                   <div className="form-group">

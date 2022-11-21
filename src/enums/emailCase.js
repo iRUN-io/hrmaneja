@@ -27,4 +27,6 @@ export const emailCase = {
     employeePayrollGenerated: 'employeePayrollGenerated',
     createTask:         'createTask',
     updateTask:         'updateTask',
+    deleteTask:         'deleteTask',
+    createJob:          'createJob',
 }

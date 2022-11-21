@@ -170,6 +170,16 @@ const emailSwitch = {
     return {
       subject: 'Task updated', body: `Your task has been updated successfully. 
     ` };
+  },
+  deleteTask: () => {
+    return {
+      subject: 'Task deleted', body: `Your task has been deleted successfully. 
+    ` };
+  },
+  createJob: () => {
+    return {
+      subject: 'Job created', body: `Your job has been created successfully. 
+    ` };
   }
 
 }

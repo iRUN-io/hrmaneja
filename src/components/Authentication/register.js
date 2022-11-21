@@ -349,7 +349,7 @@ const Register = () => {
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Manage Employees</h4>
+								{/* <h4>Manage Employees</h4> */}
 							</div>
 						</div>
 						<div className="carousel-item active">
@@ -359,7 +359,6 @@ const Register = () => {
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Leave & Time Off</h4>
 								{/* <p>Leave % Time Off</p> */}
 							</div>
 						</div>
@@ -370,7 +369,6 @@ const Register = () => {
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Requisition</h4>
 								{/* <p>Requisition</p> */}
 							</div>
 						</div>
@@ -381,7 +379,6 @@ const Register = () => {
 								className="img-fluid"
 								width={100} />
 							<div className="px-4 mt-4">
-								<h4>Payroll</h4>
 								{/* <p>Payroll</p> */}
 							</div>
 						</div>
