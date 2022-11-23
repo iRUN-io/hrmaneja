@@ -13,6 +13,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'material-react-toastify';
 import 'material-react-toastify/dist/ReactToastify.css';
 import EmailConfirmation from './components/Authentication/emailConfirmation';
+import AllJobs from './components/JobPortal/Jobs/AllJobs';
+import JobDetail from './components/JobPortal/Jobs/JobDetail';
 
 class App extends Component {
 	render() {
@@ -28,6 +30,9 @@ class App extends Component {
 						<Route path="/verify-email/:token" component={EmailConfirmation} />
 						<Route path="/forgot-password" component={ForgotPassword} />
 						<Route path="/internalserver" component={InternalServer} />
+						<Route path="/jobs" component={AllJobs} />
+						{/* add id later to jobDetail */}
+						<Route path="/jobDetail" component={JobDetail} /> 
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />
 					</Switch>

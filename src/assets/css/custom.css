@@ -787,3 +787,7 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
     box-shadow: 0 8px 16px rgba(46, 52, 88, 0.16);
   }
 }
+
+.job-layout{
+  margin-top: 5rem;
+}

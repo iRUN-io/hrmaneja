@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { getCompanyData, getUser } from '../../config/common.js';
-import { totalDepartments, totalEmployees, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
+import { totalDepartments, totalEmployees, totalJobs, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
 import Loader from '../common/loader.js';
 
 const Settings = () => {
@@ -16,7 +16,6 @@ const Settings = () => {
 	const id = window.location.pathname.split('/')[3];
 
 	const history = useHistory();
-
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
@@ -28,13 +27,16 @@ const Settings = () => {
 			const totalEmployeesResponse = await totalEmployees(company_id);
 			const totalLeavesResponse = await totalLeaves(company_id);
 			const totalRequisitionsResponse = await totalRequisition(company_id);
+			const totalJobsResponse = await totalJobs(company_id);
 			if (totalDepartmentsResponse && totalUsersResponse && totalEmployeesResponse && totalLeavesResponse) {
 				setCompany({
+					name: companyData.name,
 					totalDepartments: totalDepartmentsResponse.totalDepartments,
 					totalUsers: totalUsersResponse.totalUsers,
 					totalEmployees: totalEmployeesResponse.totalEmployees,
 					totalLeaves: totalLeavesResponse.totalLeaves,
 					totalRequisitions: totalRequisitionsResponse.totalRequisitions,
+					totalJobs: totalJobsResponse.totalJobs
 				});
 				setFeatures(companyData.settings?.features)
 				setLoading(false);
@@ -60,6 +62,9 @@ const Settings = () => {
 									</Link>
 								</li>
 							</ul>
+							<div className="header-action">
+							<span className="nav-item badge badge-primary">{company.name} Company Settings</span>
+                            </div>
 
 						</div>
 
@@ -174,9 +179,9 @@ const Settings = () => {
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.jobManagement ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body ribbon">
-												<div className="ribbon-box green">{features?.jobManagement && company.totalRequisitions}</div>
+												<div className="ribbon-box green">{features?.jobManagement && company.totalJobs}</div>
 												<Link to={`${features?.jobManagement ? '/jobportal-positions' : '#'}`} className="my_sort_cut text-muted">
-													<i className="fa fa-money" />
+													<i className="fa fa-suitcase" />
 													<span>Job Portal</span>
 													{!features?.jobManagement && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
 														Activate
