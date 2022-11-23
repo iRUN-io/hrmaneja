@@ -791,3 +791,56 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 .job-layout{
   margin-top: 5rem;
 }
+.job-listings{
+  margin-bottom: 12rem;
+  border-bottom: 5px solid #3751FF;
+}
+/* jobs css */
+.jobs-header{
+  font-size: 28px;
+  font-weight: 900;
+}
+.small-header{
+  font-size: 18px;
+  /* line-height: 26px; */
+}
+.job-role{
+  font-size: 20px;
+  font-weight: 500;
+  /* line-height: 22; */
+}
+.job-location{
+  font-size: 18px;
+  /* line-height: 22; */
+  color: #222;
+}
+.job-dept{
+  font-weight: bold;
+  font-size: 16px;
+}
+.sub-location{
+  font-size: 14px;
+  font-weight: 400;
+}
+.job-footer{
+  color: #222;
+  padding-top: 15px;
+  background-color: white;
+  border-top: 0.5px solid rgb(226, 224, 224);
+  width: 100%;
+  font-size: 13px;
+  /* height: 100px; */
+  /* padding-left: 10px;
+  padding-right: 10px; */
+}
+.job-footer a:hover{
+  color: #999;
+
+}
+.job-footer ul {
+  list-style-type: disc;
+}
+.job-footer ul li{
+  display: inline;
+  
+}
