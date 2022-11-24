@@ -390,6 +390,14 @@ body {
     .pageof{
       margin: 0 2rem 0 2rem;
     }
+    .job-footer{
+      color: #222;
+      margin-top: 105px;
+      background-color: white;
+      border-top: 0.5px solid rgb(226, 224, 224);
+      width: 100%;
+      font-size: 13px;
+    }
   }
   
   /* Medium devices (landscape tablets, 768px and up) */
@@ -797,8 +805,9 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 }
 /* jobs css */
 .jobs-header{
-  font-size: 28px;
-  font-weight: 900;
+  /* font-size: 28px; */
+  font-weight: 400;
+  text-align: center;
 }
 .small-header{
   font-size: 18px;
@@ -843,4 +852,15 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 .job-footer ul li{
   display: inline;
   
+}
+
+.job-card:hover{
+  background: rgb(230, 233, 235);
+}
+
+.header-line{
+  background: #865aff97;
+  border: 1px solid #865aff97;
+  width: 5rem;
+  /* margin: auto; */
 }
