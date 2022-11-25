@@ -1,13 +1,12 @@
 
 import React, {useState, useEffect} from 'react'
 import CountUp from 'react-countup';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import 'react-toastify/dist/ReactToastify.css';
 
 export default function  EmployeeCounter ({employees}) {
     const [maleEmployee, setMaleEmployee] = useState([]);
     const [femaleEmployee, setFemaleEmployee] = useState([]);
-	const history = useHistory();
     
     useEffect(() => {
         const filteredEmployee = employees.filter(employee => employee.gender === 'Male');
