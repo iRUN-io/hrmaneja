@@ -1,32 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { toast, ToastContainer } from 'material-react-toastify';
+import { ToastContainer } from 'material-react-toastify';
 import LoadingBar from 'react-top-loading-bar';
-import { changePassword, confirmToken } from '../../services/user';
 import Image from '../elements/Image';
 import { verifyEmail } from '../../services/company';
 
 const EmailConfirmation = () => {
-    const [status, setStatus] = useState('');
     const [tokenStatus, setTokenStatus] = useState('');
     const [loading, setLoading] = useState(false);
     const [progress, setProgress] = useState(0)
 
     const token = window.location.href.split("/").pop();
 
-
     useEffect(() => {
         async function fetchData() {
             setProgress(10);
             setProgress(50);
             const response = await verifyEmail(token);
-            console.log(response);
-
             if(response.status === 404){
                 setTokenStatus('expired');
                 return;
             }
-            console.log(response);
             if (response.name) {
                 setProgress(50);
                 setProgress(80);

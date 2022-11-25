@@ -1,325 +1,156 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // you will need this link
-import Image from "../../elements/Image"; // you will need this image for company logo
+import { Link } from 'react-router-dom';
+import Image from "../../elements/Image"; 
 import ReactGA from 'react-ga';
 import { GOOGLE_ANALYTICS_ID } from '../../../config/config';
-
+import { getAllJobs } from '../../../services/job';
+import EmptyState from '../../EmptyState';
+import Loader from '../../common/loader';
+import { getCompany } from '../../../services/company';
 
 ReactGA.initialize(GOOGLE_ANALYTICS_ID);
 const AllJobs = () => {
-	const [jobs, setJobs] = useState([]);
-	useEffect(() => {
-		// get Jobs from url e.g jobs/irun-tech
+    const [jobs, setJobs] = useState([]);
+    const [companyData, setCompanyData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const companyId = window.location.href.split("/").pop();
+
+    useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
-	}, []);
+        async function fetchData() {
+            setLoading(true);
+            const response = await getAllJobs(companyId);
+            const companyData = await getCompany(companyId);
+            if (response.status === 404) {
+                return;
+            }
+            setJobs(response);
+            setCompanyData(companyData);
+            setLoading(false);
+        }
+        fetchData();
 
-	return (
-		<>
-		<div className="container">
-				
-			<div className=" job-layout">
-				<div className='row d-flex flex-row justify-content-between mb-4'>
-					<div className="logo col-6">
-					<Image
-						// src={require("../../assets/images/hr-manager-logo.png")}
-						src={require("../../../assets/images/hr-manager-logo.png")}
-						alt="Open"
-						className="img-fluid"
-						width={100}
-					/>
-					</div>
-					<div className="social-icons col-6 d-flex justify-content-end">
-						<span>fb</span>
-						<span>Ig</span>
-						<span>twit</span>
-					</div>
+    }, [companyId]);
 
-				</div>
-				
-				<div className="card col-md-12 mx-auto job-listings">
-					<div className="card-body">
-                        {/* All Jobs here in a loop */}
-                        <h2 className='jobs-header'>Current Openings</h2>
-						<p className='small-header'>Thanks for checking out our job openings. See something that interests you? Apply here.</p>
-						<hr />
-						
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+    if (loading) {
+        return <Loader />
+    }
 
-								
-							<div class=" col-6 col-md-3" >
+    const getDepartments = () => {
+        const departments = jobs
+            .map(job => job.department)
+            .filter((item, index, arr) => arr.indexOf(item) === index);
+        return departments;
+    }
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+    const departments = getDepartments();
 
-								
-							<div class=" col-6 col-md-3" >
+    return (
+        <>
+            <div className="container" style={{ marginBottom: '200px' }}>
+                <div className=" job-layout">
+                    <div className='row d-flex flex-row justify-content-between mb-4'>
+                        <div className="logo col-6">
+                            <h5>{companyData.name}</h5>
+                            {/* add below when companies can upload thier logos */}
+                            {/* <Image
+                                src={require("../../../assets/images/hr-manager-logo.png")}
+                                alt="Open"
+                                className="img-fluid"
+                                width={100}
+                            /> */}
+                        </div>
+                        {/* <div className="social-icons col-6 d-flex justify-content-end">
+                            <span>fb</span>
+                            <span>Ig</span>
+                            <span>twit</span>
+                        </div> */}
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+                    </div>
 
-								
-							<div class=" col-6 col-md-3" >
+                    <div className="card table-card col-md-12 mx-auto">
+                        <div className="card-body">
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+                            <h5 className='jobs-header'>Open Positions</h5>
+                            <hr className='header-line'></hr>
+                            {/* <p className='small-header'>Thanks for checking out our job openings. See something that interests you? Apply here.</p> */}
+                            {jobs.length === 0 ? (
+                                <><EmptyState />
+                                    <div>
+                                        <h5 className='mx-auto text-center' style={{ marginTop: '50px' }}>We do not have any opening yet</h5>
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div>
+                                        {departments.map((dept, index) => (
+                                            <div key={index}>
+                                                <span className='badge badge-warning' style={{ marginBottom: '10px' }}>{dept}</span>
+                                                {jobs.map((job, index) => (
+                                                    <div key={index}>
+                                                        {job.department === dept ? (
+                                                            <>
+                                                                <Link to={`/jd/${job.id}`}>
+                                                                    <div className="card d-flex flex-row row job-card" style={{ paddingTop: '20px', paddingBottom: '30px' }}>
+                                                                        <div className="job-role col-6">
+                                                                            {job.jobTitle}
+                                                                        </div>
+                                                                        <div className=" col-3">
 
-								
-							<div class=" col-6 col-md-3" >
+                                                                            <span className='job-location'><i className="text-primary fa fa-location-arrow"></i> {job.location}</span>
+                                                                            {/* <p className='pl-4 sub-location'>{job.jobType}</p> */}
+                                                                        </div>
+                                                                        <div className=" col-3">
+                                                                            <span className='job-location'><i className="text-primary fa fa-suitcase"></i> {job.jobType}</span>
+                                                                        </div>
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+                                                                    </div>
+                                                                </Link>
+                                                                <hr />
 
-								
-							<div class=" col-6 col-md-3" >
+                                                            </>
+                                                        ) : (
+                                                            null
+                                                        )}
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </div>
 
-								
-							<div class=" col-6 col-md-3" >
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+            </div>
+            <footer className='job-footer fixed-bottom'>
+                <div className='row d-flex align-items-center flex-row justify-content-between mb-4'>
 
-								
-							<div class=" col-6 col-md-3" >
+                    <div className="social-icons col-6 d-flex ">
+                        <ul>
+                            {/* <li><a>Privacy Policy</a> &nbsp; . &nbsp;</li>
+                            <li><a>  Terms of Service</a></li> &nbsp; . &nbsp; */}
+                            <li><p className="mb-0">© {new Date().getFullYear()} iRUN Technology </p></li>
+                        </ul>
+                    </div>
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
+                    <div className="logo col-6 justify-content-end d-flex pr-4">
+                        <Image
+                            src={require("../../../assets/images/hr-manager-logo.png")}
+                            alt="Open"
+                            className="img-fluid"
+                            width={100}
+                        />
+                    </div>
 
-								
-							<div class=" col-6 col-md-3" >
+                </div>
 
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						<hr />
-						<div class="d-flex flex-row row">
-							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
-								<p className='job-dept'>Finance</p>
-								<a>DevOps Engineer (Remote)</a></div>
-
-								
-							<div class=" col-6 col-md-3" >
-
-								<span className='job-icon'>
-									<i class="fa fa-location-dot"></i>
-								</span>
-								<span className='job-location text-small'>London</span>
-								<p className='pl-3 sub-location text-tiny '>Greater London</p>
-							</div>
-							<div class="col-6 col-md-3" >
-								<span className='job-icon'>
-									<i class="fa fa-user"></i>
-								</span>
-								<span className='text-small'>Engineering</span>
-								<p className='pl-3 text-tiny'>FullTime</p>
-							</div>
-							
-						</div>
-						
-
-						
-						
-						
-					</div>
-				</div>
-			</div>
-
-		
-		</div>
-		<footer className='job-footer fixed-bottom'>
-		<div className='d-none row d-md-flex align-items-center flex-row justify-content-between mb-4'>
-			
-			<div className="social-icons col-6 d-flex ">
-				<ul>
-
-				
-				<li><a>Privacy Policy</a> &nbsp; . &nbsp;</li>
-				<li><a>  Terms of Service</a></li> &nbsp; . &nbsp;
-				<li><a>  &nbsp; &copy; 2021 HrManeja All rights reserved.</a></li>
-				</ul>
-			</div>
-
-			<div className="logo col-6 justify-content-end d-flex pr-4">
-				{/* <p>hello</p> */}
-			<Image
-				// src={require("../../assets/images/hr-manager-logo.png")}
-				src={require("../../../assets/images/hr-manager-logo.png")}
-				alt="Open"
-				className="img-fluid"
-				width={100}
-			/>
-			</div>
-
-		</div>	
-
-		<div className='d-md-none'>
-			
-			<div className='mx-auto container'>
-				<div className="logo text-align-center logo-small mx-auto mb-3">
-					<Image
-						// src={require("../../assets/images/hr-manager-logo.png")}
-						src={require("../../../assets/images/hr-manager-logo.png")}
-						alt="Open"
-						className="img-fluid"
-						width={100}
-					/>
-				</div>
-				<div className="socials-small ">
-				
-				<a>Privacy Policy</a> &nbsp; . &nbsp;
-				<a>Terms of Service</a>
-					<p>&copy; 2021 - 2022 HrManeja All rights reserved.</p>
-					
-				</div>
-			</div>
-		</div>	
-
-		</footer>
+            </footer>
         </>
-	);
+    );
 }
 
 export default AllJobs;

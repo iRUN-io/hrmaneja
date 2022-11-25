@@ -5,15 +5,20 @@ import { Link } from 'react-router-dom';
 import { getCompanyData, getUser } from '../../../config/common';
 import { emailCase } from '../../../enums/emailCase';
 import { createActivity } from '../../../services/activities';
+import { getAllDepartments } from '../../../services/department';
 import { createJob, getAllJobs } from '../../../services/job';
 import { sendEmail } from '../../../services/mail/sendMail';
 import Country from '../../common/country';
+import FeatureNotAvailable from '../../common/featureDisabled';
+import Loader from '../../common/loader';
 
 const Positions = () => {
     const [featureEnabled, setFeatureEnabled] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [jobs, setJobs] = useState([]);
     const [user, setUser] = useState([]);
+	const [departments, setDepartments] = useState([]);
+	const [companyData, setCompany] = useState([]);
 	const [formState, setFormState] = useState({
         jobTitle: '',
 		department: '',
@@ -45,6 +50,7 @@ const Positions = () => {
             const body = {
                 ...formState,
                 company_id: user.company_id,
+                companyName: companyData.name,
             }
             if (body.jobTitle === '') {
                 toast.error('Please fill all the fields');
@@ -98,18 +104,29 @@ const Positions = () => {
             if (user) {
                 const company_id = user.company_id;
                 const companyData = await getCompanyData();
-                companyData.settings?.features['department'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                companyData.settings?.features['jobManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getAllJobs(company_id);
+				const departmentResponse = await getAllDepartments(company_id);
                 setJobs(response);
                 setUser(user);
                 setLoading(false);
+				setCompany(companyData);
+				setDepartments(departmentResponse);
             }
         }
         fetchData();
 
     }, []);
 
-	console.log(jobs)
+	if (loading ) {
+		return <Loader />
+	}
+
+	if (!featureEnabled) {
+		return <FeatureNotAvailable />
+		}
+
+	console.log(companyData)
 
 		return (
 			<>
@@ -267,12 +284,24 @@ const Positions = () => {
 																onChange={updateForm} type="text" className="form-control" placeholder="$2,000.00" />
 														</div>
 													</div>
-													<div className="col-md-6">
-														<div className="form-group">
-															<label>Department</label>
-															<input name='department' value={formState?.department}
-																onChange={updateForm} type="text" className="form-control" placeholder="Engineering" />
-														</div>
+													<div className="col-lg-6 col-md-6">
+													<div className="form-group">
+														<label style={{ fontSize: '12px' }}>Department</label>
+														<select
+														onChange={updateForm}
+														value={formState?.department}
+														className="form-control"
+														name="department"
+														id="department"
+														>
+														<option value="">Select Department</option>
+														{departments.map((department, index) => (
+															<option key={index} value={department.name}>
+															{department.name}
+															</option>
+														))}
+														</select>
+													</div>
 													</div>
 													<div className="col-lg-6 col-md-6">
 														<div className="form-group">
