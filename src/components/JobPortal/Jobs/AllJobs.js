@@ -44,130 +44,223 @@ const AllJobs = () => {
 						<hr />
 						
 						<div class="d-flex flex-row row">
-							<div class="job-role col-6">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
 								<p className='job-dept'>Finance</p>
 								<a>DevOps Engineer (Remote)</a></div>
-							<div class=" col-3" >
+
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
 						<hr />
 						<div class="d-flex flex-row row">
-							<div class="job-role col-6"><a>DevOps Engineer (Remote)</a></div>
-							<div class=" col-3" >
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
 						<hr />
 						<div class="d-flex flex-row row">
-							
-							<div class="job-role col-6">
-							<p className='job-dept'>Engineering</p>
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
 
-								<a>DevOps Engineer (Remote)</a>
-							</div>
-							
-							<div class=" col-3" >
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
 						<hr />
 						<div class="d-flex flex-row row">
-							<div class="job-role col-6"><a>DevOps Engineer (Remote)</a></div>
-							<div class=" col-3" >
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
-						<hr /><div class="d-flex flex-row row">
-							<div class="job-role col-6"><a>DevOps Engineer (Remote)</a></div>
-							<div class=" col-3" >
+						<hr />
+						<div class="d-flex flex-row row">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
-						<hr /><div class="d-flex flex-row row">
-							<div class="job-role col-6"><a>DevOps Engineer (Remote)</a></div>
-							<div class=" col-3" >
+						<hr />
+						<div class="d-flex flex-row row">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
 
 								<span className='job-icon'>
 									<i class="fa fa-location-dot"></i>
 								</span>
-								<span className='job-location'>London</span>
-								<p className='pl-4 sub-location'>Greater London</p>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
 							</div>
-							<div class=" col-3" >
+							<div class="col-6 col-md-3" >
 								<span className='job-icon'>
 									<i class="fa fa-user"></i>
 								</span>
-								<span className='job-location'>Engineering</span>
-								<p className='pl-4 sub-location'>FullTime</p>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
 							</div>
 							
 						</div>
+						<hr />
+						<div class="d-flex flex-row row">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
+
+								<span className='job-icon'>
+									<i class="fa fa-location-dot"></i>
+								</span>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
+							</div>
+							<div class="col-6 col-md-3" >
+								<span className='job-icon'>
+									<i class="fa fa-user"></i>
+								</span>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
+							</div>
+							
+						</div>
+						<hr />
+						<div class="d-flex flex-row row">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
+
+								<span className='job-icon'>
+									<i class="fa fa-location-dot"></i>
+								</span>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
+							</div>
+							<div class="col-6 col-md-3" >
+								<span className='job-icon'>
+									<i class="fa fa-user"></i>
+								</span>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
+							</div>
+							
+						</div>
+						<hr />
+						<div class="d-flex flex-row row">
+							<div class="text-medium col-12 col-md-6 mb-2 md-mb-0">
+								<p className='job-dept'>Finance</p>
+								<a>DevOps Engineer (Remote)</a></div>
+
+								
+							<div class=" col-6 col-md-3" >
+
+								<span className='job-icon'>
+									<i class="fa fa-location-dot"></i>
+								</span>
+								<span className='job-location text-small'>London</span>
+								<p className='pl-3 sub-location text-tiny '>Greater London</p>
+							</div>
+							<div class="col-6 col-md-3" >
+								<span className='job-icon'>
+									<i class="fa fa-user"></i>
+								</span>
+								<span className='text-small'>Engineering</span>
+								<p className='pl-3 text-tiny'>FullTime</p>
+							</div>
+							
+						</div>
+						
+
+						
 						
 						
 					</div>
@@ -177,7 +270,7 @@ const AllJobs = () => {
 		
 		</div>
 		<footer className='job-footer fixed-bottom'>
-		<div className='row d-flex align-items-center flex-row justify-content-between mb-4'>
+		<div className='d-none row d-md-flex align-items-center flex-row justify-content-between mb-4'>
 			
 			<div className="social-icons col-6 d-flex ">
 				<ul>
@@ -200,7 +293,29 @@ const AllJobs = () => {
 			/>
 			</div>
 
-		</div>			
+		</div>	
+
+		<div className='d-md-none'>
+			
+			<div className='mx-auto container'>
+				<div className="logo text-align-center logo-small mx-auto mb-3">
+					<Image
+						// src={require("../../assets/images/hr-manager-logo.png")}
+						src={require("../../../assets/images/hr-manager-logo.png")}
+						alt="Open"
+						className="img-fluid"
+						width={100}
+					/>
+				</div>
+				<div className="socials-small ">
+				
+				<a>Privacy Policy</a> &nbsp; . &nbsp;
+				<a>Terms of Service</a>
+					<p>&copy; 2021 - 2022 HrManeja All rights reserved.</p>
+					
+				</div>
+			</div>
+		</div>	
 
 		</footer>
         </>

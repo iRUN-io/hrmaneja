@@ -791,8 +791,8 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 .job-layout{
   margin-top: 5rem;
 }
-.job-listings{
-  margin-bottom: 12rem;
+.job-listings, .job-wrapper{
+  margin-bottom: 12rem!important;
   border-bottom: 5px solid #3751FF;
 }
 /* jobs css */
@@ -804,12 +804,12 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   font-size: 18px;
   /* line-height: 26px; */
 }
-.job-role{
+.text-medium{
   font-size: 20px;
   font-weight: 500;
-  /* line-height: 22; */
+  
 }
-.job-location{
+.text-small{
   font-size: 18px;
   /* line-height: 22; */
   color: #222;
@@ -818,7 +818,7 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   font-weight: bold;
   font-size: 16px;
 }
-.sub-location{
+.text-tiny{
   font-size: 14px;
   font-weight: 400;
 }
@@ -843,4 +843,47 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 .job-footer ul li{
   display: inline;
   
+}
+.logo-small{
+  width: 50%;
+  text-align: center;
+}
+.socials-small{
+  text-align: center;
+  /* width: 90%; */
+}
+.job-details{
+  color: #222;
+}
+.btn-apply{
+  padding: 1rem 1.5rem ;
+  font-size: 24px;
+}
+.job-social-links span{
+  margin-right: 3rem;
+}
+.apply-card{
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+.submit-footer{
+  padding-top: 45px!important;
+  padding-left: 45px!important;
+  /* background: #222; */
+}
+.submit-btn{
+  font-size: 20px;
+  padding: 10px 24px;
+}
+.tn-cancel{
+  font-size: 18px;
+}
+.form-details .form-group .job-form-label{
+  font-size: 18px!important;
+  font-weight: normal;
+}
+.btn-cancel{
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
 }
