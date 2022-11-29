@@ -1,13 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 
-class Applicants extends Component {
-
-	render() {
-		const { fixNavbar } = this.props;
+const Applicants = () => {
 		return (
 			<>
-				<div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
+				<div className={`section-body  mt-3`}>
 					<div className="container-fluid">
 						<div className="row clearfix">
 							<div className="col-12">
@@ -85,177 +82,9 @@ class Applicants extends Component {
 													Applied on: <strong>04 Jan, 2019</strong>
 												</td>
 											</tr>
-											<tr>
-												<td className="w60">
-													<img
-														className="avatar"
-														src="../assets/images/xs/avatar1.jpg"
-														alt="fake_url"
-													/>
-												</td>
-												<td>
-													<div className="font-15">FaceBook Inc.</div>
-													<span className="text-muted">Marketing</span>
-												</td>
-												<td>$57 per hour</td>
-												<td>
-													<span className="tag tag-warning">Part-time</span>
-												</td>
-												<td>
-													<span>44 Shirley Ave. IL 60185</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>12 Jan, 2019</strong>
-												</td>
-											</tr>
-											<tr>
-												<td className="w60">
-													<img
-														className="avatar"
-														src="../assets/images/xs/avatar2.jpg"
-														alt="fake_url"
-													/>
-												</td>
-												<td>
-													<div className="font-15">FaceBook Inc.</div>
-													<span className="text-muted">Full-stack developer</span>
-												</td>
-												<td>$43 per hour</td>
-												<td>
-													<span className="tag tag-success">Full-time</span>
-												</td>
-												<td>
-													<span>44 Shirley Ave. IL 60185</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>15 Jan, 2019</strong>
-												</td>
-											</tr>
-											<tr>
-												<td className="w60">
-													<img
-														className="avatar"
-														src="../assets/images/xs/avatar3.jpg"
-														alt="fake_url"
-													/>
-												</td>
-												<td>
-													<div className="font-15">FaceBook Inc.</div>
-													<span className="text-muted">Web Application Developer</span>
-												</td>
-												<td>$55 per hour</td>
-												<td>
-													<span className="tag tag-success">Full-time</span>
-												</td>
-												<td>
-													<span>514 S. Magnolia St. Orlando</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>18 Jan, 2019</strong>
-												</td>
-											</tr>
-											<tr>
-												<td className="w60">
-													<div
-														className="avatar avatar-blue"
-														data-toggle="tooltip"
-														data-placement="top"
-														data-original-title="Avatar Name"
-													>
-														<span>KT</span>
-													</div>
-												</td>
-												<td>
-													<div className="font-15">FaceBook Inc.</div>
-													<span className="text-muted">Designer</span>
-												</td>
-												<td>$43 per hour</td>
-												<td>
-													<span className="tag tag-warning">Part-time</span>
-												</td>
-												<td>
-													<span>44 Shirley Ave. IL 60185</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>24 Jan, 2019</strong>
-												</td>
-											</tr>
-											<tr>
-												<td className="w60">
-													<img
-														className="avatar"
-														src="../assets/images/xs/avatar5.jpg"
-														alt="fake_url"
-													/>
-												</td>
-												<td>
-													<div className="font-15">iQuar Inc.</div>
-													<span className="text-muted">Sr. SQL Server Developer</span>
-												</td>
-												<td>$33 per hour</td>
-												<td>
-													<span className="tag tag-success">Full-time</span>
-												</td>
-												<td>
-													<span>44 Shirley Ave. IL 60185</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>05 Feb, 2019</strong>
-												</td>
-											</tr>
-											<tr>
-												<td className="w60">
-													<img
-														className="avatar"
-														src="../assets/images/xs/avatar6.jpg"
-														alt="fake_url"
-													/>
-												</td>
-												<td>
-													<div className="font-15">Linkdin Inc.</div>
-													<span className="text-muted">Full-stack developer</span>
-												</td>
-												<td>$39 per hour</td>
-												<td>
-													<span className="tag tag-success">Full-time</span>
-												</td>
-												<td>
-													<span>44 Shirley Ave. IL 60185</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>11 March, 2019</strong>
-												</td>
-											</tr>
 										</tbody>
 									</table>
 								</div>
-								<ul className="pagination mt-2">
-									<li className="page-item">
-										<a className="page-link" href="fake_url;">
-											Previous
-										</a>
-									</li>
-									<li className="page-item active">
-										<a className="page-link" href="fake_url;">
-											1
-										</a>
-									</li>
-									<li className="page-item">
-										<a className="page-link" href="fake_url;">
-											2
-										</a>
-									</li>
-									<li className="page-item">
-										<a className="page-link" href="fake_url;">
-											3
-										</a>
-									</li>
-									<li className="page-item">
-										<a className="page-link" href="fake_url;">
-											Next
-										</a>
-									</li>
-								</ul>
 							</div>
 						</div>
 					</div>
@@ -264,7 +93,7 @@ class Applicants extends Component {
 			</>
 		);
 	}
-}
+
 const mapStateToProps = state => ({
 	fixNavbar: state.settings.isFixNavbar
 })

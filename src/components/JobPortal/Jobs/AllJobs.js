@@ -1,28 +1,31 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Image from "../../elements/Image"; 
+import { Link, useHistory } from 'react-router-dom';
+// import Image from "../../elements/Image"; 
 import ReactGA from 'react-ga';
 import { GOOGLE_ANALYTICS_ID } from '../../../config/config';
 import { getAllJobs } from '../../../services/job';
 import EmptyState from '../../EmptyState';
 import Loader from '../../common/loader';
 import { getCompany } from '../../../services/company';
+import JobsFooter from './JobsFooter';
+import Image from '../../elements/Image';
 
 ReactGA.initialize(GOOGLE_ANALYTICS_ID);
 const AllJobs = () => {
     const [jobs, setJobs] = useState([]);
     const [companyData, setCompanyData] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [companyStatus, setCompanyStatus] = useState('');
     const companyId = window.location.href.split("/").pop();
-
+    const history = useHistory();
     useEffect(() => {
         ReactGA.pageview(window.location.pathname + window.location.search);
         async function fetchData() {
             setLoading(true);
             const response = await getAllJobs(companyId);
             const companyData = await getCompany(companyId);
-            if (response.status === 404) {
-                return;
+            if (response.status || companyData.status === 404) {
+                setCompanyStatus('notFound');
             }
             setJobs(response);
             setCompanyData(companyData);
@@ -32,9 +35,17 @@ const AllJobs = () => {
 
     }, [companyId]);
 
-    if (loading) {
-        return <Loader />
-    }
+
+    const jobDescription = (id) => {
+        window.location.href = `/jd/${companyId}/${id}`;
+        // history.push({
+        //     pathname: `/jd/${id}`,
+        //     state: {
+        //         jd: jd,
+        //         companyData: companyData,
+        //     }
+        // });
+    };
 
     const getDepartments = () => {
         const departments = jobs
@@ -44,6 +55,31 @@ const AllJobs = () => {
     }
 
     const departments = getDepartments();
+
+    if (loading) {
+        return <Loader />
+    }
+
+    if (companyStatus === 'notFound') {
+        return (
+            <>
+                <div className='mx-auto text-center' style={{ marginTop: '200px', marginBottom: '20px' }}>
+                    <Image
+                        src={require("../../../assets/images/404.svg")}
+                        alt="We have received your application"
+                        className="img-fluid"
+                        width={200}
+                        style={{ marginBottom: '20px' }}
+                    />
+                    <h5 style={{ marginTop: '10px', marginBottom: '20px' }}>Seems the page you're looking for is in another dimension !</h5>
+                    <button onClick={() => history.push('/register')} type="button" className="btn btn-primary btn-lg">
+                        Create your own jobs here
+                    </button>
+                </div>
+                <JobsFooter />
+            </>
+        )
+    }
 
     return (
         <>
@@ -90,7 +126,7 @@ const AllJobs = () => {
                                                     <div key={index}>
                                                         {job.department === dept ? (
                                                             <>
-                                                                <Link to={`/jd/${job.id}`}>
+                                                                <Link onClick={() => jobDescription(job.id)}>
                                                                     <div className="card d-flex flex-row row job-card" style={{ paddingTop: '20px', paddingBottom: '30px' }}>
                                                                         <div className="job-role col-6">
                                                                             {job.jobTitle}
@@ -126,29 +162,7 @@ const AllJobs = () => {
 
 
             </div>
-            <footer className='job-footer fixed-bottom'>
-                <div className='row d-flex align-items-center flex-row justify-content-between mb-4'>
-
-                    <div className="social-icons col-6 d-flex ">
-                        <ul>
-                            {/* <li><a>Privacy Policy</a> &nbsp; . &nbsp;</li>
-                            <li><a>  Terms of Service</a></li> &nbsp; . &nbsp; */}
-                            <li><p className="mb-0">© {new Date().getFullYear()} iRUN Technology </p></li>
-                        </ul>
-                    </div>
-
-                    <div className="logo col-6 justify-content-end d-flex pr-4">
-                        <Image
-                            src={require("../../../assets/images/hr-manager-logo.png")}
-                            alt="Open"
-                            className="img-fluid"
-                            width={100}
-                        />
-                    </div>
-
-                </div>
-
-            </footer>
+            <JobsFooter />
         </>
     );
 }

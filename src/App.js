@@ -32,7 +32,7 @@ class App extends Component {
 						<Route path="/internalserver" component={InternalServer} />
 						<Route path="/jobs/:company_id" component={AllJobs} />
 						{/* add id later to jobDetail */}
-						<Route path="/jd/:job_id" component={JobDetail} /> 
+						<Route path="/jd/:company_id/:id" component={JobDetail} /> 
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />
 					</Switch>
@@ -48,9 +48,6 @@ class App extends Component {
 	}
 }
 
-// useEffect(() => {
-// 	ReactGA.pageview(window.location.pathname + window.location.search);
-//   }, []);
 
 const mapStateToProps = state => ({
 	darkMode: state.settings.isDarkMode,

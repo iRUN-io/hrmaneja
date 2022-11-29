@@ -6,7 +6,7 @@ import { getCompanyData } from '../../../config/common';
 const Features = () => {
     const [company, setCompany] = useState({});
 
-    const history = useHistory();
+    // const history = useHistory();
 
     useEffect(() => {
         async function fetchData() {

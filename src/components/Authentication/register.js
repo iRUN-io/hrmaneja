@@ -2,7 +2,7 @@ import React, {  useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from "../../services/auth";
 import { setUserSession, setCompanySession } from '../../config/common';
-import { ToastContainer, toast } from 'material-react-toastify';
+import {  toast } from 'material-react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 import Image from "../elements/Image";
 import LoadingBar from 'react-top-loading-bar';
@@ -22,7 +22,7 @@ const Register = () => {
 	const [password, setPassword] = useState();
 	const [progress, setProgress] = useState(0)
 	const [loggedResponse, setResponse] = useState();
-	const [passwordCheck, setCheckPassword] = useState('');
+	const [setCheckPassword] = useState('');
 	const [formState, setFormState] = useState({
 		name: '',
 		registered_company_number: '',

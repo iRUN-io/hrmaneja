@@ -801,7 +801,7 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
 }
 .job-listings, .job-wrapper{
   margin-bottom: 12rem!important;
-  border-bottom: 5px solid #3751FF;
+  border-bottom: 5px solid #865aff;
 }
 /* jobs css */
 .jobs-header{
@@ -810,25 +810,25 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   text-align: center;
 }
 .small-header{
-  font-size: 18px;
+  font-size: 15px;
   /* line-height: 26px; */
 }
 .text-medium{
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   
 }
 .text-small{
-  font-size: 18px;
+  font-size: 14px;
   /* line-height: 22; */
   color: #222;
 }
 .job-dept{
   font-weight: bold;
-  font-size: 16px;
+  font-size: 14px;
 }
 .text-tiny{
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 400;
 }
 .job-footer{
@@ -863,4 +863,66 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   border: 1px solid #865aff97;
   width: 5rem;
   /* margin: auto; */
+}
+
+.job-link{
+  border: 1px solid #865aff97;
+  color: #865aff;
+  font-size: small;
+}
+
+
+.drop_box {
+  margin: 10px 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px dotted #a3a3a3;
+  border-radius: 5px;
+}
+
+.drop_box h4 {
+  font-size: 16px;
+  font-weight: 400;
+  color: #2e2e2e;
+}
+
+.drop_box p {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+.btn-upload {
+  text-decoration: none;
+  background-color: #865aff;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.btn-upload:hover{
+  text-decoration: none;
+  background-color: #ffffff;
+  color: #865aff;
+  padding: 10px 20px;
+  border: none;
+  outline: 1px solid #865aff;
+  border-radius: 5px;
+
+}
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #865aff19;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
 }

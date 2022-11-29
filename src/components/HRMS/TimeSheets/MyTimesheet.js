@@ -9,8 +9,8 @@ import ComingSoon from '../../common/comingSoon';
 import { Link } from 'react-router-dom';
 import { toast } from 'material-react-toastify';
 import { createActivity } from '../../../services/activities';
-import { emailCase } from '../../../enums/emailCase';
-import { sendEmail } from '../../../services/mail/sendMail';
+// import { emailCase } from '../../../enums/emailCase';
+// import { sendEmail } from '../../../services/mail/sendMail';
 import moment from 'moment';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../../services/attendance';
@@ -212,7 +212,7 @@ function Timesheet(props) {
             setLoading(true);
             const user = getUser();
             if (user) {
-                const companyData = await getCompanyData();
+                // const companyData = await getCompanyData();
                 // companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const employeeRecord = await getEmployee(user.employee_id);
                 const allAttendance = await getAttendance(user.employee_id);

@@ -1,6 +1,6 @@
 
 import request from 'umi-request';
-import { getUser } from '../../config/common';
+import { getUser, getCompanyData } from '../../config/common';
 import { API_URL, USER_TOKEN } from '../../config/config';
 
 export const sendEmail = async (email, name, caseType) => {
@@ -180,6 +180,18 @@ const emailSwitch = {
     return {
       subject: 'Job created', body: `Your job has been created successfully. 
     ` };
+  },
+  candidateAppliedAdmin: () => {
+    return {
+      subject: 'Application submitted', body: `New job application submitted ! 
+      `
+    }
+  },
+  candidateAppliedUser: () => {
+    return {
+      subject: 'Application received', body: `Thank you for your interest in joining ${getCompanyData.name}, you will hear from us soon ! 
+      `
+    }
   }
 
 }

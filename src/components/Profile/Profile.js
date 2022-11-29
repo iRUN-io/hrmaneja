@@ -88,7 +88,6 @@ function Profile(props) {
             toast.error("Error, try again");
             setFormState({ ...formState });
         }
-        console.log(formState)
     }
 
     const changePasswordAction = async () => {

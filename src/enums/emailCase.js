@@ -29,4 +29,5 @@ export const emailCase = {
     updateTask:         'updateTask',
     deleteTask:         'deleteTask',
     createJob:          'createJob',
+    candidateApplied:   'candidateApplied'
 }
