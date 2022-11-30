@@ -54,26 +54,26 @@ div.rtl{
 }
 
 .btn-hrmaneja-success{
-    background-color: #74b16f!important;
+    background-color: #29A673!important;
     color: white;
-    border-color: #74b16f!important;
+    border-color: #29A673!important;
 }
 
 .btn-hrmaneja{
-    background-color: #38e0ca !important;
+    background-color: #29A673 !important;
     color: white;
-    border-color: #38e0ca!important;
+    border-color: #29A673!important;
 }
 
 .btn-hrmaneja:hover{
-    background-color: #38e0ca !important;
+    background-color: #29A673 !important;
     color: white;
-    border-color: #38e0ca!important;
+    border-color: #29A673!important;
 }
 
 .btn-hrmaneja-success:hover {
     color: #fff !important;
-    background-color: #377c71 !important;
+    background-color: #29A673 !important;
     border-color: #fff !important;
     
   }
@@ -511,7 +511,7 @@ body {
   }
   
   .badge-success{
-    background: #29cc969e !important;
+    background: #29A673 !important;
   }
   
   .badge-danger{

@@ -38,13 +38,6 @@ const AllJobs = () => {
 
     const jobDescription = (id) => {
         window.location.href = `/jd/${companyId}/${id}`;
-        // history.push({
-        //     pathname: `/jd/${id}`,
-        //     state: {
-        //         jd: jd,
-        //         companyData: companyData,
-        //     }
-        // });
     };
 
     const getDepartments = () => {

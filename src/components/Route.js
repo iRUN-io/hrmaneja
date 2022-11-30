@@ -317,7 +317,7 @@ const Routes = [
         component: Positions
     },
     {
-        path: "/jobportal-applicants",
+        path: "/jobportal-applicants/:job_id",
         name: 'jobportalpplicants',
         exact: true,
         pageTitle: "Job Applicants",

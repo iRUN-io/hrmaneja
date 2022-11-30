@@ -553,6 +553,7 @@ class Menu extends Component {
 				&& !this.props.location?.pathname.includes('/req-payslip/')
 				&& !this.props.location?.pathname.includes('/billing-receipt/')
 				&& !this.props.location?.pathname.includes('/payroll-status/')
+				&& !this.props.location?.pathname.includes('/jobportal-applicants/')
 				&& !this.props.location?.pathname.includes('/single-payroll/')) {
 				return <NotFound />
 			}

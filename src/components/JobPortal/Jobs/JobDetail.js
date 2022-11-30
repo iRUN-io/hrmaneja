@@ -3,7 +3,7 @@ import Image from "../../elements/Image"; // you will need this image for compan
 import ReactGA from 'react-ga';
 import { GOOGLE_ANALYTICS_ID } from '../../../config/config';
 import JobsFooter from './JobsFooter';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Loader from '../../common/loader';
 import Country from '../../common/country';
 import { toast } from 'material-react-toastify';
@@ -23,6 +23,7 @@ const JobDetail = () => {
 	const [submitted, setSubmitted] = useState(false);
 	const [companyData, setCompanyData] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [uploadLoading, setUploadLoading] = useState(false);
 	const [resume, setResume] = useState('');
 	const [selectedResume, setSelectedResume] = useState('');
 	const [formState, setFormState] = useState({
@@ -62,7 +63,7 @@ const JobDetail = () => {
 		}
 		fetchData();
 
-	}, []);
+	}, [params.company_id, params.id]);
 
 
 	const submitCandidate = async () => {
@@ -74,7 +75,7 @@ const JobDetail = () => {
 				jobId: job.id,
 				resume: resume,
 			}
-			if (formState.email === '' || formState.firstName === '') {
+			if (formState.email === '' || formState.firstName === '' || formState.resume === '') {
 				toast.error('Please fill all the fields');
 				return;
 			}
@@ -90,9 +91,19 @@ const JobDetail = () => {
 			}
 
 			setFormState({
-				departmentHead: '',
-				departmentName: '',
-				allEmployee: '',
+				firstName: '',
+				lastName: '',
+				email: '',
+				phone: '',
+				address: '',
+				city: '',
+				province: '',
+				postCode: '',
+				country: '',
+				dateAvailable: '',
+				desiredPay: '',
+				portfolio: '',
+				linkedin: '',
 			});
 		} catch (err) {
 			toast.error("Error, try again");
@@ -124,12 +135,13 @@ const JobDetail = () => {
 	}
 
 	const handleFile = async e => {
+		setUploadLoading(true);
 		const file = e.target.files[0];
 		const upload = await UploadCloudinary(file);
 		// const convertedFile = await Convert(file) // switch this to use base64
 		setResume(upload.secure_url);
-		console.log('kkk', upload.original_filename)
 		setSelectedResume(upload.original_filename);
+		setUploadLoading(false);
 	}
 
 	const chooseFile = useCallback(() => {
@@ -138,27 +150,42 @@ const JobDetail = () => {
 		const input = dropArea.querySelector("input");
 		button.onclick();
 		input.click();
-
 	}, [])
+
 
 	const uploadFile = useMemo(() => {
 		return (
 			<div className="drop_box">
 				<header>
 					{selectedResume !== '' ? (
-						<div className="alert alert-success" role="alert">
-							<h4>{selectedResume}.pdf</h4>
-						</div>
+						<>
+							<div>{uploadLoading ? (
+								<div style={{ width: '100%', height: '100%', marginTop: '50px' }} className="loader">
+								</div>
+							) : (
+								<div className="alert alert-success" role="alert">
+									<h4>{selectedResume}.pdf</h4>
+								</div>
+							)}
+							</div>
+
+						</>
 					) : (
+						<div>
+							{uploadLoading ? (
+							<div style={{ width: '100%', height: '100%', marginTop: '50px' }} className="loader"></div>
+						) : (
 						<h4>Select Resume here</h4>
+						)}
+					</div>
 					)}
 				</header>
 				<p>Files Supported: PDF</p>
 				<input name="file" type="file" onChange={handleFile} hidden accept="application/pdf" id="fileID" style={{ display: 'none' }} />
-				<button onClick={chooseFile} className="btn-sm btn-upload">Choose File</button>
+				<button onClick={chooseFile} disabled={uploadLoading && true} className="btn-sm btn-upload">Choose File</button>
 			</div>
 		)
-	}, [chooseFile, selectedResume]);
+	}, [chooseFile, selectedResume, uploadLoading]);
 
 
 	if (submitted) {

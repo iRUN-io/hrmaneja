@@ -1,98 +1,195 @@
-import React from 'react';
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { getCompanyData } from '../../../config/common';
+import { getAllCandidates } from '../../../services/candidate';
+import { getJob } from '../../../services/job';
+import { downloadAndZip, downloadSinglePdf } from '../../common/downloader';
+import FeatureNotAvailable from '../../common/featureDisabled';
+import Loader from '../../common/loader';
+import EmptyState from '../../EmptyState';
 
 const Applicants = () => {
-		return (
-			<>
-				<div className={`section-body  mt-3`}>
-					<div className="container-fluid">
-						<div className="row clearfix">
-							<div className="col-12">
-								<div className="card">
-									<div className="card-body">
-										<div className="row">
-											<div className="col-lg-4 col-md-4 col-sm-6">
-												<label>Search</label>
-												<div className="input-group">
-													<input
-														type="text"
-														className="form-control"
-														placeholder="Search..."
-													/>
-												</div>
+	const [job, setJob] = useState({});
+	const [applicants, setApplicants] = useState([]);
+	const [loading, setLoading] = useState(false);
+	const [featureEnabled, setFeatureEnabled] = useState(false);
+
+	const params = useParams();
+
+	useEffect(() => {
+		async function fetchData() {
+			setLoading(true);
+			const jobData = await getJob(params.job_id)
+			setJob(jobData);
+			const companyData = await getCompanyData();
+			companyData.settings?.features['jobManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+			const applicantsData = await getAllCandidates(params.job_id)
+			setApplicants(applicantsData);
+			setLoading(false);
+		}
+		fetchData();
+
+	}, [params.job_id]);
+
+	const downloadPdf = (url, name) => {
+		return downloadSinglePdf(url, name)
+	}
+
+	const downloadAllPdfs = () => {
+		const urls = [];
+		const names = [];
+		applicants.forEach(applicant => {
+			urls.push(applicant.resume)
+			names.push(applicant.firstName + applicant.lastName)
+		});
+		const data = {
+			urls: urls,
+			names: names,
+		}
+
+		return downloadAndZip(data, job.jobTitle)
+	}
+
+	if (loading) {
+		return <Loader />
+	}
+
+	if (!featureEnabled) {
+		return <FeatureNotAvailable />
+	}
+
+	return (
+		<>
+			<div className={`section-body  mt-3`}>
+				<div className="container-fluid">
+					<div className="row clearfix">
+						<div className="col-12">
+							<h5 className=''>{job.jobTitle}</h5>
+							<div className="card">
+								<div className="card-body">
+									<div className="row">
+										<div className="col-lg-4 col-md-4 col-sm-6">
+											<label>Search</label>
+											<div className="input-group">
+												<input
+													type="text"
+													className="form-control"
+													placeholder="Search..."
+												/>
 											</div>
-											<div className="col-lg-3 col-md-4 col-sm-6">
-												<label>Status</label>
-												<div className="multiselect_div">
-													<select className="custom-select">
-														<option>None Selected</option>
-														<option value={1}>All Status</option>
-														<option value={2}>New</option>
-														<option value={3}>Contacted</option>
-													</select>
-												</div>
+										</div>
+										<div className="col-lg-3 col-md-4 col-sm-6">
+											<label>Status</label>
+											<div className="multiselect_div">
+												<select className="custom-select">
+													<option>None Selected</option>
+													<option value={1}>All Status</option>
+													<option value={2}>New</option>
+													<option value={3}>Contacted</option>
+												</select>
 											</div>
-											<div className="col-lg-3 col-md-4 col-sm-6">
-												<label>Order</label>
-												<div className="form-group">
-													<select className="custom-select">
-														<option>Newest first</option>
-														<option value={1}>Oldest first</option>
-														<option value={2}>Low salary first</option>
-														<option value={3}>High salary first</option>
-														<option value={3}>Sort by name</option>
-													</select>
-												</div>
+										</div>
+										<div className="col-lg-3 col-md-4 col-sm-6">
+											<label>Order</label>
+											<div className="form-group">
+												<select className="custom-select">
+													<option>Newest first</option>
+													<option value={1}>Oldest first</option>
+													<option value={2}>Low salary first</option>
+													<option value={3}>High salary first</option>
+													<option value={3}>Sort by name</option>
+												</select>
 											</div>
-											<div className="col-lg-2 col-md-4 col-sm-6">
-												<label>&nbsp;</label>
-												<a href="fake_url" className="btn btn-sm btn-primary btn-block">
-													Filter
-												</a>
-											</div>
+										</div>
+										<div className="col-lg-2 col-md-4 col-sm-6">
+											<label>&nbsp;</label>
+											<a href="#" onClick={downloadAllPdfs} className="btn btn-sm btn-primary btn-block">
+												Download all PDFS
+											</a>
+
 										</div>
 									</div>
 								</div>
-								<div className="table-responsive">
+							</div>
+							{applicants.length === 0 ? (
+								<EmptyState />
+							) : (
+								<div className="table-responsive card card-body">
 									<table className="table table-hover table-vcenter table_custom text-nowrap spacing5 border-style mb-0">
-										<tbody>
+										<thead>
 											<tr>
-												<td className="w60">
-													<div
-														className="avatar avatar-pink"
-														data-toggle="tooltip"
-														data-placement="top"
-														data-original-title="Avatar Name"
-													>
-														<span>GH</span>
-													</div>
-												</td>
-												<td>
-													<div className="font-15">Google Inc.</div>
-													<span className="text-muted">Full-stack developer</span>
-												</td>
-												<td>$60 per hour</td>
-												<td>
-													<span className="tag tag-success">Full-time</span>
-												</td>
-												<td>
-													<span>123 6th St. Melbourne, FL 32904</span>
-												</td>
-												<td className="text-right">
-													Applied on: <strong>04 Jan, 2019</strong>
-												</td>
+												<th></th>
+												<th className="w200">
+													<p>Applicant</p>
+													<p>Position</p>
+												</th>
+												<th className="w200">Salary</th>
+												<th className="w60">Job Type</th>
+												<th className="w200">Resume</th>
+												<th className="w200">Address</th>
+												<th className="w200">Application Date</th>
 											</tr>
+										</thead>
+										<tbody>
+											{applicants.map((applicant, index) => (
+												<tr key={index}>
+													<td className="w60">
+														<div
+															className="avatar avatar-pink"
+															data-toggle="tooltip"
+															data-placement="top"
+															data-original-title="Avatar Name"
+														>
+
+															{applicant.firstName && applicant.lastName && (<span>
+																{(applicant.firstName[0] + applicant.lastName[0]).toUpperCase()}</span>
+															)}
+														</div>
+													</td>
+													<td>
+														<div className="font-15">{applicant.firstName + " " + applicant.lastName}</div>
+														<span className="text-muted">{job.jobTitle}</span>
+													</td>
+													<td>{job.totalSalary ?? 'Salary not provided'}</td>
+													<td>
+														<span className="tag tag-primary">{job.jobType}</span>
+													</td>
+													<td>
+
+														<span className="tag tag-info text-white">
+															{applicant.resume ? (
+																<a href='#' onClick={() => downloadPdf(applicant.resume, applicant.firstName + applicant.lastName)} className="text-white">
+																	{'Download Resume'}
+																</a>
+															) : (
+																<a href='#' className="text-white">No Resume
+																</a>
+															)}
+														</span>
+													</td>
+													<td>
+														<span>{applicant.address}</span>
+													</td>
+													<td className="text-right">
+														Applied on: <strong>{moment(applicant.createdAt).format('MMM Do YYYY')}</strong>
+													</td>
+												</tr>
+											))}
 										</tbody>
 									</table>
 								</div>
-							</div>
+							)}
 						</div>
 					</div>
 				</div>
+			</div>
 
-			</>
-		);
-	}
+		</>
+	);
+}
 
 const mapStateToProps = state => ({
 	fixNavbar: state.settings.isFixNavbar

@@ -124,9 +124,11 @@ const Positions = () => {
 
 	if (!featureEnabled) {
 		return <FeatureNotAvailable />
-		}
+	}
 
-	console.log(companyData)
+	const seeApplicants = (id) => {
+			window.location.href = `/jobportal-applicants/${id}`;
+	};
 
 		return (
 			<>
@@ -235,7 +237,7 @@ const Positions = () => {
 															<i className="fa fa-ellipsis-v" />
 														</a>
 														<div className="dropdown-menu dropdown-menu-right">
-															<a href="fake_url;" className="dropdown-item"> <i className="fa fa-eye" /> View</a>
+															<button onClick={()=> seeApplicants(job.id) } className="dropdown-item"> <i className="fa fa-eye" /> View</button>
 															<a href="fake_url;" className="dropdown-item"> <i className="fa fa-trash" /> Delete</a>
 														</div>
 													</div>
