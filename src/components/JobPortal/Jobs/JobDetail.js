@@ -75,7 +75,7 @@ const JobDetail = () => {
 				jobId: job.id,
 				resume: resume,
 			}
-			if (formState.email === '' || formState.firstName === '' || formState.resume === '') {
+			if (formState.email === '' || formState.firstName === '' || resume === '' || formState.phone === '' || formState.address === '' || formState.linkedin === '') {
 				toast.error('Please fill all the fields');
 				return;
 			}
@@ -363,6 +363,7 @@ const JobDetail = () => {
 											<select
 												className="form-control"
 												name="country"
+												required
 												id="country"
 												value={formState?.country}
 												onChange={updateForm}
@@ -377,7 +378,7 @@ const JobDetail = () => {
 										<div className='row'>
 											<div className="form-group col-6">
 												<label className="form-label">Date Available*</label>
-												<input className='form-control' value={formState?.dateAvailable} onChange={updateForm} type="date" name="dateAvailable"
+												<input required className='form-control' value={formState?.dateAvailable} onChange={updateForm} type="date" name="dateAvailable"
 													min="2018-01-01" max="2024-12-31" />
 											</div>
 											<div className="form-group col-6">
@@ -390,13 +391,13 @@ const JobDetail = () => {
 										<div className='row'>
 											<div className="form-group col-md-6 col-12">
 												<label className="job-form-label ">Website, Blog or Portfolio*</label>
-												<input type="text" name='portfolio'
+												<input required type="text" name='portfolio'
 													value={formState?.portfolio} onChange={updateForm}
 													className="form-control" />
 											</div>
 											<div className="form-group col-md-6 col-12">
 												<label className="job-form-label">LinkedIn*</label>
-												<input type="text" name='linkedin' value={formState?.linkedin} onChange={updateForm}
+												<input required type="text" name='linkedin' value={formState?.linkedin} onChange={updateForm}
 													className="form-control" />
 											</div>
 										</div>

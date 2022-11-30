@@ -41,10 +41,12 @@ const Applicants = () => {
 	const downloadAllPdfs = () => {
 		const urls = [];
 		const names = [];
+		
 		applicants.forEach(applicant => {
 			urls.push(applicant.resume)
 			names.push(applicant.firstName + applicant.lastName)
 		});
+
 		const data = {
 			urls: urls,
 			names: names,
