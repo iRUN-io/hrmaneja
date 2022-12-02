@@ -34,7 +34,7 @@ export const exportZip = (blobs, applicantNames, title) => {
     const zip = JsZip();
     blobs.forEach((blob, i) => {
         const applicantName = applicantNames[i];
-        zip.file(`${applicantName}.pdf`, blob);
+        zip.file(`${applicantName}.pdf`, blob); // Archer 🎊 
     });
 
     zip.generateAsync({ type: 'blob' }).then(zipFile => {
