@@ -22,7 +22,7 @@ const Register = () => {
 	const [password, setPassword] = useState();
 	const [progress, setProgress] = useState(0)
 	const [loggedResponse, setResponse] = useState();
-	const [setCheckPassword] = useState('');
+	const [checkpassword, setCheckPassword] = useState('');
 	const [formState, setFormState] = useState({
 		name: '',
 		registered_company_number: '',

@@ -6,11 +6,12 @@ import { getCompanyData, getUser } from '../../../config/common';
 import { emailCase } from '../../../enums/emailCase';
 import { createActivity } from '../../../services/activities';
 import { getAllDepartments } from '../../../services/department';
-import { createJob, getAllJobs } from '../../../services/job';
+import { createJob, deleteJob, getAllJobs } from '../../../services/job';
 import { sendEmail } from '../../../services/mail/sendMail';
 import Country from '../../common/country';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import Loader from '../../common/loader';
+import EmptyState from '../../EmptyState';
 
 const Positions = () => {
     const [featureEnabled, setFeatureEnabled] = useState(false);
@@ -130,6 +131,28 @@ const Positions = () => {
 			window.location.href = `/jobportal-applicants/${id}`;
 	};
 
+	const removeJob = async (id) => {
+		const response = await deleteJob(id);
+		if (response) {
+			const logJob = await createActivity(
+				{
+					name: 'Job deleted',
+					employee_id: user.employee_id,
+					activity: `${user.name} deleted a job`,
+					activity_name: 'Deletion',
+					user: user.name,
+					company_id: user.company_id,
+				}
+			)
+
+			if (logJob.id) {
+				// sendEmail(user.emailAddress, user.name, emailCase.deleteJob);
+				setJobs(jobs.filter(job => job.id !== id))
+				toast.success("Job deleted successfully");
+			}
+		}
+	}
+
 		return (
 			<>
 				<div className='section-body mt-3'>
@@ -152,7 +175,7 @@ const Positions = () => {
 					<div className="container-fluid">
 						<div className="row clearfix">
 							<div className="col-12">
-								<div className="card">
+								{/* <div className="card">
 									<div className="card-body">
 										<div className="row">
 											<div className="col-lg-3 col-md-5 col-sm-6">
@@ -200,7 +223,10 @@ const Positions = () => {
 											</div>
 										</div>
 									</div>
-								</div>
+								</div> */}
+								{jobs.length === 0 ? (
+								<EmptyState />
+								) : (
 								<div className="table-responsive card">
 									<table className="card-body table table-hover table-vcenter table_custom text-nowrap spacing5 mb-0">
 										<tbody>
@@ -238,7 +264,7 @@ const Positions = () => {
 														</a>
 														<div className="dropdown-menu dropdown-menu-right">
 															<button onClick={()=> seeApplicants(job.id) } className="dropdown-item"> <i className="fa fa-eye" /> View</button>
-															<a href="fake_url;" className="dropdown-item"> <i className="fa fa-trash" /> Delete</a>
+															<button onClick={() => removeJob(job.id)} className="dropdown-item"> <i className="fa fa-trash" /> Delete</button>
 														</div>
 													</div>
 												</td>
@@ -247,6 +273,7 @@ const Positions = () => {
 										</tbody>
 									</table>
 								</div>
+								)}
 								<div className="modal fade" id="exampleModal" tabIndex={-1} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 									<div className="modal-dialog modal-lg" role="document">
 										<div className="modal-content">

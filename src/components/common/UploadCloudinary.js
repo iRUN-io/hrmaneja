@@ -2,7 +2,6 @@ import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESET } from "../../config/co
 
 
 const UploadCloudinary = async (file) => {
-
     const data = new FormData();
     data.append("file", file);
     data.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);

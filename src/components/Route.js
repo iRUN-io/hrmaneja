@@ -21,10 +21,10 @@ import Excel from './HRMS/Excel/Excel';
 // import TicketDetails from './Project/TicketDetails/TicketDetails';
 // import Clients from './Project/Clients/Clients';
 import TodoList from './Project/TodoList/TodoList';
-// import JobPortalDashboard from './JobPortal/Dashboard/Dashboard';
-// import Applicants from './JobPortal/Applicants/Applicants';
-// import Positions from './JobPortal/Positions/Positions';
-// import Resumes from './JobPortal/Resumes/Resumes';
+import JobPortalDashboard from './JobPortal/Dashboard/Dashboard';
+import Applicants from './JobPortal/Applicants/Applicants';
+import Positions from './JobPortal/Positions/Positions';
+import Resumes from './JobPortal/Resumes/Resumes';
 // import JobSettings from './JobPortal/Settings/Settings';
 // import Icons from './Icons/icons';
 // import IconsFeather from './Icons/IconsFeather';
@@ -302,34 +302,34 @@ const Routes = [
 
     // //job portal
 
-    // {
-    //     path: "/jobportal-dashboard",
-    //     name: 'jobportalDashboard',
-    //     exact: true,
-    //     pageTitle: "Job Dashboard",
-    //     component: JobPortalDashboard
-    // },
-    // {
-    //     path: "/jobportal-positions",
-    //     name: 'jobportalPositions',
-    //     exact: true,
-    //     pageTitle: "Job Positions",
-    //     component: Positions
-    // },
-    // {
-    //     path: "/jobportal-applicants/:job_id",
-    //     name: 'jobportalpplicants',
-    //     exact: true,
-    //     pageTitle: "Job Applicants",
-    //     component: Applicants
-    // },
-    // {
-    //     path: "/jobportal-resumes",
-    //     name: 'jobportalResumes',
-    //     exact: true,
-    //     pageTitle: "Job Resumes",
-    //     component: Resumes
-    // },
+    {
+        path: "/jobportal-dashboard",
+        name: 'jobportalDashboard',
+        exact: true,
+        pageTitle: "Job Dashboard",
+        component: JobPortalDashboard
+    },
+    {
+        path: "/jobportal-positions",
+        name: 'jobportalPositions',
+        exact: true,
+        pageTitle: "Job Positions",
+        component: Positions
+    },
+    {
+        path: "/jobportal-applicants/:job_id",
+        name: 'jobportalpplicants',
+        exact: true,
+        pageTitle: "Job Applicants",
+        component: Applicants
+    },
+    {
+        path: "/jobportal-resumes",
+        name: 'jobportalResumes',
+        exact: true,
+        pageTitle: "Job Resumes",
+        component: Resumes
+    },
     // {
     //     path: "/jobportal-settings",
     //     name: 'jobportalSettings',

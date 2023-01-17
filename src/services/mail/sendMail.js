@@ -188,8 +188,9 @@ const emailSwitch = {
     }
   },
   candidateAppliedUser: () => {
+    const companyName = sessionStorage.getItem('companyName');
     return {
-      subject: 'Application received', body: `Thank you for your interest in joining ${getCompanyData.name}, you will hear from us soon ! 
+      subject: 'Application received', body: `Thank you for your interest in joining ${companyName}, you will hear from us soon ! 
       `
     }
   }

@@ -30,9 +30,9 @@ class App extends Component {
 						<Route path="/verify-email/:token" component={EmailConfirmation} />
 						<Route path="/forgot-password" component={ForgotPassword} />
 						<Route path="/internalserver" component={InternalServer} />
-						{/* <Route path="/jobs/:company_id" component={AllJobs} /> */}
+						<Route path="/jobs/:company_id" component={AllJobs} />
 						{/* add id later to jobDetail */}
-						{/* <Route path="/jd/:company_id/:id" component={JobDetail} />  */}
+						<Route path="/jd/:company_id/:id" component={JobDetail} /> 
 						<Route component={Layout} />
 						<Route path="/notfound" component={NotFound} />
 					</Switch>

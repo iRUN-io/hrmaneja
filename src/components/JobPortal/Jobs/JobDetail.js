@@ -25,6 +25,7 @@ const JobDetail = () => {
 	const [loading, setLoading] = useState(false);
 	const [uploadLoading, setUploadLoading] = useState(false);
 	const [resume, setResume] = useState('');
+	const [copied, setCopied] = useState(false);
 	const [selectedResume, setSelectedResume] = useState('');
 	const [formState, setFormState] = useState({
 		firstName: '',
@@ -83,6 +84,7 @@ const JobDetail = () => {
 
 			if (response.id) {
 				sendEmail(companyData.email, companyData.name, emailCase.candidateAppliedAdmin);
+				sessionStorage.setItem('companyName', companyData.name);
 				sendEmail(formState.email, formState.firstName, emailCase.candidateAppliedUser);
 				setSubmitted(true);
 				toast.success("Application sent successfully");
@@ -120,6 +122,11 @@ const JobDetail = () => {
 		});
 	};
 
+	const copyToClipboard = (text) => {
+		navigator.clipboard.writeText(text);
+		setCopied(true);
+	  }
+
 
 	const setRequirement = new Set(job.requirements);
 	const requirements = [...setRequirement];
@@ -151,6 +158,12 @@ const JobDetail = () => {
 		button.onclick();
 		input.click();
 	}, [])
+
+	useEffect(() => {
+		if (copied) {
+		  setTimeout(() => { setCopied(false) }, 2000);
+		}
+	  }, [copied])
 
 
 	const uploadFile = useMemo(() => {
@@ -234,15 +247,12 @@ const JobDetail = () => {
 									</button>
 								}
 								<hr />
-								<input className="mb-2 p-2 job-link" type="text" name="" id="" readOnly
+								<p className='text-small text-center'>Share this job</p>
+								{copied && <small className='text-center' style={{ color: 'green', marginBottom: '10px' }}>Copied!</small>}
+								{/* <input className="mb-2 p-2 job-link" type="text" name="" id="" readOnly
 									value={`${window.location.href}`}
-								/>
-								{/* <div className='job-social-links mt-2'>
-									<span>Fb</span>
-									<span>IG</span>
-									<span>WA</span>
-
-								</div> */}
+								/> */}
+								<button onClick={() => copyToClipboard(`${window.location.href}`)} className="btn btn-outline-primary btn-block btn-apply">Copy Link</button>
 							</div>
 							<br></br>
 							<div className="card card-body" >

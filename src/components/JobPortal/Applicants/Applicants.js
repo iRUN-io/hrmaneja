@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getCompanyData } from '../../../config/common';
 import { getAllCandidates } from '../../../services/candidate';
 import { getJob } from '../../../services/job';
@@ -65,6 +65,22 @@ const Applicants = () => {
 
 	return (
 		<>
+		<div className='section-body mt-3'>
+					<div className="container-fluid">
+						<div className="d-flex justify-content-between align-items-center">
+							<ul className="nav nav-tabs page-header-tab">
+								<li className="nav-item">
+									<Link to={'/jobportal-positions'} className="nav-link active">
+										<i className="fa fa-arrow-left"></i>
+									</Link>
+								</li>
+							</ul>
+							<div className="header-action">
+								<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			<div className={`section-body  mt-3`}>
 				<div className="container-fluid">
 					<div className="row clearfix">
