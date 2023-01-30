@@ -3,7 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 // import Image from "../../elements/Image"; 
 import ReactGA from 'react-ga';
 import { GOOGLE_ANALYTICS_ID } from '../../../config/config';
-import { getAllJobs } from '../../../services/job';
+import { getAllActiveJobs } from '../../../services/job';
 import EmptyState from '../../EmptyState';
 import Loader from '../../common/loader';
 import { getCompany } from '../../../services/company';
@@ -22,7 +22,7 @@ const AllJobs = () => {
         ReactGA.pageview(window.location.pathname + window.location.search);
         async function fetchData() {
             setLoading(true);
-            const response = await getAllJobs(companyId);
+            const response = await getAllActiveJobs(companyId);
             const companyData = await getCompany(companyId);
             if (response.status || companyData.status === 404) {
                 setCompanyStatus('notFound');

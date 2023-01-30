@@ -13,6 +13,18 @@ export async function getAllJobs(COMPANY_ID) {
   });
 }
 
+export async function getAllActiveJobs(COMPANY_ID) {
+  return request(`${API_URL}/jobs/active/${COMPANY_ID}`, {
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+      'Authorization': USER_TOKEN,
+    },
+  });
+}
+
 export async function getJob(id) {
   return request(`${API_URL}/jobs/details/${id}`, {
     method: 'get',
