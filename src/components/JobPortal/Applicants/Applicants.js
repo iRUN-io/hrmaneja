@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { toast } from 'material-react-toastify';
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { getCompanyData } from '../../../config/common';
-import { getAllCandidates } from '../../../services/candidate';
+import { getAllCandidates, scoreCandidate } from '../../../services/candidate';
 import { getJob } from '../../../services/job';
 import { downloadAndZip, downloadSinglePdf } from '../../common/downloader';
 import FeatureNotAvailable from '../../common/featureDisabled';
@@ -19,6 +20,9 @@ const Applicants = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [ApplicantPage] = useState(15);
 	const [searchApplicant, setSearchApplicant] = useState('');
+	const [applicantsScore, setApplicantsScore] = useState([]);
+	const [applicantScore, setApplicantScore] = useState([]);
+	// const [texts, setTexts] = useState([]);
 
 	const params = useParams();
 
@@ -36,6 +40,7 @@ const Applicants = () => {
 		fetchData();
 
 	}, [params.job_id]);
+
 
 	const downloadPdf = (url, name) => {
 		return downloadSinglePdf(url, name)
@@ -58,45 +63,84 @@ const Applicants = () => {
 		return downloadAndZip(data, job.jobTitle)
 	}
 
-	
+
 	const getApplicantBySearchQuery = (
 		applicants,
 		searchQuery,
-	  ) => {
+	) => {
 		return applicants.filter(applicant =>
 			applicant.firstName.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			applicant.lastName.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			applicant.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			applicant.phone.toLowerCase().includes(searchQuery.toLowerCase())
 		);
-	  };
-	
-	  const allApplicantArray = useMemo(() => {
+	};
+
+	const allApplicantArray = useMemo(() => {
 		let allApplicants = applicants;
 		if (searchApplicant) {
-		  allApplicants = getApplicantBySearchQuery(allApplicants, searchApplicant);
+			allApplicants = getApplicantBySearchQuery(allApplicants, searchApplicant);
 		}
-	
+
 		return allApplicants || [];
-	  }, [applicants, searchApplicant]);
-	
-	  const setSearch = (e) => {
+	}, [applicants, searchApplicant]);
+
+	const setSearch = (e) => {
 		const { value } = e.target;
 		setSearchApplicant(value);
-	  };
-  
+	};
+
 	const indexOfLastApplicant = currentPage * ApplicantPage;
 	const indexOfFirstApplicant = indexOfLastApplicant - ApplicantPage;
 	const currentApplicants = allApplicantArray.slice(indexOfFirstApplicant, indexOfLastApplicant);
-  
+
 	const paginate = pageNumber => setCurrentPage(pageNumber);
 	const nextPage = () => setCurrentPage(currentPage + 1);
 	const prevPage = () => setCurrentPage(currentPage - 1);
-  
+
 	const pageNumbers = [];
 	for (let i = 1; i <= Math.ceil(allApplicantArray.length / ApplicantPage); i++) {
-	  pageNumbers.push(i);
+		pageNumbers.push(i);
 	}
+
+
+	// useEffect(() => {
+	// 	async function fetchData() {
+	// 		setLoading(true);
+	// 		const applicantsData = await getAllCandidates(params.job_id)
+	// 		const texts = applicantsData.map(applicant => {
+	// 			return { applicantId: applicant.id, resume: applicant.resume }
+	// 		})
+	// 		const appLSC = await scoreCandidate(texts,params.job_id)
+
+	// 		setApplicantScore([...applicantScore, appLSC]);
+	// 		setLoading(false);
+	// 	}
+	// 	fetchData();
+
+	// // eslint-disable-next-line react-hooks/exhaustive-deps
+	// }, [params.job_id]);
+
+
+	const scoreApplicant = useCallback (async(applicantId, resume) => {
+		const texts = { applicantId: applicantId, resume: resume }
+		if (applicantScore.some(applicant => applicant.candidate === applicantId)) {
+			toast.error(`Applicant already scored with ${applicantScore.find(applicant => applicant.candidate === applicantId).score} points`);
+			return;
+		}
+		const appLSC = await scoreCandidate(texts,params.job_id)
+		setApplicantScore([...applicantScore, appLSC]);
+		toast.success(`Applicant scored with ${appLSC.score} points`);
+	}
+	, [applicantScore, params.job_id]);
+
+
+	const getScore = useCallback ((id) => {
+		const score = applicantScore.find(applicant => applicant.candidate === id);
+		return score ? score.score : 0;
+	}
+	, [applicantScore]);
+
 
 	if (loading) {
 		return <Loader />
@@ -106,10 +150,11 @@ const Applicants = () => {
 		return <FeatureNotAvailable />
 	}
 
-	console.log(applicants)
-
 	return (
 		<>
+			<div>
+				{/* {getRankedApplicants()} */}
+			</div>
 			<div className='section-body mt-3'>
 				<div className="container-fluid">
 					<div className="d-flex justify-content-between align-items-center">
@@ -178,115 +223,127 @@ const Applicants = () => {
 								</div>
 							</div> */}
 							<div className='card'>
-							<div className="card-header">
-								<h3 className="card-title">Applicants</h3>
-								<div className="col-lg-10 col-md-4 col-sm-6 card-body">
-									<a href="#" onClick={downloadAllPdfs} className="btn btn-sm btn-primary btn-block">
-										Download all PDFS
-									</a>
-								</div>
-								<div className="card-options">
-									<div className="input-group">
-										<input
-										type="text"
-										className="form-control form-control-sm"
-										placeholder="Search Applicants..."
-										onChange={setSearch}
-										value={searchApplicant}
-										name="s"
-										/>
+								<div className="card-header">
+									<h3 className="card-title">Applicants</h3>
+									<div className="col-lg-10 col-md-4 col-sm-6 card-body">
+										<a href="#" onClick={downloadAllPdfs} className="btn btn-sm btn-primary btn-block">
+											Download all PDFS
+										</a>
 									</div>
+									<div className="card-options">
+										<div className="input-group">
+											<input
+												type="text"
+												className="form-control form-control-sm"
+												placeholder="Search Applicants..."
+												onChange={setSearch}
+												value={searchApplicant}
+												name="s"
+											/>
+										</div>
+									</div>
+
 								</div>
-								
-								</div>
-								</div>
+							</div>
 							{currentApplicants.length === 0 ? (
 								<EmptyState />
 							) : (
 								<><div className="table-responsive card card-body">
-										<table className="table table-hover table-vcenter table_custom text-nowrap spacing5 border-style mb-0">
-											<thead>
-												<tr>
-													<th></th>
-													<th className="w200">
-														<p>Applicant</p>
-														<p>Position</p>
-													</th>
-													<th className="w100">Salary</th>
-													<th className="w60">Job Type</th>
-													<th className="w100">Resume</th>
-													<th className="w50">Address</th>
-													<th className="w50">Date Available</th>
-													<th className="w100">Application Date</th>
+									<table className="table table-hover table-vcenter table_custom text-nowrap spacing5 border-style mb-0">
+										<thead>
+											<tr>
+												<th></th>
+												<th className="w200">
+													<p>Applicant</p>
+													<p>Position</p>
+												</th>
+												<th className="w100">Salary</th>
+												<th className='w60'>Score</th>
+												<th className="w60">Job Type</th>
+												<th className="w100">Resume</th>
+												<th className="w50">Address</th>
+												<th className="w50">Date Available</th>
+												<th className="w100">Application Date</th>
+												{/* <th className="w100">Action</th> */}
+											</tr>
+										</thead>
+										<tbody>
+											{currentApplicants.map((applicant, index) => (
+												<tr key={index}>
+													<td className="w60">
+														<div
+															className="avatar avatar-pink"
+															data-toggle="tooltip"
+															data-placement="top"
+															data-original-title="Avatar Name"
+														>
+
+															{applicant.firstName && applicant.lastName && (<span>
+																{(applicant.firstName[0] + applicant.lastName[0]).toUpperCase()}</span>
+															)}
+														</div>
+													</td>
+													<td>
+														<div className="font-15">{applicant.firstName + " " + applicant.lastName}</div>
+														<span className="text-muted">{job.jobTitle}</span>
+													</td>
+													
+													<td>{applicant.desiredPay ?? 'Salary not provided'}</td>
+													<td>
+														<button onClick={() => scoreApplicant(applicant.id, applicant.resume)} className="btn btn-sm btn-primary btn-block">Score</button>
+														{getScore(applicant.id)}
+													</td>
+													<td>
+														<span className="tag tag-primary">{job.jobType}</span>
+													</td>
+													<td>
+
+														<span className="tag tag-info text-white">
+															{applicant.resume ? (
+																<a href='#' onClick={() => downloadPdf(applicant.resume, applicant.firstName + applicant.lastName)} className="text-white">
+																	{'Download Resume'}
+																</a>
+															) : (
+																<a href='#' className="text-white">No Resume
+																</a>
+															)}
+														</span>
+													</td>
+													<td colSpan={1}>
+														<span>{applicant.address}</span>
+													</td>
+													<td className="text-right">
+														 <strong>{moment(applicant.dateAvailable).format('MMM Do YYYY')}</strong>
+													</td>
+													<td className="text-right">
+														<strong>{moment(applicant.createdAt).format('MMM Do YYYY')}</strong>
+													</td>
+													{/* <td> 
+
+														<button onClick={() => scoreApplicant(applicant.id, applicant.resume)} className="btn btn-sm btn-primary btn-block">Score</button>
+													</td> */}
+
 												</tr>
-											</thead>
-											<tbody>
-												{currentApplicants.map((applicant, index) => (
-													<tr key={index}>
-														<td className="w60">
-															<div
-																className="avatar avatar-pink"
-																data-toggle="tooltip"
-																data-placement="top"
-																data-original-title="Avatar Name"
-															>
-
-																{applicant.firstName && applicant.lastName && (<span>
-																	{(applicant.firstName[0] + applicant.lastName[0]).toUpperCase()}</span>
-																)}
-															</div>
-														</td>
-														<td>
-															<div className="font-15">{applicant.firstName + " " + applicant.lastName}</div>
-															<span className="text-muted">{job.jobTitle}</span>
-														</td>
-														<td>{applicant.desiredPay ?? 'Salary not provided'}</td>
-														<td>
-															<span className="tag tag-primary">{job.jobType}</span>
-														</td>
-														<td>
-
-															<span className="tag tag-info text-white">
-																{applicant.resume ? (
-																	<a href='#' onClick={() => downloadPdf(applicant.resume, applicant.firstName + applicant.lastName)} className="text-white">
-																		{'Download Resume'}
-																	</a>
-																) : (
-																	<a href='#' className="text-white">No Resume
-																	</a>
-																)}
-															</span>
-														</td>
-														<td>
-															<span>{applicant.address}</span>
-														</td>
-														<td className="text-right">
-															Available on: <strong>{moment(applicant.dateAvailable).format('MMM Do YYYY')}</strong>
-														</td>
-														<td className="text-right">
-															Applied on: <strong>{moment(applicant.createdAt).format('MMM Do YYYY')}</strong>
-														</td>
-													</tr>
+											))}
+										</tbody>
+									</table>
+								</div><div className=''>
+										<nav aria-label="Page navigation example">
+											<ul className="pagination justify-content-end">
+												<li className="page-item" style={{ marginRight: '5px' }}>
+													<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
+												</li>
+												{pageNumbers.map(number => (
+													<li key={number} className="page-item" style={{ marginRight: '5px' }}>
+														<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+													</li>
 												))}
-											</tbody>
-										</table>
-									</div><div className=''>
-											<nav aria-label="Page navigation example">
-												<ul className="pagination justify-content-end">
-													<li className="page-item" style={{ marginRight: '5px' }}>
-														<button className="btn btn-sm btn-primary" onClick={prevPage} disabled={currentPage === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
-													</li>
-													{pageNumbers.map(number => (
-														<li key={number} className="page-item" style={{ marginRight: '5px' }}>
-															<button onClick={() => paginate(number)} className={currentPage === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
-														</li>
-													))}
-													<li className="page-item">
-														<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
-													</li>
-												</ul>
-											</nav>
-										</div></>
+												<li className="page-item">
+													<button className="btn btn-sm btn-primary" onClick={nextPage} disabled={currentPage === pageNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+												</li>
+											</ul>
+										</nav>
+									</div></>
 							)}
 						</div>
 					</div>
@@ -303,3 +360,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({})
 export default connect(mapStateToProps, mapDispatchToProps)(Applicants);
+

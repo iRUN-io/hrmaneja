@@ -47,6 +47,17 @@ export async function updateCandidate(body, candidateId) {
   });
 }
 
+export async function scoreCandidate(body, jobId) {
+  return request(`${API_URL}/candidates/score/${jobId}`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 
 export async function deleteCandidate(candidateId) {
   return request(`${API_URL}/candidates/delete/${candidateId}`, {
