@@ -290,8 +290,8 @@ const Applicants = () => {
 													
 													<td>{applicant.desiredPay ?? 'Salary not provided'}</td>
 													<td>
-														<button onClick={() => scoreApplicant(applicant.id, applicant.resume)} className="btn btn-sm btn-primary btn-block">Score</button>
-														{getScore(applicant.id)}
+														<button onClick={() => scoreApplicant(applicant.id, applicant.resume)} className="btn btn-sm btn-primary"><small>Score </small></button>
+														<span className='text-success' style={{fontWeight: 'bold'}}>&nbsp;&nbsp;{getScore(applicant.id)}</span>
 													</td>
 													<td>
 														<span className="tag tag-primary">{job.jobType}</span>
