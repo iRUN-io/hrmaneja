@@ -224,13 +224,13 @@ const Applicants = () => {
 							</div> */}
 							<div className='card'>
 								<div className="card-header">
-									<h3 className="card-title">Applicants</h3>
-									<div className="col-lg-10 col-md-4 col-sm-6 card-body">
+									<h3 className="card-title"><span className="badge badge-primary">{applicants.length}</span> Applicants</h3>
+									<div className="col-lg-6 col-md-4 col-sm-6 card-body">
 										<a href="#" onClick={downloadAllPdfs} className="btn btn-sm btn-primary btn-block">
 											Download all PDFS
 										</a>
 									</div>
-									<div className="card-options">
+									<div className="card-options col-lg-6">
 										<div className="input-group">
 											<input
 												type="text"
@@ -242,7 +242,6 @@ const Applicants = () => {
 											/>
 										</div>
 									</div>
-
 								</div>
 							</div>
 							{currentApplicants.length === 0 ? (
@@ -327,7 +326,6 @@ const Applicants = () => {
 											))}
 										</tbody>
 									</table>
-								</div><div className=''>
 										<nav aria-label="Page navigation example">
 											<ul className="pagination justify-content-end">
 												<li className="page-item" style={{ marginRight: '5px' }}>
@@ -343,7 +341,8 @@ const Applicants = () => {
 												</li>
 											</ul>
 										</nav>
-									</div></>
+									</div>
+								</>
 							)}
 						</div>
 					</div>
