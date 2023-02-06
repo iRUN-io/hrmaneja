@@ -21,7 +21,7 @@ function Profile(props) {
     const [company, setCompany] = useState({});
     const [activity, setActivity] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [ActivityPerPage] = useState(10);
+    const [ActivityPerPage] = useState(20);
     const [myTeamMembers, setTeamMembers] = useState([]);
     const [myTotalLeaves, setTotalLeaves] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -64,7 +64,6 @@ function Profile(props) {
         currentPassword: '',
         confirmPassword: '',
         newPassword: '',
-
     })
 
 
@@ -287,7 +286,7 @@ function Profile(props) {
                                                             </div>
                                                         </div>
                                                     ))}
-                                                    <div className=''>
+                                                    <div className="row wrapper content">
                                                     <nav aria-label="Page navigation example">
                                                         <ul className="pagination justify-content-end">
                                                             <li className="page-item" style={{ marginRight: '5px' }}>

@@ -31,4 +31,6 @@ export const emailCase = {
     createJob:          'createJob',
     candidateAppliedUser:   'candidateAppliedUser',
     candidateAppliedAdmin: 'candidateAppliedAdmin',
+    approveCandidate:   'approveCandidate',
+    rejectCandidate:    'rejectCandidate',
 }

@@ -926,3 +926,11 @@ background-image:  repeating-radial-gradient( circle at 0 0, transparent 0, #fff
   padding: 12px 20px;
   border-radius: 4px;
 }
+
+.wrapper {
+  overflow: auto;
+  width: 100%;
+}
+.content {
+  overflow-x: auto;
+}

@@ -193,6 +193,22 @@ const emailSwitch = {
       subject: 'Application received', body: `Thank you for your interest in joining ${companyName}, you will hear from us soon ! 
       `
     }
+  },
+  rejectCandidate: () => {
+    const companyName = sessionStorage.getItem('companyName');
+    const jobTitle = sessionStorage.getItem('jobTitle');
+    return {
+      subject: `Your application to ${jobTitle} at ${companyName}`, body: `
+      Thank you for your interest in the ${jobTitle} position at ${companyName}. Unfortunately, They will not be moving forward with your application, but they appreciate your time and interest in ${companyName}. 
+    ` };
+  },
+  approveCandidate: () => {
+    const companyName = sessionStorage.getItem('companyName');
+    const jobTitle = sessionStorage.getItem('jobTitle');
+    return {
+      subject: `Your application to ${jobTitle} at ${companyName}`, body: `
+      Thank you for your interest in the ${jobTitle} position at ${companyName}. Congratulations, You were successful in the screening process, you will be contacted for next steps. 
+    ` };
   }
 
 }
