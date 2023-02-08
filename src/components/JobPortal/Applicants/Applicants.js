@@ -306,14 +306,15 @@ const Applicants = () => {
 													<p>Position</p>
 												</th>
 												<th className="w100">Salary</th>
+
 												<th className='w60'>Score</th>
-												{/* <th className="w60">Job Type</th> */}
+												<th className="w100">Action</th>
+												<th className="w60">Email</th>
 												<th className="w100">Resume</th>
 												<th className="w50">Address</th>
 												<th className="w50">Date Available</th>
 												<th className="w100">Application Date</th>
 												<th className="w100">Status</th>
-												<th className="w100">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -342,9 +343,43 @@ const Applicants = () => {
 														<button onClick={() => scoreApplicant(applicant.id, applicant.resume)} className="btn btn-sm btn-primary"><small>Score </small></button>
 														<span className='text-success' style={{fontWeight: 'bold'}}>&nbsp;&nbsp;{getScore(applicant.id)}</span>
 													</td>
-													{/* <td>
-														<span className="tag tag-primary">{job.jobType}</span>
-													</td> */}
+													<td>
+														{/* {applicant.status === 'approved'  &&  (  */}
+														<OverlayTrigger trigger="focus" placement="bottom" delay={1}
+															overlay={
+																<Popover id="popover-basic">
+																	<Popover.Header as="p">Confirm Decline</Popover.Header>
+																	<Popover.Body>
+																		<div className="clearfix" >
+																			<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+																			<button style={{ margin: '10px' }} onClick={() => rejectApplicant(applicant.id)} type="button" className="btn btn-sm btn-danger">Reject</button>
+																		</div>
+																	</Popover.Body>
+																</Popover>
+															}>
+															<button type="button" className="btn btn-icon js-sweetalert" title="Reject" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+														</OverlayTrigger>
+													 {/* )} */}
+														{/* {(applicant.status === 'active' || applicant.status === 'rejected') && ( */}
+														<OverlayTrigger trigger="focus" placement="bottom" delay={1}
+															overlay={ 
+																<Popover id="popover-basic">
+																	<Popover.Header as="p">Confirm Approval</Popover.Header>
+																	<Popover.Body>
+																		<div className="clearfix" >
+																			<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+																			<button style={{ margin: '10px' }} onClick={() => approveApplicant(applicant.id)} type="button" className="btn btn-sm btn-danger">Approve</button>
+																		</div>
+																	</Popover.Body>
+																</Popover>
+															}>
+															<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
+														</OverlayTrigger>
+														{/* )} */}
+													</td>
+													<td>
+														<span className="tag tag-primary"><a href={`mailto:${applicant.email}`} className="text-white">{applicant.email}</a></span>
+													</td>
 													<td>
 
 														<span className="tag tag-info text-white">
@@ -376,41 +411,6 @@ const Applicants = () => {
 													{applicant.status === 'active' && (
 													<span className="badge badge-info">Pending</span>
 													)}
-													</td>
-
-													<td>
-														{applicant.status === 'approved'  &&  ( 
-														<OverlayTrigger trigger="focus" placement="bottom" delay={1}
-															overlay={
-																<Popover id="popover-basic">
-																	<Popover.Header as="p">Confirm Decline</Popover.Header>
-																	<Popover.Body>
-																		<div className="clearfix" >
-																			<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-																			<button style={{ margin: '10px' }} onClick={() => rejectApplicant(applicant.id)} type="button" className="btn btn-sm btn-danger">Reject</button>
-																		</div>
-																	</Popover.Body>
-																</Popover>
-															}>
-															<button type="button" className="btn btn-icon js-sweetalert" title="Reject" data-type="confirm"><i className="fa fa-close text-warning" /></button>
-														</OverlayTrigger>
-													 )}
-														{(applicant.status === 'active' || applicant.status === 'rejected') && (
-														<OverlayTrigger trigger="focus" placement="bottom" delay={1}
-															overlay={ 
-																<Popover id="popover-basic">
-																	<Popover.Header as="p">Confirm Approval</Popover.Header>
-																	<Popover.Body>
-																		<div className="clearfix" >
-																			<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-																			<button style={{ margin: '10px' }} onClick={() => approveApplicant(applicant.id)} type="button" className="btn btn-sm btn-danger">Approve</button>
-																		</div>
-																	</Popover.Body>
-																</Popover>
-															}>
-															<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
-														</OverlayTrigger>
-														)}
 													</td>
 
 												</tr>
