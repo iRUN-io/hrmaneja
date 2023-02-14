@@ -109,7 +109,7 @@ function Employee(props) {
         bank_code: formState.bank_code
       };
 
-      if (body.name === "" || body.email === "" || body.phone === "" || body.address === "" || body.role === "" || body.salary === "" || body.department === "" || body.bank_account_number === "" || body.bank_account_name === "" || body.bank_name === "" || body.bank_code === "") {
+      if (body.name === "" || body.email === "" || body.phone === ""  || body.salary === "" || body.department === "" || body.bank_account_number === "" || body.bank_account_name === "" || body.bank_name === "") {
         toast.error("Please fill all the fields");
         return;
       }

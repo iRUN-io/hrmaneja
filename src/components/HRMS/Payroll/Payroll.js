@@ -63,7 +63,7 @@ function Payroll(props) {
 
 	const getEmployeeDepartment = (id) => {
 		const department = departments.find(req => req.id === id);
-		return department.name;
+		return department?.name;
 	}
 
 

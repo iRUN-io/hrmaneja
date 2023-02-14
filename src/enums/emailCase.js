@@ -33,4 +33,5 @@ export const emailCase = {
     candidateAppliedAdmin: 'candidateAppliedAdmin',
     approveCandidate:   'approveCandidate',
     rejectCandidate:    'rejectCandidate',
+    sendAirtime:        'sendAirtime',
 }

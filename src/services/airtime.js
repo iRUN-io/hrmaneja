@@ -1,8 +1,9 @@
+
 import request from 'umi-request';
 import { API_URL, USER_TOKEN } from '../config/config';
 
-export async function getAllBanks() {
-  return request(`${API_URL}/payments/banks`, {
+export async function getAllAirtimeTransaction(COMPANY_ID) {
+  return request(`${API_URL}/airtime/${COMPANY_ID}`, {
     method: 'get',
     headers: {
        'Content-Type': 'application/json',
@@ -11,17 +12,14 @@ export async function getAllBanks() {
   });
 }
 
-export async function sendAirtime(body) {
-  return request(`${API_URL}/payments/airtime`, {
+
+export async function createAirtimeTransaction(body) {
+  return request(`${API_URL}/airtime/create`, {
     method: 'post',
     headers: {
-       'Content-Type': 'application/json',
-       'Authorization': USER_TOKEN,
+      'Content-Type': 'application/json',
+      'Authorization': USER_TOKEN,
     },
     body: JSON.stringify(body),
   });
 }
-
-
-
-

@@ -82,6 +82,7 @@ import BillingSlip from './HRMS/Billing/BillingSlip';
 import PayrollStatus from './HRMS/Payroll/PayrollStatus';
 import EmailConfirmation from './Authentication/emailConfirmation';
 import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
+import Airtime from './HRMS/BillPayments/Airtime';
 
 const user = getUser();
 
@@ -241,6 +242,13 @@ const Routes = [
         exact: true,
         pageTitle: "Settings",
         component: Settings
+    },
+    isAdmin && {
+        path: "/hr-airtime",
+        name: 'airtime',
+        exact: true,
+        pageTitle: "Airtime",
+        component: Airtime
     },
     // add new routes here
 

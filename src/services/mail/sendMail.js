@@ -209,7 +209,13 @@ const emailSwitch = {
       subject: `Your application to ${jobTitle} at ${companyName}`, body: `
       Thank you for your interest in the ${jobTitle} position at ${companyName}. Congratulations, You were successful in the screening process, you will be contacted for next steps. 
     ` };
-  }
+  },
+  sendAirtime: () => {
+    return {
+      subject: 'Airtime Sent!', body: `Airtime Sent successfully ! 
+      `
+    }
+  },
 
 }
 

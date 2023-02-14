@@ -354,7 +354,7 @@ function Timesheet(props) {
                                                             {pastWeeks}
                                                         </select>
                                                     </div>
-                                                    <button onClick={() => resetDate()} style={{ marginLeft: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Current timesheet</button>
+                                                    {/* <button onClick={() => resetDate()} style={{ marginLeft: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Current timesheet</button> */}
                                                 </div>
                                             </div>
                                             <div className="card-body">

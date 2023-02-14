@@ -225,6 +225,19 @@ const Settings = () => {
 											</div>
 										</div>
 									</div>
+									<div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
+										<div className="card feature-card">
+											<div className="card-body">
+												<Link to={`${features?.airtime ? '/hr-airtime' : '#'}`} className="my_sort_cut text-muted">
+													<i className="fa fa-phone-square" />
+													<span>Airtime Purchase <br></br>(<small>All Nigerian Networks</small>)</span>
+													{!features?.payroll && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
+														Activate
+													</button>}
+												</Link>
+											</div>
+										</div>
+									</div>
 
 
 								</div>
