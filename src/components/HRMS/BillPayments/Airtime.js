@@ -18,6 +18,7 @@ const Airtime = () => {
     const [airtimes, setTransactions] = useState([]);
     const [user, setUser] = useState([]);
     const [employees, setUsers] = useState([]);
+    
     const [currentPage, setCurrentPage] = useState(1);
     const [AirtimePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
