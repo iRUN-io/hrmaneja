@@ -73,7 +73,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.user && company.totalUsers}</div>
-												<Link to={`${features?.user ? '/hr-users' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.user ? '/admin/hr-users' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-users" />
 													<span>Users</span>
 													{!features?.user && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -87,7 +87,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.department && company.totalDepartments}</div>
-												<Link to={`${features?.user ? '/hr-departments' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.user ? '/admin/hr-departments' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-like" />
 													<span>Departments</span>
 													{!features?.department && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -100,7 +100,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.leave && company.totalLeaves}</div>
-												<Link to={`${features?.leave ? '/hr-leaves' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.leave ? '/admin/hr-leaves' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-calendar" />
 													<span>Leaves</span>
 													{!features?.leave && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -113,7 +113,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.employee && company.totalEmployees}</div>
-												<Link to={`${features?.employee ? '/hr-employees' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.employee ? '/admin/hr-employees' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-users" />
 													<span>Employees</span>
 													{!features?.employee && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -126,7 +126,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												{/* <div className="ribbon-box orange">0</div>  */}
-												<Link to={`${features?.reports ? '/hr-report' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.reports ? '/admin/hr-report' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-graph" />
 													<span>Reports</span>
 													{!features?.reports && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -139,7 +139,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												{/* <div className="ribbon-box orange">0</div>  */}
-												<Link to={`${features?.activity ? '/hr-activities' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.activity ? '/admin/hr-activities' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-user-secret" />
 													<span>Log Trail</span>
 													{!features?.activity && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -166,7 +166,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box green">{features?.expenseManagement && company.totalRequisitions}</div>
-												<Link to={`${features?.expenseManagement ? '/hr-requisition' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.expenseManagement ? '/admin/hr-requisition' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-money" />
 													<span>Requisition</span>
 													{!features?.expenseManagement && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -193,7 +193,7 @@ const Settings = () => {
 									<div className={`col-6 col-md-4 col-xl-3`}>
 										<div className="card feature-card">
 											<div className="card-body">
-												<Link to="/hr-features" className="my_sort_cut text-muted">
+												<Link to="/admin/hr-features" className="my_sort_cut text-muted">
 													<i className="fe fe-grid" />
 													<span>Features</span>
 												</Link>
@@ -201,13 +201,10 @@ const Settings = () => {
 										</div>
 									</div><div className={`col-6 col-md-4 col-xl-3`}>
 										<div className="card feature-card">
-											<div className="card-body disabled-card">
-												<Link to="#" className="my_sort_cut text-muted">
+											<div className="card-body">
+												<Link to="/admin/hr-wallet" className="my_sort_cut text-muted">
 													<i className="fa fa-bank" />
 													<span>Wallet</span>
-													{/* {!features?.wallet && <button onClick={()=> history.push('/support')} type="button" className="btn btn-success btn-lg">
-														Activate
-													</button>} */}
 												</Link>
 											</div>
 										</div>
@@ -215,7 +212,7 @@ const Settings = () => {
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body">
-												<Link to={`${features?.payroll ? '/hr-payroll' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.payroll ? '/admin/hr-payroll' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-credit-card" />
 													<span>Payroll</span>
 													{!features?.payroll && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -228,7 +225,7 @@ const Settings = () => {
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body">
-												<Link to={`${features?.airtime ? '/hr-airtime' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.airtime ? '/admin/hr-airtime' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-phone-square" />
 													<span>Airtime Purchase <br></br>(<small>All Nigerian Networks</small>)</span>
 													{!features?.payroll && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">

@@ -34,4 +34,6 @@ export const emailCase = {
     approveCandidate:   'approveCandidate',
     rejectCandidate:    'rejectCandidate',
     sendAirtime:        'sendAirtime',
+    walletAccountCreated:     'walletAccountCreated',
+    fundAccount:        'fundAccount',
 }

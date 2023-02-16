@@ -216,6 +216,18 @@ const emailSwitch = {
       `
     }
   },
+  walletAccountCreated: () => {
+    return {
+      subject: 'Wallet Account Created!', body: `Your Virtual wallet has been created successfully ! 
+      `
+    }
+  },
+  fundAccount: () => {
+    return {
+      subject: 'Wallet Account Funded!', body: `Your Virtual wallet has been funded successfully ! 
+      `
+    }
+  }
 
 }
 

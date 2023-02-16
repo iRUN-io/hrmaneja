@@ -83,6 +83,7 @@ import PayrollStatus from './HRMS/Payroll/PayrollStatus';
 import EmailConfirmation from './Authentication/emailConfirmation';
 import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
 import Airtime from './HRMS/BillPayments/Airtime';
+import Wallet from './HRMS/Wallet/Index';
 
 const user = getUser();
 
@@ -125,42 +126,42 @@ const Routes = [
 
     // Admin 
     isAdmin && {
-        path: "/hr-users",
+        path: "/admin/hr-users",
         name: 'hr-users',
         exact: true,
         pageTitle: "Users",
         component: Users
     },
     isAdmin && {
-        path: "/hr-departments",
+        path: "/admin/hr-departments",
         name: 'departments',
         exact: true,
         pageTitle: "Departments",
         component: Departments
     },
     isAdmin && {
-        path: "/hr-employees",
+        path: "/admin/hr-employees",
         name: 'employees',
         exact: true,
         pageTitle: "Employee",
         component: Employee
     },
     isAdmin && {
-        path: "/hr-leaves",
+        path: "/admin/hr-leaves",
         name: 'leaves',
         exact: true,
         pageTitle: "Leaves",
         component: Leave
     },
     isAdmin && {
-        path: "/hr-employee-details",
+        path: "/admin/hr-employee-details",
         name: 'employee',
         exact: true,
         pageTitle: "Employee Details",
         component: EmployeeDetails
     },
     isAdmin && {
-        path: "/hr-activities",
+        path: "/admin/hr-activities",
         name: 'activities',
         exact: true,
         pageTitle: "Activities",
@@ -168,14 +169,14 @@ const Routes = [
     },
 
     isAdmin && {
-        path: "/hr-requisition",
+        path: "/admin/hr-requisition",
         name: 'expense',
         exact: true,
         pageTitle: "Requisition",
         component: Expense
     },
     isAdmin && {
-        path: "/hr-payroll",
+        path: "/admin/hr-payroll",
         name: 'payroll',
         exact: true,
         pageTitle: "Payroll",
@@ -183,7 +184,7 @@ const Routes = [
     }, 
 
     isAdmin && {
-        path: "/hr-past-payroll",
+        path: "/admin/hr-past-payroll",
         name: 'past-payroll',
         exact: true,
         pageTitle: "Payroll",
@@ -191,7 +192,7 @@ const Routes = [
     }, 
 
     isAdmin && {
-        path: "/hr-initiate-payroll",
+        path: "/admin/hr-initiate-payroll",
         name: 'initiate-payroll',
         exact: true,
         pageTitle: "Run Payroll",
@@ -199,21 +200,21 @@ const Routes = [
     },
 
     isAdmin && {
-        path: "/hr-accounts",
+        path: "/admin/hr-accounts",
         name: 'accounts',
         exact: true,
         pageTitle: "Accounts",
         component: Accounts
     },
     isAdmin && {
-        path: "/hr-report",
+        path: "/admin/hr-report",
         name: 'report',
         exact: true,
         pageTitle: "Report",
         component: Report
     },
     isAdmin && {
-        path: "/hr-excel",
+        path: "/admin/hr-excel",
         name: 'excel',
         exact: true,
         pageTitle: "Excel",
@@ -244,11 +245,18 @@ const Routes = [
         component: Settings
     },
     isAdmin && {
-        path: "/hr-airtime",
+        path: "/admin/hr-airtime",
         name: 'airtime',
         exact: true,
         pageTitle: "Airtime",
         component: Airtime
+    },
+    isAdmin && {
+        path: "/admin/hr-wallet",
+        name: 'wallet',
+        exact: true,
+        pageTitle: "Wallet",
+        component: Wallet
     },
     // add new routes here
 
