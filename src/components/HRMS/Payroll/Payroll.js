@@ -88,7 +88,7 @@ function Payroll(props) {
 			const department = allDepartments.filter(req => req.total > 0);
 
 			const allEmployees = employees.map(employee => {
-				sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
+				// sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
 				return {
 					name: employee.name,
 					department: getEmployeeDepartment(employee.department),
@@ -123,6 +123,16 @@ function Payroll(props) {
 			const initiateSalary = await createPayroll(body);
 
 			if (initiateSalary.data) {
+				 employees.map(employee => {
+					sendEmail(employee.email, employee.name, emailCase.employeePayrollGenerated)
+					return {
+						name: employee.name,
+						department: getEmployeeDepartment(employee.department),
+						salary: employee.salary,
+						role: employee.role,
+						id: employee.id
+					};
+				}).sort((a, b) => b.total - a.total);
 				sendEmail(user.emailAddress, user.name, emailCase.createPayroll);
 				const activity = {
 					user_id: user.id,
