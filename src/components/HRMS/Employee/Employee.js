@@ -23,7 +23,6 @@ import { createActivity } from "../../../services/activities";
 import FeatureNotAvailable from "../../common/featureDisabled";
 import { getAllBanks } from "../../../services/flutterwave";
 
-
 export const getEmployeeById = (employeeId) => {
   async function fetchData() {
     const response = await getAllEmployees();
@@ -35,7 +34,6 @@ export const getEmployeeById = (employeeId) => {
 };
 
 function Employee(props) {
-
   const { fixNavbar } = props;
   const [banks, setBanks] = useState([]);
   const [employee, setEmployee] = useState([]);
