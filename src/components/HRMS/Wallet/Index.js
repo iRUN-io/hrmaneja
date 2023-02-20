@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Loader from '../../common/loader.js';
 import { formatMoney, getCompanyData, getUser } from '../../../config/common.js';
@@ -9,6 +9,7 @@ import { sendEmail } from '../../../services/mail/sendMail.js';
 import { emailCase } from '../../../enums/emailCase.js';
 import { toast } from 'material-react-toastify';
 import EmptyState from '../../EmptyState/index.js';
+import moment from 'moment';
 
 const Wallet = () => {
 
@@ -35,7 +36,6 @@ const Wallet = () => {
             const companyData = await getCompanyData();
             const balance = await getAccountBalance(companyData.bankAccount.account_ref);
             const transactions = await getAccountTransactions(companyData.bankAccount.account_ref);
-            console.log('transactions', transactions.data.transactions)
             const userData = await getUser(id);
             setUser(userData);
             setBalance(balance.data);
@@ -140,8 +140,8 @@ const Wallet = () => {
                                 <><div className={`col-6 col-md-6 col-xl-6`}>
                                     <div className="card feature-card">
                                         <div className="card-body ribbon">
-                                            <h5>Available Balance ₦ {balance?.available_balance}</h5>
-                                            <p>Ledger Balance ₦ {balance?.ledger_balance}</p>
+                                            <h5>Available Balance {formatMoney(balance?.available_balance)}</h5>
+                                            <p>Ledger Balance {formatMoney(balance?.ledger_balance)}</p>
                                             <button onClick={() => history.push('#')} type="button" className="btn disabled btn-success btn-lg">
                                                 Fund Account
                                             </button>
@@ -178,6 +178,7 @@ const Wallet = () => {
                                                 <th className="w60">Remarks</th>
                                                 <th className="w200">Balance Before</th>
                                                 <th className="w200">Balance After</th>
+                                                <th className=''>Date</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -198,6 +199,9 @@ const Wallet = () => {
                                                     <td>{transaction.remarks}</td>
                                                     <td>{transaction.balance_before}</td>
                                                     <td>{transaction.balance_after}</td>
+                                                    <td>
+														<span className="tag tag-secondary ml-0 mr-0">{moment(transaction.date).format('MMM Do YYYY')}</span>
+													</td>
 
                                                 </tr>
                                             ))}

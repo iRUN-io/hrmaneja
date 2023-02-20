@@ -81,6 +81,10 @@ function Employee(props) {
         toast.error('Feature not enabled');
         return;
       }
+      if (formState.salary < 100 ) {
+        toast.error("Salary should be more than 100 Naira");
+        return;
+      }
       setFormState({ ...formState });
       const body = {
         name: formState.name,

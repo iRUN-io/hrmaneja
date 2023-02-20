@@ -11,14 +11,14 @@ import { Link } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
-import { sendAirtime } from '../../../services/flutterwave';
+import { getAccountBalance, sendAirtime } from '../../../services/flutterwave';
 import Loader from '../../common/loader.js';
 
 const Airtime = () => {
     const [airtimes, setTransactions] = useState([]);
     const [user, setUser] = useState([]);
     const [employees, setUsers] = useState([]);
-    
+    const [balance, setBalance] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [AirtimePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
@@ -119,10 +119,12 @@ const Airtime = () => {
             if (user) {
                 const company_id = user.company_id;
                 const companyData = await getCompanyData();
+                const balance = await getAccountBalance(companyData.bankAccount.account_ref);
                 companyData.settings?.features['airtime'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getAllAirtimeTransaction(company_id);
                 const userResponse = await getAllEmployees(company_id);
                 setTransactions(response);
+                setBalance(balance.data);
                 setUsers(userResponse);
                 setUser(user);
                 setLoading(false);
@@ -193,6 +195,7 @@ const Airtime = () => {
                                     </Link>
                                 </li>
                             </ul>
+                            <span>Available Balance ₦ {balance?.available_balance}</span>
                             <div className="header-action">
                                 <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Send Airtime</button>
                             </div>

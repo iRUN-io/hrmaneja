@@ -71,7 +71,7 @@ function Payroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/hr-past-payroll'}className="nav-link active">
+                                            <Link to={'/admin/hr-payroll'}className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>

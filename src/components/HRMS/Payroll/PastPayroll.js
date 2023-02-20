@@ -118,7 +118,7 @@ function PastPayroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/hr-payroll'} className="nav-link active">
+                                            <Link to={'/admin/hr-payroll'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -199,7 +199,7 @@ function PastPayroll(props) {
 																				<span className="tag tag-secondary ml-0 mr-0">{moment(payroll.createdAt).format('MMM Do YYYY')}</span>
 																			</td>
 																			<td>
-																				<button
+																				{/* <button
 																					type="button"
 																					className="btn btn-icon"
 																					title="Send Invoice"
@@ -207,7 +207,7 @@ function PastPayroll(props) {
 																					data-placement="top"
 																				>
 																					<i className="icon-envelope text-info" />
-																				</button>
+																				</button> */}
 																				<button
 																					type="button"
 																					onClick={() => individualPayroll(payroll, payroll.id)}

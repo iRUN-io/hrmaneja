@@ -29,6 +29,7 @@ function Payroll(props) {
 	const [loading, setLoading] = useState(false);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [EmployeesPerPage] = useState(10);
+	const [company, setCompany] = useState({});
 	const comingSoon = false;
 	const history = useHistory();
 
@@ -45,6 +46,7 @@ function Payroll(props) {
 				const allDepartments = await getAllDepartments(user.company_id);
 				setDepartments(allDepartments);
 				setEmployees(response);
+				setCompany(companyData);
 				setLoading(false);
 				setUser(user);
 			}
@@ -101,7 +103,6 @@ function Payroll(props) {
 				return toast.error('Please add employees to run payroll');
 			}
 
-			
 			const totalSalary = allEmployees.reduce((acc, curr) => {
 				return acc + Number(curr.salary);
 			}, 0);
@@ -116,6 +117,7 @@ function Payroll(props) {
 				month: new Date().toLocaleString('default', { month: 'long' }),
 				year: new Date().getFullYear(),
 				employee_id: user.employee_id,
+				payout_account_ref: company.bankAccount.account_ref,
 			};
 
 			const initiateSalary = await createPayroll(body);
@@ -237,7 +239,7 @@ function Payroll(props) {
 													<form>
 														<div className="input-group">
 															<button style={{ marginRight: '10px' }} type="button" className="btn btn-primary btn-sm" onClick={runPayroll}>{loading ? <i className="fa text-white fa-spinner fa-spin" aria-hidden="true"></i> : 'Run Payroll'}</button>
-															<Link to="/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary text-primary btn-sm">Payroll Records</Link>
+															<Link to="/admin/hr-past-payroll" style={{ marginRight: '10px' }} type="button" className="btn btn-outline-primary text-primary btn-sm">Payroll Records</Link>
 															<input
 																type="text"
 																className="form-control form-control-sm"
