@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { getAllAirtimeTransaction, createAirtimeTransaction } from '../../../services/airtime.js'
-import { getCompanyData, getUser } from '../../../config/common';
+import { formatMoney, getCompanyData, getUser } from '../../../config/common';
 import { toast } from 'material-react-toastify';
 import 'react-loading-skeleton/dist/skeleton.css'
 import moment from 'moment';
@@ -17,8 +17,9 @@ import Loader from '../../common/loader.js';
 const Airtime = () => {
     const [airtimes, setTransactions] = useState([]);
     const [user, setUser] = useState([]);
-    const [employees, setUsers] = useState([]);
+    const [employees, setUsers] = useState([]); // will use employees later for sending airtime for folks
     const [balance, setBalance] = useState();
+    const [company, setCompany] = useState();
     const [currentPage, setCurrentPage] = useState(1);
     const [AirtimePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
@@ -40,16 +41,27 @@ const Airtime = () => {
         setLoading(true);
 
         if (!featureEnabled) {
+            document.getElementById('closeModal').click();
             toast.error('Feature not enabled');
             setLoading(false);
             return;
         }
+
+        if (formState.amount > balance?.available_balance){
+            document.getElementById('closeModal').click();
+            setLoading(false);
+            toast.error('Insufficient Funds');
+            return;
+        }
+
         try {
+
             setFormState({ ...formState });
 
             const body = {
                 amount: formState.amount,
                 phoneNumber: formState.phoneNumber,
+                payout_account_ref: company.bankAccount.account_ref,
             }
             if (body.amount === '' || body.phoneNumber === ''){
             toast.error('Please fill all the fields');
@@ -84,6 +96,8 @@ const Airtime = () => {
                 if (logAirtime.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.sendAirtime);
                     setTransactions([...airtimes, response])
+                    document.getElementById('closeModal').click();
+                    setLoading(false);
                     toast.success("Airtime sent successfully");
                 }
                 }
@@ -97,6 +111,7 @@ const Airtime = () => {
             setLoading(false);
 
         } catch (err) {
+            document.getElementById('closeModal').click();
             toast.error("Error, try again");
             setLoading(false);
 
@@ -126,6 +141,7 @@ const Airtime = () => {
                 setTransactions(response);
                 setBalance(balance.data);
                 setUsers(userResponse);
+                setCompany(companyData);
                 setUser(user);
                 setLoading(false);
 
@@ -134,7 +150,6 @@ const Airtime = () => {
         fetchData();
 
     }, []);
-
 
 	const setSearch = (e) => {
         const { value } = e.target;
@@ -177,7 +192,6 @@ const Airtime = () => {
 		return <FeatureNotAvailable />
 	}
 
-    
 	if (loading ) {
 		return <Loader />
 	}
@@ -235,7 +249,7 @@ const Airtime = () => {
                                                                     </td>
 
                                                                     <td>
-                                                                        <span>{airtime.amount}</span>
+                                                                        <span>{formatMoney(airtime.amount)}</span>
                                                                     </td>
 
                                                                     <td> {moment(airtime.createdAt).format('MMM Do YYYY')} </td>
@@ -282,14 +296,6 @@ const Airtime = () => {
                         {/* update form */}
                         <div className="modal-body">
                             <div className="row clearfix">
-                                {/* <div className="col-md-12">
-                                    <div className="form-group">
-                                        <select name='leaveType' value={formState?.leaveType}
-                                            onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                </div> */}
                                 <div className="col-md-12">
                                     <div className="form-group">
                                         <label>Phone Number</label>
@@ -307,7 +313,7 @@ const Airtime = () => {
                             </div>
                         </div>
                         <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" id='closeModal' className="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button onClick={() => initiateAirtime()} className="btn btn-primary">Send</button>
                         </div>
                     </div>

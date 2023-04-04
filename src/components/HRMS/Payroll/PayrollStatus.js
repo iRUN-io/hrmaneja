@@ -30,7 +30,7 @@ function PayrollStatus(props) {
                 const response = await getPayrollStatus(batchId);
                 console.log('response', response.data)
                 setPayroll(routeState.payroll);
-                setPayrollStatement([response.data[0]]);
+                setPayrollStatement([response.data]);
                 setLoading(false);
             }
         }
@@ -60,7 +60,13 @@ function PayrollStatus(props) {
         return <EmptyState />
     }
 
-    console.log(payrollStatement[0])
+
+    const payrollData = payrollStatement[0];
+
+    const newData = Object.keys(payrollData).map((key) => {
+        return { ...payrollData[key] }
+    });
+
 
 
     return (
@@ -134,7 +140,7 @@ function PayrollStatus(props) {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {payrollStatement.map((payroll, index) => (
+                                                            {newData.map((payroll, index) => (
                                                                 <tr key={index}>
                                                                     <td>
                                                                         <span>{payroll.account_number}</span>

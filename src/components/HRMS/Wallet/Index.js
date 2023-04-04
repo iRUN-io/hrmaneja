@@ -169,6 +169,9 @@ const Wallet = () => {
                             <EmptyState />
                         ) : (
                             <div className="card card-body">
+                                <div>
+                                    <h5>Transactions</h5>
+                                </div>
                                 <div className="table-responsive">
                                     <table className="table table-hover table-striped table-vcenter text-nowrap">
                                         <thead>
@@ -186,7 +189,7 @@ const Wallet = () => {
                                             {currentTransactions.map((transaction, index) => (
                                                 <tr key={index}>
                                                     <td>
-                                                        <span className='text-primary'>{transaction.amount}</span>
+                                                        <span className='text-primary'>{formatMoney(transaction.amount)}</span>
                                                     </td>
                                                     <td>
                                                         {transaction.type === 'D' ? (
@@ -197,8 +200,8 @@ const Wallet = () => {
                                                     </td>
 
                                                     <td>{transaction.remarks}</td>
-                                                    <td>{transaction.balance_before}</td>
-                                                    <td>{transaction.balance_after}</td>
+                                                    <td>{formatMoney(transaction.balance_before)}</td>
+                                                    <td>{formatMoney(transaction.balance_after)}</td>
                                                     <td>
 														<span className="tag tag-secondary ml-0 mr-0">{moment(transaction.date).format('MMM Do YYYY')}</span>
 													</td>

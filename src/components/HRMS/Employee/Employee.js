@@ -134,38 +134,37 @@ function Employee(props) {
           setEmployees([...employees, response])
           sendEmail(body.email, body.name, emailCase.createEmployee)
           toast.success("Employee created successfully");
+          setFormState({
+            name: "",
+            email: "",
+            phone: "",
+            address: "",
+            company_id: "",
+            role: "",
+            gender: "",
+            salary: "",
+            line_manager: "",
+            department: "",
+            office: "",
+            country_of_employment: "",
+            currency: "",
+            salary_frequency: "",
+            salary_start_date: "",
+            profile_picture: "",
+            dob: "",
+            country: "",
+            bank_name: "",
+            bank_account_number: "",
+            bank_account_name: "",
+            company_admin: "",
+            start_date: "",
+            bank_code: ""
+          });
         }
 
       }
 
       toast.info(response.message);
-
-      setFormState({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        company_id: "",
-        role: "",
-        gender: "",
-        salary: "",
-        line_manager: "",
-        department: "",
-        office: "",
-        country_of_employment: "",
-        currency: "",
-        salary_frequency: "",
-        salary_start_date: "",
-        profile_picture: "",
-        dob: "",
-        country: "",
-        bank_name: "",
-        bank_account_number: "",
-        bank_account_name: "",
-        company_admin: "",
-        start_date: "",
-        bank_code: ""
-      });
 
     } catch (err) {
       toast.error("Error, try again");
