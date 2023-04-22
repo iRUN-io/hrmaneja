@@ -136,7 +136,6 @@ function PayrollStatus(props) {
                                                                 <th className="w200">Narration</th>
                                                                 <th className="w150">Status</th>
                                                                 <th className="w150">Action</th>
-
                                                             </tr>
                                                         </thead>
                                                         <tbody>
