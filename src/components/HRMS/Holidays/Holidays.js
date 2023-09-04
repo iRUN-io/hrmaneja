@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getUser } from '../../../config/common';
 import { getHolidays } from '../../../services/setting';
 import Loader from '../../common/loader';
@@ -9,13 +9,13 @@ const Holidays = () => {
 	const [loading, setLoading] = useState(false);
 	const [, setUser] = useState({});
 	const [holidays, setHolidays] = useState([]);
-    const history = useHistory();
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
-				const holiday = await getHolidays('NG', '2022');
+				const currentYear = new Date().getFullYear();
+				const holiday = await getHolidays('NG', currentYear);
 				setHolidays(holiday);
 				setLoading(false);
 				setUser(user)
