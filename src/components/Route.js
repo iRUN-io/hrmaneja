@@ -450,7 +450,7 @@ const Routes = [
         component: MyTimesheet
     },
     {
-        path: "/hr-features",
+        path: "/admin/hr-features",
         name: 'hr-features',
         exact: true,
         pageTitle: "Company Features",

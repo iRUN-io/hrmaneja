@@ -73,7 +73,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.user && company.totalUsers}</div>
-												<Link to={`${features?.user ? '/admin/hr-users' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.user ? '/hr-features' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-users" />
 													<span>Users</span>
 													{!features?.user && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
