@@ -37,6 +37,7 @@
 		"react-metismenu-router-link": "^2.1.0",
 		"react-password-strength-bar": "^0.4.1",
 		"react-pricing-table": "^0.3.0",
+		"react-quill": "^2.0.0",
 		"react-redux": "^7.2.0",
 		"react-router-dom": "^5.1.2",
 		"react-script-tag": "^1.1.2",

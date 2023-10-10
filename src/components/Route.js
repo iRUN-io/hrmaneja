@@ -84,6 +84,7 @@ import EmailConfirmation from './Authentication/emailConfirmation';
 import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
 import Airtime from './HRMS/BillPayments/Airtime';
 import Wallet from './HRMS/Wallet/Index';
+import EmailResponse from './HRMS/EmailResponse';
 
 const user = getUser();
 
@@ -455,6 +456,13 @@ const Routes = [
         exact: true,
         pageTitle: "Company Features",
         component: Features
+    },
+    {
+        path: "/email-response",
+        name: 'email-response',
+        exact: true,
+        pageTitle: "Email Response Generator",
+        component: EmailResponse
     },
     // {
     //     path: "/internalserver",

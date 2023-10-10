@@ -209,7 +209,7 @@ const JobDetail = () => {
 		return <Loader />
 	}
 
-	const pageTitle = job.title;
+	const pageTitle = job.jobTitle;
 
 	document.title = `${pageTitle} | ${companyData.name}`;
 
