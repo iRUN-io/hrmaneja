@@ -2,7 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { connect } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
     statisticsAction,
     statisticsCloseAction
@@ -97,7 +97,14 @@ const EmployeeDetails = (employee) => {
         <>
             <div className="section-body">
                 <div className="container-fluid">
-                    <div>
+                    <div className="">
+                    <ul className="nav nav-tabs page-header-tab">
+                    <li className="nav-item">
+                        <Link to={'/admin/hr-employees'} className="nav-link active">
+                            <i className="fa fa-arrow-left"></i>
+                        </Link>
+                        </li>
+                    </ul>
                         <div className="row">
                             <div className="col-lg-4 col-md-12">
                                 <div className="card">

@@ -14,11 +14,13 @@ import { Link } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
+import { getAllEmployees } from '../../../services/employee';
 
 const Department = () => {
     const [departments, setDepartments] = useState([]);
     const [user, setUser] = useState([]);
     const [users, setUsers] = useState([]);
+    const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(false);
     const [department, setDepartment] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -98,7 +100,7 @@ const Department = () => {
             }
             const response = await deleteDepartment(departmentId);
 
-            if (response.id) {
+            if (response.message) {
 
                 const logDepartment = await createActivity(
                     {
@@ -136,8 +138,10 @@ const Department = () => {
                 companyData.settings?.features['department'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getAllDepartments(company_id);
                 const userResponse = await getAllUsers(company_id);
+                const employeeResponse = await getAllEmployees(company_id);
                 setDepartments(response);
                 setUsers(userResponse);
+                setEmployees(employeeResponse);
                 setUser(user);
                 setLoading(false);
             }
@@ -154,10 +158,13 @@ const Department = () => {
         return 'No department head';
     }
 
-    const getAllEmployees = (departmentId) => {
-        const employees = users.filter(user => user.department_id === departmentId);
-        if (employees.length > 0) {
-            return employees.map(employee => employee.name).join(', ');
+    console.log('employee', employees)
+    const getAllEmployeesHere = (departmentId) => {
+        const employ = employees.filter(user => user.department === departmentId);
+
+        console.log('okay', employ)
+        if (employ.length > 0) {
+            return employ.map(employee => employee.name).join(', ');
         }
         return 'No Employee';
     }
@@ -266,7 +273,7 @@ const Department = () => {
                                                                     {/* <td>0{department.id}</td> */}
                                                                     <td><div className="font-15">{department.name}</div></td>
                                                                     <td>{getDepartmentHead(department.department_head)}</td>
-                                                                    <td>{getAllEmployees(department.id)}</td>
+                                                                    <td>{getAllEmployeesHere(department.id)}</td>
                                                                     <td>
 
                                                                         <button type="button" className="btn btn-icon" title="Edit" onClick={() => setDepartment(department)} data-toggle="modal" data-target="#editModal"><i className="fa fa-edit" /></button>

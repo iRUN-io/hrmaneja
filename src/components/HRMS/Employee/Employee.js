@@ -57,6 +57,7 @@ function Employee(props) {
     department: "",
     gender: "",
     office: "",
+    employment_type: "",
     country_of_employment: "",
     currency: "",
     salary_frequency: "",
@@ -96,6 +97,7 @@ function Employee(props) {
         line_manager: formState.line_manager,
         department: formState.department,
         office: formState.office,
+        employment_type: formState.employment_type,
         country_of_employment: formState.country_of_employment,
         currency: formState.currency,
         salary_frequency: formState.salary_frequency,
@@ -153,6 +155,7 @@ function Employee(props) {
             profile_picture: "",
             dob: "",
             country: "",
+            employment_type: "",
             bank_name: "",
             bank_account_number: "",
             bank_account_name: "",
@@ -193,7 +196,7 @@ function Employee(props) {
   const employeeDetails = id => {
     try {
       const employee = employees.filter(employee => employee.id === id);
-      props.history.push("/hr-employee-details", { employee });
+      props.history.push("/admin/hr-employee-details", { employee });
     } catch (err) {
       toast.error("Error, try again");
     }

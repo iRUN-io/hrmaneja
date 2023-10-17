@@ -50,6 +50,12 @@ const emailSwitch = {
       subject: 'Account Deleted', body: `We received your request to delete your account; your account has been successfully deleted.
     We hope you change your mind, please let us know your feedback and experience so far. If you need assistance in creating a new account, we are available to give you all the support.
     Sincerely,` };
+  },
+  updateUser: () => {
+    return {
+      subject: 'Account Updated', body: `We received your request to update user account; your account has been successfully updated.
+    Please let us know your feedback and experience so far. If you need assistance in creating a new account, we are available to give you all the support.
+    Sincerely,` };
   }
   , createDepartment: () => {
     return {

@@ -404,8 +404,8 @@ const Users = (navStatus) => {
 												>
 													<option>Select Role Type</option>
 													<option value={'HR Manager'}>Hr Manager</option>
-													<option value={'Super Admin'}>Super Admin</option>
-													<option value={'Admin'}>Admin</option>
+													{/* <option value={'Super Admin'}>Super Admin</option>
+													<option value={'Admin'}>Admin</option> */}
 													<option value={'Employee'}>Employee</option>
 												</select>
 											</div>

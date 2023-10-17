@@ -188,7 +188,7 @@ const Airtime = () => {
         pageNumbers.push(i);
     }
 
-    if (!featureEnabled && !loading ) {
+    if (featureEnabled && !loading ) { // remove this when ready
 		return <FeatureNotAvailable />
 	}
 
