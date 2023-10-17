@@ -17,6 +17,106 @@ import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../
 
 
 function Timesheet(props) {
+    ///// NEW PHASE STARTS HERE
+    const [clockedIn, setClockedIn] = useState(false);
+    const [timeEntries, setTimeEntries] = useState([]);
+    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
+
+    useEffect(() => {
+        // Load time entries from local storage on component mount
+        const savedEntries = JSON.parse(localStorage.getItem('timeEntries')) || [];
+        setTimeEntries(savedEntries);
+
+        const intervalId = setInterval(() => {
+            setCurrentDateTime(new Date());
+        }, 1000);
+
+        
+        // Clear the interval when the component unmounts
+        return () => clearInterval(intervalId);
+    }, []);
+
+    const clockIn = () => {
+        // Check if there is already a clock-in entry for the current day
+        const hasClockInToday = timeEntries.some(
+          (entry) =>
+            entry.type === 'in' &&
+            moment(entry.date).isSame(new Date(), 'day')
+        );
+    
+        if (!hasClockInToday) {
+          // Clock in logic
+          const newEntry = { date: new Date(), type: 'in' };
+          const updatedEntries = [...timeEntries, newEntry];
+          setTimeEntries(updatedEntries);
+          setClockedIn(true);
+    
+          // Save time entries to local storage
+          localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+        } else {
+          alert('You have already clocked in today.');
+        }
+      };
+    
+      const clockOut = () => {
+        // Check if there is already a clock-out entry for the current day
+        const hasClockOutToday = timeEntries.some(
+          (entry) =>
+            entry.type === 'out' &&
+            moment(entry.date).isSame(new Date(), 'day')
+        );
+    
+        if (!hasClockOutToday) {
+          // Clock out logic
+          const newEntry = { date: new Date(), type: 'out' };
+          const updatedEntries = [...timeEntries, newEntry];
+          setTimeEntries(updatedEntries);
+          setClockedIn(false);
+    
+          // Save time entries to local storage
+          localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+        } else {
+          alert('You have already clocked out today.');
+        }
+      };
+    // Group time entries by day
+    const groupedTimeEntries = timeEntries.reduce((result, entry) => {
+        const day = moment(entry.date).format('MMMM DD, YYYY');
+        if (!result[day]) {
+            result[day] = [];
+        }
+        result[day].push(entry);
+        return result;
+    }, {});
+
+    // State to manage the current page
+    const [currentPage, setCurrentPage] = useState(1);
+    const entriesPerPage = 5; // Number of entries to display per page
+
+    // Calculate the total number of pages based on the number of unique days
+    const uniqueDays = Object.keys(groupedTimeEntries);
+    const totalPages = Math.ceil(uniqueDays.length / entriesPerPage);
+
+    // Get the current page's entries based on the current page number
+    const currentDays = uniqueDays.slice(
+        (currentPage - 1) * entriesPerPage,
+        currentPage * entriesPerPage
+    );
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const handleSaveEntries = () => {
+        // Handle saving time entries, for example, send them to an API
+        // You can implement your saving logic here
+        console.log('logging')
+      };
+
+    ///// NEW PHASE ENDS HERE
+
+
     const [loading, setLoading] = useState(false);
     const [allAttendance, setAttendance] = useState([]);
     const [user, setUser] = useState({});
@@ -314,6 +414,8 @@ function Timesheet(props) {
         return <FeatureNotAvailable />
     }
 
+    console.log('time', timeEntries)
+
 
     return (
         <>
@@ -341,6 +443,94 @@ function Timesheet(props) {
                                     <div className="tab-pane fade show active" role="tabpanel">
                                         <div className="card table-card">
                                             <div className="card-header">
+                                                <h1 style={{ fontSize: 20 }} className="card-title mx-auto">
+                                                    {currentDateTime.toLocaleString('en-US', {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        second: '2-digit',
+                                                    })}</h1>
+                                            </div>
+                                            <div className='card-body'>
+                                                <div className='mx-auto' style={{ textAlign: 'center' }}>
+                                                {clockedIn ? (
+                                                    <button
+                                                    style={{ width: 200, height: 50 }}
+                                                    className="btn btn-lg btn-danger"
+                                                    onClick={clockOut}
+                                                    // disabled={clockedIn || hasClockedInToday()}
+                                                    >
+                                                    Clock Out
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                    style={{ width: 200, height: 50 }}
+                                                    className="btn btn-lg btn-danger"
+                                                    // disabled={!clockedIn || hasClockedOutToday()}
+                                                    onClick={clockIn}
+                                                    >
+                                                    Clock In
+                                                    </button>
+                                                )}
+
+                                                {/* Save Entries Button */}
+                                                {!clockedIn && timeEntries.length > 0 && (
+                                                    <button
+                                                    style={{ width: 200, height: 50, marginLeft: 10 }}
+                                                    className="btn btn-lg btn-primary"
+                                                    onClick={handleSaveEntries}
+                                                    >
+                                                    Save Entries
+                                                    </button>
+                                                )}
+                                                </div>
+                                                <table className='table table-hover table-striped table-vcenter text-nowrap'>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>Type</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {currentDays.map((day, dayIndex) => (
+                                                            <React.Fragment key={dayIndex}>
+                                                                <tr>
+                                                                    <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
+                                                                </tr>
+                                                                {groupedTimeEntries[day].map((entry, index) => (
+                                                                    <tr key={index}>
+                                                                        <td> <small className="float-left badge badge-primary">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
+                                                                        <td>{entry.type}</td>
+                                                                    </tr>
+                                                                ))}
+                                                            </React.Fragment>
+                                                        ))}
+                                                    </tbody>
+
+                                                </table>
+
+                                                <div className="pagination">
+                                                    <button
+                                                    className='btn-primary btn-sm'
+                                                        disabled={currentPage === 1}
+                                                        onClick={() => handlePageChange(currentPage - 1)}
+                                                    >
+                                                        Previous
+                                                    </button>
+                                                    <span>{currentPage} of {totalPages}</span>
+                                                    <button
+                                                    className='btn-primary btn-sm'
+                                                        disabled={currentPage === totalPages}
+                                                        onClick={() => handlePageChange(currentPage + 1)}
+                                                    >
+                                                        Next
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            {/* <div className="card-header">
                                                 <h3 className="card-title">TimeSheet</h3>
                                                 <div className="card-options">
                                                     <div className="item-action dropdown">
@@ -354,10 +544,9 @@ function Timesheet(props) {
                                                             {pastWeeks}
                                                         </select>
                                                     </div>
-                                                    {/* <button onClick={() => resetDate()} style={{ marginLeft: '10px' }} type="button" className="btn btn-outline-primary btn-sm">Current timesheet</button> */}
                                                 </div>
-                                            </div>
-                                            <div className="card-body">
+                                            </div> */}
+                                            {/* <div className="card-body">
                                                 <div className="table-responsive">
                                                     {loading ? (
                                                         <Skeleton count={5} height={57} />
@@ -393,8 +582,8 @@ function Timesheet(props) {
                                                                 <th className="w60 disabled-card">
                                                                     <p>Sunday</p>
                                                                     <small>{moment(week.sunday).format('Do MMM YYYY')}</small>
-                                                                </th> */}
-                                                                        {/* <th className="w200">Action</th> */}
+                                                                </th> 
+
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -490,42 +679,7 @@ function Timesheet(props) {
                                                                                 </div>
                                                                             </div>
                                                                         </td>
-                                                                        {/* <td>
-                                                                    <div className="align-items-center disabled-card">
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">Start Time</label>
-                                                                            <input disabled type="time" name="time"
-                                                                                min="08:00" max="18:00" className="form-control" required />
-                                                                        </div>
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">End Time</label>
-                                                                            <input disabled type="time" name="time"
-                                                                                min="08:00" max="18:00" className="form-control" required />
-                                                                        </div>
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">Notes</label>
-                                                                            <textarea disabled name='note' className="form-control" rows={3} />
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <div className="align-items-center disabled-card">
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">Start Time</label>
-                                                                            <input disabled type="time" name="time"
-                                                                                min="08:00" max="18:00" className="form-control" required />
-                                                                        </div>
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">End Time</label>
-                                                                            <input disabled type="time" name="time"
-                                                                                min="08:00" max="18:00" className="form-control" required />
-                                                                        </div>
-                                                                        <div className="form-group">
-                                                                            <label className="form-label">Notes</label>
-                                                                            <textarea disabled name='note' className="form-control" rows={3} />
-                                                                        </div>
-                                                                    </div>
-                                                                </td> */}
+
                                                                     </tr>
                                                                 </tbody>
                                                             </table>
@@ -541,7 +695,7 @@ function Timesheet(props) {
                                                             </>
                                                         )}
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
@@ -553,6 +707,22 @@ function Timesheet(props) {
             </div>
         </>
     );
+
+    function hasClockedInToday() {
+        return timeEntries.some(
+          (entry) =>
+            entry.type === 'in' &&
+            moment(entry.date).isSame(new Date(), 'day')
+        );
+      }
+    
+      function hasClockedOutToday() {
+        return timeEntries.some(
+          (entry) =>
+            entry.type === 'out' &&
+            moment(entry.date).isSame(new Date(), 'day')
+        );
+      }
 }
 const mapStateToProps = state => ({
     fixNavbar: state.settings.isFixNavbar

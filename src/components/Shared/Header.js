@@ -74,7 +74,7 @@ class Header extends Component {
 						<div className="page-header">
 							<div className="left">
 								<h1 className="page-title">{this.props.dataFromSubParent}</h1>
-								{checked && company.settings.emailVerification &&  !company.settings.emailVerified ? (
+								{checked && company.settings?.emailVerification &&  !company.settings.emailVerified ? (
 									<><span className='text-white bg-danger btn  btn-sm'>Email confirmation is required.</span>
 									<Button onClick={()=> resendEmail()} className="btn btn-primary btn-sm ml-2">Resend</Button>
 									</>
