@@ -366,7 +366,6 @@ class Subscribe extends React.Component {
                   </div>
                 </div>
               </div>
-              {/* <EditLeaves leave={leave} /> */}
             </div>
           </div>
         </div></>

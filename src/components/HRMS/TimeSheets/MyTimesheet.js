@@ -14,13 +14,13 @@ import { createActivity } from '../../../services/activities';
 import moment from 'moment';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../../services/attendance';
+import { createBilling } from '../../../services/billing';
 
 
 function Timesheet(props) {
     ///// NEW PHASE STARTS HERE
     const [clockedIn, setClockedIn] = useState(false);
     const [timeEntries, setTimeEntries] = useState([]);
-    const [currentDate, setCurrentDate] = useState(new Date());
     const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
     useEffect(() => {
@@ -32,13 +32,10 @@ function Timesheet(props) {
             setCurrentDateTime(new Date());
         }, 1000);
 
-        
-        // Clear the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
     const clockIn = () => {
-        // Check if there is already a clock-in entry for the current day
         const hasClockInToday = timeEntries.some(
           (entry) =>
             entry.type === 'in' &&
@@ -55,7 +52,7 @@ function Timesheet(props) {
           // Save time entries to local storage
           localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
         } else {
-          alert('You have already clocked in today.');
+          toast.error("You have already clocked in today.");
         }
       };
     
@@ -77,7 +74,8 @@ function Timesheet(props) {
           // Save time entries to local storage
           localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
         } else {
-          alert('You have already clocked out today.');
+        toast.error("You have already clocked out today");
+        //   alert('You have already clocked out today.');
         }
       };
     // Group time entries by day
@@ -115,17 +113,15 @@ function Timesheet(props) {
       };
 
     ///// NEW PHASE ENDS HERE
-
-
     const [loading, setLoading] = useState(false);
     const [allAttendance, setAttendance] = useState([]);
     const [user, setUser] = useState({});
     const [employee, setEmployee] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(true);
     const comingSoon = false;
-    const [timeSheetId, setTimeSheetId] = useState();
-    const [currentWeek, setCurrentWeekState] = useState({});
-    const [timeSheetStatus, setTimeSheetStatus] = useState('');
+    // const [timeSheetId, setTimeSheetId] = useState();
+    // const [currentWeek, setCurrentWeekState] = useState({});
+    // const [timeSheetStatus, setTimeSheetStatus] = useState('');
     const [formState, setFormState] = useState({
         week: moment().week().toString(),
         month: moment().month().toString(),
@@ -238,6 +234,25 @@ function Timesheet(props) {
             setFormState({ ...formState });
         }
     };
+    // 63ea33bb6896dc1d2ba9e54c
+    // const initiatePayroll = async () => {
+    // const body = {
+    //     amount: 37500,
+    //     paidBy: '652fae4fda18b490584f7fc3',
+    //     company_id: '65042d837c7d024918a1a56d',
+    //     plan: 'Company Premium',
+    //     expiryDate: new Date().setMonth(new Date().getMonth() + 1),
+    //     status: 'active',
+    //   }
+    //   if (body.amount === '') {
+    //     toast.error('Please select a plan');
+    //     return;
+    //   }
+    //   const billing = await createBilling(body, user.employee_id);
+
+    //   toast.success('billing sent');
+    // };
+
 
     const approvalRequest = async (timeSheetId) => {
         try {
@@ -319,8 +334,8 @@ function Timesheet(props) {
                 setAttendance(allAttendance);
                 const thisWeekAttendance = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
                 const savedData = thisWeekAttendance[0]?.timeSheet[0];
-                setTimeSheetId(thisWeekAttendance[0]?.id);
-                setTimeSheetStatus(thisWeekAttendance[0]?.status);
+                // setTimeSheetId(thisWeekAttendance[0]?.id);
+                // setTimeSheetStatus(thisWeekAttendance[0]?.status);
                 setEmployee(employeeRecord);
                 if (savedData) {
                     setFormFunction(null, savedData);
@@ -334,87 +349,91 @@ function Timesheet(props) {
     }, []);
 
 
-    const updateForm = (e) => {
-        const { value, name } = e.target;
-        setFormState({
-            ...formState,
-            [name]: value,
-        });
-    };
+    // const updateForm = (e) => {
+    //     const { value, name } = e.target;
+    //     setFormState({
+    //         ...formState,
+    //         [name]: value,
+    //     });
+    // };
 
-    useEffect(() => {
-        const currentTimesheetById = allAttendance.filter(attendance => attendance.id === timeSheetId);
-        const today = new Date(currentTimesheetById[0]?.updatedAt);
-        const day = today.getDay();
-        const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-        const monday = new Date(today.setDate(diff));
-        const tuesday = new Date(today.setDate(diff + 1));
-        const wednesday = new Date(today.setDate(diff + 2));
-        const thursday = new Date(today.setDate(diff + 3));
-        const friday = new Date(today.setDate(diff + 4));
-        const saturday = new Date(today.setDate(diff + 5));
-        const sunday = new Date(today.setDate(diff + 6));
-        const week = [
-            {
-                week: moment(monday).week().toString(),
-                year: moment(monday).year().toString(),
-                month: moment(monday).month().toString(),
-                date: moment(monday).format('YYYY-MM-DD'),
-                monday: monday,
-                tuesday: tuesday,
-                wednesday: wednesday,
-                thursday: thursday,
-                friday: friday,
-                saturday: saturday,
-                sunday: sunday,
-            }
-        ];
+    // useEffect(() => {
+    //     const currentTimesheetById = allAttendance.filter(attendance => attendance.id === timeSheetId);
+    //     const today = new Date(currentTimesheetById[0]?.updatedAt);
+    //     const day = today.getDay();
+    //     const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+    //     const monday = new Date(today.setDate(diff));
+    //     const tuesday = new Date(today.setDate(diff + 1));
+    //     const wednesday = new Date(today.setDate(diff + 2));
+    //     const thursday = new Date(today.setDate(diff + 3));
+    //     const friday = new Date(today.setDate(diff + 4));
+    //     const saturday = new Date(today.setDate(diff + 5));
+    //     const sunday = new Date(today.setDate(diff + 6));
+    //     const week = [
+    //         {
+    //             week: moment(monday).week().toString(),
+    //             year: moment(monday).year().toString(),
+    //             month: moment(monday).month().toString(),
+    //             date: moment(monday).format('YYYY-MM-DD'),
+    //             monday: monday,
+    //             tuesday: tuesday,
+    //             wednesday: wednesday,
+    //             thursday: thursday,
+    //             friday: friday,
+    //             saturday: saturday,
+    //             sunday: sunday,
+    //         }
+    //     ];
 
-        setCurrentWeekState(week[0]);
-    }, [allAttendance, timeSheetId]);
+    //     setCurrentWeekState(week[0]);
+    // }, [allAttendance, timeSheetId]);
 
-    const week = currentWeek;
+    // const week = currentWeek;
 
-    const pastWeeks = useMemo(() => {
-        const pastWeeks = allAttendance;
-        return (
-            <>
-                {!loading && pastWeeks.length > 0 && (
-                    <>
-                        {pastWeeks.map((week, index) => (
-                            <option className='' key={index} value={week.id}>
-                                {moment().week(week.week).startOf('week').format('Do MMM YYYY')} - {moment().week(week.week).endOf('week').format('Do MMM YYYY')} {' '}
-                            </option>
-                        ))}
-                    </>
-                )}
+    // const pastWeeks = useMemo(() => {
+    //     const pastWeeks = allAttendance;
+    //     return (
+    //         <>
+    //             {!loading && pastWeeks.length > 0 && (
+    //                 <>
+    //                     {pastWeeks.map((week, index) => (
+    //                         <option className='' key={index} value={week.id}>
+    //                             {moment().week(week.week).startOf('week').format('Do MMM YYYY')} - {moment().week(week.week).endOf('week').format('Do MMM YYYY')} {' '}
+    //                         </option>
+    //                     ))}
+    //                 </>
+    //             )}
 
-            </>
-        )
-    }, [allAttendance, loading]);
+    //         </>
+    //     )
+    // }, [allAttendance, loading]);
 
-    const setCurrentWeek = useCallback((id) => {
-        setTimeSheetId(id);
-        const currentTimesheetById = allAttendance.filter(attendance => attendance.id === id);
-        const currentTimesheet = currentTimesheetById[0];
-        const timeSheet = currentTimesheet.timeSheet[0];
-        setTimeSheetStatus(currentTimesheetById[0].status);
-        setFormFunction(currentTimesheet, timeSheet);
-    }, [allAttendance, setFormFunction]);
+    // const setCurrentWeek = useCallback((id) => {
+    //     setTimeSheetId(id);
+    //     const currentTimesheetById = allAttendance.filter(attendance => attendance.id === id);
+    //     const currentTimesheet = currentTimesheetById[0];
+    //     const timeSheet = currentTimesheet.timeSheet[0];
+    //     setTimeSheetStatus(currentTimesheetById[0].status);
+    //     setFormFunction(currentTimesheet, timeSheet);
+    // }, [allAttendance, setFormFunction]);
 
-    const resetDate = useCallback(() => {
-        const latestTimesheet = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
-        setTimeSheetId(latestTimesheet[0].id);
-        console.log(latestTimesheet[0].id);
-        const timeSheet = latestTimesheet[0].timeSheet[0];
-        setFormFunction(null, timeSheet);
-    }, [allAttendance, formState.week, formState.year, setFormFunction]);
+    // const resetDate = useCallback(() => {
+    //     const latestTimesheet = allAttendance.filter(attendance => attendance.week === formState.week && attendance.year === formState.year);
+    //     setTimeSheetId(latestTimesheet[0].id);
+    //     console.log(latestTimesheet[0].id);
+    //     const timeSheet = latestTimesheet[0].timeSheet[0];
+    //     setFormFunction(null, timeSheet);
+    // }, [allAttendance, formState.week, formState.year, setFormFunction]);
 
-    if (!featureEnabled && !loading) {
+    if (featureEnabled && !loading) {
         return <FeatureNotAvailable />
     }
 
     console.log('time', timeEntries)
+
+    const s = new Date().getTime();
+    console.log(s); // This will log the current timestamp, e.g., 1665568669407
+
 
 
     return (
@@ -502,8 +521,8 @@ function Timesheet(props) {
                                                                 </tr>
                                                                 {groupedTimeEntries[day].map((entry, index) => (
                                                                     <tr key={index}>
-                                                                        <td> <small className="float-left badge badge-primary">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
-                                                                        <td>{entry.type}</td>
+                                                                        <td> <small className="float-left">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
+                                                                        <td style={{textTransform: 'uppercase'}}>{entry.type}</td>
                                                                     </tr>
                                                                 ))}
                                                             </React.Fragment>
