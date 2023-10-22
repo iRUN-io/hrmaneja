@@ -73,6 +73,10 @@ function Employee(props) {
     bank_code: ""
   });
 
+  const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
+
 
   const createEmployeeAction = async () => {
     try {

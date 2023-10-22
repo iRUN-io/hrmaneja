@@ -42,6 +42,9 @@ function Expense(props) {
 		department: '',
 	});
 
+	const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
 
 	const history = useHistory();
 

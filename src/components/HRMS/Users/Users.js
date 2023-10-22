@@ -31,7 +31,9 @@ const Users = (navStatus) => {
 		password: '',
 		confirmPassword: '',
 	});
+	const isAdmin = currentUser?.role === "HR Manager";
 
+	if(!isAdmin){window.location.href = '/'}
 	
 	const history = useHistory();
 	const createUsersAction = async () => {

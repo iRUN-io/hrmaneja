@@ -20,6 +20,9 @@ const Settings = () => {
 		async function fetchData() {
 			setLoading(true);
 			const userData = await getUser(id);
+			const isAdmin = userData.role === "HR Manager";
+
+			if(!isAdmin){window.location.href = '/'}
 			const companyData = await getCompanyData();
 			const company_id = userData.company_id;
 			const totalDepartmentsResponse = await totalDepartments(company_id);

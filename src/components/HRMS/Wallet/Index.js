@@ -30,6 +30,10 @@ const Wallet = () => {
 
     const id = window.location.pathname.split('/')[3];
 
+    const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
+
     const history = useHistory();
     useEffect(() => {
         async function fetchData() {

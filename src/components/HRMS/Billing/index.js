@@ -20,6 +20,8 @@ const Billing = () => {
 
 	const history = useHistory();
 
+	if(!isAdmin){window.location.href = '/'}
+
 	useEffect(() => {
 
 		async function fetchData() {

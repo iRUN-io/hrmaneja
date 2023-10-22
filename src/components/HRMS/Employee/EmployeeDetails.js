@@ -31,6 +31,10 @@ const EmployeeDetails = (employee) => {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
+            const isAdmin = user?.role === "HR Manager";
+
+	        if(!isAdmin){window.location.href = '/'}
+            
             if (user) {
                 // const company_id = user.company_id;
                 const response = await getActivity(employeeData.id);

@@ -34,6 +34,10 @@ const Leave = () => {
         notifyEmployee: '',
         leaveReason: '',
     });
+
+    const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
     
     useEffect(() => {
         const user = getUser();

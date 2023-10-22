@@ -33,6 +33,10 @@ const Department = () => {
         allEmployee: '',
     });
 
+    const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
+
 
     const createDepartmentAction = async () => {
         if (!featureEnabled) {
