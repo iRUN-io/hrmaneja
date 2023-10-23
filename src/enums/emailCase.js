@@ -3,6 +3,7 @@ export const emailCase = {
     userCreation:       'userCreation',
     passwordReset:      'passwordReset',
     deleteUser:         'deleteUser',
+    updateUser:         'updateUser',
     createDepartment:   'createDepartment',
     updateDepartment:   'updateDepartment',
     deleteDepartment:   'deleteDepartment',

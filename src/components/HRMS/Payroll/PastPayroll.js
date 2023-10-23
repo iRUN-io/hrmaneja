@@ -16,7 +16,7 @@ function PastPayroll(props) {
 	const { fixNavbar } = props;
 	// const [employees, setEmployees] = useState([]);
 	const [featureEnabled, setFeatureEnabled] = useState(false); // 
-	const [, setUser] = useState({});
+	const [user, setUser] = useState({});
 	const [payrolls, setPayrolls] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [searchPayroll, setSearchPayroll] = useState('');
@@ -31,6 +31,8 @@ function PastPayroll(props) {
 			const user = await getUser();
 			if (user) {
 				// const userId = user.id;
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				// const userResponse = await getAllUsers(userId);
 				const companyData = await getCompanyData();
         		companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);

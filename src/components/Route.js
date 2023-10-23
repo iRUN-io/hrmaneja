@@ -59,7 +59,7 @@ import AppCalendar from './AppPages/AppCalendar';
 // import AppFilemanager from './AppPages/AppFilemanager';
 // import AppSetting from './AppPages/AppSetting';
 // import Maps from './Maps/Maps';
-// import Gallery from './Gallery/Gallery';
+import Gallery from './Gallery/Gallery';
 // import Login from './Authentication/login';
 // import Signup from './Authentication/signup';
 // import ForgotPassword from './Authentication/forgotPassword';
@@ -84,6 +84,7 @@ import EmailConfirmation from './Authentication/emailConfirmation';
 import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
 import Airtime from './HRMS/BillPayments/Airtime';
 import Wallet from './HRMS/Wallet/Index';
+import EmailResponse from './HRMS/EmailResponse';
 import Documents from './HRMS/Documents/Document';
 import ManageDocument from './HRMS/Documents/ManageDocument';
 
@@ -125,19 +126,18 @@ const Routes = [
         component: Events
     },
     
-    
 
     // Admin 
     isAdmin && {
         path: "/admin/hr-users",
         name: 'hr-users',
         exact: true,
-        pageTitle: "Users",
-        component: Users
+        pageTitle: "My Requisition",
+        component: MyExpense
     },
-    isAdmin && {
-        path: "/admin/hr-departments",
-        name: 'departments',
+    {
+        path: "/my-timesheet",
+        name: 'myTimesheet',
         exact: true,
         pageTitle: "Departments",
         component: Departments
@@ -263,16 +263,16 @@ const Routes = [
     },
     isAdmin && {
         path: "/admin/hr-documents",
-        name: 'hr-documents',
+        name: 'documents',
         exact: true,
-        pageTitle: "Company Features",
+        pageTitle: "Documents",
         component: Documents
     },
     isAdmin && {
         path: "/admin/managedocument/:id",
         name: 'managedocument',
         exact: true,
-        pageTitle: "Manage Document",
+        pageTitle: "ManageDocument",
         component: ManageDocument
     },
     // add new routes here
@@ -451,27 +451,13 @@ const Routes = [
         pageTitle: "Payroll Status",
         component: PayrollStatus
     },
-    
-     {
-        path: "/my-requisition",
-        name: 'my-requisition',
-        exact: true,
-        pageTitle: "My Requisition",
-        component: MyExpense
-    },
+
     {
-        path: "/my-timesheet",
-        name: 'my-timesheet',
+        path: "/email-response",
+        name: 'email-response',
         exact: true,
-        pageTitle: "My Timesheet",
-        component: MyTimesheet
-    },
-    {
-        path: "/admin/hr-features",
-        name: 'hr-features',
-        exact: true,
-        pageTitle: "Company Features",
-        component: Features
+        pageTitle: "Email Response Generator",
+        component: EmailResponse
     },
     // {
     //     path: "/internalserver",
@@ -714,13 +700,155 @@ const Routes = [
     //     pageTitle: "Vector Maps",
     //     component: Maps
     // },
-    // {
-    //     path: "/gallery",
-    //     name: 'gallery',
-    //     exact: true,
-    //     pageTitle: "Image Gallery",
-    //     component: Gallery
-    // },
+    {
+        path: "/gallery",
+        name: 'gallery',
+        exact: true,
+        pageTitle: "Image Gallery",
+        component: Gallery
+    },
+    
+    // Admin 
+    {
+        path: "/admin/hr-users",
+        name: 'hr-users',
+        exact: true,
+        pageTitle: "Users",
+        component: Users
+    },
+    {
+        path: "/admin/hr-departments",
+        name: 'departments',
+        exact: true,
+        pageTitle: "Departments",
+        component: Departments
+    },
+    {
+        path: "/admin/hr-employees",
+        name: 'employees',
+        exact: true,
+        pageTitle: "Employee",
+        component: Employee
+    },
+    {
+        path: "/admin/hr-leaves",
+        name: 'leaves',
+        exact: true,
+        pageTitle: "Leaves",
+        component: Leave
+    },
+    {
+        path: "/admin/hr-employee-details",
+        name: 'employee',
+        exact: true,
+        pageTitle: "Employee Details",
+        component: EmployeeDetails
+    },
+    {
+        path: "/admin/hr-activities",
+        name: 'activities',
+        exact: true,
+        pageTitle: "Activities",
+        component: Activities
+    },
+
+    {
+        path: "/admin/hr-requisition",
+        name: 'expense',
+        exact: true,
+        pageTitle: "Requisition",
+        component: Expense
+    },
+    {
+        path: "/admin/hr-payroll",
+        name: 'payroll',
+        exact: true,
+        pageTitle: "Payroll",
+        component: Payroll
+    }, 
+
+    {
+        path: "/admin/hr-past-payroll",
+        name: 'past-payroll',
+        exact: true,
+        pageTitle: "Payroll",
+        component: PastPayroll
+    }, 
+
+    {
+        path: "/admin/hr-initiate-payroll",
+        name: 'initiate-payroll',
+        exact: true,
+        pageTitle: "Run Payroll",
+        component: PayrollStats
+    },
+
+    {
+        path: "/admin/hr-accounts",
+        name: 'accounts',
+        exact: true,
+        pageTitle: "Accounts",
+        component: Accounts
+    },
+    {
+        path: "/admin/hr-report",
+        name: 'report',
+        exact: true,
+        pageTitle: "Report",
+        component: Report
+    },
+    {
+        path: "/admin/hr-excel",
+        name: 'excel',
+        exact: true,
+        pageTitle: "Excel",
+        component: Excel
+    },
+
+    {
+        path: "/admin/billing",
+        name: 'billing',
+        exact: true,
+        pageTitle: "Billing",
+        component: Billing // update this component
+    },
+    {
+        path: "/admin/billing-receipt/:id",
+        name: 'billing receipt',
+        exact: true,
+        pageTitle: "Billing",
+        component: BillingSlip // update this component
+    },
+
+    
+    {
+        path: "/admin/settings",
+        name: 'settings',
+        exact: true,
+        pageTitle: "Settings",
+        component: Settings
+    },
+    {
+        path: "/admin/hr-airtime",
+        name: 'airtime',
+        exact: true,
+        pageTitle: "Airtime",
+        component: Airtime
+    },
+    {
+        path: "/admin/hr-wallet",
+        name: 'wallet',
+        exact: true,
+        pageTitle: "Wallet",
+        component: Wallet
+    },
+    {
+        path: "/admin/hr-features",
+        name: 'hr-features',
+        exact: true,
+        pageTitle: "Company Features",
+        component: Features
+    },
 ];
 
 export default Routes;

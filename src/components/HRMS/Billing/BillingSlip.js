@@ -19,11 +19,14 @@ function BillingSlip(props) {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
     const comingSoon = false;
+	
+    
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
             if (user) {
+                
                 const billingResponse = await getBilling(id);
                 setBilling(billingResponse);
                 setLoading(false);
@@ -68,7 +71,7 @@ function BillingSlip(props) {
                                             <div className="card-body">
                                                 <div className="media mb-4">
                                                     <div className="mr-3">
-                                                    <i className="fa fa-user-circle-o fa-5x" style={{color: "#999"}} aria-hidden="true"></i>
+                                                        <i className="fa fa-user-circle-o fa-5x" style={{ color: "#999" }} aria-hidden="true"></i>
                                                     </div>
                                                     <div className="media-body">
                                                         <div className="content">
@@ -77,7 +80,7 @@ function BillingSlip(props) {
                                                             </span>
                                                             <p className="h5">
                                                                 {billing.employee}{' '}
-                                                               
+
                                                                 <small className="float-right badge badge-primary">
                                                                     {moment(billing.createdAt).format('MMM Do YYYY')}
                                                                 </small>
@@ -145,7 +148,7 @@ function BillingSlip(props) {
                                                     </table>
                                                     {billing.employee_id !== user.employee_id && (
                                                         <>
-                                                    {(billing.status === 'pending' || billing.status === 'approve') && (
+                                                            {(billing.status === 'pending' || billing.status === 'approve') && (
                                                                 <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                     overlay={
                                                                         <Popover id="popover-basic">
@@ -158,9 +161,9 @@ function BillingSlip(props) {
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }>
-                                                                          <button type="button" style={{marginRight: '10px'}} className="btn btn-info js-sweetalert" title="Approve" data-type="confirm">
-                                                                            <i className="icon-close" /> Reject
-                                                                        </button>
+                                                                    <button type="button" style={{ marginRight: '10px' }} className="btn btn-info js-sweetalert" title="Approve" data-type="confirm">
+                                                                        <i className="icon-close" /> Reject
+                                                                    </button>
 
                                                                 </OverlayTrigger>
                                                             )}
@@ -177,14 +180,14 @@ function BillingSlip(props) {
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }>
-                                                                        <button type="button" className="btn btn-success btn-hrmaneja-success js-sweetalert" title="Approve" data-type="confirm">
-                                                                            <i className="icon-check" /> Approve
-                                                                        </button>
+                                                                    <button type="button" className="btn btn-success btn-hrmaneja-success js-sweetalert" title="Approve" data-type="confirm">
+                                                                        <i className="icon-check" /> Approve
+                                                                    </button>
 
                                                                 </OverlayTrigger>
                                                             )}
-                                                            </>
-                                                            )}
+                                                        </>
+                                                    )}
                                                     {/* <button className="btn btn-info float-right">
                                                         <i className="icon-printer" /> Print
                                                     </button> */}

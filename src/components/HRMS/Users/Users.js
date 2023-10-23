@@ -14,7 +14,7 @@ import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 
 const Users = (navStatus) => {
-	const [currentUser, setCurrentUser] = useState([]);
+	const [currentUser, setCurrentUser] = useState({});
 	const [userData, setUserData] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [employees, setEmployees] = useState([]);
@@ -32,8 +32,6 @@ const Users = (navStatus) => {
 		confirmPassword: '',
 	});
 
-	
-	const history = useHistory();
 	const createUsersAction = async () => {
 		try {
 			setFormState({ ...formState });
@@ -159,6 +157,8 @@ const Users = (navStatus) => {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				const company_id = user.company_id;
 				const response = await getAllUsers(company_id);
 				const employeeResponse = await getAllEmployees(company_id);
@@ -404,8 +404,8 @@ const Users = (navStatus) => {
 												>
 													<option>Select Role Type</option>
 													<option value={'HR Manager'}>Hr Manager</option>
-													<option value={'Super Admin'}>Super Admin</option>
-													<option value={'Admin'}>Admin</option>
+													{/* <option value={'Super Admin'}>Super Admin</option>
+													<option value={'Admin'}>Admin</option> */}
 													<option value={'Employee'}>Employee</option>
 												</select>
 											</div>

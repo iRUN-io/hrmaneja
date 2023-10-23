@@ -33,6 +33,10 @@ function Payroll(props) {
 	const comingSoon = false;
 	const history = useHistory();
 
+	const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
+	
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);

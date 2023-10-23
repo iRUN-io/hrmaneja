@@ -359,14 +359,13 @@ class Subscribe extends React.Component {
                     <p>Account Name: <strong>Irun Technology LTD</strong></p>
                     <p>Account Number: <strong>0123555629</strong></p>
                     <p>Bank: <strong>Wema Bank</strong></p>
-                    <p>Amount: <strong>{formatMoney(this.state.amount * 750)}</strong></p>
+                    <p>Amount: <strong>{formatMoney(this.state.amount * 900)}</strong></p>
                     <p>After payment, create a support ticket with payment details.</p>
                     <p>Click <a href="/support">here</a> to create a support ticket.</p>
                     <p>Thank you</p>
                   </div>
                 </div>
               </div>
-              {/* <EditLeaves leave={leave} /> */}
             </div>
           </div>
         </div></>

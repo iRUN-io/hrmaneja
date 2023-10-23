@@ -100,6 +100,13 @@ const EditDepartment = (departmentData) => {
 		return <FeatureNotAvailable />
 	}
 
+    const getDepartmentHead = (departmentHeadId) => {
+        const departmentHead = users.find(user => user.id === departmentHeadId);
+        if (departmentHead) {
+            return departmentHead.name;
+        }
+        return 'No department head';
+    }
 
     return (
         <>
@@ -117,7 +124,7 @@ const EditDepartment = (departmentData) => {
                             <div className="form-group">
                                 <select name='departmentHead' value={formState?.departmentHead}
                                     onChange={updateForm} required className="form-control show-tick ms select2" data-placeholder="Select">
-                                    <option selected value={formState?.departmentHead}>{formState?.departmentHead}</option>
+                                    <option selected value={formState?.departmentHead}>{getDepartmentHead(formState?.departmentHead)}</option>
                                     {users.map((user) => (
                                             <option key={user.id} value={user.id}>{user.name}</option>
                                     ))}

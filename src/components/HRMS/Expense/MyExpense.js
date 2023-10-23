@@ -38,6 +38,33 @@ function Expense(props) {
 		department: '',
 	});
 
+	
+
+	useEffect(() => {
+		async function fetchData() {
+			setLoading(true);
+			const user = getUser();
+			if (user) {
+				const companyData = await getCompanyData();
+				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+				const employeeRecord = await getEmployee(user.employee_id);
+				const allRequisition = await getEmployeeRequisition(user.employee_id);
+				setRequisitions(allRequisition);
+				setFormState({
+					...formState,
+					employeeId: employeeRecord.id,
+					employeeName: employeeRecord.name,
+					notifyEmployee: employeeRecord.line_manager,
+					department: employeeRecord.department
+				});
+				setLoading(false);
+				setUser(user);
+
+			}
+		}
+		fetchData();
+	}, []);
+
 	const makeRequisition = async () => {
 		if (!featureEnabled) {
             toast.error('Feature not enabled');
@@ -104,31 +131,6 @@ function Expense(props) {
 			setFormState({ ...formState });
 		}
 	};
-
-	useEffect(() => {
-		async function fetchData() {
-			setLoading(true);
-			const user = getUser();
-			if (user) {
-				const companyData = await getCompanyData();
-				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
-				const employeeRecord = await getEmployee(user.employee_id);
-				const allRequisition = await getEmployeeRequisition(user.employee_id);
-				setRequisitions(allRequisition);
-				setFormState({
-					...formState,
-					employeeId: employeeRecord.id,
-					employeeName: employeeRecord.name,
-					notifyEmployee: employeeRecord.line_manager,
-					department: employeeRecord.department
-				});
-				setLoading(false);
-				setUser(user);
-
-			}
-		}
-		fetchData();
-	}, []);
 
 	const updateForm = (e) => {
 		const { value, name } = e.target;

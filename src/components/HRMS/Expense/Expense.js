@@ -117,6 +117,8 @@ function Expense(props) {
 			setLoading(true);
 			const user = getUser();
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				const companyData = await getCompanyData();
 				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const employeeRecord = await getEmployee(user.employee_id);
@@ -264,6 +266,7 @@ function Expense(props) {
 	if (!featureEnabled && !loading) {
 		return <FeatureNotAvailable />
 	}
+
 
 	return (
 		<>

@@ -6,7 +6,7 @@ import { getCompanyData, getUser } from '../../../config/common';
 import { emailCase } from '../../../enums/emailCase';
 import { createActivity } from '../../../services/activities';
 import { getAllDepartments } from '../../../services/department';
-import { createJob, deleteJob, getAllJobs } from '../../../services/job';
+import { createJob, deleteJob, getAllJobs, updateJob } from '../../../services/job';
 import { sendEmail } from '../../../services/mail/sendMail';
 import Country from '../../common/country';
 import FeatureNotAvailable from '../../common/featureDisabled';
@@ -16,6 +16,7 @@ import EmptyState from '../../EmptyState';
 const Positions = () => {
     const [featureEnabled, setFeatureEnabled] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [copied, setCopied] = useState(false);
 	const [jobs, setJobs] = useState([]);
     const [user, setUser] = useState([]);
 	const [departments, setDepartments] = useState([]);
@@ -79,18 +80,6 @@ const Positions = () => {
 
             }
 
-            // setFormState({
-            //  title: '',
-			// 	department: '',
-			// 	location: '',
-			// 	aboutCompany: '',
-			// 	aboutRole: '',
-			// 	responsibilities: '',
-			// 	requirements: '',
-			// 	benefits: '',
-			// 	totalSalary: '',
-			// 	jobType: '',
-            // });
         } catch (err) {
             toast.error("Error, try again");
             setFormState({ ...formState });
@@ -153,6 +142,44 @@ const Positions = () => {
 		}
 	}
 
+	const updateStatus = async (id) => {
+		const body = {
+			status: 'inactive',
+		}
+		const response = await updateJob(body, id);
+		if (response) {
+			const logJob = await createActivity(
+				{
+					name: 'Updated Job Status',
+					employee_id: user.employee_id,
+					activity: `${user.name} updated a job status`,
+					activity_name: 'Update',
+					user: user.name,
+					company_id: user.company_id,
+				}
+			)
+
+			if (logJob.id) {
+				// sendEmail(user.emailAddress, user.name, emailCase.deleteJob);
+				const updatedJobs = jobs.map((job) => {
+					if (job.id === id) {
+					  return { ...job, status: 'inactive' };
+					} else {
+					  return job;
+					}
+				  });
+				  setJobs(updatedJobs);
+				toast.success("Job status updated successfully");
+			}
+		}
+	}
+
+	const copyToClipboard = (id) => {
+		const text = `https://app.hrmaneja.com/jd/${companyData.id}/${id}`;
+		navigator.clipboard.writeText(text);
+		setCopied(true);
+	  }
+
 		return (
 			<>
 				<div className='section-body mt-3'>
@@ -175,61 +202,14 @@ const Positions = () => {
 					<div className="container-fluid">
 						<div className="row clearfix">
 							<div className="col-12">
-								{/* <div className="card">
-									<div className="card-body">
-										<div className="row">
-											<div className="col-lg-3 col-md-5 col-sm-6">
-												<label>TYPE</label>
-												<div className="multiselect_div">
-													<select className="custom-select">
-														<option>None Selected</option>
-														<option value={1}>Part Time</option>
-														<option value={2}>Full Time</option>
-														<option value={3}>All Type</option>
-													</select>
-
-												</div>
-											</div>
-											<div className="col-lg-3 col-md-5 col-sm-6">
-												<label>Category</label>
-												<div className="form-group">
-													<select className="custom-select">
-														<option>Designer</option>
-														<option value={1}>Project Manager</option>
-														<option value={2}>Senior Developer</option>
-														<option value={3}>Front-end Developer</option>
-													</select>
-												</div>
-											</div>
-											<div className="col-lg-3 col-md-5 col-sm-6">
-												<label>Salary</label>
-												<div className="input-group">
-													<input
-														type="text"
-														className="form-control"
-														placeholder="Salary"
-													/>
-												</div>
-											</div>
-											<div className="col-lg-3 col-md-5 col-sm-6">
-												<label>Search</label>
-												<div className="input-group">
-													<input
-														type="text"
-														className="form-control"
-														placeholder="Search..."
-													/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div> */}
+								
 								{jobs.length === 0 ? (
 								<EmptyState />
 								) : (
 								<div className="table-responsive card">
 									<table className="card-body table table-hover table-vcenter table_custom text-nowrap spacing5 mb-0">
 										<tbody>
+										{copied && <small className='text-center' style={{ color: 'green', marginBottom: '10px' }}>Link Copied!</small>}
 											{jobs.map((job, index) => (
 											<tr key={index}>
 												<td className="w60">
@@ -245,12 +225,16 @@ const Positions = () => {
 													<div className="font-15">{job.jobTitle}</div>
 													<span className="text-muted">{job.department}</span>
 												</td>
+
+												<td>
+													<button onClick={() => copyToClipboard(job.id)} className="btn btn-outline-primary btn-sm btn-block btn-apply">copy link</button></td>
+
 												<td>
 													<span className="tag tag-info">{job.jobType ?? 'dhhd'}</span>
 												</td>
-												<td>
-													Applicants: <strong>{job.applicants ?? 0}</strong>
-												</td>
+												{/* <td>
+													Applicants: <strong>{job.applicants/2 ?? 0}</strong>
+												</td> */}
 												<td>
 													<span>{job.location}</span>
 												</td>
@@ -264,6 +248,7 @@ const Positions = () => {
 														</a>
 														<div className="dropdown-menu dropdown-menu-right">
 															<button onClick={()=> seeApplicants(job.id) } className="dropdown-item"> <i className="fa fa-eye" /> View</button>
+															<button onClick={()=> updateStatus(job.id) } className="dropdown-item"> <i className="fa fa-eye" /> Update</button>
 															<button onClick={() => removeJob(job.id)} className="dropdown-item"> <i className="fa fa-trash" /> Delete</button>
 														</div>
 													</div>

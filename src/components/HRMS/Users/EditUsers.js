@@ -15,13 +15,15 @@ const EditUsers = (userData) => {
         employeeID: '',
         email: '',
         phone: '',
-        roleType: '',
+        role: '',
         userName: '',
         password: '',
         confirmPassword: '',
     });
 
     const user = userData.user;
+
+    console.log('user', user)
 
     const editUsersAction = async () => {
         try {
@@ -32,7 +34,7 @@ const EditUsers = (userData) => {
                 name: formState.name,
                 email: formState.email,
                 phone: formState.phone,
-                roleType: formState.roleType,
+                role: formState.role,
                 userName: formState.userName,
                 password: formState.password,
                 confirmPassword: formState.confirmPassword,
@@ -58,7 +60,7 @@ const EditUsers = (userData) => {
                     }
                 )
                 if (logActivity.id) {
-                    sendEmail(user.emailAddress, user.name, emailCase.updateUser);
+                    // sendEmail(user.emailAddress, user.name, emailCase.updateUser);
                     toast.success("User updated successfully");
 
                 }
@@ -156,13 +158,14 @@ const EditUsers = (userData) => {
                                 <div className="col-lg-12 col-md-12 col-sm-12">
                                     <div className="form-group">
                                         <select className="form-control show-tick"
-                                            name='roleType' value={formState?.roleType}
+                                            name='role' value={formState?.role}
                                             onChange={updateForm}
                                         >
                                             <option>Select Role Type</option>
-                                            <option>Super Admin</option>
-                                            <option>Admin</option>
-                                            <option>Employee</option>
+                                            <option value={'HR Manager'}>Hr Manager</option>
+													{/* <option value={'Super Admin'}>Super Admin</option>
+													<option value={'Admin'}>Admin</option> */}
+													<option value={'Employee'}>Employee</option>
                                         </select>
                                     </div>
                                 </div>

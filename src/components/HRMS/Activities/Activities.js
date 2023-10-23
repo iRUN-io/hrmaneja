@@ -13,12 +13,18 @@ const Activities = () => {
 	const [loading, setLoading] = useState(false);
 	const [featureEnabled, setFeatureEnabled] = useState(false);
 
+	
 	useEffect(() => {
 
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
+			
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+
+				if(!isAdmin){window.location.href = '/'}
+				
 				const company_id = user.company_id;
 				const response = await getAllActivities(company_id);
 				const companyData = await getCompanyData();

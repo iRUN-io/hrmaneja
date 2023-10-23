@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {  getBillingData, getUser } from "../../../config/common";
+import { formatMoney, getBillingData, getUser } from "../../../config/common";
 
 import { getAllBillings } from '../../../services/billing';
 import ComingSoon from '../../common/comingSoon';
@@ -19,13 +19,15 @@ const Billing = () => {
 	const comingSoon = false;
 
 	const history = useHistory();
-	
+
 	useEffect(() => {
 
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				const company_id = user.company_id;
 				const response = await getAllBillings(company_id);
 				const billingExist = await getBillingData();
@@ -36,7 +38,7 @@ const Billing = () => {
 		}
 		fetchData();
 	}, []);
-	
+
 
 	if (loading) {
 		return <Loader />
@@ -79,68 +81,68 @@ const Billing = () => {
 										</div>
 									</div>
 								</div>
-								
-								
+
+
 								<div className="row clearfix">
-										<div className="card disabled-card">
-											<div className="row">
-												<div className="col-6">
-													<div className="">
-														<div className="card-body">
-															
-															<p></p>
-															<h3>---- Bank</h3>
-															<h5>------ Name</h5>
-															<h5>$ 0.00</h5>
-															<div className='upgrade-button'>
-																<button className="btn btn-default text-white card-blue btn-sm">Fund Account</button>
-															</div>
+									{/* <div className="card disabled-card">
+										<div className="row">
+											<div className="col-6">
+												<div className="">
+													<div className="card-body">
+
+														<p></p>
+														<h3>---- Bank</h3>
+														<h5>------ Name</h5>
+														<h5>$ 0.00</h5>
+														<div className='upgrade-button'>
+															<button className="btn btn-default text-white card-blue btn-sm">Fund Account</button>
 														</div>
 													</div>
 												</div>
-												<div className="col-6 wallet-card">
+											</div>
+											<div className="col-6 wallet-card">
 
-												</div>
 											</div>
 										</div>
-											
-										<div  className="card card-blue col-md-6 col-xl-6">
-											<div className="card-body">
-													<div className='card-icon card-icon-white' style={{ float: 'right' }}>
-														<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
-													</div>
-													<p></p>
-													<h3>${billings[0].amount}</h3>
-													<h5>{billings[0].plan}</h5>
-													<div className='upgrade-button'>
-														<button className="btn btn-default disabled btn-sm">Upgrade</button>
-													</div>
-											</div>
-										</div>
+									</div> */}
 
-										<div className="card next-plan-card  more-cards card-white col-lg-6 col-md-6 col-xl-6">
+									<div className="card card-blue col-md-6 col-xl-6">
 										<div className="card-body">
-												<div className='card-icon card-icon-white' style={{ float: 'right' }}>
-													<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
-												</div>
-												<p>Next Payment</p>
-												<h3>${billings[0].amount}</h3>
-												<h5>on {getNextBillingDate()}</h5>
-												<div className='upgrade-button'>
-													<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
-												</div>
+											<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+												<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
+											</div>
+											<p></p>
+											<h3>{formatMoney(billings[0].amount)}</h3>
+											<h5>{billings[0].plan}</h5>
+											<div className='upgrade-button'>
+												<button className="btn btn-default disabled btn-sm">Upgrade</button>
+											</div>
 										</div>
+									</div>
+
+									<div className="card next-plan-card  more-cards card-white col-lg-6 col-md-6 col-xl-6">
+										<div className="card-body">
+											<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+												<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
+											</div>
+											<p>Next Payment</p>
+											<h3>{formatMoney(billings[0].amount)}</h3>
+											<h5>on {getNextBillingDate()}</h5>
+											<div className='upgrade-button'>
+												<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
+											</div>
 										</div>
+									</div>
 
-										
 
-										{/* test table */}
-										<div className="card table-card">
-											<div className="row">
-												
+
+									{/* test table */}
+									<div className="card table-card">
+										<div className="row">
+
 											<div className=' col-12'>
-											
-											<div className='card-header'>Transaction history</div>
+
+												<div className='card-header'>Transaction history</div>
 												<div className="card-body">
 													<div className="table-responsive">
 														<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
@@ -163,7 +165,7 @@ const Billing = () => {
 																		{/* <td>{billing.paidBy}</td> */}
 																		<td>{billing.status}</td>
 																		<td>
-																			<button 
+																			<button
 																				type="button"
 																				className="btn btn-icon "
 																				title="Print"
@@ -171,13 +173,13 @@ const Billing = () => {
 																				data-placement="top"
 																				onClick={() => viewBilling(billing.id)}
 																			>
-																			<i className="icon-printer" />
+																				<i className="icon-printer" />
 
 																			</button>
 																		</td>
 																	</tr>
 																))}
-																
+
 															</tbody>
 														</table>
 													</div>
@@ -226,14 +228,14 @@ const Billing = () => {
 													</div>
 												</div>
 											</div> */}
-											
-																								
 
-											</div>
+
+
 										</div>
-									
-									
-									
+									</div>
+
+
+
 								</div>
 							</div>
 						</>

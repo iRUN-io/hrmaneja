@@ -29,6 +29,10 @@ const Airtime = () => {
         amount: '',
         phoneNumber: '',
     });
+
+    const isAdmin = user?.role === "HR Manager";
+
+	if(!isAdmin){window.location.href = '/'}
     
     useEffect(() => {
         const user = getUser();
@@ -188,7 +192,7 @@ const Airtime = () => {
         pageNumbers.push(i);
     }
 
-    if (!featureEnabled && !loading ) {
+    if (featureEnabled && !loading ) { // remove this when ready
 		return <FeatureNotAvailable />
 	}
 

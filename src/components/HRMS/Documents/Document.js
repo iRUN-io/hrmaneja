@@ -4,9 +4,12 @@ import EmptyState from '../../EmptyState';
 import { Link, useHistory } from 'react-router-dom';
 import Skeleton from 'react-loading-skeleton';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
-import { getUser } from '../../../config/common';
+import { getUser, formatDate } from '../../../config/common';
 import { getAllUsers } from '../../../services/user';
 import { getAllEmployees } from '../../../services/employee';
+import { createActivity } from '../../../services/activities';
+import { deleteUser } from '../../../services/user';
+import { sendEmail } from '../../../services/mail/sendMail';
 
 
 const Documents = () => {
@@ -23,21 +26,7 @@ const Documents = () => {
 	const history = useHistory();
 
 
-	const updateForm = (e) => {
-		const { value, name } = e.target;
-		if (name === 'employeeID') {
-			const userExists = users.find(user => user.employee_id === value);
-			if (userExists) {
-				toast.error('User already created for selected employee');
-				return;
-			}
-		}
-		setFormState({
-			...formState,
-			[name]: value,
-		})
-		console.log({ [name]: value })
-	}
+	
 
 	const removeUser = async (userId) => {
 		try {
@@ -58,7 +47,7 @@ const Documents = () => {
 				)
 
 				if (logUser.id) {
-					sendEmail(currentUser.emailAddress, currentUser.name, emailCase.deleteUser);
+					sendEmail(currentUser.emailAddress, currentUser.name);
 					setUsers(newUsers);
 					toast.info(response.message);
 				}
@@ -66,7 +55,7 @@ const Documents = () => {
 
 		} catch (err) {
 			toast.error("Error, try again");
-			setFormState({ ...formState });
+			// setFormState({ ...formState });
 
 		};
 
@@ -115,9 +104,9 @@ const Documents = () => {
 									</Link>
 								</li>
 							</ul>
-							<div className="header-action">
+							{/* <div className="header-action">
 								<button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal"><i className="fe fe-plus mr-2" />Add</button>
-							</div>
+							</div> */}
 						</div>
 					</div>
 				</div>
@@ -193,15 +182,15 @@ const Documents = () => {
 
 																		{user.id !== currentUser.id ? (
 																			<td>
-																				<button
+																				<Link to="/admin/managedocument/:id"><button
 																					data-toggle="modal" data-target="#editModal"
 																					type="button"
 																					className="btn btn-icon"
 																					title="Edit"
-																					onClick={() => setUserData(user)}
 																				>
 																					<i className="fa fa-edit" />
-																				</button>
+																				</button></Link>
+																				
 																				<OverlayTrigger trigger="focus" placement="bottom" delay={1}
 																					overlay={
 																						<Popover id="popover-basic">

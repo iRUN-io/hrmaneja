@@ -237,7 +237,9 @@ function Profile(props) {
                                         <li className="nav-item">
                                             <a className="nav-link" id="pills-password-tab" data-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">Change Password</a>
                                         </li>
-
+                                        <li className="nav-item">
+                                            <a className="nav-link" id="pills-document-tab" data-toggle="pill" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="false">Upload Document</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div className="col-lg-8 col-md-12">
@@ -507,7 +509,7 @@ function Profile(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="tab-pane fade" id="pills-password" role="tabpanel" aria-labelledby="pills-password-tab">
+                                        <div className="tab-pane fade" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab">
                                             <div className="card">
                                                 <div className="card-header">
                                                     <h3 className="card-title">Upload Document</h3>
@@ -517,9 +519,9 @@ function Profile(props) {
                                                         <div className="col-sm-6 col-md-6">
                                                             <div className="form-group">
                                                                 <label className="form-label">Document Name</label>
-                                                                <input type="password" className="form-control" placeholder=""
-                                                                    name='currentPassword'
-                                                                    id='currentPassword'
+                                                                <input type="text" className="form-control" placeholder=""
+                                                                    name='documentName'
+                                                                    id='documentName'
                                                                     value={formState?.documentName}
                                                                     onChange={updateForm}
 
@@ -531,8 +533,8 @@ function Profile(props) {
                                                                 <label className="form-label">Document</label>
                                                                 <input type="file" className="form-control"
                                                                     placeholder=""
-                                                                    name='newPassword'
-                                                                    id='newPassword'
+                                                                    name='selectedFile'
+                                                                    id='selectedFile'
                                                                     value={formState?.selectedFile}
                                                                     onChange={updateForm}
 

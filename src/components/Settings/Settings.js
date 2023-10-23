@@ -20,6 +20,9 @@ const Settings = () => {
 		async function fetchData() {
 			setLoading(true);
 			const userData = await getUser(id);
+			const isAdmin = userData.role === "HR Manager";
+
+			if(!isAdmin){window.location.href = '/'}
 			const companyData = await getCompanyData();
 			const company_id = userData.company_id;
 			const totalDepartmentsResponse = await totalDepartments(company_id);
@@ -73,7 +76,7 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box orange">{features?.user && company.totalUsers}</div>
-												<Link to={`${features?.user ? '/hr-features' : '#'}`} className="my_sort_cut text-muted">
+												<Link to={`${features?.user ? '/admin/hr-users' : '#'}`} className="my_sort_cut text-muted">
 													<i className="icon-users" />
 													<span>Users</span>
 													{!features?.user && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
@@ -148,7 +151,7 @@ const Settings = () => {
 												</Link>
 											</div>
 										</div>
-									</div><div className="col-6 col-md-4 col-xl-3 disabled-card">
+									</div><div className={`col-6 col-md-4 col-xl-3 ${features?.expenseManagement ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box green">0</div>
@@ -199,7 +202,8 @@ const Settings = () => {
 												</Link>
 											</div>
 										</div>
-									</div><div className={`col-6 col-md-4 col-xl-3`}>
+									</div>
+									{/* <div className={`col-6 col-md-4 col-xl-3`}>
 										<div className="card feature-card">
 											<div className="card-body">
 												<Link to="/admin/hr-wallet" className="my_sort_cut text-muted">
@@ -208,7 +212,7 @@ const Settings = () => {
 												</Link>
 											</div>
 										</div>
-									</div>
+									</div> */}
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body">
@@ -223,7 +227,7 @@ const Settings = () => {
 										</div>
 									</div>
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
-										<div className="card feature-card">
+										{/* <div className="card feature-card">
 											<div className="card-body">
 												<Link to={`${features?.airtime ? '/admin/hr-airtime' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-phone-square" />
@@ -233,7 +237,7 @@ const Settings = () => {
 													</button>}
 												</Link>
 											</div>
-										</div>
+										</div> */}
 									</div>
 
 
