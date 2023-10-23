@@ -125,6 +125,20 @@ const Routes = [
         pageTitle: "Events",
         component: Events
     },
+    {
+        path: "/my-requisition",
+        name: 'myRequisition',
+        exact: true,
+        pageTitle: "My Requisition",
+        component: MyExpense
+    },
+    {
+        path: "/my-timesheet",
+        name: 'myTimesheet',
+        exact: true,
+        pageTitle: "My Timesheet",
+        component: MyTimesheet
+    },
     
 
     // Admin 
