@@ -152,12 +152,12 @@ const Settings = () => {
 										<div className="card feature-card">
 											<div className="card-body ribbon">
 												<div className="ribbon-box green">0</div>
-												<Link to="#" className="my_sort_cut text-muted">
+												<Link to={`${features?.activity ? '/admin/hr-documents' :"#"}`} className="my_sort_cut text-muted">
 													<i className="fa fa-folder-open-o	" />
 													<span>Documents</span>
-													{/* {!features?.leave && <button onClick={()=> history.push('/support')} type="button" className="btn btn-success btn-lg">
+													{!features?.leave && <button onClick={()=> history.push('/support')} type="button" className="btn btn-success btn-lg">
 													Activate
-												</button>} */}
+												</button>}
 												</Link>
 											</div>
 										</div>

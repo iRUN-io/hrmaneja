@@ -84,6 +84,8 @@ import EmailConfirmation from './Authentication/emailConfirmation';
 import MyTimesheet from './HRMS/TimeSheets/MyTimesheet';
 import Airtime from './HRMS/BillPayments/Airtime';
 import Wallet from './HRMS/Wallet/Index';
+import Documents from './HRMS/Documents/Document';
+import ManageDocument from './HRMS/Documents/ManageDocument';
 
 const user = getUser();
 
@@ -122,6 +124,7 @@ const Routes = [
         pageTitle: "Events",
         component: Events
     },
+    
     
 
     // Admin 
@@ -257,6 +260,20 @@ const Routes = [
         exact: true,
         pageTitle: "Wallet",
         component: Wallet
+    },
+    isAdmin && {
+        path: "/admin/hr-documents",
+        name: 'hr-documents',
+        exact: true,
+        pageTitle: "Company Features",
+        component: Documents
+    },
+    isAdmin && {
+        path: "/admin/managedocument/:id",
+        name: 'managedocument',
+        exact: true,
+        pageTitle: "Manage Document",
+        component: ManageDocument
     },
     // add new routes here
 
