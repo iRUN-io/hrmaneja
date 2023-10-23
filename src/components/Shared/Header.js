@@ -94,7 +94,16 @@ class Header extends Component {
 								<div className="notification d-flex">
 									<div className="dropdown d-flex">
 										<p className='menuClock'>
-											{time.toLocaleTimeString()}
+											{/* {time.toLocaleTimeString()} */}
+											{time.toLocaleString('en-US', {
+                                                        weekday: 'long',
+                                                        year: 'numeric',
+                                                        month: 'long',
+                                                        day: 'numeric',
+                                                        hour: '2-digit',
+                                                        minute: '2-digit',
+                                                        second: '2-digit',
+                                                    })}
 										</p>
 										<a
 											href="/#"

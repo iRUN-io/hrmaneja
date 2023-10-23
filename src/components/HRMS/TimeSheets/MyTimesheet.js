@@ -89,6 +89,7 @@ function Timesheet(props) {
 
                 // Convert the combinedTimesheets object into an array
                 const result = Object.values(combinedTimesheets);
+                console.log('result', result)
                 localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
                 setTimeEntries(result[0].timeSheet);
                 // console.log('result', result)
@@ -184,7 +185,6 @@ function Timesheet(props) {
         }
     };
     // Group time entries by day
-    console.log('timer', timeEntries)
     const groupedTimeEntries = timeEntries.reduce((result, entry) => {
         const day = moment(entry.date).format('MMMM DD, YYYY');
         if (!result[day]) {
@@ -271,7 +271,6 @@ function Timesheet(props) {
         return <FeatureNotAvailable />
     }
 
-    console.log('time', timeEntries)
 
     const s = new Date().getTime();
     console.log(s); // This will log the current timestamp, e.g., 1665568669407
@@ -301,7 +300,7 @@ function Timesheet(props) {
                                     <div className="tab-pane fade show active" role="tabpanel">
                                         <div className="card table-card">
                                             <div className="card-header">
-                                                <h1 style={{ fontSize: 20 }} className="card-title mx-auto">
+                                                <p style={{ fontSize: 12 }} className="card-title mx-auto">
                                                     {currentDateTime.toLocaleString('en-US', {
                                                         weekday: 'long',
                                                         year: 'numeric',
@@ -310,7 +309,7 @@ function Timesheet(props) {
                                                         hour: '2-digit',
                                                         minute: '2-digit',
                                                         second: '2-digit',
-                                                    })}</h1>
+                                                    })}</p>
                                             </div>
                                             <div className='card-body'>
                                                 <div className='mx-auto' style={{ textAlign: 'center' }}>
@@ -358,12 +357,19 @@ function Timesheet(props) {
                                                                 <tr>
                                                                     <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
                                                                 </tr>
-                                                                {groupedTimeEntries[day].map((entry, index) => (
-                                                                    <tr key={index}>
-                                                                        <td> <small className="float-left">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
-                                                                        <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
-                                                                    </tr>
-                                                                ))}
+                                                                {groupedTimeEntries[day]
+                                                                    .filter((entry, index, self) => {
+
+                                                                        return (
+                                                                            index === self.findIndex((e) => e.date === entry.date)
+                                                                        );
+                                                                    })
+                                                                    .map((entry, index) => (
+                                                                        <tr key={index}>
+                                                                            <td> <small className="float-left">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
+                                                                            <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
+                                                                        </tr>
+                                                                    ))}
                                                             </React.Fragment>
                                                         ))}
                                                     </tbody>
