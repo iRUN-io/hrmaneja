@@ -25,16 +25,14 @@ function PastPayroll(props) {
 	const comingSoon = false;
     const history = useHistory();
 
-	const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
-
 	useEffect(() => {
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
 				// const userId = user.id;
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				// const userResponse = await getAllUsers(userId);
 				const companyData = await getCompanyData();
         		companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);

@@ -89,7 +89,7 @@ function Timesheet(props) {
 
                 // Convert the combinedTimesheets object into an array
                 const result = Object.values(combinedTimesheets);
-                console.log('result', result)
+                // console.log('result', result)
                 localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
                 setTimeEntries(result[0].timeSheet);
                 // console.log('result', result)

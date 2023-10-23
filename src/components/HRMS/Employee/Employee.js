@@ -73,10 +73,6 @@ function Employee(props) {
     bank_code: ""
   });
 
-  const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
-
 
   const createEmployeeAction = async () => {
     try {
@@ -242,9 +238,16 @@ function Employee(props) {
 
   useEffect(() => {
     async function fetchData() {
+      
       setLoading(true);
+
       const user = await getUser();
+
       if (user) {
+        const isAdmin = user?.role === "HR Manager";
+
+	      if(!isAdmin){window.location.href = '/'}
+
         const company_id = user.company_id;
         const companyData = await getCompanyData();
         const flutterwaveBanks = await getAllBanks();

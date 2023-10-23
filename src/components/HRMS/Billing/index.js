@@ -20,14 +20,14 @@ const Billing = () => {
 
 	const history = useHistory();
 
-	if(!isAdmin){window.location.href = '/'}
-
 	useEffect(() => {
 
 		async function fetchData() {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				const company_id = user.company_id;
 				const response = await getAllBillings(company_id);
 				const billingExist = await getBillingData();

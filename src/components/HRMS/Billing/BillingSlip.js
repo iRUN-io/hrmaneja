@@ -19,16 +19,14 @@ function BillingSlip(props) {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
     const comingSoon = false;
-
-    const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
+	
     
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
             const user = await getUser();
             if (user) {
+                
                 const billingResponse = await getBilling(id);
                 setBilling(billingResponse);
                 setLoading(false);

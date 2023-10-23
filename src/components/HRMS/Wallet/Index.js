@@ -30,11 +30,6 @@ const Wallet = () => {
 
     const id = window.location.pathname.split('/')[3];
 
-    const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
-
-    const history = useHistory();
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -42,6 +37,8 @@ const Wallet = () => {
             const balance = await getAccountBalance(companyData.bankAccount.account_ref);
             const transactions = await getAccountTransactions(companyData.bankAccount.account_ref);
             const userData = await getUser(id);
+            const isAdmin = userData?.role === "HR Manager";
+			if(!isAdmin){window.location.href = '/'}
             setUser(userData);
             setBalance(balance.data);
             setTransactions(transactions.data.transactions);

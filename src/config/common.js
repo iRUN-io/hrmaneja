@@ -19,6 +19,7 @@ import { getCompany } from "../services/company";
   export const removeUserSession = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    localStorage.removeItem('timeEntries');
     sessionStorage.removeItem('hrmanejaCompany');
     window.location.href = "/login";
   }

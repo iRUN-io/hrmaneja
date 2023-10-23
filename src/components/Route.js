@@ -59,7 +59,7 @@ import AppCalendar from './AppPages/AppCalendar';
 // import AppFilemanager from './AppPages/AppFilemanager';
 // import AppSetting from './AppPages/AppSetting';
 // import Maps from './Maps/Maps';
-// import Gallery from './Gallery/Gallery';
+import Gallery from './Gallery/Gallery';
 // import Login from './Authentication/login';
 // import Signup from './Authentication/signup';
 // import ForgotPassword from './Authentication/forgotPassword';
@@ -564,13 +564,13 @@ const Routes = [
     //     pageTitle: "Vector Maps",
     //     component: Maps
     // },
-    // {
-    //     path: "/gallery",
-    //     name: 'gallery',
-    //     exact: true,
-    //     pageTitle: "Image Gallery",
-    //     component: Gallery
-    // },
+    {
+        path: "/gallery",
+        name: 'gallery',
+        exact: true,
+        pageTitle: "Image Gallery",
+        component: Gallery
+    },
     
     // Admin 
     {

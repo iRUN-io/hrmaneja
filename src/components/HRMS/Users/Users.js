@@ -14,7 +14,7 @@ import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 
 const Users = (navStatus) => {
-	const [currentUser, setCurrentUser] = useState([]);
+	const [currentUser, setCurrentUser] = useState({});
 	const [userData, setUserData] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [employees, setEmployees] = useState([]);
@@ -31,11 +31,7 @@ const Users = (navStatus) => {
 		password: '',
 		confirmPassword: '',
 	});
-	const isAdmin = currentUser?.role === "HR Manager";
 
-	if(!isAdmin){window.location.href = '/'}
-	
-	const history = useHistory();
 	const createUsersAction = async () => {
 		try {
 			setFormState({ ...formState });
@@ -161,6 +157,8 @@ const Users = (navStatus) => {
 			setLoading(true);
 			const user = await getUser();
 			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
 				const company_id = user.company_id;
 				const response = await getAllUsers(company_id);
 				const employeeResponse = await getAllEmployees(company_id);

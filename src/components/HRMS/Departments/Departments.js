@@ -33,10 +33,6 @@ const Department = () => {
         allEmployee: '',
     });
 
-    const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
-
 
     const createDepartmentAction = async () => {
         if (!featureEnabled) {
@@ -137,6 +133,8 @@ const Department = () => {
             setLoading(true);
             const user = await getUser();
             if (user) {
+                const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
                 const company_id = user.company_id;
                 const companyData = await getCompanyData();
                 companyData.settings?.features['department'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
