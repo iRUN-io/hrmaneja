@@ -64,8 +64,9 @@ function Profile(props) {
         currentPassword: '',
         confirmPassword: '',
         newPassword: '',
+        selectedFile: null,
+        documentName: '',
     })
-
 
     useEffect(() => {
         setFormState({
@@ -146,11 +147,20 @@ function Profile(props) {
         };
     
     const updateForm = e => {
-        const { value, name } = e.target;
-        setFormState({
-            ...formState,
-            [name]: value
-        });
+        const { value, name, type } = e.target;
+        if (type === 'file') {
+            const file = e.target.files[0];
+        
+            setFormState((prevState) => ({
+              ...prevState,
+              selectedFile: file,
+            }));
+          } else {
+            setFormState((prevState) => ({
+              ...prevState,
+              [name]: value,
+            }));
+          }
     };
 
     const indexOfLastActivity = currentPage * ActivityPerPage;
@@ -227,7 +237,9 @@ function Profile(props) {
                                         <li className="nav-item">
                                             <a className="nav-link" id="pills-password-tab" data-toggle="pill" href="#pills-password" role="tab" aria-controls="pills-password" aria-selected="false">Change Password</a>
                                         </li>
-
+                                        <li className="nav-item">
+                                            <a className="nav-link" id="pills-document-tab" data-toggle="pill" href="#pills-document" role="tab" aria-controls="pills-document" aria-selected="false">Upload Document</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div className="col-lg-8 col-md-12">
@@ -494,6 +506,45 @@ function Profile(props) {
                                                 </div>
                                                 <div className="card-footer text-right">
                                                     <button type="submit" onClick={() => changePasswordAction()} className="btn btn-primary" >Change Password</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="tab-pane fade" id="pills-document" role="tabpanel" aria-labelledby="pills-document-tab">
+                                            <div className="card">
+                                                <div className="card-header">
+                                                    <h3 className="card-title">Upload Document</h3>
+                                                </div>
+                                                <div className="card-body">
+                                                    <div className="row clearfix">
+                                                        <div className="col-sm-6 col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="form-label">Document Name</label>
+                                                                <input type="text" className="form-control" placeholder=""
+                                                                    name='documentName'
+                                                                    id='documentName'
+                                                                    value={formState?.documentName}
+                                                                    onChange={updateForm}
+
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="col-md-6">
+                                                            <div className="form-group">
+                                                                <label className="form-label">Document</label>
+                                                                <input type="file" className="form-control"
+                                                                    placeholder=""
+                                                                    name='selectedFile'
+                                                                    id='selectedFile'
+                                                                    value={formState?.selectedFile}
+                                                                    onChange={updateForm}
+
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="card-footer text-right">
+                                                    <button type="submit" onClick={() => changePasswordAction()} className="btn btn-primary" >Upload</button>
                                                 </div>
                                             </div>
                                         </div>
