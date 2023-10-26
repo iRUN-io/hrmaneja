@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { getCompanyData, getUser } from '../../config/common.js';
-import { totalDepartments, totalEmployees, totalJobs, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
+import { totalDepartments, totalDocuments, totalEmployees, totalJobs, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
 import Loader from '../common/loader.js';
 
 const Settings = () => {
@@ -31,6 +31,7 @@ const Settings = () => {
 			const totalLeavesResponse = await totalLeaves(company_id);
 			const totalRequisitionsResponse = await totalRequisition(company_id);
 			const totalJobsResponse = await totalJobs(company_id);
+			const totalDocumentsResponse = await totalDocuments(company_id);
 			if (totalDepartmentsResponse && totalUsersResponse && totalEmployeesResponse && totalLeavesResponse) {
 				setCompany({
 					name: companyData.name,
@@ -39,7 +40,8 @@ const Settings = () => {
 					totalEmployees: totalEmployeesResponse.totalEmployees,
 					totalLeaves: totalLeavesResponse.totalLeaves,
 					totalRequisitions: totalRequisitionsResponse.totalRequisitions,
-					totalJobs: totalJobsResponse.totalJobs
+					totalJobs: totalJobsResponse.totalJobs,
+					totalDocuments: totalDocumentsResponse.totalDocuments
 				});
 				setFeatures(companyData.settings?.features)
 				setLoading(false);
@@ -154,7 +156,7 @@ const Settings = () => {
 									</div><div className={`col-6 col-md-4 col-xl-3 ${features?.expenseManagement ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body ribbon">
-												<div className="ribbon-box green">0</div>
+												<div className="ribbon-box green">{company.totalDocuments}</div>
 												<Link to={`${features?.activity ? '/admin/hr-documents' :"#"}`} className="my_sort_cut text-muted">
 													<i className="fa fa-folder-open-o	" />
 													<span>Documents</span>
@@ -222,6 +224,16 @@ const Settings = () => {
 													{!features?.payroll && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
 														Activate
 													</button>}
+												</Link>
+											</div>
+										</div>
+									</div>
+									<div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
+										<div className="card feature-card">
+											<div className="card-body">
+												<Link to='/admin/hr-attendance' className="my_sort_cut text-muted">
+													<i className="fa fa-clock-o" />
+													<span>Attendance</span>
 												</Link>
 											</div>
 										</div>

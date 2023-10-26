@@ -15,6 +15,9 @@ import moment from 'moment';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import { approveTimeSheetRequest, createAttendance, getAttendance } from '../../../services/attendance';
 import { createBilling } from '../../../services/billing';
+import { sendEmail } from '../../../services/mail/sendMail';
+import { emailCase } from '../../../enums/emailCase';
+import Loader from '../../common/loader';
 
 
 function Timesheet(props) {
@@ -26,6 +29,7 @@ function Timesheet(props) {
     const [allAttendance, setAttendance] = useState([]);
     const [user, setUser] = useState({});
     const [employee, setEmployee] = useState({});
+    const [lineManager, setLineManager] = useState({});
     const [company, setCompany] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(true);
     const comingSoon = false;
@@ -34,76 +38,89 @@ function Timesheet(props) {
         // Load time entries from local storage on component mount
         const savedEntries = JSON.parse(localStorage.getItem('timeEntries')) || [];
         setTimeEntries(savedEntries);
-
-        const intervalId = setInterval(() => {
-            setCurrentDateTime(new Date());
-        }, 1000);
-
-        return () => clearInterval(intervalId);
-    }, []);
-
-    useEffect(() => {
+      
+        // const intervalId = setInterval(() => {
+        //   setCurrentDateTime(new Date());
+        // }, 1000);
+      
+        // return () => clearInterval(intervalId);
+      }, []);
+      
+      useEffect(() => {
         async function fetchData() {
-            setLoading(true);
+          setLoading(true);
+      
+          const user = getUser();
+          const week = moment().week().toString();
+          const month = moment().month().toString();
+          const year = moment().year().toString();
+      
+          if (user) {
+            const companyData = await getCompanyData();
+            // companyData.settings?.features['expenseManagement']
+            //   ? setFeatureEnabled(true)
+            //   : setFeatureEnabled(false);
+            setCompany(companyData);
+            const employeeRecord = await getEmployee(user.employee_id);
+            const lineManager = await getEmployee(employeeRecord.line_manager);
+      
+            setLineManager(lineManager);
+            const allAttendance = await getAttendance(user.employee_id);
+            setAttendance(allAttendance);
+            // const thisWeekAttendance = allAttendance.filter(
+            //   (attendance) =>
+            //     attendance.week === week &&
+            //     attendance.year === year &&
+            //     attendance.month === month
+            // );
+            // const savedData = thisWeekAttendance[0]?.timeSheet;
+            setEmployee(employeeRecord);
+      
+            const combinedTimesheets = {};
 
-            const user = getUser();
-            const week = moment().week().toString();
-            const month = moment().month().toString();
-            const year = moment().year().toString();
-
-            if (user) {
-                const companyData = await getCompanyData();
-                // companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
-                setCompany(companyData)
-                const employeeRecord = await getEmployee(user.employee_id);
-                const allAttendance = await getAttendance(user.employee_id);
-                setAttendance(allAttendance);
-                const thisWeekAttendance = allAttendance.filter(attendance => attendance.week === week && attendance.year === year && attendance.month === month);
-                const savedData = thisWeekAttendance[0]?.timeSheet;
-                setEmployee(employeeRecord);
-
-                const combinedTimesheets = {};
-
-                allAttendance.forEach(entry => {
-                    const employeeId = entry.employee_id;
-
-                    if (!combinedTimesheets[employeeId]) {
-                        combinedTimesheets[employeeId] = {
-                            employee_id: employeeId,
-                            timeSheet: [],
-                            company_id: entry.company_id,
-                            date: entry.date,
-                            month: entry.month,
-                            week: entry.week,
-                            year: entry.year,
-                            status: entry.status,
-                            createdAt: entry.createdAt,
-                            updatedAt: entry.updatedAt,
-                            id: entry.id
-                        };
-                    }
-
-                    // Combine the timesheets for this employee
-                    combinedTimesheets[employeeId].timeSheet = combinedTimesheets[employeeId].timeSheet.concat(entry.timeSheet);
-                });
-
-                // Convert the combinedTimesheets object into an array
-                const result = Object.values(combinedTimesheets);
-                // console.log('result', result)
+      
+            allAttendance.forEach((entry) => {
+              const employeeId = entry.employee_id;
+      
+              if (!combinedTimesheets[employeeId]) {
+                combinedTimesheets[employeeId] = {
+                  employee_id: employeeId,
+                  timeSheet: [],
+                  company_id: entry.company_id,
+                  date: entry.date,
+                  month: entry.month,
+                  week: entry.week,
+                  year: entry.year,
+                  status: entry.status,
+                  createdAt: entry.createdAt,
+                  updatedAt: entry.updatedAt,
+                  id: entry.id,
+                };
+              }
+      
+              // Combine the timesheets for this employee
+              combinedTimesheets[employeeId].timeSheet = combinedTimesheets[employeeId].timeSheet.concat(
+                entry.timeSheet
+              );
+            });
+      
+            // Convert the combinedTimesheets object into an array
+            const result = Object.values(combinedTimesheets);
+            
+            if(result.length > 0){
                 localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
                 setTimeEntries(result[0].timeSheet);
-                // console.log('result', result)
-                // if (savedData) {
-                //     setFormFunction(null, savedData);
-                // }
             }
-            setLoading(false);
-            setUser(user);
+            
+            // if (savedData) {
+            //     setFormFunction(null, savedData);
+            // }
+          }
+          setLoading(false);
+          setUser(user);
         }
         fetchData();
-
-    }, []);
-
+      }, []);
     const clockIn = () => {
         const hasClockInToday = timeEntries.some(
             (entry) =>
@@ -267,15 +284,56 @@ function Timesheet(props) {
     // };
 
 
+    const handleSaveEntries = async (timeSheetId) => {
+        try {
+            if (!featureEnabled) {
+                toast.error('Feature not enabled');
+                return;
+            }
+            if(!lineManager.email){
+                toast.error('You do not have a line manager, contact your admin')
+                return;
+            }
+            sendEmail(lineManager.email, lineManager.name, emailCase.attendanceApprovalRequest);
+                    toast.info('emailm sent');
+            let response;
+            // response = await approveTimeSheetRequest(timeSheetId);
+            // if (!response.error) {
+            //     const week = moment().week().toString();
+            //     const year = moment().year().toString();
+            //     const date = moment().format('YYYY-MM-DD');
+            //     const logLeave = await createActivity(
+            //         {
+            //             name: 'Approve Timesheet Request',
+            //             employee_id: user.employee_id,
+            //             activity: `Timesheet approval request for week ${week} of ${year}, date; ${date}`,
+            //             activity_name: 'Update',
+            //             user: user.name,
+            //             company_id: user.company_id,
+            //         }
+            //     )
+
+            //     if (logLeave.id) {
+            //         sendEmail(lineManager.emailAddress, user.name, emailCase.attendanceApprovalRequest);
+            //         toast.info(response.message);
+            //     }
+            // }
+
+        } catch (err) {
+            toast.error("Error, try again");
+        }
+
+    };
+
     if (!featureEnabled && !loading) {
         return <FeatureNotAvailable />
     }
 
+    if (loading ) {
+        			return <Loader />
+    }
 
-    const s = new Date().getTime();
-    console.log(s); // This will log the current timestamp, e.g., 1665568669407
-
-
+    console.log('allAttendance', timeEntries)
 
     return (
         <>
@@ -338,7 +396,7 @@ function Timesheet(props) {
                                                         <button
                                                             style={{ width: 200, height: 50, marginLeft: 10 }}
                                                             className="btn btn-lg btn-primary"
-                                                            onClick={handleSaveEntries}
+                                                            onClick={()=>handleSaveEntries()}
                                                         >
                                                             Save Entries
                                                         </button>

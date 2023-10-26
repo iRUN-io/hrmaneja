@@ -142,148 +142,148 @@ const Routes = [
     
 
     // Admin 
-    isAdmin && {
-        path: "/admin/hr-users",
-        name: 'hr-users',
-        exact: true,
-        pageTitle: "My Requisition",
-        component: MyExpense
-    },
-    {
-        path: "/my-timesheet",
-        name: 'myTimesheet',
-        exact: true,
-        pageTitle: "Departments",
-        component: Departments
-    },
-    isAdmin && {
-        path: "/admin/hr-employees",
-        name: 'employees',
-        exact: true,
-        pageTitle: "Employee",
-        component: Employee
-    },
-    isAdmin && {
-        path: "/admin/hr-leaves",
-        name: 'leaves',
-        exact: true,
-        pageTitle: "Leaves",
-        component: Leave
-    },
-    isAdmin && {
-        path: "/admin/hr-employee-details",
-        name: 'employee',
-        exact: true,
-        pageTitle: "Employee Details",
-        component: EmployeeDetails
-    },
-    isAdmin && {
-        path: "/admin/hr-activities",
-        name: 'activities',
-        exact: true,
-        pageTitle: "Activities",
-        component: Activities
-    },
+    // isAdmin && {
+    //     path: "/admin/hr-users",
+    //     name: 'hr-users',
+    //     exact: true,
+    //     pageTitle: "My Requisition",
+    //     component: MyExpense
+    // },
+    // {
+    //     path: "/my-timesheet",
+    //     name: 'myTimesheet',
+    //     exact: true,
+    //     pageTitle: "Departments",
+    //     component: Departments
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-employees",
+    //     name: 'employees',
+    //     exact: true,
+    //     pageTitle: "Employee",
+    //     component: Employee
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-leaves",
+    //     name: 'leaves',
+    //     exact: true,
+    //     pageTitle: "Leaves",
+    //     component: Leave
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-employee-details",
+    //     name: 'employee',
+    //     exact: true,
+    //     pageTitle: "Employee Details",
+    //     component: EmployeeDetails
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-activities",
+    //     name: 'activities',
+    //     exact: true,
+    //     pageTitle: "Activities",
+    //     component: Activities
+    // },
 
-    isAdmin && {
-        path: "/admin/hr-requisition",
-        name: 'expense',
-        exact: true,
-        pageTitle: "Requisition",
-        component: Expense
-    },
-    isAdmin && {
-        path: "/admin/hr-payroll",
-        name: 'payroll',
-        exact: true,
-        pageTitle: "Payroll",
-        component: Payroll
-    }, 
+    // isAdmin && {
+    //     path: "/admin/hr-requisition",
+    //     name: 'expense',
+    //     exact: true,
+    //     pageTitle: "Requisition",
+    //     component: Expense
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-payroll",
+    //     name: 'payroll',
+    //     exact: true,
+    //     pageTitle: "Payroll",
+    //     component: Payroll
+    // }, 
 
-    isAdmin && {
-        path: "/admin/hr-past-payroll",
-        name: 'past-payroll',
-        exact: true,
-        pageTitle: "Payroll",
-        component: PastPayroll
-    }, 
+    // isAdmin && {
+    //     path: "/admin/hr-past-payroll",
+    //     name: 'past-payroll',
+    //     exact: true,
+    //     pageTitle: "Payroll",
+    //     component: PastPayroll
+    // }, 
 
-    isAdmin && {
-        path: "/admin/hr-initiate-payroll",
-        name: 'initiate-payroll',
-        exact: true,
-        pageTitle: "Run Payroll",
-        component: PayrollStats
-    },
+    // isAdmin && {
+    //     path: "/admin/hr-initiate-payroll",
+    //     name: 'initiate-payroll',
+    //     exact: true,
+    //     pageTitle: "Run Payroll",
+    //     component: PayrollStats
+    // },
 
-    isAdmin && {
-        path: "/admin/hr-accounts",
-        name: 'accounts',
-        exact: true,
-        pageTitle: "Accounts",
-        component: Accounts
-    },
-    isAdmin && {
-        path: "/admin/hr-report",
-        name: 'report',
-        exact: true,
-        pageTitle: "Report",
-        component: Report
-    },
-    isAdmin && {
-        path: "/admin/hr-excel",
-        name: 'excel',
-        exact: true,
-        pageTitle: "Excel",
-        component: Excel
-    },
+    // isAdmin && {
+    //     path: "/admin/hr-accounts",
+    //     name: 'accounts',
+    //     exact: true,
+    //     pageTitle: "Accounts",
+    //     component: Accounts
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-report",
+    //     name: 'report',
+    //     exact: true,
+    //     pageTitle: "Report",
+    //     component: Report
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-excel",
+    //     name: 'excel',
+    //     exact: true,
+    //     pageTitle: "Excel",
+    //     component: Excel
+    // },
 
-    isAdmin && {
-        path: "/admin/billing",
-        name: 'billing',
-        exact: true,
-        pageTitle: "Billing",
-        component: Billing // update this component
-    },
-    isAdmin && {
-        path: "/admin/billing-receipt/:id",
-        name: 'billing receipt',
-        exact: true,
-        pageTitle: "Billing",
-        component: BillingSlip // update this component
-    },
+    // isAdmin && {
+    //     path: "/admin/billing",
+    //     name: 'billing',
+    //     exact: true,
+    //     pageTitle: "Billing",
+    //     component: Billing // update this component
+    // },
+    // isAdmin && {
+    //     path: "/admin/billing-receipt/:id",
+    //     name: 'billing receipt',
+    //     exact: true,
+    //     pageTitle: "Billing",
+    //     component: BillingSlip // update this component
+    // },
 
     
-    isAdmin && {
-        path: "/admin/settings",
-        name: 'settings',
-        exact: true,
-        pageTitle: "Settings",
-        component: Settings
-    },
-    isAdmin && {
-        path: "/admin/hr-airtime",
-        name: 'airtime',
-        exact: true,
-        pageTitle: "Airtime",
-        component: Airtime
-    },
-    isAdmin && {
-        path: "/admin/hr-wallet",
-        name: 'wallet',
-        exact: true,
-        pageTitle: "Wallet",
-        component: Wallet
-    },
-    isAdmin && {
+    // isAdmin && {
+    //     path: "/admin/settings",
+    //     name: 'settings',
+    //     exact: true,
+    //     pageTitle: "Settings",
+    //     component: Settings
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-airtime",
+    //     name: 'airtime',
+    //     exact: true,
+    //     pageTitle: "Airtime",
+    //     component: Airtime
+    // },
+    // isAdmin && {
+    //     path: "/admin/hr-wallet",
+    //     name: 'wallet',
+    //     exact: true,
+    //     pageTitle: "Wallet",
+    //     component: Wallet
+    // },
+    {
         path: "/admin/hr-documents",
         name: 'documents',
         exact: true,
         pageTitle: "Documents",
         component: Documents
     },
-    isAdmin && {
-        path: "/admin/managedocument/:id",
+    {
+        path: "/admin/hr-documents/manage",
         name: 'managedocument',
         exact: true,
         pageTitle: "ManageDocument",

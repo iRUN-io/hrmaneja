@@ -2,6 +2,7 @@
 import request from 'umi-request';
 import { getUser, getCompanyData } from '../../config/common';
 import { API_URL, USER_TOKEN } from '../../config/config';
+import moment from 'moment';
 
 export const sendEmail = async (email, name, caseType) => {
   if (localStorage.getItem('emailNotificationEnabled') === 'false')
@@ -231,6 +232,13 @@ const emailSwitch = {
   fundAccount: () => {
     return {
       subject: 'Wallet Account Funded!', body: `Your Virtual wallet has been funded successfully ! 
+      `
+    }
+  },
+  attendanceApprovalRequest: () => {
+    const date = moment().format('YYYY-MM-DD');
+    return {
+      subject: 'Attendance request!', body: `Please review my attendance on the date; ${date} ! 
       `
     }
   }

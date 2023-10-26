@@ -131,6 +131,16 @@ export async function totalJobs(companyId) {
   });
 }
 
+export async function totalDocuments(companyId) {
+  return request(`${API_URL}/setting/totalDocuments/${companyId}`, {
+      method: 'get',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': USER_TOKEN,
+      },
+  });
+}
+
 export async function getHolidays(country, year) {
   return request(`https://date.nager.at/api/v2/PublicHolidays/${year}/${country}`, {
       method: 'get',

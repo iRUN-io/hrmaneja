@@ -35,9 +35,7 @@ const Leave = () => {
         leaveReason: '',
     });
 
-    const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
+  
     
     useEffect(() => {
         const user = getUser();
@@ -225,6 +223,9 @@ const Leave = () => {
             setLoading(true);
             const user = await getUser();
             if (user) {
+                const isAdmin = user?.role === "HR Manager";
+
+                if(!isAdmin){window.location.href = '/'}
                 const company_id = user.company_id;
                 const companyData = await getCompanyData();
                 companyData.settings?.features['leave'] ? setFeatureEnabled(true) : setFeatureEnabled(false);

@@ -37,4 +37,5 @@ export const emailCase = {
     sendAirtime:        'sendAirtime',
     walletAccountCreated:     'walletAccountCreated',
     fundAccount:        'fundAccount',
+    attendanceApprovalRequest: 'attendanceApprovalRequest'
 }
