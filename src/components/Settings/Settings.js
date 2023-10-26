@@ -228,7 +228,7 @@ const Settings = () => {
 											</div>
 										</div>
 									</div>
-									<div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
+									{/* <div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body">
 												<Link to='/admin/hr-attendance' className="my_sort_cut text-muted">
@@ -237,7 +237,7 @@ const Settings = () => {
 												</Link>
 											</div>
 										</div>
-									</div>
+									</div> */}
 									<div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
 										{/* <div className="card feature-card">
 											<div className="card-body">

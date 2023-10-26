@@ -159,7 +159,7 @@ const Billing = () => {
 															<tbody>
 																{billings.map((billing) => (
 																	<tr key={billing.id}>
-																		<td>${billing.amount}</td>
+																		<td>{formatMoney(billings.amount)}</td>
 																		<td>{billing.plan}</td>
 																		<td>{moment(billing.createdAt).format('MMM Do YYYY')}</td>
 																		{/* <td>{billing.paidBy}</td> */}
