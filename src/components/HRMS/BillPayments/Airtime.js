@@ -30,12 +30,13 @@ const Airtime = () => {
         phoneNumber: '',
     });
 
-    const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
+   
     
     useEffect(() => {
         const user = getUser();
+        const isAdmin = user.role === "HR Manager";
+
+        if(!isAdmin){window.location.href = '/'}
         setFormState({ ...formState, employeeId: user.employee_id, employeeName: user.name });
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -74,7 +75,7 @@ const Airtime = () => {
             }
             const response = await sendAirtime(body);
 
-            if (!response.error) {
+            if (response[0].status === 'success') {
 
                 const createRecord = await createAirtimeTransaction(
                     {
@@ -84,7 +85,7 @@ const Airtime = () => {
                         paidBy: user.id,
                     }
                 )
-                
+
                 if(createRecord) {
 
                 const logAirtime = await createActivity(
@@ -98,21 +99,28 @@ const Airtime = () => {
                     }
                 )
                 if (logAirtime.id) {
+
                     sendEmail(user.emailAddress, user.name, emailCase.sendAirtime);
                     setTransactions([...airtimes, response])
                     document.getElementById('closeModal').click();
                     setLoading(false);
+                    
                     toast.success("Airtime sent successfully");
                 }
                 }
-               
+            setLoading(false);
+
+            }else{
+                // document.getElementById('closeModal').click();
+                setLoading(false);
+                toast.success("Error, "+ response[0].message);
             }
 
             setFormState({
                 amount: '',
                 phoneNumber: '',
             });
-            setLoading(false);
+            
 
         } catch (err) {
             document.getElementById('closeModal').click();
@@ -192,7 +200,7 @@ const Airtime = () => {
         pageNumbers.push(i);
     }
 
-    if (featureEnabled && !loading ) { // remove this when ready
+    if (!featureEnabled && !loading ) { // remove this when ready
 		return <FeatureNotAvailable />
 	}
 

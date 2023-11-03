@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { connect } from "react-redux";
-import { Link } from 'react-router-dom';
 import {
   statisticsAction,
   statisticsCloseAction
@@ -50,7 +49,7 @@ function Documents(props) {
 
   useEffect(() => {
     async function fetchData() {
-
+      
       setLoading(true);
 
       const user = await getUser();
@@ -58,11 +57,11 @@ function Documents(props) {
       if (user) {
         const isAdmin = user?.role === "HR Manager";
 
-        if (!isAdmin) { window.location.href = '/' }
+	      if(!isAdmin){window.location.href = '/'}
 
         const company_id = user.company_id;
         const companyData = await getCompanyData();
-        const allDocuments = await getAllDocuments(company_id)
+		const allDocuments = await getAllDocuments(company_id)
         companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
         const departmentResponse = await getAllDepartments(company_id);
         const response = await getAllEmployees(company_id);
@@ -101,7 +100,7 @@ function Documents(props) {
   }, [employees, searchEmployee]);
 
 
-
+  
   const indexOfLastEmployee = currentPage * EmployeePerPage;
   const indexOfFirstEmployee = indexOfLastEmployee - EmployeePerPage;
   const currentEmployee = allEmployeesArray.slice(indexOfFirstEmployee, indexOfLastEmployee);
@@ -120,8 +119,8 @@ function Documents(props) {
   }
 
   const countEmployeeDocuments = (employee_id) => {
-    const employeeDocuments = documents.filter(document => document.employee_id === employee_id);
-    return employeeDocuments.length;
+	const employeeDocuments = documents.filter(document => document.employee_id === employee_id);
+	return employeeDocuments.length;
   };
 
   return (
@@ -134,15 +133,6 @@ function Documents(props) {
 
           <div className="section-body">
             <div className="container-fluid">
-            <div className="d-flex justify-content-between align-items-center">
-                        <ul className="nav nav-tabs page-header-tab">
-                            <li className="nav-item">
-                                <Link to={'/admin/settings'} className="nav-link active">
-                                    <i className="fa fa-arrow-left" />
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
               <div className="tab-content">
                 <div
                   className="tab-pane fade show active"
@@ -231,13 +221,13 @@ function Documents(props) {
                                       <td>{countEmployeeDocuments(employee?.id)}</td>
                                       <td>
                                         <button
-                                          type="button"
-                                          className="btn btn-icon btn-sm"
-                                          title="Manage Documents"
-                                          onClick={() => employeeDetails(employee?.id)}
-                                        >
-                                          <i className="fa fa-eye" />
-                                        </button>
+										type="button"
+										className="btn btn-icon btn-sm"
+										title="Manage Documents"
+										onClick={() => employeeDetails(employee?.id)}
+										>
+										<i className="fa fa-eye" />
+										</button>
 
                                       </td>
                                     </tr>

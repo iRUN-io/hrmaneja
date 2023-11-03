@@ -10,6 +10,7 @@ import { toast } from "material-react-toastify";
 import Time from '../../elements/Time';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { createActivity } from '../../../services/activities';
+import Loader from '../../common/loader';
 
 function ManageDocument(props) {
     const { fixNavbar } = props;
@@ -200,6 +201,10 @@ function ManageDocument(props) {
 		)
 	}, [chooseFile, selectedDocument, uploadLoading]);
 
+    if (loading ) {
+		return <Loader />
+	}
+
     return (
         <>
             <div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
@@ -223,12 +228,12 @@ function ManageDocument(props) {
                                             <option value="asc">Newest</option>
                                             <option value="desc">Oldest</option>
                                         </select> */}
-                                        <div className="input-icon ml-2">
+                                        {/* <div className="input-icon ml-2">
                                             <span className="input-icon-addon">
                                                 <i className="fe fe-search" />
                                             </span>
                                             <input type="text" className="form-control" placeholder="Search documents" />
-                                        </div>
+                                        </div> */}
                                         <button type="submit" className="btn btn-primary ml-2" data-toggle="modal" data-target="#exampleModal">Upload New</button>
                                     </div>
                                 </div>
@@ -252,7 +257,7 @@ function ManageDocument(props) {
                                     </div>
                                     <div className="ml-auto text-muted">
                                     <a onClick={()=> openFileInNewWindow(document.url)} className="mb-3">
-                                    <button className='btn btn-sm btn-primary'>View File</button>
+                                    <button className='btn btn-sm btn-outline-primary'>View File</button>
                                 </a>
                                     </div>
                                 </div>

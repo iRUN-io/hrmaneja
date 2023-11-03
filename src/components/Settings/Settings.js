@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { getCompanyData, getUser } from '../../config/common.js';
-import { totalDepartments, totalDocuments, totalEmployees, totalJobs, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
+import { totalDepartments, totalDocuments, totalEmployees, totalInventory, totalJobs, totalLeaves, totalRequisition, totalUsers } from '../../services/setting.js';
 import Loader from '../common/loader.js';
 
 const Settings = () => {
@@ -32,6 +32,7 @@ const Settings = () => {
 			const totalRequisitionsResponse = await totalRequisition(company_id);
 			const totalJobsResponse = await totalJobs(company_id);
 			const totalDocumentsResponse = await totalDocuments(company_id);
+			const totalInventoryResponse = await totalInventory(company_id);
 			if (totalDepartmentsResponse && totalUsersResponse && totalEmployeesResponse && totalLeavesResponse) {
 				setCompany({
 					name: companyData.name,
@@ -41,7 +42,8 @@ const Settings = () => {
 					totalLeaves: totalLeavesResponse.totalLeaves,
 					totalRequisitions: totalRequisitionsResponse.totalRequisitions,
 					totalJobs: totalJobsResponse.totalJobs,
-					totalDocuments: totalDocumentsResponse.totalDocuments
+					totalDocuments: totalDocumentsResponse.totalDocuments,
+					totalInventory: totalInventoryResponse.totalInventories
 				});
 				setFeatures(companyData.settings?.features)
 				setLoading(false);
@@ -238,8 +240,8 @@ const Settings = () => {
 											</div>
 										</div>
 									</div> */}
-									<div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
-										{/* <div className="card feature-card">
+									{/* <div className={`col-6 col-md-4 col-xl-3 ${features?.airtime ? '' : 'disabled-card'}`}>
+										<div className="card feature-card">
 											<div className="card-body">
 												<Link to={`${features?.airtime ? '/admin/hr-airtime' : '#'}`} className="my_sort_cut text-muted">
 													<i className="fa fa-phone-square" />
@@ -249,7 +251,22 @@ const Settings = () => {
 													</button>}
 												</Link>
 											</div>
-										</div> */}
+										</div>
+									</div> */}
+
+									<div className={`col-6 col-md-4 col-xl-3 ${features?.jobManagement ? '' : 'disabled-card'}`}>
+										<div className="card feature-card">
+											<div className="card-body ribbon">
+												<div className="ribbon-box green">{features?.inventoryManagement && company.totalInventory}</div>
+												<Link to={`${features?.inventoryManagement ? '/admin/hr-inventories' : '#'}`} className="my_sort_cut text-muted">
+													<i className="fa fa-archive" />
+													<span>Inventory</span>
+													{!features?.inventoryManagement && <button onClick={() => history.push('/support')} type="button" className="btn btn-success btn-lg">
+														Activate
+													</button>}
+												</Link>
+											</div>
+										</div>
 									</div>
 
 

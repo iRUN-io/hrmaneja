@@ -33,9 +33,7 @@ function Payroll(props) {
 	const comingSoon = false;
 	const history = useHistory();
 
-	const isAdmin = user?.role === "HR Manager";
-
-	if(!isAdmin){window.location.href = '/'}
+	
 	
 	useEffect(() => {
 		async function fetchData() {
@@ -44,6 +42,9 @@ function Payroll(props) {
 			if (user) {
 				// const userId = user.id;
 				// const userResponse = await getAllUsers(userId);
+				const isAdmin = user?.role === "HR Manager";
+
+				if(!isAdmin){window.location.href = '/'}
 				const companyData = await getCompanyData();
 				companyData.settings?.features['payroll'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const response = await getAllEmployees(user.company_id);

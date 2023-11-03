@@ -87,6 +87,7 @@ import Wallet from './HRMS/Wallet/Index';
 import EmailResponse from './HRMS/EmailResponse';
 import Documents from './HRMS/Documents/Document';
 import ManageDocument from './HRMS/Documents/ManageDocument';
+import ManageInventory from './HRMS/Inventory/ManageInventory';
 
 const user = getUser();
 
@@ -288,6 +289,13 @@ const Routes = [
         exact: true,
         pageTitle: "ManageDocument",
         component: ManageDocument
+    },
+    {
+        path: "/admin/hr-inventories",
+        name: 'manageinventory',
+        exact: true,
+        pageTitle: "ManageInventory",
+        component: ManageInventory
     },
     // add new routes here
 

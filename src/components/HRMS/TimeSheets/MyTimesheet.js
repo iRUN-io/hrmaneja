@@ -396,7 +396,7 @@ function Timesheet(props) {
                                                         <button
                                                             style={{ width: 200, height: 50, marginLeft: 10 }}
                                                             className="btn btn-lg btn-primary"
-                                                            onClick={()=>handleSaveEntries()}
+                                                            onClick={()=>initiatePayroll()}
                                                         >
                                                             Save Entries
                                                         </button>
