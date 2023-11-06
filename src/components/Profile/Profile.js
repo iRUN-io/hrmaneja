@@ -13,6 +13,11 @@ import { Link, useHistory } from 'react-router-dom';
 import { changePassword } from '../../services/user';
 import { sendEmail } from '../../services/mail/sendMail';
 import { emailCase } from '../../enums/emailCase';
+import { createDocument, deleteDocument, getEmployeeDocument } from '../../services/documents';
+import UploadCloudinary from '../common/UploadCloudinary';
+import EmptyState from '../EmptyState';
+import { OverlayTrigger, Popover } from 'react-bootstrap';
+import Time from '../elements/Time';
 
 function Profile(props) {
     const { fixNavbar } = props;
@@ -25,6 +30,9 @@ function Profile(props) {
     const [myTeamMembers, setTeamMembers] = useState([]);
     const [myTotalLeaves, setTotalLeaves] = useState(0);
     const [loading, setLoading] = useState(false);
+    const [documents, setDocuments] = useState([]);
+    const [uploadDocument, setDocument] = useState('');
+    const [uploadLoading, setUploadLoading] = useState(false);
     const history = useHistory();
     useEffect(() => {
         async function fetchData() {
@@ -36,6 +44,7 @@ function Profile(props) {
                 const allEmployee = await getAllEmployees(user.company_id);
                 const allLeaves = await getAllLeaves(user.company_id);
                 const companyData = await getCompanyData();
+                // const document = await getEmployeeDocument(user.id);
                 const teamMembers = allEmployee.filter(mYemployee => mYemployee.department === employee.department).filter(employee => employee.id !== user.employee_id);
                 const totalLeaves = allLeaves.filter(leave => leave.employee_id === user.employee_id).length;
                 setUser(user);
@@ -44,6 +53,7 @@ function Profile(props) {
                 setEmployee(employee);
                 setCompany(companyData);
                 setTeamMembers(teamMembers);
+                // setDocuments(document);
                 setLoading(false);
             }
         }
@@ -145,6 +155,77 @@ function Profile(props) {
             }
 
         };
+
+        const submitDocument = async () => {
+            try {
+                setFormState({ ...formState });
+                const body = {
+                    name: formState.documentName,
+                    company_id: user.company_id,
+                    url: uploadDocument,
+                    employee_id: user.id,
+                }
+                if (formState.documentName === '' || formState.firstName === '') {
+                    toast.error('Please fill all the fields');
+                    return;
+                }
+                const response = await createDocument(body);
+    
+                if (response.id) {
+                    await createActivity(
+                        {
+                          name: 'Create Document',
+                          employee_id: user.employee_id,
+                          activity: `${user.name} created a document with name; ${document.name}`,
+                          activity_name: 'Creation',
+                          user: user.name,
+                          company_id: user.company_id
+                        }
+                      )
+                    setDocuments([...documents, response])
+                    toast.success("Document sent successfully");
+                } else {
+                    toast.info(response.message);
+                }
+    
+                setFormState({documentName: ''});
+    
+            } catch (err) {
+                toast.error("Error, try again");
+                setFormState({ ...formState });
+            }
+            // console.log(body)
+        };
+
+        const removeDocument = async (documentId) => {
+            try {
+    
+              const response = await deleteDocument(documentId);
+        
+              if (response.message) {
+                const logEmployee = await createActivity(
+                  {
+                    name: 'Delete Document',
+                    employee_id: user.employee_id,
+                    activity: `${user.name} deleted a document with name; ${document.name}`,
+                    activity_name: 'Deletion',
+                    user: user.name,
+                    company_id: user.company_id
+                  }
+                )
+                if (logEmployee.id) {
+                  const newDocuments = documents.filter(document => document.id !== documentId);
+                  setDocuments(newDocuments);
+                  toast.info(response.message);
+                }
+              }
+        
+            } catch (err) {
+              toast.error("Error, try again");
+              setFormState({ ...formState });
+            }
+        
+          };
     
     const updateForm = e => {
         const { value, name, type } = e.target;
@@ -162,6 +243,23 @@ function Profile(props) {
             }));
           }
     };
+
+    const handleFile = async e => {
+		setUploadLoading(true);
+		const file = e.target.files[0];
+		const upload = await UploadCloudinary(file);
+		setDocument(upload.secure_url);
+		// setSelectedResume(upload.original_filename);
+		setUploadLoading(false);
+	}
+
+    const readableDate = (date) => {
+        return Time(date);
+    }
+
+    const openFileInNewWindow = (url) => {
+         window.open(url, '_blank');
+      };
 
     const indexOfLastActivity = currentPage * ActivityPerPage;
     const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
@@ -536,7 +634,7 @@ function Profile(props) {
                                                                     name='selectedFile'
                                                                     id='selectedFile'
                                                                     value={formState?.selectedFile}
-                                                                    onChange={updateForm}
+                                                                    onChange={handleFile}
 
                                                                 />
                                                             </div>
@@ -544,9 +642,52 @@ function Profile(props) {
                                                     </div>
                                                 </div>
                                                 <div className="card-footer text-right">
-                                                    <button type="submit" onClick={() => changePasswordAction()} className="btn btn-primary" >Upload</button>
+                                                    <button type="submit" onClick={() => submitDocument()} className="btn btn-primary" >Upload</button>
                                                 </div>
                                             </div>
+                                                {documents.length === 0 && !loading ? (
+                                                    <div className='card'>
+                                                        <EmptyState />
+                                                        </div>
+                                                ) : (
+                                                <div className="row row-cards">
+                                                    {documents.map((document) => (
+                                                    <div key={document.id} className="col-sm-6 col-lg-4">
+                                                        <div className="card p-3">
+                                                        <div className="d-flex align-items-center px-2">
+                                                                <div>
+                                                                    <div>{document.name}</div>
+                                                                    <small className="d-block text-muted">{readableDate(document.createdAt)}</small>
+                                                                </div>
+                                                                <div className="ml-auto text-muted">
+                                                                <a onClick={()=> openFileInNewWindow(document.url)} className="mb-3">
+                                                                <button className='btn btn-sm btn-outline-primary'>View File</button>
+                                                            </a>
+                                                                </div>
+                                                            </div>
+                                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                overlay={
+                                                                <Popover id="popover-basic">
+                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                    <Popover.Body>
+                                                                    <div className="clearfix" >
+                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                        <button style={{ margin: '10px' }} onClick={() => removeDocument(document.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                                    </div>
+                                                                    </Popover.Body>
+                                                                </Popover>
+                                                                }>
+                                                                <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
+                                                            </OverlayTrigger>
+                                                            {/* <a onClick={openFileInNewWindow(document.url)} className="mb-3">
+                                                                <button className='btn btn-sm btn-primary'>View File</button>
+                                                            </a> */}
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    ))}
+                                                </div>
+                                                )}
                                         </div>
                                         <div className="tab-pane fade" id="pills-blog" role="tabpanel" aria-labelledby="pills-blog-tab">
                                             <div className="card">

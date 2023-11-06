@@ -12,6 +12,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { createActivity } from '../../../services/activities';
 import Loader from '../../common/loader';
 
+
 function ManageDocument(props) {
     const { fixNavbar } = props;
     const [formState, setFormState] = useState({
