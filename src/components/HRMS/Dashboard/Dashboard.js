@@ -85,7 +85,7 @@ const Dashboard = () => {
 								</div>
 								{isAdmin && (
 									<div className="col-6 col-md-4 col-xl-3 ">
-										<Link to="/hr-activities" className="text-muted text-white text-bold">
+										<Link to="/admin/hr-activities" className="text-muted text-white text-bold">
 											<div className="card card-green">
 												<div className="card-body">
 													<span>Log Trail</span>
