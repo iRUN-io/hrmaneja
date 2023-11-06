@@ -50,6 +50,7 @@ const EmployeeDetails = (employee) => {
     const [currentPageRequisition, setCurrentPageRequisition] = useState(1);
     const [attendance, setAttendance] = useState([]);
     const [timeEntries, setTimeEntries] = useState([]);
+    console.log({attendance});
 
     const removeLeave = async (leaveId) => {
         if (!featureEnabled) {
@@ -188,6 +189,7 @@ const EmployeeDetails = (employee) => {
         return result;
     }, {});
 
+    console.log({groupedTimeEntries});
     // State to manage the current page
     
     const entriesPerPage = 5; // Number of entries to display per page
@@ -414,19 +416,21 @@ const EmployeeDetails = (employee) => {
                                                                 <tr>
                                                                     <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
                                                                 </tr>
-                                                                {groupedTimeEntries[day]
-                                                                    .filter((entry, index, self) => {
-
-                                                                        return (
-                                                                            index === self.findIndex((e) => e.date === entry.date)
-                                                                        );
-                                                                    })
-                                                                    .map((entry, index) => (
-                                                                        <tr key={index}>
-                                                                            <td> <small className="float-left">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
-                                                                            <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
-                                                                        </tr>
+                                                                {groupedTimeEntries[day].map((attendance, index) => (
+                                                                        <React.Fragment key={index}>
+                                                                            {attendance.timeSheet.map((entry, idx) => (
+                                                                                <tr key={idx}>
+                                                                                    <td>
+                                                                                        <small className="float-left">
+                                                                                            {moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}
+                                                                                        </small>
+                                                                                    </td>
+                                                                                    <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </React.Fragment>
                                                                     ))}
+
                                                             </React.Fragment>
                                                         ))}
                                                     </tbody>
