@@ -18,6 +18,9 @@ import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getEmployeeRequisition } from '../../../services/expense';
 import { getAttendance } from '../../../services/attendance';
+import { deleteDocument, getEmployeeDocument } from '../../../services/documents';
+import Time from '../../elements/Time';
+import { getDepartment } from '../../../services/department';
 
 
 
@@ -49,7 +52,9 @@ const EmployeeDetails = (employee) => {
     const [searchExpense, setSearchExpense] = useState('');
     const [currentPageRequisition, setCurrentPageRequisition] = useState(1);
     const [attendance, setAttendance] = useState([]);
-    const [timeEntries, setTimeEntries] = useState([]);
+    const [department, setDepartment] = useState('');
+    const [documents, setDocuments] = useState([]);
+    
 
     const removeLeave = async (leaveId) => {
         if (!featureEnabled) {
@@ -149,6 +154,7 @@ const EmployeeDetails = (employee) => {
 
     };
 
+
     useEffect(() => {
 
         async function fetchData() {
@@ -162,14 +168,18 @@ const EmployeeDetails = (employee) => {
             if (user) {
                 // const company_id = user.company_id;
                 const activity = await getActivity(employeeData.id);
-                const leave = await getEmployeeLeave(employeeData.id)
-                const requisition = await getEmployeeRequisition(employeeData.id)
+                const leave = await getEmployeeLeave(employeeData.id);
+                const requisition = await getEmployeeRequisition(employeeData.id);
                 const allAttendance = await getAttendance(employeeData.id);
+                // const document = await getEmployeeDocument(employeeData?.id);
+                const department = await getDepartment(employeeData.id)
                 // companyData.settings?.features['activity'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 setActivities(activity);
                 setLeaves(leave)
                 setRequisitions(requisition)
                 setAttendance(allAttendance);
+                // setDocuments(document)
+                setDepartment(department)
                 setLoading(false);
             }
 
@@ -187,8 +197,6 @@ const EmployeeDetails = (employee) => {
         result[day].push(entry);
         return result;
     }, {});
-
-    // State to manage the current page
     
     const entriesPerPage = 5; // Number of entries to display per page
 
@@ -326,6 +334,43 @@ const EmployeeDetails = (employee) => {
         pageRequisitionNumbers.push(i);
     }
 
+    const readableDate = (date) => {
+        return Time(date);
+    }
+
+    const openFileInNewWindow = (url) => {
+         window.open(url, '_blank');
+      };
+
+      const removeDocument = async (documentId) => {
+        try {
+
+          const response = await deleteDocument(documentId);
+    
+          if (response.message) {
+            const logEmployee = await createActivity(
+              {
+                name: 'Delete Document',
+                employee_id: user.employee_id,
+                activity: `${user.name} deleted an ${employeeData.name}'s document with name; ${document.name}`,
+                activity_name: 'Deletion',
+                user: user.name,
+                company_id: user.company_id
+              }
+            )
+            if (logEmployee.id) {
+              const newDocuments = documents.filter(document => document.id !== documentId);
+              setDocuments(newDocuments);
+              toast.info(response.message);
+            }
+          }
+    
+        } catch (err) {
+          toast.error("Error, try again");
+        }
+    
+      };
+
     const successActivities = [
         'Completion',
         'Creation',
@@ -374,6 +419,8 @@ const EmployeeDetails = (employee) => {
                                         </div>
                                         <p className="mb-4">
                                             <span>{employeeData.phone}</span><br />
+                                            <span>{employeeData.gender}</span><br />
+                                            <span>{department}</span><br />
                                             <a href={`mailto:${employeeData.email}`}>{employeeData.email}</a><br />
                                             <span>{employeeData.country}</span>
                                         </p>
@@ -414,19 +461,21 @@ const EmployeeDetails = (employee) => {
                                                                 <tr>
                                                                     <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
                                                                 </tr>
-                                                                {groupedTimeEntries[day]
-                                                                    .filter((entry, index, self) => {
-
-                                                                        return (
-                                                                            index === self.findIndex((e) => e.date === entry.date)
-                                                                        );
-                                                                    })
-                                                                    .map((entry, index) => (
-                                                                        <tr key={index}>
-                                                                            <td> <small className="float-left">{moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}</small></td>
-                                                                            <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
-                                                                        </tr>
+                                                                {groupedTimeEntries[day].map((attendance, index) => (
+                                                                        <React.Fragment key={index}>
+                                                                            {attendance.timeSheet.map((entry, idx) => (
+                                                                                <tr key={idx}>
+                                                                                    <td>
+                                                                                        <small className="float-left">
+                                                                                            {moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}
+                                                                                        </small>
+                                                                                    </td>
+                                                                                    <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </React.Fragment>
                                                                     ))}
+
                                                             </React.Fragment>
                                                         ))}
                                                     </tbody>
@@ -731,6 +780,50 @@ const EmployeeDetails = (employee) => {
 										</div>
 									</div>
 								</div>
+                                <div className='card'>
+                                <div className="card-header">
+												<h3 className="card-title">Documents</h3>
+											</div>
+                                            {documents.length === 0 && !loading ? (
+                                    <div className='card'>
+                                        <EmptyState />
+                                        </div>
+                                ) : (
+                                <div className="row row-cards">
+                                    {documents.map((document) => (
+                                    <div key={document.id} className="col-sm-6 col-lg-4">
+                                        <div className="card p-3">
+                                        <div className="d-flex align-items-center px-2">
+                                                <div>
+                                                    <div>{document.name}</div>
+                                                    <small className="d-block text-muted">{readableDate(document.createdAt)}</small>
+                                                </div>
+                                                <div className="ml-auto text-muted">
+                                                <a onClick={()=> openFileInNewWindow(document.url)} className="mb-3">
+                                                <button className='btn btn-sm btn-outline-primary'>View File</button>
+                                            </a>
+                                                </div>
+                                            </div>
+                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                overlay={
+                                                <Popover id="popover-basic">
+                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                    <Popover.Body>
+                                                    <div className="clearfix" >
+                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                        <button style={{ margin: '10px' }} onClick={() => removeDocument(document.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                    </div>
+                                                    </Popover.Body>
+                                                </Popover>
+                                                }>
+                                                <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
+                                            </OverlayTrigger>
+                                        </div>
+                                    </div>
+                                    ))}
+                                </div>
+                                )}
+                                </div>
                                 <div className="card">
                                     <div className="card-body">
                                     <div className="card-options" style={{marginBottom: '20px', marginLeft: '10px'}}>
