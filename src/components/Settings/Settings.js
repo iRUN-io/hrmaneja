@@ -31,8 +31,8 @@ const Settings = () => {
 			const totalLeavesResponse = await totalLeaves(company_id);
 			const totalRequisitionsResponse = await totalRequisition(company_id);
 			const totalJobsResponse = await totalJobs(company_id);
-			// const totalDocumentsResponse = await totalDocuments(company_id);
-			// const totalInventoryResponse = await totalInventory(company_id);
+			const totalDocumentsResponse = await totalDocuments(company_id);
+			const totalInventoryResponse = await totalInventory(company_id);
 			if (totalDepartmentsResponse && totalUsersResponse && totalEmployeesResponse && totalLeavesResponse) {
 				setCompany({
 					name: companyData.name,
@@ -42,8 +42,8 @@ const Settings = () => {
 					totalLeaves: totalLeavesResponse.totalLeaves,
 					totalRequisitions: totalRequisitionsResponse.totalRequisitions,
 					totalJobs: totalJobsResponse.totalJobs,
-					// totalDocuments: totalDocumentsResponse.totalDocuments,
-					// totalInventory: totalInventoryResponse.totalInventories
+					totalDocuments: totalDocumentsResponse.totalDocuments,
+					totalInventory: totalInventoryResponse.totalInventories
 				});
 				setFeatures(companyData.settings?.features)
 				setLoading(false);

@@ -44,7 +44,7 @@ function Profile(props) {
                 const allEmployee = await getAllEmployees(user.company_id);
                 const allLeaves = await getAllLeaves(user.company_id);
                 const companyData = await getCompanyData();
-                // const document = await getEmployeeDocument(user.id);
+                const document = await getEmployeeDocument(user.employee_id);
                 const teamMembers = allEmployee.filter(mYemployee => mYemployee.department === employee.department).filter(employee => employee.id !== user.employee_id);
                 const totalLeaves = allLeaves.filter(leave => leave.employee_id === user.employee_id).length;
                 setUser(user);
@@ -53,7 +53,7 @@ function Profile(props) {
                 setEmployee(employee);
                 setCompany(companyData);
                 setTeamMembers(teamMembers);
-                // setDocuments(document);
+                setDocuments(document);
                 setLoading(false);
             }
         }
@@ -163,7 +163,7 @@ function Profile(props) {
                     name: formState.documentName,
                     company_id: user.company_id,
                     url: uploadDocument,
-                    employee_id: user.id,
+                    employee_id: user.employee_id,
                 }
                 if (formState.documentName === '' || formState.firstName === '') {
                     toast.error('Please fill all the fields');
@@ -713,7 +713,7 @@ function Profile(props) {
                                         <div className="card-body">
                                             <div className="widgets1">
                                                 <div className="icon">
-                                                    <i className="icon-trophy text-success font-30" />
+                                                    <i className="fa fa-money text-success font-30" />
                                                 </div>
                                                 <div className="details">
                                                     <h6 className="mb-0 font600">Salary</h6>

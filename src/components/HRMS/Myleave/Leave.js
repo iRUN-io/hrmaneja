@@ -314,6 +314,7 @@ const MyLeave = () => {
                                             <option value="Sick Leave">Sick Leave</option>
                                             <option value="Paid Leave">Paid Leave</option>
                                             <option value="Rest Leave">Rest Leave</option>
+                                            <option value="Others">Others</option>
                                         </select>
                                     </div>
                                 </div>

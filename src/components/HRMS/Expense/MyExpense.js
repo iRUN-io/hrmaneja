@@ -333,6 +333,7 @@ function Expense(props) {
 														<option value="Office Supplies">Office Supplies</option>
 														<option value="Travel Expense">Travel Expense</option>
 														<option value="Taxi Fares">Taxi Fares</option>
+														<option value="Others">Others</option>
 													</select>
 												</div>
 											</div>

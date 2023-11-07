@@ -13,14 +13,15 @@ import EmptyState from '../../EmptyState';
 import Skeleton from 'react-loading-skeleton'
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { toast } from 'material-react-toastify';
-import { approveLeave, deleteLeave, disapproveLeave, getEmployeeLeave,  } from '../../../services/leave';
+import { approveLeave, deleteLeave, disapproveLeave, getEmployeeLeave, } from '../../../services/leave';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import { getEmployeeRequisition } from '../../../services/expense';
 import { getAttendance } from '../../../services/attendance';
 import { deleteDocument, getEmployeeDocument } from '../../../services/documents';
 import Time from '../../elements/Time';
-import { getDepartment } from '../../../services/department';
+import { getAllDepartments } from '../../../services/department';
+import { getEmployee } from '../../../services/employee';
 
 
 
@@ -30,6 +31,8 @@ const EmployeeDetails = (employee) => {
     const { location } = employee;
     const { state } = location;
     const employeeData = state.employee[0];
+
+    console.log('employee', employeeData)
 
     if (!employeeData) {
         window.location.href = "/hr-employees";
@@ -52,8 +55,9 @@ const EmployeeDetails = (employee) => {
     const [searchExpense, setSearchExpense] = useState('');
     const [currentPageRequisition, setCurrentPageRequisition] = useState(1);
     const [attendance, setAttendance] = useState([]);
-    const [department, setDepartment] = useState('');
+    const [departments, setDepartments] = useState([]);
     const [documents, setDocuments] = useState([]);
+    const [lineManager, setLineManager] = useState('');
     
 
     const removeLeave = async (leaveId) => {
@@ -163,30 +167,38 @@ const EmployeeDetails = (employee) => {
             const isAdmin = user?.role === "HR Manager";
             setUser(user)
 
-	        if(!isAdmin){window.location.href = '/'}
-            
+            if (!isAdmin) { window.location.href = '/' }
+
             if (user) {
                 // const company_id = user.company_id;
                 const activity = await getActivity(employeeData.id);
                 const leave = await getEmployeeLeave(employeeData.id);
                 const requisition = await getEmployeeRequisition(employeeData.id);
                 const allAttendance = await getAttendance(employeeData.id);
-                // const document = await getEmployeeDocument(employeeData?.id);
-                const department = await getDepartment(employeeData.id)
+                const document = await getEmployeeDocument(employeeData.id);
+                const department = await getAllDepartments(user.company_id)
+                const lineManager = await getEmployee(employeeData.line_manager);
+      
+                setLineManager(lineManager.name);
                 // companyData.settings?.features['activity'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 setActivities(activity);
                 setLeaves(leave)
                 setRequisitions(requisition)
                 setAttendance(allAttendance);
-                // setDocuments(document)
-                setDepartment(department)
+                setDocuments(document)
+                setDepartments(department)
                 setLoading(false);
             }
 
-            
+
         }
         fetchData();
     }, []);
+
+    const getEmployeeDepartment = (id) => {
+        const department = departments.find(req => req.id === id);
+        return department?.name;
+    }
 
     // Group time entries by day
     const groupedTimeEntries = attendance.reduce((result, entry) => {
@@ -197,7 +209,7 @@ const EmployeeDetails = (employee) => {
         result[day].push(entry);
         return result;
     }, {});
-    
+
     const entriesPerPage = 5; // Number of entries to display per page
 
     // Calculate the total number of pages based on the number of unique days
@@ -255,10 +267,10 @@ const EmployeeDetails = (employee) => {
         searchQuery,
     ) => {
         return leaves.filter(leave =>
-			leave.employee.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| leave.leave_type.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| leave.status.toLowerCase().includes(searchQuery.toLowerCase())
-			|| leave.reason.toLowerCase().includes(searchQuery.toLowerCase())
+            leave.employee.toLowerCase().includes(searchQuery.toLowerCase())
+            || leave.leave_type.toLowerCase().includes(searchQuery.toLowerCase())
+            || leave.status.toLowerCase().includes(searchQuery.toLowerCase())
+            || leave.reason.toLowerCase().includes(searchQuery.toLowerCase())
         );
     };
 
@@ -276,10 +288,10 @@ const EmployeeDetails = (employee) => {
         searchQuery,
     ) => {
         return expenses.filter(expense =>
-			expense.amount.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| expense.category.toLowerCase().includes(searchQuery.toLowerCase()) 
-			|| expense.status.toLowerCase().includes(searchQuery.toLowerCase())
-			|| expense.note.toLowerCase().includes(searchQuery.toLowerCase())
+            expense.amount.toLowerCase().includes(searchQuery.toLowerCase())
+            || expense.category.toLowerCase().includes(searchQuery.toLowerCase())
+            || expense.status.toLowerCase().includes(searchQuery.toLowerCase())
+            || expense.note.toLowerCase().includes(searchQuery.toLowerCase())
         );
     };
 
@@ -339,37 +351,37 @@ const EmployeeDetails = (employee) => {
     }
 
     const openFileInNewWindow = (url) => {
-         window.open(url, '_blank');
-      };
+        window.open(url, '_blank');
+    };
 
-      const removeDocument = async (documentId) => {
+    const removeDocument = async (documentId) => {
         try {
 
-          const response = await deleteDocument(documentId);
-    
-          if (response.message) {
-            const logEmployee = await createActivity(
-              {
-                name: 'Delete Document',
-                employee_id: user.employee_id,
-                activity: `${user.name} deleted an ${employeeData.name}'s document with name; ${document.name}`,
-                activity_name: 'Deletion',
-                user: user.name,
-                company_id: user.company_id
-              }
-            )
-            if (logEmployee.id) {
-              const newDocuments = documents.filter(document => document.id !== documentId);
-              setDocuments(newDocuments);
-              toast.info(response.message);
+            const response = await deleteDocument(documentId);
+
+            if (response.message) {
+                const logEmployee = await createActivity(
+                    {
+                        name: 'Delete Document',
+                        employee_id: user.employee_id,
+                        activity: `${user.name} deleted an ${employeeData.name}'s document with name; ${document.name}`,
+                        activity_name: 'Deletion',
+                        user: user.name,
+                        company_id: user.company_id
+                    }
+                )
+                if (logEmployee.id) {
+                    const newDocuments = documents.filter(document => document.id !== documentId);
+                    setDocuments(newDocuments);
+                    toast.info(response.message);
+                }
             }
-          }
-    
+
         } catch (err) {
-          toast.error("Error, try again");
+            toast.error("Error, try again");
         }
-    
-      };
+
+    };
 
     const successActivities = [
         'Completion',
@@ -381,23 +393,32 @@ const EmployeeDetails = (employee) => {
         'Approval',
         'Paid for subscription'
     ];
+
     return (
         <>
             <div className="section-body">
                 <div className="container-fluid">
                     <div className="">
-                    <ul className="nav nav-tabs page-header-tab">
-                    <li className="nav-item">
-                        <Link to={'/admin/hr-employees'} className="nav-link active">
-                            <i className="fa fa-arrow-left"></i>
-                        </Link>
-                        </li>
-                    </ul>
+                        <ul className="nav nav-tabs page-header-tab">
+                            <li className="nav-item">
+                                <Link to={'/admin/hr-employees'} className="nav-link active">
+                                    <i className="fa fa-arrow-left"></i>
+                                </Link>
+                            </li>
+                        </ul>
                         <div className="row">
                             <div className="col-lg-4 col-md-12">
                                 <div className="card">
                                     <div className="card-body">
                                         <div className="media mb-4">
+                                        {employeeData.profile_picture !== '' ? (
+                                                <img
+                                                    className="avatar avatar-xl mr-3"
+                                                    src={employeeData.profile_picture}
+                                                    alt={employeeData.name}
+                                                />
+                                            ) : (
+                                            <>
                                             {employeeData.gender === 'Female' ? (
                                                 <img
                                                     className="avatar avatar-xl mr-3"
@@ -412,6 +433,8 @@ const EmployeeDetails = (employee) => {
 
                                                 />
                                             )}
+                                            </>
+                                            )}
                                             <div className="media-body">
                                                 <h5 className="m-0">{employeeData.name}</h5>
                                                 <p className="text-muted mb-0">{employeeData.role}</p>
@@ -420,9 +443,10 @@ const EmployeeDetails = (employee) => {
                                         <p className="mb-4">
                                             <span>{employeeData.phone}</span><br />
                                             <span>{employeeData.gender}</span><br />
-                                            <span>{department}</span><br />
+                                            <span>{getEmployeeDepartment(employeeData.department)}</span><br />
                                             <a href={`mailto:${employeeData.email}`}>{employeeData.email}</a><br />
-                                            <span>{employeeData.country}</span>
+                                            <span>{employeeData.address}, {employeeData.country}</span><br/>
+                                            <span>{employeeData.employment_type}</span>
                                         </p>
                                         <button style={{ marginRight: '10px' }} className="btn btn-outline-primary btn-sm">
                                             <a href={`mailto:${employeeData.email}`}><span className="fa fa-envelope" /></a>
@@ -433,8 +457,34 @@ const EmployeeDetails = (employee) => {
                                         </button>
                                     </div>
                                 </div>
-
                                 <div className="card">
+                                <div className="card-header">
+                                    Other Details
+                                </div>
+                                <div className="card-body">
+                                    <div className="media-body">
+
+                                    <p className="text-muted mb-0"><strong>Employment Type:</strong> {employeeData.employment_type}</p>
+                                    <p className="text-muted mb-0"><strong>Line Manager:</strong> {lineManager}</p>
+                                    <p className="text-muted mb-0"><strong>Date of Birth:</strong> {employeeData.dob}</p>
+                                    <p className="text-muted mb-0"><strong>Country:</strong> {employeeData.country}</p>
+                                    {/* <p className="text-muted mb-0"><strong>Country of Employment:</strong> {employeeData.country_of_employment}</p> */}
+                                    <p className="text-muted mb-0"><strong>Currency:</strong> {employeeData.currency}</p>
+                                    <p className="text-muted mb-0"><strong>Salary Frequency:</strong> {employeeData.salary_frequency}</p>
+                                    <p className="text-muted mb-0"><strong>Start Date:</strong> {employeeData.start_date}</p>
+                                    <p className="text-muted mb-0"><strong>Salary Start Date:</strong> {employeeData.salary_start_date}</p>
+                                    <p className="text-muted mb-0"><strong>Salary:</strong> {formatMoney(employeeData.salary)}</p>
+                                    <p className="text-muted mb-0"><strong>Bank Name:</strong> {employeeData.bank_name}</p>
+                                    <p className="text-muted mb-0"><strong>Bank Account Number:</strong> {employeeData.bank_account_number}</p>
+                                    <p className="text-muted mb-0"><strong>Bank Account Name:</strong> {employeeData.bank_account_name}</p>
+                                    <p className="text-muted mb-0"><strong>Created At:</strong> {moment(employeeData.createdAt).format('MMMM DD, YYYY, hh:mm:ss A z')}</p>
+                                    <p className="text-muted mb-0"><strong>Updated At:</strong> {moment(employeeData.updatedAt).format('MMMM DD, YYYY, hh:mm:ss A z')}</p>
+                                    
+                                    </div>
+                                </div>
+                                </div>
+
+                                {/* <div className="card">
                                     <div className='card-header'>
                                         Salary Details
                                     </div>
@@ -446,60 +496,67 @@ const EmployeeDetails = (employee) => {
                                             <p className="text-muted mb-0">{formatMoney(employeeData.salary)}</p>
                                         </div>
                                     </div>
-                                </div>
-                                <div className='card'>
-                                                <table className='table table-hover table-striped table-vcenter text-nowrap'>
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Date</th>
-                                                            <th>Type</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {currentDays.map((day, dayIndex) => (
-                                                            <React.Fragment key={dayIndex}>
-                                                                <tr>
-                                                                    <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
-                                                                </tr>
-                                                                {groupedTimeEntries[day].map((attendance, index) => (
-                                                                        <React.Fragment key={index}>
-                                                                            {attendance.timeSheet.map((entry, idx) => (
-                                                                                <tr key={idx}>
-                                                                                    <td>
-                                                                                        <small className="float-left">
-                                                                                            {moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}
-                                                                                        </small>
-                                                                                    </td>
-                                                                                    <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
-                                                                                </tr>
-                                                                            ))}
-                                                                        </React.Fragment>
-                                                                    ))}
+                                </div> */}
 
+                                <div className='card'>
+                                <div className='card-header'>
+                                        Time Sheet
+                                        </div>
+                                    <div className='card-body'>
+                                    
+                                        <table className='table table-hover table-striped table-vcenter text-nowrap'>
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {currentDays.map((day, dayIndex) => (
+                                                    <React.Fragment key={dayIndex}>
+                                                        {/* <tr>
+                                                            <th colSpan="2"> <small className="float-right badge badge-primary">{day}</small></th>
+                                                        </tr> */}
+                                                        {groupedTimeEntries[day].map((attendance, index) => (
+                                                            <React.Fragment key={index}>
+                                                                {attendance.timeSheet.map((entry, idx) => (
+                                                                    <tr key={idx}>
+                                                                        <td>
+                                                                            <small className="float-left">
+                                                                                {moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z')}
+                                                                            </small>
+                                                                        </td>
+                                                                        <td style={{ textTransform: 'uppercase' }}>{entry.type}</td>
+                                                                    </tr>
+                                                                ))}
                                                             </React.Fragment>
                                                         ))}
-                                                    </tbody>
 
-                                                </table>
+                                                    </React.Fragment>
+                                                ))}
+                                            </tbody>
 
-                                                <div className="pagination justify-content-end">
-                                                    <button
-                                                        className='btn-primary btn-sm'
-                                                        disabled={currentPage === 1}
-                                                        onClick={() => handlePageChange(currentPage - 1)}
-                                                    >
-                                                        <i className="fa fa-angle-double-left"></i>
-                                                    </button>
-                                                    <span>{currentPage} of {totalPages}</span>
-                                                    <button
-                                                        className='btn-primary btn-sm'
-                                                        disabled={currentPage === totalPages}
-                                                        onClick={() => handlePageChange(currentPage + 1)}
-                                                    >
-                                                        <i className="fa fa-angle-double-right"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
+                                        </table>
+
+                                        <div className="pagination justify-content-end">
+                                            <button
+                                                className='btn-primary btn-sm'
+                                                disabled={currentPage === 1}
+                                                onClick={() => handlePageChange(currentPage - 1)}
+                                            >
+                                                <i className="fa fa-angle-double-left"></i>
+                                            </button>
+                                            <span>{currentPage} of {totalPages}</span>
+                                            <button
+                                                className='btn-primary btn-sm'
+                                                disabled={currentPage === totalPages}
+                                                onClick={() => handlePageChange(currentPage + 1)}
+                                            >
+                                                <i className="fa fa-angle-double-right"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="card disabled-card">
                                     <div className='card-header'>
                                         Send Message
@@ -525,321 +582,321 @@ const EmployeeDetails = (employee) => {
 
                             </div>
                             <div className="col-lg-8 col-md-12">
-                                            <div className="card">
-                                                <div className="card-body">
-                                                    <div className="tab-content mt-3">
-                                                        <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
-                                                            <div className="card">
-                                                                <div className="card-header">
-                                                                    <h3 className="card-title">Employee Leave Record</h3>
-                                                                    <div className="card-options">
-                                                                        <form>
-                                                                            <div className="input-group">
-                                                                                <input value={searchLeave} onChange={leaveSearch} type="text" className="form-control form-control-sm" placeholder="Search Leave..." name="s" />
-                                                                                <span className="input-group-btn ml-2"><button className="btn btn-icon"><span className="fe fe-search" /></button></span>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
+                                <div className="card">
+                                    <div className="card-body">
+                                        <div className="tab-content mt-3">
+                                            <div className="tab-pane fade show active" id="Leaves-list" role="tabpanel">
+                                                <div className="card">
+                                                    <div className="card-header">
+                                                        <h3 className="card-title">Employee Leave Record</h3>
+                                                        <div className="card-options">
+                                                            <form>
+                                                                <div className="input-group">
+                                                                    <input value={searchLeave} onChange={leaveSearch} type="text" className="form-control form-control-sm" placeholder="Search Leave..." name="s" />
+                                                                    <span className="input-group-btn ml-2"><button className="btn btn-icon"><span className="fe fe-search" /></button></span>
                                                                 </div>
-                                                                {currentLeaves.length === 0 && !loading ? (
-                                                                    <EmptyState />
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    {currentLeaves.length === 0 && !loading ? (
+                                                        <EmptyState />
+                                                    ) : (
+                                                        <div className="card-body">
+                                                            <div className="table-responsive">
+
+                                                                {loading ? (
+                                                                    <Skeleton count={4} height={50} />
                                                                 ) : (
-                                                                    <div className="card-body">
-                                                                        <div className="table-responsive">
+                                                                    <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>#</th>
+                                                                                <th>Name</th>
+                                                                                <th>Leave Type</th>
+                                                                                <th>Duration</th>
+                                                                                <th>Reason</th>
+                                                                                <th>Status</th>
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {currentLeaves.map((leave) => (
+                                                                                <tr key={leave.id}>
+                                                                                    <td className="width45">
+                                                                                        <span
+                                                                                            className="avatar avatar-orange"
+                                                                                            data-toggle="tooltip"
+                                                                                            title="Avatar Name"
+                                                                                        >
+                                                                                            {leave.employee?.charAt(0).toUpperCase()}
+                                                                                        </span>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div className="font-15">{leave.employee}</div>
+                                                                                    </td>
 
-                                                                            {loading ? (
-                                                                                <Skeleton count={4} height={50} />
-                                                                            ) : (
-                                                                                <table className="table table-hover table-striped table-vcenter text-nowrap mb-0">
-                                                                                    <thead>
-                                                                                        <tr>
-                                                                                            <th>#</th>
-                                                                                            <th>Name</th>
-                                                                                            <th>Leave Type</th>
-                                                                                            <th>Duration</th>
-                                                                                            <th>Reason</th>
-                                                                                            <th>Status</th>
-                                                                                            <th>Action</th>
-                                                                                        </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                        {currentLeaves.map((leave) => (
-                                                                                            <tr key={leave.id}>
-                                                                                                <td className="width45">
-                                                                                                    <span
-                                                                                                        className="avatar avatar-orange"
-                                                                                                        data-toggle="tooltip"
-                                                                                                        title="Avatar Name"
-                                                                                                    >
-                                                                                                        {leave.employee?.charAt(0).toUpperCase()}
-                                                                                                    </span>
-                                                                                                </td>
-                                                                                                <td>
-                                                                                                    <div className="font-15">{leave.employee}</div>
-                                                                                                </td>
+                                                                                    <td>
+                                                                                        <span>{leave.leave_type}</span>
+                                                                                    </td>
 
-                                                                                                <td>
-                                                                                                    <span>{leave.leave_type}</span>
-                                                                                                </td>
+                                                                                    <td> {moment(leave.from).format('MMM Do YYYY')} To {moment(leave.to).format('MMM Do YYYY')}</td>
+                                                                                    <td>{leave.reason}</td>
+                                                                                    <td> {leave.status === 'approve' && (
+                                                                                        <span className="badge badge-success">approved</span>
+                                                                                    )}
+                                                                                        {leave.status === 'disapprove' && (
+                                                                                            <span className="badge badge-danger">rejected</span>
+                                                                                        )}
+                                                                                        {leave.status === 'pending' && (
+                                                                                            <span className="badge badge-grey">pending</span>
+                                                                                        )}
+                                                                                    </td>
 
-                                                                                                <td> {moment(leave.from).format('MMM Do YYYY')} To {moment(leave.to).format('MMM Do YYYY')}</td>
-                                                                                                <td>{leave.reason}</td>
-                                                                                                <td> {leave.status === 'approve' && ( 
-                                                                                                <span className="badge badge-success">approved</span>
-                                                                                                )}
-                                                                                                {leave.status === 'disapprove' && (
-                                                                                                <span className="badge badge-danger">rejected</span>
-                                                                                                )}
-                                                                                                {leave.status === 'pending' && (
-                                                                                                <span className="badge badge-grey">pending</span>
-                                                                                                )}
-                                                                                                </td>
-
-                                                                                                <td>
-                                                                                                    {leave.status === 'approve'  &&  ( 
-                                                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                                                        overlay={
-                                                                                                            <Popover id="popover-basic">
-                                                                                                                <Popover.Header as="p">Confirm Decline</Popover.Header>
-                                                                                                                <Popover.Body>
-                                                                                                                    <div className="clearfix" >
-                                                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                                                        <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
-                                                                                                                    </div>
-                                                                                                                </Popover.Body>
-                                                                                                            </Popover>
-                                                                                                        }>
-                                                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
-                                                                                                    </OverlayTrigger>
-                                                                                                    )}
-                                                                                                    {(leave.status === 'pending' || leave.status === 'disapprove') && (
-                                                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                                                        overlay={ 
-                                                                                                            <Popover id="popover-basic">
-                                                                                                                <Popover.Header as="p">Confirm Approval</Popover.Header>
-                                                                                                                <Popover.Body>
-                                                                                                                    <div className="clearfix" >
-                                                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                                                        <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
-                                                                                                                    </div>
-                                                                                                                </Popover.Body>
-                                                                                                            </Popover>
-                                                                                                        }>
-                                                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
-                                                                                                    </OverlayTrigger>
-                                                                                                    )}
-                                                                                                    <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                                                        overlay={
-                                                                                                            <Popover id="popover-basic">
-                                                                                                                <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                                                                                                <Popover.Body>
-                                                                                                                    <div className="clearfix" >
-                                                                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                                                        <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                                                                                                    </div>
-                                                                                                                </Popover.Body>
-                                                                                                            </Popover>
-                                                                                                        }>
-                                                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                                                    </OverlayTrigger>
-                                                                                                </td>
-                                                                                            </tr>
-                                                                                        ))}
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            )}
-                                                                        </div>
-                                                                        <div className=''>
-                                                                            <nav aria-label="Page navigation example">
-                                                                                <ul className="pagination justify-content-end">
-                                                                                    <li className="page-item" style={{ marginRight: '5px' }}>
-                                                                                        <button className="btn btn-sm btn-primary" onClick={prevPageLeaves} disabled={currentPageLeaves === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
-                                                                                    </li>
-                                                                                    {pageLeaveNumbers.map(number => (
-                                                                                        <li key={number} className="page-item" style={{ marginRight: '5px' }}>
-                                                                                            <button onClick={() => paginateLeaves(number)} className={currentPageLeaves === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
-                                                                                        </li>
-                                                                                    ))}
-                                                                                    <li className="page-item">
-                                                                                        <button className="btn btn-sm btn-primary" onClick={nextPageLeaves} disabled={currentPageLeaves === pageLeaveNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
-                                                                                    </li>
-                                                                                </ul>
-                                                                            </nav>
-                                                                        </div>
-                                                                    </div>
+                                                                                    <td>
+                                                                                        {leave.status === 'approve' && (
+                                                                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                                                overlay={
+                                                                                                    <Popover id="popover-basic">
+                                                                                                        <Popover.Header as="p">Confirm Decline</Popover.Header>
+                                                                                                        <Popover.Body>
+                                                                                                            <div className="clearfix" >
+                                                                                                                <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                                                <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                                            </div>
+                                                                                                        </Popover.Body>
+                                                                                                    </Popover>
+                                                                                                }>
+                                                                                                <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+                                                                                            </OverlayTrigger>
+                                                                                        )}
+                                                                                        {(leave.status === 'pending' || leave.status === 'disapprove') && (
+                                                                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                                                overlay={
+                                                                                                    <Popover id="popover-basic">
+                                                                                                        <Popover.Header as="p">Confirm Approval</Popover.Header>
+                                                                                                        <Popover.Body>
+                                                                                                            <div className="clearfix" >
+                                                                                                                <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                                                <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
+                                                                                                            </div>
+                                                                                                        </Popover.Body>
+                                                                                                    </Popover>
+                                                                                                }>
+                                                                                                <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
+                                                                                            </OverlayTrigger>
+                                                                                        )}
+                                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                                            overlay={
+                                                                                                <Popover id="popover-basic">
+                                                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                                                    <Popover.Body>
+                                                                                                        <div className="clearfix" >
+                                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                                            <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                                                                        </div>
+                                                                                                    </Popover.Body>
+                                                                                                </Popover>
+                                                                                            }>
+                                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
+                                                                                        </OverlayTrigger>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </tbody>
+                                                                    </table>
                                                                 )}
                                                             </div>
+                                                            <div className=''>
+                                                                <nav aria-label="Page navigation example">
+                                                                    <ul className="pagination justify-content-end">
+                                                                        <li className="page-item" style={{ marginRight: '5px' }}>
+                                                                            <button className="btn btn-sm btn-primary" onClick={prevPageLeaves} disabled={currentPageLeaves === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
+                                                                        </li>
+                                                                        {pageLeaveNumbers.map(number => (
+                                                                            <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                                <button onClick={() => paginateLeaves(number)} className={currentPageLeaves === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                                            </li>
+                                                                        ))}
+                                                                        <li className="page-item">
+                                                                            <button className="btn btn-sm btn-primary" onClick={nextPageLeaves} disabled={currentPageLeaves === pageLeaveNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </nav>
+                                                            </div>
                                                         </div>
-
-                                                    </div>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <div className="tab-content mt-3">
-									<div className="tab-pane fade show active" id="Expense-Salary" role="tabpanel">
-										<div className="card">
-											<div className="card-header">
-												<h3 className="card-title">Expenses</h3>
-												<div className="card-options">
-													<form>
-														<div className="input-group">
-															<input
-																type="text"
-																className="form-control form-control-sm"
-																placeholder="Search expense..."
-																value={searchExpense}
-																onChange={setSearch}
-																name="s" />
-															<span className="input-group-btn ml-2">
-																<button className="btn btn-icon" type="submit">
-																	<span className="fe fe-search" />
-																</button>
-															</span>
-														</div>
-													</form>
-												</div>
-											</div>
-											{requisitions.length === 0 && !loading ? (
-												<EmptyState />
-											) : (
-											<div className="card-body">
-												<div className="table-responsive">
-													{loading ? (
-														<Skeleton count={5} height={57} />
-													) :
-														(
-															<table className="table table-hover table-striped table-vcenter text-nowrap">
-																<thead>
-																	<tr>
-																		<th className="w200">Employee</th>
-																		<th className="w200">Category</th>
-																		<th className="w60">Due Date</th>
-																		<th className="w60">Amount</th>
-																		<th className="w60">Status</th>
-																		{/* <th className="w200">Action</th> */}
-																	</tr>
-																</thead>
-																<tbody>
 
-																	{currentRequisitions.map((request, index) => (
-																		<tr key={index}>
-																			<td>
-																				<div className="d-flex align-items-center">
-																					<span
-																						className="avatar avatar-pink"
-																						data-toggle="tooltip"
-																						data-placement="top"
-																						title="Avatar Name"
-																					>
-																						{(request.employee ? request.employee[0] + request.employee[1] : '').toUpperCase()}
-																					</span>
-																					<div className="ml-3">
-																						<a href="#">{request.employee}</a>
-																						<p className="mb-0">{request.note}</p>
-																					</div>
-																				</div>
-																			</td>
-																			<td>{request.category}</td>
-																			<td>{moment(request.dueDate).format('MMM Do YYYY')}</td>
-																			<td>{formatMoney(request.amount)}</td>
-																			<td>
-																				{request.status === 'approve' && (
-																					<span className="badge badge-success">approved</span>
-																				)}
-																				{request.status === 'disapprove' && (
-																					<span className="badge badge-danger">rejected</span>
-																				)}
-																				{request.status === 'pending' && (
-																					<span className="badge badge-grey">pending</span>
-																				)}
-																			</td>
-																		</tr>
-																	))}
-																</tbody>
-															</table>
-														)}
-												</div>
-												<div className=''>
-													<nav aria-label="Page navigation example">
-														<ul className="pagination justify-content-end">
-															<li className="page-item" style={{ marginRight: '5px' }}>
-																<button className="btn btn-sm btn-primary" onClick={prevPageRequisite} disabled={currentPageRequisition === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
-															</li>
-															{pageRequisitionNumbers.map(number => (
-																<li key={number} className="page-item" style={{ marginRight: '5px' }}>
-																	<button onClick={() => paginateRequisite(number)} className={currentPageRequisition === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
-																</li>
-															))}
-															<li className="page-item">
-																<button className="btn btn-sm btn-primary" onClick={nextPageRequisite} disabled={currentPageRequisition === pageRequisitionNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
-															</li>
-														</ul>
-													</nav>
-												</div>
-											</div>
-											)}
-										</div>
-									</div>
-								</div>
-                                <div className='card'>
-                                <div className="card-header">
-												<h3 className="card-title">Documents</h3>
-											</div>
-                                            {documents.length === 0 && !loading ? (
-                                    <div className='card'>
-                                        <EmptyState />
-                                        </div>
-                                ) : (
-                                <div className="row row-cards">
-                                    {documents.map((document) => (
-                                    <div key={document.id} className="col-sm-6 col-lg-4">
-                                        <div className="card p-3">
-                                        <div className="d-flex align-items-center px-2">
-                                                <div>
-                                                    <div>{document.name}</div>
-                                                    <small className="d-block text-muted">{readableDate(document.createdAt)}</small>
-                                                </div>
-                                                <div className="ml-auto text-muted">
-                                                <a onClick={()=> openFileInNewWindow(document.url)} className="mb-3">
-                                                <button className='btn btn-sm btn-outline-primary'>View File</button>
-                                            </a>
-                                                </div>
-                                            </div>
-                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                overlay={
-                                                <Popover id="popover-basic">
-                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                                    <Popover.Body>
-                                                    <div className="clearfix" >
-                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                        <button style={{ margin: '10px' }} onClick={() => removeDocument(document.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                                    </div>
-                                                    </Popover.Body>
-                                                </Popover>
-                                                }>
-                                                <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
-                                            </OverlayTrigger>
                                         </div>
                                     </div>
-                                    ))}
                                 </div>
-                                )}
+                                <div className="tab-content mt-3">
+                                    <div className="tab-pane fade show active" id="Expense-Salary" role="tabpanel">
+                                        <div className="card">
+                                            <div className="card-header">
+                                                <h3 className="card-title">Expenses</h3>
+                                                <div className="card-options">
+                                                    <form>
+                                                        <div className="input-group">
+                                                            <input
+                                                                type="text"
+                                                                className="form-control form-control-sm"
+                                                                placeholder="Search expense..."
+                                                                value={searchExpense}
+                                                                onChange={setSearch}
+                                                                name="s" />
+                                                            <span className="input-group-btn ml-2">
+                                                                <button className="btn btn-icon" type="submit">
+                                                                    <span className="fe fe-search" />
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            {requisitions.length === 0 && !loading ? (
+                                                <EmptyState />
+                                            ) : (
+                                                <div className="card-body">
+                                                    <div className="table-responsive">
+                                                        {loading ? (
+                                                            <Skeleton count={5} height={57} />
+                                                        ) :
+                                                            (
+                                                                <table className="table table-hover table-striped table-vcenter text-nowrap">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th className="w200">Employee</th>
+                                                                            <th className="w200">Category</th>
+                                                                            <th className="w60">Due Date</th>
+                                                                            <th className="w60">Amount</th>
+                                                                            <th className="w60">Status</th>
+                                                                            {/* <th className="w200">Action</th> */}
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+
+                                                                        {currentRequisitions.map((request, index) => (
+                                                                            <tr key={index}>
+                                                                                <td>
+                                                                                    <div className="d-flex align-items-center">
+                                                                                        <span
+                                                                                            className="avatar avatar-pink"
+                                                                                            data-toggle="tooltip"
+                                                                                            data-placement="top"
+                                                                                            title="Avatar Name"
+                                                                                        >
+                                                                                            {(request.employee ? request.employee[0] + request.employee[1] : '').toUpperCase()}
+                                                                                        </span>
+                                                                                        <div className="ml-3">
+                                                                                            <a href="#">{request.employee}</a>
+                                                                                            <p className="mb-0">{request.note}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>{request.category}</td>
+                                                                                <td>{moment(request.dueDate).format('MMM Do YYYY')}</td>
+                                                                                <td>{formatMoney(request.amount)}</td>
+                                                                                <td>
+                                                                                    {request.status === 'approve' && (
+                                                                                        <span className="badge badge-success">approved</span>
+                                                                                    )}
+                                                                                    {request.status === 'disapprove' && (
+                                                                                        <span className="badge badge-danger">rejected</span>
+                                                                                    )}
+                                                                                    {request.status === 'pending' && (
+                                                                                        <span className="badge badge-grey">pending</span>
+                                                                                    )}
+                                                                                </td>
+                                                                            </tr>
+                                                                        ))}
+                                                                    </tbody>
+                                                                </table>
+                                                            )}
+                                                    </div>
+                                                    <div className=''>
+                                                        <nav aria-label="Page navigation example">
+                                                            <ul className="pagination justify-content-end">
+                                                                <li className="page-item" style={{ marginRight: '5px' }}>
+                                                                    <button className="btn btn-sm btn-primary" onClick={prevPageRequisite} disabled={currentPageRequisition === 1 ? true : false}><i className="fa fa-angle-double-left"></i></button>
+                                                                </li>
+                                                                {pageRequisitionNumbers.map(number => (
+                                                                    <li key={number} className="page-item" style={{ marginRight: '5px' }}>
+                                                                        <button onClick={() => paginateRequisite(number)} className={currentPageRequisition === number ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-outline-primary'}>{number}</button>
+                                                                    </li>
+                                                                ))}
+                                                                <li className="page-item">
+                                                                    <button className="btn btn-sm btn-primary" onClick={nextPageRequisite} disabled={currentPageRequisition === pageRequisitionNumbers.length ? true : false}><i className="fa fa-angle-double-right"></i></button>
+                                                                </li>
+                                                            </ul>
+                                                        </nav>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='card'>
+                                    <div className="card-header">
+                                        <h3 className="card-title">Documents</h3>
+                                    </div>
+                                    {documents.length === 0 && !loading ? (
+                                        <div className='card'>
+                                            <EmptyState />
+                                        </div>
+                                    ) : (
+                                        <div className="row row-cards">
+                                            {documents.map((document) => (
+                                                <div key={document.id} className="col-sm-6 col-lg-4">
+                                                    <div className="card p-3">
+                                                        <div className="d-flex align-items-center px-2">
+                                                            <div>
+                                                                <div>{document.name}</div>
+                                                                <small className="d-block text-muted">{readableDate(document.createdAt)}</small>
+                                                            </div>
+                                                            <div className="ml-auto text-muted">
+                                                                <a onClick={() => openFileInNewWindow(document.url)} className="mb-3">
+                                                                    <button className='btn btn-sm btn-outline-primary'>View File</button>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                            overlay={
+                                                                <Popover id="popover-basic">
+                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                    <Popover.Body>
+                                                                        <div className="clearfix" >
+                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                            <button style={{ margin: '10px' }} onClick={() => removeDocument(document.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                                                        </div>
+                                                                    </Popover.Body>
+                                                                </Popover>
+                                                            }>
+                                                            <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
+                                                        </OverlayTrigger>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="card">
                                     <div className="card-body">
-                                    <div className="card-options" style={{marginBottom: '20px', marginLeft: '10px'}}>
-                                        <form>
-                                            <div className="input-group">
-                                                <input
-                                                    type="text"
-                                                    onChange={activitySearch}
-                                                    value={searchActivity}
-                                                    className="form-control form-control-sm"
-                                                    placeholder="Search Activity..."
-                                                    name="" />
+                                        <div className="card-options" style={{ marginBottom: '20px', marginLeft: '10px' }}>
+                                            <form>
+                                                <div className="input-group">
+                                                    <input
+                                                        type="text"
+                                                        onChange={activitySearch}
+                                                        value={searchActivity}
+                                                        className="form-control form-control-sm"
+                                                        placeholder="Search Activity..."
+                                                        name="" />
 
-                                            </div>
-                                        </form>
-                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                         <ul className="new_timeline mt-3">
                                             {currentActivity.map((activity, index) => (
                                                 <li key={index}>
