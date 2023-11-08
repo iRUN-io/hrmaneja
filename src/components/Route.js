@@ -88,6 +88,8 @@ import EmailResponse from './HRMS/EmailResponse';
 import Documents from './HRMS/Documents/Document';
 import ManageDocument from './HRMS/Documents/ManageDocument';
 import ManageInventory from './HRMS/Inventory/ManageInventory';
+import ManageReport from './HRMS/Report/ManageReport';
+import MyReport from './HRMS/MyReport/Report';
 
 const user = getUser();
 
@@ -140,7 +142,13 @@ const Routes = [
         pageTitle: "My Timesheet",
         component: MyTimesheet
     },
-    
+    {
+        path: "/my-report",
+        name: 'myReport',
+        exact: true,
+        pageTitle: "My Report",
+        component: MyReport
+    },
 
     // Admin 
     // isAdmin && {
@@ -296,6 +304,13 @@ const Routes = [
         exact: true,
         pageTitle: "ManageInventory",
         component: ManageInventory
+    },
+    {
+        path: "/admin/hr-report/manage",
+        name: 'managereport',
+        exact: true,
+        pageTitle: "ManageReport",
+        component: ManageReport
     },
     // add new routes here
 

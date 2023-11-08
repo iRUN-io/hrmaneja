@@ -350,11 +350,11 @@ class Menu extends Component {
 					// 	"label": "Accounts",
 					// 	"to": "/hr-accounts"
 					// },
-					// {
-					// 	"id": 13,
-					// 	"label": "Report",
-					// 	"to": "/hr-report"
-					// },
+					{
+						"id": 13,
+						"label": "My Report",
+						"to": "/my-report"
+					},
 					// {
 					// 	"id": 14,
 					// 	"label": "Expense",
