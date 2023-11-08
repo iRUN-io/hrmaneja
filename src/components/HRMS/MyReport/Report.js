@@ -257,7 +257,7 @@ const MyReport = () => {
                                         <div className="card-options">
                                             <form>
                                                 <div className="input-group">
-                                                    <input value={searchReport} onChange={setSearch} type="text" className="form-control form-control-sm" placeholder="Search leave..." name="s" />
+                                                    <input value={searchReport} onChange={setSearch} type="text" className="form-control form-control-sm" placeholder="Search report..." name="s" />
                                                     <span className="input-group-btn ml-2"><button className="btn btn-icon"><span className="fe fe-search" /></button></span>
                                                 </div>
                                             </form>
