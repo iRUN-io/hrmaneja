@@ -59,13 +59,43 @@ function ReportDoc(props) {
 
     const handlePrint = () => {
         const content = document.getElementById('reportContent').innerHTML;
+    
         const newWindow = window.open();
-        newWindow.document.write('<html><head><title>Print</title></head><body>');
+        newWindow.document.write('<html><head><title>Print</title>');
+    
+        // Add styles to center content
+        newWindow.document.write('<style>');
+        newWindow.document.write(`
+    
+    
+            #printContainer {
+                width: 210mm; /* A4 width */
+                margin: auto;
+                text-align: left;
+            }
+    
+            #reportContent {
+                padding: 20px; /* Adjust as needed */
+                border: 1px solid #000; /* Optional border for clarity */
+            }
+    
+            h2, .info {
+                text-align: center;
+            }
+        `);
+        newWindow.document.write('</style></head><body>');
+    
+        newWindow.document.write('<div id="printContainer">');
+    
         newWindow.document.write(content);
+    
+        newWindow.document.write('</div>');
+    
         newWindow.document.write('</body></html>');
         newWindow.document.close();
         newWindow.print();
     };
+    
     return (
         <>
                         <div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
@@ -93,7 +123,7 @@ function ReportDoc(props) {
                                                     <div className="media-body">
                                                         <div className="content">
                                                             <div id="reportContent"><div className="text-center"><h2>Weekly Activity Report</h2></div>
-                                                            <div>
+                                                            <div className="body"><div>
                                                                 <strong>Report Date</strong> <br/>
                                                                 <small>{moment(reportData?.from).format('MMM Do YYYY')} To {moment(reportData?.to).format('MMM Do YYYY')}</small>
                                                             </div><br/>
@@ -125,7 +155,9 @@ function ReportDoc(props) {
                                                                 <strong>Fture Overview</strong> <br/>
                                                                 <small>{reportData.report_overview}</small>
                                                             </div><br/>
-                                                            <div><big>{companyData.name} | {companyData.registered_company_number} | email: <a href={`mailto:${companyData.email}`}>{companyData.email}</a></big></div></div><br/>
+                                                            <div className="info text-center"><big>{companyData.name} | {companyData.registered_company_number} | email: <a href={`mailto:${companyData.email}`}>{companyData.email}</a></big></div><br/></div>
+                                                            
+                                                            </div>
                                                             
                                                         </div>
                                                         <nav className="d-flex text-muted">

@@ -132,9 +132,14 @@ function ManageReport(props) {
                                         <small className="d-block text-muted">{readableDate(report.createdAt)}</small>
                                     </div>
                                     <div className="ml-auto text-muted">
-                                    <a className="mb-3" onClick={() => viewReport(report)}>
+                                    <button
+                                              type="button"
+                                              className="btn btn-icon btn-sm"
+                                              title="Print Reports"
+                                              onClick={() => viewReport(report)}
+                                            >
                                     <i className="icon-printer" />
-                                    </a>
+                                    </button>
                                     </div>
                               </div>
                                 {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
