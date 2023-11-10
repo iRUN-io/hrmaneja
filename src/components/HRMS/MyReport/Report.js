@@ -69,11 +69,12 @@ const MyReport = () => {
                 fromDate: formState.fromDate,
                 toDate: formState.toDate,
                 company_id: user.company_id,
-                employee_role: formState.employee_role,
+                designation: formState.designation,
                 tasks: formState.tasks,
                 weekly_challenges: formState.weekly_challenges,
                 weekly_outcomes: formState.weekly_outcomes,
                 report_overview: formState.report_overview,
+                team_memeber: formState.team_memeber,
             }
             if (body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
                 toast.error('Please fill all the fields');
@@ -112,11 +113,12 @@ const MyReport = () => {
                 report_summary: '',
                 fromDate: '',
                 toDate: '',
-                employee_role: '',
+                designation: '',
                 tasks: '',
                 weekly_challenges: '',
                 weekly_outcomes: '',
                 report_overview: '',
+                team_memeber: '',
             });
         } catch (err) {
             toast.error("Error, try again");
@@ -235,7 +237,12 @@ const MyReport = () => {
 		return <FeatureNotAvailable />
 	}
 
-    
+    const viewReport = (report) => {
+        history.push({
+          pathname: `/my-reportslip`,
+          state: { reportData: report }
+      });
+    }
 
     return (
         <>
@@ -327,7 +334,7 @@ const MyReport = () => {
                                                                     title="View"
                                                                     // onClick={() => employeeDetails(report?.id)}
                                                                     >
-                                                                    <i className="fa fa-eye" />
+                                                                    <i className="fa fa-eye" onClick={() => viewReport(report)}/>
                                                                     </button>
                                                                         <button
                                                                         onClick={() => setReport(report)}
@@ -336,9 +343,10 @@ const MyReport = () => {
                                                                         className="btn btn-icon btn-sm"
                                                                         title="Edit"
                                                                         >
+
                                                                         <i className="fa fa-edit" />
                                                                         </button>
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                         overlay={
                                                                             <Popover id="popover-basic">
                                                                             <Popover.Header as="p">Confirm Delete</Popover.Header>
@@ -351,7 +359,7 @@ const MyReport = () => {
                                                                             </Popover>
                                                                         }>
                                                                         <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                        </OverlayTrigger>
+                                                                        </OverlayTrigger> */}
                                                                     </td>
                                                                 </tr>
                                                             ))}
@@ -407,6 +415,18 @@ const MyReport = () => {
                                     <div className="form-group">
                                         <label>Tasks</label>
                                         <textarea onChange={updateForm} className='form-control' name='tasks' value={formState?.tasks} placeholder='Outline of accomplished and in-progress tasks' />
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                        <label>Team Member</label>
+                                        <textarea onChange={updateForm} className='form-control' name='team_memeber' value={formState?.team_memeber} placeholder='Name and Surname of team memeber (enter N/A if not applicable)'/>
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                        <label>Designation</label>
+                                        <textarea onChange={updateForm} className='form-control' name='designation' value={formState?.designation} placeholder='Designation of team member (enter N/A if not applicable)'/>
                                     </div>
                                 </div>
                                 {/* date input from and to */}
@@ -467,6 +487,7 @@ const MyReport = () => {
     );
 }
 
+
 const mapStateToProps = state => ({
     fixNavbar: state.settings.isFixNavbar,
     statisticsOpen: state.settings.isStatistics,
@@ -477,4 +498,4 @@ const mapStateToProps = state => ({
     statisticsAction: e => dispatch(statisticsAction(e)),
     statisticsCloseAction: e => dispatch(statisticsCloseAction(e))
   });
-export default connect(mapStateToProps, mapDispatchToProps)(MyReport);
+export default connect(mapStateToProps, mapDispatchToProps)(MyReport)

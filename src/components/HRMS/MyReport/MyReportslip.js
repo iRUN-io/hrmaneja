@@ -8,7 +8,7 @@ import { getEmployeeReport } from "../../../services/report";
 import Time from "../../elements/Time";
 import html2pdf from 'html2pdf.js'
 
-function ReportDoc(props) {
+function MyReportDoc(props) {
     const {fixNavbar} = props;
     const { location } = props;
     const { state } = location;
@@ -74,7 +74,7 @@ function ReportDoc(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/admin/hr-report'} className="nav-link active">
+                                            <Link to={'/my-report'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -155,4 +155,4 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(ReportDoc);
+export default connect(mapStateToProps, mapDispatchToProps)(MyReportDoc);
