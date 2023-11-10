@@ -90,6 +90,7 @@ import ManageDocument from './HRMS/Documents/ManageDocument';
 import ManageInventory from './HRMS/Inventory/ManageInventory';
 import ManageReport from './HRMS/Report/ManageReport';
 import MyReport from './HRMS/MyReport/Report';
+import ReportDoc from './HRMS/Report/Reportslip';
 
 const user = getUser();
 
@@ -496,6 +497,7 @@ const Routes = [
         pageTitle: "Email Response Generator",
         component: EmailResponse
     },
+    
     // {
     //     path: "/internalserver",
     //     name: 'internalserver',
@@ -803,7 +805,13 @@ const Routes = [
         pageTitle: "Payroll",
         component: Payroll
     }, 
-
+    {
+        path: "/admin/reportslip",
+        name: 'reportslip',
+        exact: true,
+        pageTitle: "Employee Report",
+        component: ReportDoc
+    },
     {
         path: "/admin/hr-past-payroll",
         name: 'past-payroll',

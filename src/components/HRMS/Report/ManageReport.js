@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import { getUser } from '../../../config/common';
 import { deleteReport, getEmployeeReport } from '../../../services/report';
@@ -20,6 +20,7 @@ function ManageReport(props) {
     const { location } = props;
     const { state } = location;
     const employeeData = state.employee[0];
+    const history = useHistory();
 
     useEffect(() => {
       async function fetchData() {
@@ -73,6 +74,13 @@ function ManageReport(props) {
     const readableDate = (date) => {
       return Time(date);
   }
+
+  const viewReport = (report) => {
+    history.push({
+      pathname: '/admin/reportslip',
+      state: { reportData: report }
+  });
+	}
   return (
     <>
             <div className={`section-body ${fixNavbar ? "marginTop" : ""} mt-3`}>
@@ -124,12 +132,12 @@ function ManageReport(props) {
                                         <small className="d-block text-muted">{readableDate(report.createdAt)}</small>
                                     </div>
                                     <div className="ml-auto text-muted">
-                                    <a className="mb-3">
+                                    <a className="mb-3" onClick={() => viewReport(report)}>
                                     <i className="icon-printer" />
                                     </a>
                                     </div>
                               </div>
-                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                     overlay={
                                     <Popover id="popover-basic">
                                         <Popover.Header as="p">Confirm Delete</Popover.Header>
@@ -142,7 +150,8 @@ function ManageReport(props) {
                                     </Popover>
                                     }>
                                     <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
-                                </OverlayTrigger>                            </div>
+                                </OverlayTrigger>                             */}
+                                </div>
                         </div>
                         ))}
                     </div>

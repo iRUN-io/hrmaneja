@@ -16,6 +16,8 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import EditReport from './EditReport';
 import { connect } from 'react-redux';
 import { statisticsAction, statisticsCloseAction } from '../../../actions/settingsAction';
+import { getDepartment } from '../../../services/department';
+
 
 
 
@@ -27,6 +29,7 @@ const MyReport = () => {
     const [ReportPerPage] = useState(10);
     const [user, setUser] = useState([]);
     const [employees, setUsers] = useState([]);
+    // const [department, setDepartments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchReport, setSearchReport] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
@@ -172,12 +175,14 @@ const MyReport = () => {
             if (user) {
                 const {employee_id, company_id} = user;
                 const companyData = await getCompanyData();
-                companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                companyData.settings?.features['reports'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getEmployeeReport(employee_id);
                 const userResponse = await getAllEmployees(company_id);
+                // const department = await getDepartment(employee_id)
                 setReports(response);
                 setUsers(userResponse);
                 setUser(user);
+                // setDepartments(department);
                 setLoading(false);
             }
         }
