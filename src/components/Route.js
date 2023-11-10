@@ -91,6 +91,7 @@ import ManageInventory from './HRMS/Inventory/ManageInventory';
 import ManageReport from './HRMS/Report/ManageReport';
 import MyReport from './HRMS/MyReport/Report';
 import ReportDoc from './HRMS/Report/Reportslip';
+import MyReportDoc from './HRMS/MyReport/MyReportslip'
 
 const user = getUser();
 
@@ -466,6 +467,13 @@ const Routes = [
         exact: true,
         pageTitle: "Payslip",
         component: Payslip
+    },
+    {
+        path: "/my-reportslip",
+        name: 'my-reportslip',
+        exact: true,
+        pageTitle: "My Report Slip",
+        component: MyReportDoc
     },
    
     {

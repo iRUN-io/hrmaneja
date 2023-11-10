@@ -8,7 +8,7 @@ import { getEmployeeReport } from "../../../services/report";
 import Time from "../../elements/Time";
 import html2pdf from 'html2pdf.js'
 
-function ReportDoc(props) {
+function MyReportDoc(props) {
     const {fixNavbar} = props;
     const { location } = props;
     const { state } = location;
@@ -95,7 +95,6 @@ function ReportDoc(props) {
         newWindow.document.close();
         newWindow.print();
     };
-    
     return (
         <>
                         <div className={`section-body ${fixNavbar ? "marginTop" : ""}`}>
@@ -104,7 +103,7 @@ function ReportDoc(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/admin/hr-report'} className="nav-link active">
+                                            <Link to={'/my-report'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -123,7 +122,7 @@ function ReportDoc(props) {
                                                     <div className="media-body">
                                                         <div className="content">
                                                             <div id="reportContent"><div className="text-center"><h2>Weekly Activity Report</h2></div>
-                                                            <div className="body"><div>
+                                                            <div>
                                                                 <strong>Report Date</strong> <br/>
                                                                 <small>{moment(reportData?.from).format('MMM Do YYYY')} To {moment(reportData?.to).format('MMM Do YYYY')}</small>
                                                             </div><br/>
@@ -155,9 +154,7 @@ function ReportDoc(props) {
                                                                 <strong>Fture Overview</strong> <br/>
                                                                 <small>{reportData.report_overview}</small>
                                                             </div><br/>
-                                                            <div className="info text-center"><big>{companyData.name} | {companyData.registered_company_number} | email: <a href={`mailto:${companyData.email}`}>{companyData.email}</a></big></div><br/></div>
-                                                            
-                                                            </div>
+                                                            <div className="info text-center"><big>{companyData.name} | {companyData.registered_company_number} | email: <a href={`mailto:${companyData.email}`}>{companyData.email}</a></big></div></div><br/>
                                                             
                                                         </div>
                                                         <nav className="d-flex text-muted">
@@ -187,4 +184,4 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(ReportDoc);
+export default connect(mapStateToProps, mapDispatchToProps)(MyReportDoc);
