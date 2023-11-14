@@ -44,7 +44,8 @@ const MyReport = () => {
         weekly_challenges: '',
         weekly_outcomes: '',
         report_overview: '',
-        
+        team_member: '',
+        designation: '',
     });
     const history = useHistory();
 
@@ -74,7 +75,7 @@ const MyReport = () => {
                 weekly_challenges: formState.weekly_challenges,
                 weekly_outcomes: formState.weekly_outcomes,
                 report_overview: formState.report_overview,
-                team_memeber: formState.team_memeber,
+                team_member: formState.team_member,
             }
             if (body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
                 toast.error('Please fill all the fields');
@@ -87,7 +88,7 @@ const MyReport = () => {
                     {
                         name: 'Create Report',
                         employee_id: user.employee_id,
-                        activity: `${user.name} Created a new report ; ${body.leaveType}`,
+                        activity: `${user.name} Created a new report ; ${body.report_summary}`,
                         activity_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,
@@ -118,7 +119,7 @@ const MyReport = () => {
                 weekly_challenges: '',
                 weekly_outcomes: '',
                 report_overview: '',
-                team_memeber: '',
+                team_member: '',
             });
         } catch (err) {
             toast.error("Error, try again");
@@ -405,18 +406,7 @@ const MyReport = () => {
                         {/* update form */}
                         <div className="modal-body">
                             <div className="row clearfix">
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <label>Report Summary</label>
-                                        <textarea onChange={updateForm} className='form-control' name='report_summary' value={formState?.report_summary} placeholder='A brief summary of key activities implemented during the reporting period.' />
-                                    </div>
-                                </div>
-                                <div className="col-md-12">
-                                    <div className="form-group">
-                                        <label>Tasks</label>
-                                        <textarea onChange={updateForm} className='form-control' name='tasks' value={formState?.tasks} placeholder='Outline of accomplished and in-progress tasks' />
-                                    </div>
-                                </div>
+                                
                                 <div className="col-md-12">
                                     <div className="form-group">
                                         <label>Team Member</label>
@@ -445,6 +435,18 @@ const MyReport = () => {
                                 </div>
                                 <div className="col-md-12">
                                     <div className="form-group">
+                                        <label>Report Summary</label>
+                                        <textarea onChange={updateForm} className='form-control' name='report_summary' value={formState?.report_summary} placeholder='A brief summary of key activities implemented during the reporting period.' />
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                        <label>Tasks</label>
+                                        <textarea onChange={updateForm} className='form-control' name='tasks' value={formState?.tasks} placeholder='Outline of accomplished and in-progress tasks' />
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
                                         <label>Weekly Outcomes</label>
                                         <textarea onChange={updateForm} className='form-control' name='weekly_outcomes' value={formState?.weekly_outcomes} placeholder='A brief description of outcome of task/activities or deliverables.' />
                                     </div>
@@ -465,7 +467,7 @@ const MyReport = () => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button onClick={() => createReportAction()} className="btn btn-primary">Send Request</button>
+                            <button onClick={() => createReportAction()} className="btn btn-primary">Send Report</button>
                         </div>
                     </div>
                 </div>
