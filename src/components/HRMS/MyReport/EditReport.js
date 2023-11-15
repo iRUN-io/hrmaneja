@@ -29,9 +29,35 @@ const EditReport = (reportData) => {
         weekly_challenges: '',
         weekly_outcomes: '',
         report_overview: '',
+        designation: '',
+        team_member: '',
   });
 
   const reportInfo = reportData.report;
+  console.log({formState});
+  useEffect(() => {
+    setFormState({
+        employee_id: reportInfo.employee_id,
+        employee_name: reportInfo.name,
+        report_summary: reportInfo.report_summary,
+        fromDate: reportInfo.from,
+        toDate: reportInfo.to,
+        company_id: reportInfo.company_id,
+        employee_role: reportInfo.employee_role,
+        tasks: reportInfo.tasks,
+        weekly_challenges: reportInfo.weekly_challenges,
+        weekly_outcomes: reportInfo.weekly_outcomes,
+        report_overview: reportInfo.report_overview,
+        designation: reportInfo.designation,
+        team_member: reportInfo.team_member,
+    })
+  }, [reportInfo]);
+
+//   const formatDate = (dateString) => {
+//   const date = new Date(dateString);
+//   return date.toISOString().split('T')[0];
+// };
+
   const editReportsAction = async () => {
     if (!featureEnabled) {
       toast.error('Feature not enabled');
@@ -51,6 +77,8 @@ const EditReport = (reportData) => {
                 weekly_challenges: formState.weekly_challenges,
                 weekly_outcomes: formState.weekly_outcomes,
                 report_overview: formState.report_overview,
+                team_member: formState.team_member,
+                designation: formState.designation,
       };
 
       if (body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
@@ -59,7 +87,6 @@ const EditReport = (reportData) => {
     }
     
       const response = await updateReport(body, reportInfo.id);
-      console.log({response});
 
       if (response.message === 'Report was updated successfully.') {
         setEmployees([...employees, response]);
@@ -87,21 +114,23 @@ const EditReport = (reportData) => {
     }
   };
 
-  useEffect(() => {
-    setFormState({
-        employee_id: reportInfo.employee_id,
-        employee_name: reportInfo.name,
-        report_summary: reportInfo.report_summary,
-        fromDate: reportInfo.fromDate,
-        toDate: reportInfo.toDate,
-        company_id: reportInfo.company_id,
-        employee_role: reportInfo.employee_role,
-        tasks: reportInfo.tasks,
-        weekly_challenges: reportInfo.weekly_challenges,
-        weekly_outcomes: reportInfo.weekly_outcomes,
-        report_overview: reportInfo.report_overview,
-    })
-  }, [reportInfo]);
+  // useEffect(() => {
+  //   setFormState({
+  //       employee_id: reportInfo.employee_id,
+  //       employee_name: reportInfo.name,
+  //       report_summary: reportInfo.report_summary,
+  //       fromDate: reportInfo.fromDate,
+  //       toDate: reportInfo.toDate,
+  //       company_id: reportInfo.company_id,
+  //       employee_role: reportInfo.employee_role,
+  //       tasks: reportInfo.tasks,
+  //       weekly_challenges: reportInfo.weekly_challenges,
+  //       weekly_outcomes: reportInfo.weekly_outcomes,
+  //       report_overview: reportInfo.report_overview,
+  //       team_member: reportInfo.team_member,
+  //       designation: reportInfo.designation,
+  //   })
+  // }, [reportInfo]);
 
   useEffect(() => {
     async function fetchData() {
@@ -138,16 +167,16 @@ const EditReport = (reportData) => {
         <ToastContainer/>
         <div className="modal-body">
                             <div className="row clearfix">
-                                <div className="col-md-12">
+                            <div className="col-md-12">
                                     <div className="form-group">
-                                        <label>Report Summary</label>
-                                        <textarea onChange={updateForm} className='form-control' name='report_summary' value={formState?.report_summary} placeholder='A brief summary of key activities implemented during the reporting period.' />
+                                        <label>Team Member</label>
+                                        <textarea onChange={updateForm} className='form-control' name='team_member' value={formState?.team_member} placeholder='Name and Surname of team memeber (enter N/A if not applicable)'/>
                                     </div>
                                 </div>
                                 <div className="col-md-12">
                                     <div className="form-group">
-                                        <label>Tasks</label>
-                                        <textarea onChange={updateForm} className='form-control' name='tasks' value={formState?.tasks} placeholder='Outline of accomplished and in-progress tasks' />
+                                        <label>Designation</label>
+                                        <textarea onChange={updateForm} className='form-control' name='designation' value={formState?.designation} placeholder='Designation of team member (enter N/A if not applicable)'/>
                                     </div>
                                 </div>
                                 {/* date input from and to */}
@@ -158,10 +187,22 @@ const EditReport = (reportData) => {
                                             <div className="input-group-prepend">
                                                 <span className="input-group-text"><i className="fa fa-calendar" /></span>
                                             </div>
-                                            <input type="date" aria-label='fromDate' className="form-control" name='fromDate' value={formState?.fromDate} onChange={updateForm} />
+                                            <input type="date" className="form-control" name='fromDate' id="fromDate" value={formState?.fromDate} onChange={updateForm} />
 
-                                            <input type="date" className="form-control" name='toDate' value={formState?.toDate} onChange={updateForm} />
+                                            <input type="date" className="form-control" name='toDate' id="toDate" value={formState?.toDate} onChange={updateForm} />
                                         </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                        <label>Report Summary</label>
+                                        <textarea onChange={updateForm} className='form-control' name='report_summary' value={formState?.report_summary} placeholder='A brief summary of key activities implemented during the reporting period.' />
+                                    </div>
+                                </div>
+                                <div className="col-md-12">
+                                    <div className="form-group">
+                                        <label>Tasks</label>
+                                        <textarea onChange={updateForm} className='form-control' name='tasks' value={formState?.tasks} placeholder='Outline of accomplished and in-progress tasks' />
                                     </div>
                                 </div>
                                 <div className="col-md-12">
