@@ -132,10 +132,7 @@ const Leave = () => {
         }
       }, [cancelClicked]);
 
-      const handlePopoverClick = () => {
-        // Set cancelClicked to true when "Cancel" is clicked
-        setCancelClicked(true);
-      };
+      
     
 
     const removeLeave = async (leaveId) => {
@@ -406,7 +403,7 @@ const Leave = () => {
                                                                                     <Popover.Header as="p">Confirm Decline</Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={handlePopoverClick}>Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
                                                                                             <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
                                                                                         </div>
                                                                                     </Popover.Body>
@@ -422,7 +419,7 @@ const Leave = () => {
                                                                                     <Popover.Header as="p">Confirm Approval</Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={handlePopoverClick}>Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
                                                                                             <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
                                                                                         </div>
                                                                                     </Popover.Body>
