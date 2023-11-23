@@ -33,6 +33,7 @@ function Profile(props) {
     const [documents, setDocuments] = useState([]);
     const [uploadDocument, setDocument] = useState('');
     const [uploadLoading, setUploadLoading] = useState(false);
+    const [openPopoverId, setOpenPopoverId] = useState(null);
     const history = useHistory();
     useEffect(() => {
         async function fetchData() {
@@ -112,7 +113,7 @@ function Profile(props) {
                     changedPassword: formState.newPassword,
                     token: user.token,
                 }
-                if (body.currentPassword === '' || body.newPassword === '') {
+                if (body.currentPassword === '' || body.changedPassword === '') {
                     toast.error('Please fill all the fields');
                     return;
                 }
@@ -188,7 +189,8 @@ function Profile(props) {
                     toast.info(response.message);
                 }
     
-                setFormState({documentName: ''});
+                setFormState({documentName: '', selectedFile: null});
+                
     
             } catch (err) {
                 toast.error("Error, try again");
@@ -665,19 +667,19 @@ function Profile(props) {
                                                             </a>
                                                                 </div>
                                                             </div>
-                                                            <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                            <OverlayTrigger trigger="focus" placement="bottom" show={openPopoverId === document.id} onHide={() => setOpenPopoverId(null)} delay={1}
                                                                 overlay={
                                                                 <Popover id="popover-basic">
                                                                     <Popover.Header as="p">Confirm Delete</Popover.Header>
                                                                     <Popover.Body>
                                                                     <div className="clearfix" >
-                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                        <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setOpenPopoverId(null)}>Cancel</button>
                                                                         <button style={{ margin: '10px' }} onClick={() => removeDocument(document.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
                                                                     </div>
                                                                     </Popover.Body>
                                                                 </Popover>
                                                                 }>
-                                                                <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
+                                                                <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm" onClick={() => setOpenPopoverId(document.id)}><i className="fe fe-trash text-danger" /></button>
                                                             </OverlayTrigger>
                                                             {/* <a onClick={openFileInNewWindow(document.url)} className="mb-3">
                                                                 <button className='btn btn-sm btn-primary'>View File</button>

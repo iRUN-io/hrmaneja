@@ -77,7 +77,7 @@ const MyReport = () => {
                 report_overview: formState.report_overview,
                 team_member: formState.team_member,
             }
-            if (body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
+            if (body.team_member === '' || body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
                 toast.error('Please fill all the fields');
                 return;
             }
@@ -410,7 +410,7 @@ const MyReport = () => {
                                 <div className="col-md-12">
                                     <div className="form-group">
                                         <label>Team Member</label>
-                                        <textarea onChange={updateForm} className='form-control' name='team_memeber' value={formState?.team_memeber} placeholder='Name and Surname of team memeber (enter N/A if not applicable)'/>
+                                        <textarea onChange={updateForm} className='form-control' name='team_memeber' value={formState?.team_member} placeholder='Name and Surname of team memeber (enter N/A if not applicable)'/>
                                     </div>
                                 </div>
                                 <div className="col-md-12">

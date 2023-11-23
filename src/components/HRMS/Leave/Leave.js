@@ -23,8 +23,14 @@ const Leave = () => {
     const [LeavePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
     const [leave,] = useState([]);
+    // console.log({leaves });
     const [searchLeave, setSearchLeave] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [openPopoverId, setOpenPopoverId] = useState(null);
+    const [approvalPopover, setApprovalPopover] = useState(false);
+    const [showPopover, setShowPopover] = useState(null);
+    const [cancelClicked, setCancelClicked] = useState(false);
+
     const [formState, setFormState] = useState({
         employeeId: '',
         employeeName: '',
@@ -116,8 +122,24 @@ const Leave = () => {
             [name]: value,
         });
     };
+    
+    useEffect(() => {
+        if (cancelClicked) {
+          // Close the popover when cancelClicked is true
+          setShowPopover(null);
+          // Reset cancelClicked for the next interaction
+          setCancelClicked(false);
+        }
+      }, [cancelClicked]);
+
+      const handlePopoverClick = () => {
+        // Set cancelClicked to true when "Cancel" is clicked
+        setCancelClicked(true);
+      };
+    
 
     const removeLeave = async (leaveId) => {
+        console.log("Leave ID to be removed:", leaveId);
         if (!featureEnabled) {
             toast.error('Feature not enabled');
             return;
@@ -156,6 +178,10 @@ const Leave = () => {
         }
 
     };
+
+    const handleCancelClick = () => {
+        setOpenPopoverId(null);  // Close the popover when "Cancel" is clicked
+      };
 
     const toggleLeave = async (leaveId, type) => {
         try {
@@ -340,6 +366,7 @@ const Leave = () => {
                                                         </thead>
                                                         <tbody>
                                                             {currentLeaves.map((leave) => (
+                                                        
                                                                 <tr key={leave.id}>
                                                                     <td className="width45">
                                                                         <span
@@ -373,51 +400,68 @@ const Leave = () => {
 
                                                                     <td>
                                                                         {leave.status === 'approve'  &&  ( 
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        <OverlayTrigger trigger="click" placement="bottom" show={showPopover === leave.id} delay={1}
                                                                             overlay={
                                                                                 <Popover id="popover-basic">
                                                                                     <Popover.Header as="p">Confirm Decline</Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={handlePopoverClick}>Cancel</button>
                                                                                             <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
                                                                             }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(leave.id)}><i className="fa fa-close text-warning" /></button>
                                                                         </OverlayTrigger>
                                                                         )}
                                                                         {(leave.status === 'pending' || leave.status === 'disapprove') && (
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        <OverlayTrigger trigger="click" placement="bottom" show={showPopover === leave.id} delay={1} 
                                                                             overlay={ 
                                                                                 <Popover id="popover-basic">
                                                                                     <Popover.Header as="p">Confirm Approval</Popover.Header>
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={handlePopoverClick}>Cancel</button>
                                                                                             <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
                                                                             }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
+                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(leave.id)}><i className="fa fa-check text-success" /></button>
                                                                         </OverlayTrigger>
                                                                         )}
-                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                                                            overlay={
-                                                                                <Popover id="popover-basic">
-                                                                                    <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                                                                    <Popover.Body>
-                                                                                        <div className="clearfix" >
-                                                                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => removeLeave(leave.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                                                                        </div>
-                                                                                    </Popover.Body>
-                                                                                </Popover>
-                                                                            }>
-                                                                            <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                        </OverlayTrigger>
+                                                                        <OverlayTrigger    trigger="click"  placement="bottom" show={openPopoverId === leave.id} onHide={() => setOpenPopoverId(null)} overlay={
+                                                                            <Popover id="popover-basic">
+                                                                                <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                                                                <Popover.Body>
+                                                                                    <div className="clearfix">
+                                                                                        <button
+                                                                                            style={{ margin: '10px' }}
+                                                                                            type="button"
+                                                                                            className="btn btn-sm btn-success"
+                                                                                            onClick={() => setOpenPopoverId(null)}
+                                                                                        >
+                                                                                            Cancel
+                                                                                        </button>
+                                                                                        <button
+                                                                                            style={{ margin: '10px' }}
+                                                                                            onClick={() => removeLeave(leave.id)}
+                                                                                            type="button"
+                                                                                            className="btn btn-sm btn-danger"
+                                                                                        >
+                                                                                            Delete
+                                                                                        </button>
+                                                                                    </div>
+                                                                                </Popover.Body>
+                                                                            </Popover>
+                                                                        }
+                                                                    >
+                                                                        <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm" onClick={() => setOpenPopoverId(leave.id)}>
+                                                                            <i className="fa fa-trash-o text-danger" />
+                                                                        </button>
+                                                                    </OverlayTrigger>
+
                                                                     </td>
                                                                 </tr>
                                                             ))}
