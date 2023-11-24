@@ -29,6 +29,8 @@ function Expense(props) {
 	const [user, setUser] = useState({});
 	const [searchExpense, setSearchExpense] = useState('');
 	const [featureEnabled, setFeatureEnabled] = useState(false);
+	const [showPopover, setShowPopover] = useState(null);
+    const [cancelClicked, setCancelClicked] = useState(false);
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
 		employeeId: '',
@@ -149,6 +151,15 @@ function Expense(props) {
 		});
 	};
 
+	useEffect(() => {
+        if (cancelClicked) {
+          // Close the popover when cancelClicked is true
+          setShowPopover(null);
+          // Reset cancelClicked for the next interaction
+          setCancelClicked(false);
+        }
+      }, [cancelClicked]);
+	  
 	const toggleRequisition = async (reqId, type) => {
 		try {
 			if (!featureEnabled) {
@@ -394,38 +405,38 @@ function Expense(props) {
 																				>
 																					<i className="icon-printer" />
 																				</button>
-																				{request.employee_id !== user.employee_id && (
+																				{request.employee_id === user.employee_id && (
 																					<>
-																						{(request.status === 'pending' || request.status === 'approve') && (
-																							<OverlayTrigger trigger="focus" placement="bottom" delay={1}
+																						{(request.status === 'approve') && (
+																							<OverlayTrigger trigger="focus" placement="bottom" show={showPopover === request.id} delay={1}
 																								overlay={
 																									<Popover id="popover-basic">
 																										<Popover.Header as="p">Confirm Decline</Popover.Header>
 																										<Popover.Body>
 																											<div className="clearfix" >
-																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
 																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
 																											</div>
 																										</Popover.Body>
 																									</Popover>
 																								}>
-																								<button type="button" className="btn btn-icon js-sweetalert" title="Reject" data-type="confirm"><i className="fa fa-close text-warning" /></button>
+																								<button type="button" className="btn btn-icon js-sweetalert" title="Reject" data-type="confirm" onClick={() => setShowPopover(request.id)}><i className="fa fa-close text-warning" /></button>
 																							</OverlayTrigger>
 																						)}
 																						{(request.status === 'pending' || request.status === 'disapprove') && (
-																							<OverlayTrigger trigger="focus" placement="bottom" delay={1}
+																							<OverlayTrigger trigger="focus" placement="bottom" show={showPopover === request.id} delay={1}
 																								overlay={
 																									<Popover id="popover-basic">
 																										<Popover.Header as="p">Confirm Approval</Popover.Header>
 																										<Popover.Body>
 																											<div className="clearfix" >
-																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
 																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
 																											</div>
 																										</Popover.Body>
 																									</Popover>
 																								}>
-																								<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm"><i className="fa fa-check text-success" /></button>
+																								<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(request.id)}><i className="fa fa-check text-success" /></button>
 																							</OverlayTrigger>
 																						)}
 																					</>
