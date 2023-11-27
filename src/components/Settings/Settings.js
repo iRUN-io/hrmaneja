@@ -230,6 +230,17 @@ const Settings = () => {
 											</div>
 										</div>
 									</div>
+									<div className={`col-6 col-md-4 col-xl-3`}>
+										<div className="card feature-card">
+											<div className="card-body">
+												<Link to="/admin/hr-timesheet" className="my_sort_cut text-muted">
+												{/* <i className="fa fa-light fa-clock" /> */}
+												<i className="fa fa-clock-o"></i>
+													<span>Time Sheet</span>
+												</Link>
+											</div>
+										</div>
+									</div>
 									{/* <div className={`col-6 col-md-4 col-xl-3 ${features?.payroll ? '' : 'disabled-card'}`}>
 										<div className="card feature-card">
 											<div className="card-body">

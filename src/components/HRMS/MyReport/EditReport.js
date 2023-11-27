@@ -11,6 +11,7 @@ import { emailCase } from "../../../enums/emailCase";
 import { getCompanyData, getUser } from "../../../config/common";
 import FeatureNotAvailable from "../../common/featureDisabled";
 import { getAllReport, updateReport } from "../../../services/report";
+import moment from "moment";
 
 
 const EditReport = (reportData) => {
@@ -91,11 +92,12 @@ const EditReport = (reportData) => {
       if (response.message === 'Report was updated successfully.') {
         setEmployees([...employees, response]);
 
+        const duration = `${moment(response?.from).format('MMM Do YYYY')} To ${moment(response?.to).format('MMM Do YYYY')}`
         const logActivity = await createActivity(
           {
             name: 'Update report',
             employee_id: user.employee_id,
-            activity: `${user.name} Updated a report`,
+            activity: `${user.name} Updated the report; From ${duration}`,
             activity_name: 'Updating',
             user: user.name,
             company_id: user.company_id,
