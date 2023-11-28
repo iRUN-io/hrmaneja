@@ -63,10 +63,11 @@ const Activities = () => {
 		return allActivities || [];
 	}, [activities, searchActivity]);
 
+	const sortedActivity = allActivitiesArray.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
 	const indexOfLastActivity = currentPage * ActivityPerPage;
 	const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
-	const currentActivity = allActivitiesArray.slice(indexOfFirstActivity, indexOfLastActivity);
+	const currentActivity = sortedActivity.slice(indexOfFirstActivity, indexOfLastActivity);
 
 	const paginate = pageNumber => setCurrentPage(pageNumber);
 	const nextPage = () => setCurrentPage(currentPage + 1);

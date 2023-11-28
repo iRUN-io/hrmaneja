@@ -69,7 +69,7 @@ const MyLeave = () => {
                     {
                         name: 'Create Leave',
                         employee_id: user.employee_id,
-                        activity: `${user.name} Created a new leave ; ${body.leaveType}`,
+                        activity: `${user.name} Created a new leave ; ${response.leaveType}`,
                         activity_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,

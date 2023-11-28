@@ -8,7 +8,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { createActivity } from '../../../services/activities';
 import Loader from '../../common/loader';
 import Time from '../../elements/Time';
-
+import moment from 'moment';
 
 
 function ManageReport(props) {
@@ -128,7 +128,8 @@ function ManageReport(props) {
                             <div className="card p-3">
                             <div className="d-flex align-items-center px-2">
                                     <div>
-                                        <div>{user.name}</div>
+                                        {/* <div>{employeeData.name}</div> */}
+                                        <small>{moment(report?.from).format('MMM Do YYYY')} To {moment(report?.to).format('MMM Do YYYY')}</small>
                                         <small className="d-block text-muted">{readableDate(report.createdAt)}</small>
                                     </div>
                                     <div className="ml-auto text-muted">

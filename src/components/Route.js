@@ -92,6 +92,8 @@ import ManageReport from './HRMS/Report/ManageReport';
 import MyReport from './HRMS/MyReport/Report';
 import ReportDoc from './HRMS/Report/Reportslip';
 import MyReportDoc from './HRMS/MyReport/MyReportslip'
+import TimeSheet from './HRMS/TimeSheets/TimeSheet';
+import ViewTimesheet from './HRMS/TimeSheets/ViewTimesheet';
 
 const user = getUser();
 
@@ -313,6 +315,13 @@ const Routes = [
         exact: true,
         pageTitle: "ManageReport",
         component: ManageReport
+    },
+    {
+        path: "/admin/hr-report/timesheet",
+        name: 'viewtimesheet',
+        exact: true,
+        pageTitle: "View Timesheet",
+        component: ViewTimesheet
     },
     // add new routes here
 
@@ -849,6 +858,13 @@ const Routes = [
         exact: true,
         pageTitle: "Report",
         component: Report
+    },
+    {
+        path: "/admin/hr-timesheet",
+        name: 'time-sheet',
+        exact: true,
+        pageTitle: "Time Sheet",
+        component: TimeSheet
     },
     {
         path: "/admin/hr-excel",

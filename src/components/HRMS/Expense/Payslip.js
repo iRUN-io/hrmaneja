@@ -22,6 +22,8 @@ function Payroll(props) {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
 	const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [showPopover, setShowPopover] = useState(null);
+    const [cancelClicked, setCancelClicked] = useState(false);
     const comingSoon = false;
     useEffect(() => {
         async function fetchData() {
@@ -38,6 +40,15 @@ function Payroll(props) {
         }
         fetchData();
     });
+
+    useEffect(() => {
+        if (cancelClicked) {
+          // Close the popover when cancelClicked is true
+          setShowPopover(null);
+          // Reset cancelClicked for the next interaction
+          setCancelClicked(false);
+        }
+      }, [cancelClicked]);
 
     const toggleRequisition = async (reqId, type) => {
 		try {
@@ -108,7 +119,7 @@ function Payroll(props) {
                                     <ul className="nav nav-tabs page-header-tab">
                                         <li className="nav-item">
 
-                                            <Link to={'/hr-requisition'} className="nav-link active">
+                                            <Link to={'/admin/hr-requisition'} className="nav-link active">
                                                 <i className="fa fa-arrow-left"></i>
                                             </Link>
                                         </li>
@@ -199,22 +210,21 @@ function Payroll(props) {
                                                             </tr>
                                                         </tfoot>
                                                     </table>
-                                                    {requisition.employee_id !== user.employee_id && (
-                                                        <>
+                                                    
                                                     {(requisition.status === 'pending' || requisition.status === 'approve') && (
-                                                                <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                <OverlayTrigger trigger="click" placement="bottom" delay={1}
                                                                     overlay={
                                                                         <Popover id="popover-basic">
                                                                             <Popover.Header as="p">Confirm Decline</Popover.Header>
                                                                             <Popover.Body>
                                                                                 <div className="clearfix" >
-                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
                                                                                     <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
                                                                                 </div>
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }>
-                                                                          <button type="button" style={{marginRight: '10px'}} className="btn btn-info js-sweetalert" title="Approve" data-type="confirm">
+                                                                          <button type="button" style={{marginRight: '10px'}} className="btn btn-info js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(requisition.id)}>
                                                                             <i className="icon-close" /> Reject
                                                                         </button>
 
@@ -227,20 +237,19 @@ function Payroll(props) {
                                                                             <Popover.Header as="p">Confirm Approval</Popover.Header>
                                                                             <Popover.Body>
                                                                                 <div className="clearfix" >
-                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
+                                                                                    <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
                                                                                     <button style={{ margin: '10px' }} onClick={() => toggleRequisition(requisition.id, 'approve')} type="button" className="btn btn-sm btn-danger ">Approve</button>
                                                                                 </div>
                                                                             </Popover.Body>
                                                                         </Popover>
                                                                     }>
-                                                                        <button type="button" className="btn btn-success btn-hrmaneja-success js-sweetalert" title="Approve" data-type="confirm">
+                                                                        <button type="button" className="btn btn-success btn-hrmaneja-success js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(requisition.id)}>
                                                                             <i className="icon-check" /> Approve
                                                                         </button>
 
                                                                 </OverlayTrigger>
                                                             )}
-                                                            </>
-                                                            )}
+                                                            
                                                     {/* <button className="btn btn-info float-right">
                                                         <i className="icon-printer" /> Print
                                                     </button> */}

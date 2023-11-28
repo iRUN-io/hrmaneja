@@ -74,7 +74,7 @@ function ManageDocument(props) {
               {
                 name: 'Delete Document',
                 employee_id: user.employee_id,
-                activity: `${user.name} deleted an ${employeeData.name}'s document with name; ${document.name}`,
+                activity: `${user.name} deleted an ${employeeData.name}'s document with name; ${response.name}`,
                 activity_name: 'Deletion',
                 user: user.name,
                 company_id: user.company_id
@@ -141,7 +141,7 @@ function ManageDocument(props) {
                     {
                       name: 'Create Document',
                       employee_id: user.employee_id,
-                      activity: `${user.name} created a document for ${employeeData.name} with name; ${document.name}`,
+                      activity: `${user.name} created a document for ${employeeData.name} with name; ${response.name}`,
                       activity_name: 'Creation',
                       user: user.name,
                       company_id: user.company_id

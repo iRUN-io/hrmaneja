@@ -96,7 +96,7 @@ function Expense(props) {
 					{
 						name: 'Sent Requisition',
 						employee_id: user.employee_id,
-						activity: `Sent Requisition from ${body.employeeName}`,
+						activity: `Sent Requisition from ${response.employeeName}`,
 						activity_name: 'Creation',
 						user: user.name,
 						company_id: user.company_id,
