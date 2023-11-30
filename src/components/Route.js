@@ -94,6 +94,7 @@ import ReportDoc from './HRMS/Report/Reportslip';
 import MyReportDoc from './HRMS/MyReport/MyReportslip'
 import TimeSheet from './HRMS/TimeSheets/TimeSheet';
 import ViewTimesheet from './HRMS/TimeSheets/ViewTimesheet';
+import Notification from './HRMS/Notification/Notification';
 
 const user = getUser();
 
@@ -410,6 +411,13 @@ const Routes = [
         exact: true,
         pageTitle: "Job Resumes",
         component: Resumes
+    },
+    {
+        path: "/notification",
+        name: 'notifications',
+        exact: true,
+        pageTitle: "Notification",
+        component: Notification
     },
     // {
     //     path: "/jobportal-settings",
