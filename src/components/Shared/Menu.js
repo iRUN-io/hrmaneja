@@ -590,9 +590,10 @@ class Menu extends Component {
 										<NavLink to="/app-filemanager" className="nav-link icon app_file xs-hide">
 											<i className="fa fa-folder-o" />
 										</NavLink> */}
-										{/* <NavLink to="/page-search" className="nav-link icon">
-											<i className="fa fa-search" />
-										</NavLink> */}
+										<NavLink to="/notification" className="nav-link icon">
+											{/* <i className="fa fa-search" /> */}
+											<i class="fa fa-bell" />
+										</NavLink>
 									</div>
 								</div>
 								<div className="hright">
