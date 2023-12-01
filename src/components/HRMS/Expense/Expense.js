@@ -78,7 +78,7 @@ function Expense(props) {
 					{
 						name: 'Sent Requisition',
 						employee_id: user.employee_id,
-						activity: `Sent Requisition from ${body.employeeName}`,
+						activity: `Sent Requisition from ${response.employeeName}`,
 						activity_name: 'Creation',
 						user: user.name,
 						company_id: user.company_id,
@@ -405,8 +405,7 @@ function Expense(props) {
 																				>
 																					<i className="icon-printer" />
 																				</button>
-																				{request.employee_id === user.employee_id && (
-																					<>
+																				
 																						{(request.status === 'approve') && (
 																							<OverlayTrigger trigger="focus" placement="bottom" show={showPopover === request.id} delay={1}
 																								overlay={
@@ -439,8 +438,7 @@ function Expense(props) {
 																								<button type="button" className="btn btn-icon js-sweetalert" title="Approve" data-type="confirm" onClick={() => setShowPopover(request.id)}><i className="fa fa-check text-success" /></button>
 																							</OverlayTrigger>
 																						)}
-																					</>
-																				)}
+																					
 
 																			</td>
 																		</tr>

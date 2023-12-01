@@ -112,7 +112,7 @@ const Dashboard = () => {
 									</div>
 									<div className="row clearfix">
 										<div className="col-6 col-md-4 col-xl-6 ">
-											<Link to="/hr-users" className="text-muted  text-bold">
+											<Link to="/admin/hr-users" className="text-muted  text-bold">
 												<div className="card">
 													<div className="card-body">
 														<span>Total Users</span>
@@ -126,7 +126,7 @@ const Dashboard = () => {
 											</Link>
 										</div>
 										<div className="col-6 col-md-4 col-xl-6 ">
-											<Link to="/hr-requisition" className="text-muted  text-bold">
+											<Link to="/admin/hr-requisition" className="text-muted  text-bold">
 												<div className="card">
 													<div className="card-body">
 														<span>Total Requisition</span>

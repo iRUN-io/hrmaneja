@@ -177,7 +177,7 @@ function Profile(props) {
                         {
                           name: 'Create Document',
                           employee_id: user.employee_id,
-                          activity: `${user.name} created a document with name; ${document.name}`,
+                          activity: `${user.name} created a document with name; ${response.name}`,
                           activity_name: 'Creation',
                           user: user.name,
                           company_id: user.company_id
@@ -263,9 +263,11 @@ function Profile(props) {
          window.open(url, '_blank');
       };
 
+    const sortedActivity = activity.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     const indexOfLastActivity = currentPage * ActivityPerPage;
     const indexOfFirstActivity = indexOfLastActivity - ActivityPerPage;
-    const currentActivity = activity.slice(indexOfFirstActivity, indexOfLastActivity);
+    const currentActivity = sortedActivity.slice(indexOfFirstActivity, indexOfLastActivity);
 
     const paginate = pageNumber => setCurrentPage(pageNumber);
     const nextPage = () => setCurrentPage(currentPage + 1);

@@ -77,18 +77,19 @@ const MyReport = () => {
                 report_overview: formState.report_overview,
                 team_member: formState.team_member,
             }
-            if (body.team_member === '' || body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
+            if (body.report_summary === '' || body.tasks === '' || body.fromDate === '' || body.toDate === '' || body.weekly_challenges === '' || body.weekly_outcomes === '' || body.report_overview === '') {
                 toast.error('Please fill all the fields');
                 return;
             }
             const response = await createReport(body, user.employee_id);
 
             if (!response.error) {
+                const duration = `${moment(response?.from).format('MMM Do YYYY')} To ${moment(response?.to).format('MMM Do YYYY')}`
                 const logActivity = await createActivity(
                     {
                         name: 'Create Report',
                         employee_id: user.employee_id,
-                        activity: `${user.name} Created a new report ; ${body.report_summary}`,
+                        activity: `${user.name} Created a new report ; From ${duration}`,
                         activity_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,

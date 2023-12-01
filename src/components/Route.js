@@ -92,6 +92,9 @@ import ManageReport from './HRMS/Report/ManageReport';
 import MyReport from './HRMS/MyReport/Report';
 import ReportDoc from './HRMS/Report/Reportslip';
 import MyReportDoc from './HRMS/MyReport/MyReportslip'
+import TimeSheet from './HRMS/TimeSheets/TimeSheet';
+import ViewTimesheet from './HRMS/TimeSheets/ViewTimesheet';
+import Notification from './HRMS/Notification/Notification';
 
 const user = getUser();
 
@@ -314,6 +317,13 @@ const Routes = [
         pageTitle: "ManageReport",
         component: ManageReport
     },
+    {
+        path: "/admin/hr-report/timesheet",
+        name: 'viewtimesheet',
+        exact: true,
+        pageTitle: "View Timesheet",
+        component: ViewTimesheet
+    },
     // add new routes here
 
     //project
@@ -401,6 +411,13 @@ const Routes = [
         exact: true,
         pageTitle: "Job Resumes",
         component: Resumes
+    },
+    {
+        path: "/notification",
+        name: 'notifications',
+        exact: true,
+        pageTitle: "Notification",
+        component: Notification
     },
     // {
     //     path: "/jobportal-settings",
@@ -849,6 +866,13 @@ const Routes = [
         exact: true,
         pageTitle: "Report",
         component: Report
+    },
+    {
+        path: "/admin/hr-timesheet",
+        name: 'time-sheet',
+        exact: true,
+        pageTitle: "Time Sheet",
+        component: TimeSheet
     },
     {
         path: "/admin/hr-excel",
