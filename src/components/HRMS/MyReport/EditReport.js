@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getAllEmployees, updateEmployee } from "../../../services/employee";
+import { getAllEmployees, getEmployee, updateEmployee } from "../../../services/employee";
 import { ToastContainer, toast } from "material-react-toastify";
 //import "react-toastify/dist/ReactToastify.css";
 import Currency from "../../common/currency";
@@ -12,6 +12,9 @@ import { getCompanyData, getUser } from "../../../config/common";
 import FeatureNotAvailable from "../../common/featureDisabled";
 import { getAllReport, updateReport } from "../../../services/report";
 import moment from "moment";
+import { createNotification } from "../../../services/notification";
+import { getAllUsers } from "../../../services/user";
+
 
 
 const EditReport = (reportData) => {
@@ -19,6 +22,8 @@ const EditReport = (reportData) => {
 	const [featureEnabled, setFeatureEnabled] = useState(false);
   const [employees, setEmployees] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [employeeRec, setEmployeeRec] = useState([]);
+  const [hrID, setHrID] = useState([]);
   const [formState, setFormState] = useState({
     employee_id: '',
         employee_name: '',
@@ -103,6 +108,18 @@ const EditReport = (reportData) => {
             company_id: user.company_id,
           }
         )
+        const notifyRequisition = await createNotification(
+          {
+              name: 'Sent Requisition',
+              sender_id: user.employee_id,
+              receiver_id: employeeRec.line_manager,
+              hr_id: hrID.employee_id,
+              notification: `${user.name} Created a new report ; From ${duration}`,
+              notification_name: 'Creation',
+              user: user.name,
+              company_id: user.company_id,
+          }
+)
         if(logActivity.id){
           sendEmail(user.emailAddress, user.name, emailCase.updateEmployee);
           toast.success("Report updated successfully");
@@ -142,9 +159,14 @@ const EditReport = (reportData) => {
 				companyData.settings?.features['employee'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
         const employeeResponse = await getAllEmployees(company_id);
         const departmentResponse = await getAllDepartments(company_id);
+        const employeeRecord = await getEmployee(user.employee_id);
+        const allUsers = await getAllUsers(user.company_id);
+        const filteredAllUsers = allUsers.filter((allUser) => allUser.role === "HR Manager");
         setUser(user);
         setEmployees(employeeResponse);
         setDepartments(departmentResponse);
+        setEmployeeRec(employeeRecord)
+        setHrID(filteredAllUsers)
     }
     fetchData();
 
