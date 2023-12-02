@@ -17,8 +17,8 @@ import EditReport from './EditReport';
 import { connect } from 'react-redux';
 import { statisticsAction, statisticsCloseAction } from '../../../actions/settingsAction';
 import { getDepartment } from '../../../services/department';
-
-
+import { createNotification } from '../../../services/notification';
+import { getAllUsers } from '../../../services/user';
 
 
 
@@ -33,6 +33,8 @@ const MyReport = () => {
     const [loading, setLoading] = useState(false);
     const [searchReport, setSearchReport] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [employeeRec, setEmployeeRec] = useState([]);
+    const [hrID, setHrID] = useState([]);
     const [formState, setFormState] = useState({
         employee_id: '',
         employee_name: '',
@@ -95,6 +97,18 @@ const MyReport = () => {
                         company_id: user.company_id,
                     }
                 )
+                const notifyRequisition = await createNotification(
+                    {
+                        name: 'Create Report',
+                        sender_id: user.employee_id,
+                        receiver_id: employeeRec.line_manager,
+						hr_id: hrID[0]?.employee_id,
+                        notification: `${user.name} Created a new report ; From ${duration}`,
+                        notification_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+				)
 
                 if (logActivity.id) {
                     sendEmail(user.emailAddress, user.name, emailCase.createReport);
@@ -142,7 +156,6 @@ const MyReport = () => {
             toast.error('Feature not enabled');
             return;
           }
-          console.log({reportID});
           const response = await deleteReport(reportID);
           
     
@@ -181,11 +194,17 @@ const MyReport = () => {
                 const companyData = await getCompanyData();
                 companyData.settings?.features['reports'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
                 const response = await getEmployeeReport(employee_id);
-                const userResponse = await getAllEmployees(company_id);
+                const employeeRecord = await getEmployee(user.employee_id);
+                const allUsers = await getAllUsers(user.company_id);
+                const filteredAllUsers = allUsers.filter(
+                    (allUser) => allUser.role === "HR Manager"
+                  );
+                // const userResponse = await getAllEmployees(company_id);
                 // const department = await getDepartment(employee_id)
                 setReports(response);
-                setUsers(userResponse);
+                setEmployeeRec(employeeRecord)
                 setUser(user);
+                setHrID(filteredAllUsers)
                 // setDepartments(department);
                 setLoading(false);
             }

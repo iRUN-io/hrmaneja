@@ -160,7 +160,6 @@ const Department = () => {
         return 'No department head';
     }
 
-    console.log('employee', employees)
     const getAllEmployeesHere = (departmentId) => {
         const employ = employees.filter(user => user.department === departmentId);
 

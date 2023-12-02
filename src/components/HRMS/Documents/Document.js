@@ -37,7 +37,6 @@ function Documents(props) {
   const [loading, setLoading] = useState(false);
   const [featureEnabled, setFeatureEnabled] = useState(false);
 
-  console.log('props', props)
   const employeeDetails = id => {
     try {
       const employee = employees.filter(employee => employee.id === id);

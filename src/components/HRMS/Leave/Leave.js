@@ -32,7 +32,7 @@ const Leave = () => {
     const [approvalPopover, setApprovalPopover] = useState(false);
     const [showPopover, setShowPopover] = useState(null);
     const [cancelClicked, setCancelClicked] = useState(false);
-    console.log({leaves});
+    
     const [formState, setFormState] = useState({
         employeeId: '',
         employeeName: '',
@@ -42,7 +42,6 @@ const Leave = () => {
         notifyEmployee: '',
         leaveReason: '',
     });
-
   
     
     useEffect(() => {
@@ -84,6 +83,17 @@ const Leave = () => {
                         employee_id: user.employee_id,
                         activity: `${user.name} Created a new leave ; ${body.leaveType}`,
                         activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+                const notifyLeave = await createNotification(
+                    {
+                        name: 'Create Leave',
+                        sender_id: user.employee_id,
+                        receiver_id: body.notifyEmployee,
+                        notification: `${user.name} want's to notify you about their leave request; ${body.leaveType}`,
+                        notification_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,
                     }
@@ -137,7 +147,7 @@ const Leave = () => {
       
     
 
-    const removeLeave = async (leaveId) => {
+    const removeLeave = async (leaveId, leaveType, receiver_id) => {
         // console.log("Leave ID to be removed:", leaveId);
         if (!featureEnabled) {
             toast.error('Feature not enabled');
@@ -157,7 +167,21 @@ const Leave = () => {
                         user: user.name,
                         company_id: user.company_id,
                     }
+
+                    
                 )
+                const notifyLeave = await createNotification(
+                    {
+                        name: 'Delete Leave',
+                        sender_id: user.employee_id,
+                        receiver_id: receiver_id,
+                        notification: `${user.name} Deleted your ${leaveType}`,
+                        notification_name: 'Deletion',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+                
 
                 setLeaves(leaves.filter(leave => leave.id !== leaveId));
 
@@ -182,7 +206,7 @@ const Leave = () => {
         setOpenPopoverId(null);  // Close the popover when "Cancel" is clicked
       };
 
-    const toggleLeave = async (leaveId, type, receiver_id) => {
+    const toggleLeave = async (leaveId, type, receiver_id, leaveType) => {
         try {
             if (!featureEnabled) {
                 toast.error('Feature not enabled');
@@ -217,16 +241,14 @@ const Leave = () => {
                         name: type === 'approve' ? 'Approve Leave' : 'Reject Leave',
                         sender_id: user.employee_id,
                         receiver_id: receiver_id,
-                        notification: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} a leave`,
+                        notification: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} your ${leaveType}`,
                         notification_name: type === 'approve' ? 'Approval' : 'Rejection',
                         user: user.name,
                         company_id: user.company_id,
                     }
                 )
 
-                if (notifyLeave) {
-                    console.log({notifyLeave});
-                }
+                
 
                 if (logLeave.id) {
                     if (type === 'approve') {
@@ -423,7 +445,7 @@ const Leave = () => {
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
                                                                                             <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject', leave.employee_id)} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject', leave.employee_id, leave.leave_type)} type="button" className="btn btn-sm btn-danger">Disapprove</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
@@ -439,7 +461,7 @@ const Leave = () => {
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
                                                                                             <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve', leave.employee_id)} type="button" className="btn btn-sm btn-danger">Approve</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve', leave.employee_id, leave.leave_type)} type="button" className="btn btn-sm btn-danger">Approve</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
@@ -462,7 +484,7 @@ const Leave = () => {
                                                                                         </button>
                                                                                         <button
                                                                                             style={{ margin: '10px' }}
-                                                                                            onClick={() => removeLeave(leave.id)}
+                                                                                            onClick={() => removeLeave(leave.id, leave.leave_type, leave.employee_id)}
                                                                                             type="button"
                                                                                             className="btn btn-sm btn-danger"
                                                                                         >

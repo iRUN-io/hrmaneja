@@ -15,6 +15,8 @@ import {  createRequisition, getEmployeeRequisition } from '../../../services/ex
 import moment from 'moment';
 import EmptyState from '../../EmptyState';
 import FeatureNotAvailable from '../../common/featureDisabled';
+import { createNotification } from '../../../services/notification';
+import { getAllUsers } from '../../../services/user';
 
 
 function Expense(props) {
@@ -25,6 +27,8 @@ function Expense(props) {
 	const [user, setUser] = useState({});
     const [searchExpense, setSearchExpense] = useState('');
 	const [featureEnabled, setFeatureEnabled] = useState(false);
+	const [hrID, setHrID] = useState([]);
+	const [employeeRec, setEmployeeRec] = useState([]);
 	const comingSoon = false;
 	const [formState, setFormState] = useState({
 		employeeId: '',
@@ -37,7 +41,6 @@ function Expense(props) {
 		amount: '',
 		department: '',
 	});
-
 	
 
 	useEffect(() => {
@@ -49,6 +52,10 @@ function Expense(props) {
 				companyData.settings?.features['expenseManagement'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
 				const employeeRecord = await getEmployee(user.employee_id);
 				const allRequisition = await getEmployeeRequisition(user.employee_id);
+				const allUsers = await getAllUsers(user.company_id);
+                const filteredAllUsers = allUsers.filter(
+                    (allUser) => allUser.role === "HR Manager"
+                  );
 				setRequisitions(allRequisition);
 				setFormState({
 					...formState,
@@ -59,6 +66,8 @@ function Expense(props) {
 				});
 				setLoading(false);
 				setUser(user);
+				setHrID(filteredAllUsers)
+				setEmployeeRec(employeeRecord)
 
 			}
 		}
@@ -101,6 +110,18 @@ function Expense(props) {
 						user: user.name,
 						company_id: user.company_id,
 					}
+				)
+				const notifyRequisition = await createNotification(
+                    {
+                        name: 'Sent Requisition',
+                        sender_id: user.employee_id,
+                        receiver_id: employeeRec.line_manager,
+						hr_id: hrID[0]?.employee_id,
+                        notification: `${response.employeeName} made a requisition request`,
+                        notification_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
 				)
 
 				if (logActivity.id) {
