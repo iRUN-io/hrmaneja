@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { completeTask, getEmployeeTask, pendingTask } from '../../../services/task';
 import { toast } from 'material-react-toastify';
 import Loader from '../../common/loader';
@@ -11,13 +11,77 @@ import { getAllNotifications } from '../../../services/notification';
 
 
 
+function NotificationList({ notifications }) {
+    const user = getUser();
+
+    const isAdmin = user?.role === "HR Manager";
+    const history = useHistory();
+
+    const handleNotificationClick = (notification) => {
+        if (isAdmin) {
+            switch (notification.name) {
+                case 'Create Leave':
+                    history.push('/admin/hr-leaves');
+                    break;
+                case 'Sent Requisition':
+                    history.push('/admin/hr-requisition');
+                    break;
+                case 'Create Report':
+                    history.push('/admin/hr-report');
+                    break;
+                case 'Update TimeSheet':
+                    history.push('/admin/hr-timesheet');
+                    break;
+
+                // Default case
+                default:
+                    console.log('Unknown admin notification type');
+                    break;
+            }
+        } else {
+            switch (notification.name) {
+                case 'Approve Leave':
+                    history.push('/my-leaves');
+                    break;
+                case 'Approve Requisition':
+                    history.push('/my-requisition');
+                    break;
+                case 'Reject Leave':
+                    history.push('/my-leaves');
+                    break;
+                case 'Reject Requisition':
+                    history.push('/my-requisition');
+                    break;
+
+                // Default case
+                default:
+                    console.log('Unknown user notification type');
+                    break;
+            }
+        }
+    };
+      
+    return (
+      <div className="todo_list mt-4">
+        <ul className="list-unstyled mb-0">
+          {notifications.map((note, index) => (
+            <li key={index} onClick={() => handleNotificationClick(note)}>
+              <label className="custom-control custom-checkbox">
+                <span className="custom-control-label" style={{cursor: "pointer"}}>{note.notification}</span>
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
 function Notification(props) {
     const [tasks, setTasks] = useState([]);
 	const [user, setUser] = useState([]);
 	const [loading, setLoading] = useState([]);
     const [notification, setNotification] = useState([]);
 	
-    console.log({notification});
 	useEffect(() => {
         async function fetchData() {
             setLoading(true);
@@ -27,7 +91,7 @@ function Notification(props) {
                 const allNotifications = await getAllNotifications(user.company_id);
 
                 const filteredNotifications = allNotifications.filter(
-                    (notification) => notification.receiver_id === user.employee_id
+                    (notification) => notification.receiver_id === user.employee_id || notification.hr_id === user.employee_id
                 );
 				// set only 5 tasks
 				setTasks(allTasks.slice(0, 5));
@@ -39,65 +103,16 @@ function Notification(props) {
         }
         fetchData();
     }, []);
-
-	const toggleTask = async (id) => {
-        const task = tasks.find(task => task.id === id);
-
-        const updatedTask = {
-            ...task,
-            status: task.status === 'pending' ? 'completed' : 'pending',
-        };
-        // if updated task is pending,
-        if (updatedTask.status === 'completed') {
-            const response = await completeTask(updatedTask, task.id);
-            if (!response.error) {
-                const logActivity = await createActivity(
-                    {
-                        name: 'Completed a task',
-                        employee_id: user.employee_id,
-                        activity: `Completed a task for ${updatedTask.employee_name}`,
-                        activity_name: 'Completion',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
-
-                if (logActivity.id) {
-                    // sendEmail(user.emailAddress, user.name, emailCase.completeTask);
-                    setTasks(tasks.map(task => task.id === id ? updatedTask : task));
-                    toast.success("Task completed successfully");
-                }
-            }
-
-        }
-        // if updated task is completed
-        if (updatedTask.status === 'pending') {
-            const response = await pendingTask(updatedTask, task.id);
-            if (!response.error) {
-                const logActivity = await createActivity(
-                    {
-                        name: 'Task moved to pending',
-                        employee_id: user.employee_id,
-                        activity: `moved a task for ${updatedTask.employee_name} to pending`,
-                        activity_name: 'Pending Task',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
-
-                if (logActivity.id) {
-                    // sendEmail(user.emailAddress, user.name, emailCase.pendingTask);
-                    setTasks(tasks.map(task => task.id === id ? updatedTask : task));
-                    toast.success("Task moved back to Todo");
-                }
-            }
-        }
-    };
-
+	
 
 	if (loading) {
 		return <Loader/>
 	}
+
+    
+    const todayNotifications = notification.filter((note) => isToday(note.createdAt));
+    const yesterdayNotifications = notification.filter((note) => isYesterday(note.createdAt));
+    const olderNotifications = notification.filter((note) => !isToday(note.createdAt) && !isYesterday(note.createdAt));
 
 		return (
 			<>
@@ -114,34 +129,38 @@ function Notification(props) {
                                     </ul>
 
                                 </div>
-							<div className="row clearfix row-deck">
-								<div className="col-lg-4 col-md-12">
-									<div className="card">
-										<div className="card-body">
-											
-											<div className="todo_list mt-4">
-												<h3 className="card-title">
-													Today's <small>notifications</small>
-												</h3>
-												<ul className="list-unstyled mb-0">
-													{notification.map((note, index) => (
-													<li key={index}>
-														<label className="custom-control custom-checkbox">
-														{/* <input onClick={()=> toggleTask(task.id)} type="checkbox" className="custom-control-input" defaultChecked={task.status === 'completed' ? true : false} /> */}
-															<span className="custom-control-label">
-																{note.notification}
-																</span>
-														</label>
-													</li>
-													))}
-													{/* <li><Link to={'/hr-todo'} className="btn btn-primary btn-sm">See More Todos</Link></li> */}
-												</ul>
-											</div>
-										</div>
-									</div>
-								</div>
-								
-							</div>
+                                <div className="row clearfix row-deck">
+              <div className="col-lg-4 col-md-12">
+                <div className="card">
+                  <div className="card-body">
+                  <h3 className="card-title">
+                        Today's <small>notifications</small>
+                      </h3>
+                    <NotificationList notifications={todayNotifications} />
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4 col-md-12">
+                <div className="card">
+                  <div className="card-body">
+                  <h3 className="card-title">
+                        Yesterday's <small>notifications</small>
+                      </h3>
+                    <NotificationList notifications={yesterdayNotifications} />
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-4 col-md-12">
+                <div className="card">
+                  <div className="card-body">
+                  <h3 className="card-title">
+                        Older <small>notifications</small>
+                      </h3>
+                    <NotificationList notifications={olderNotifications} />
+                  </div>
+                </div>
+              </div>
+            </div>
 						</div>
 					</div>
 
@@ -151,8 +170,21 @@ function Notification(props) {
 				
 			</>
 		);
+        }
+        function isToday(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+          }
+          
+          // Helper function to check if a date is yesterday
+          function isYesterday(dateString) {
+            const date = new Date(dateString);
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return date.getDate() === yesterday.getDate() && date.getMonth() === yesterday.getMonth() && date.getFullYear() === yesterday.getFullYear();
+          }
 
-}
 const mapStateToProps = state => ({
 	fixNavbar: state.settings.isFixNavbar
 })

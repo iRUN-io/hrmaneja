@@ -31,7 +31,6 @@ const Users = (navStatus) => {
 		password: '',
 		confirmPassword: '',
 	});
-
 	const createUsersAction = async () => {
 		try {
 			setFormState({ ...formState });
@@ -116,7 +115,6 @@ const Users = (navStatus) => {
 			...formState,
 			[name]: value,
 		})
-		console.log({ [name]: value })
 	}
 
 	const removeUser = async (userId) => {

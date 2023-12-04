@@ -18,6 +18,9 @@ import { createBilling } from '../../../services/billing';
 import { sendEmail } from '../../../services/mail/sendMail';
 import { emailCase } from '../../../enums/emailCase';
 import Loader from '../../common/loader';
+import { getAllUsers } from '../../../services/user';
+import { createNotification } from '../../../services/notification';
+
 
 
 function Timesheet(props) {
@@ -32,6 +35,7 @@ function Timesheet(props) {
     const [lineManager, setLineManager] = useState({});
     const [company, setCompany] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(true);
+    const [hrID, setHrID] = useState([]);
     const comingSoon = false;
 
     useEffect(() => {
@@ -75,6 +79,11 @@ function Timesheet(props) {
             // );
             // const savedData = thisWeekAttendance[0]?.timeSheet;
             setEmployee(employeeRecord);
+            const allUsers = await getAllUsers(user.company_id);
+                const filteredAllUsers = allUsers.filter(
+                    (allUser) => allUser.role === "HR Manager"
+                  );
+            setHrID(filteredAllUsers)
       
             const combinedTimesheets = {};
 
@@ -182,12 +191,24 @@ function Timesheet(props) {
                     {
                         name: 'Update TimeSheet',
                         employee_id: user.employee_id,
-                        activity: `TimeSheet updated for week ${week} of ${year} | ${date}`,
+                        activity: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
                         activity_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,
                     }
                 )
+                const notifyRequisition = await createNotification(
+                    {
+                        name: 'Update TimeSheet',
+                        sender_id: user.employee_id,
+                        receiver_id: employee.line_manager,
+						hr_id: hrID[0]?.employee_id,
+                        notification: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
+                        notification_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+				)
 
                 if (logActivity.id) {
                     // sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
@@ -333,7 +354,6 @@ function Timesheet(props) {
         			return <Loader />
     }
 
-    console.log('allAttendance', timeEntries)
 
     return (
         <>

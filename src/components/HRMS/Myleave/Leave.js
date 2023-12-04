@@ -12,6 +12,9 @@ import { getAllEmployees, getEmployee } from '../../../services/employee';
 import { Link, useHistory } from 'react-router-dom';
 import EmptyState from '../../EmptyState';
 import FeatureNotAvailable from '../../common/featureDisabled';
+import { createNotification } from '../../../services/notification';
+import { getAllUsers } from '../../../services/user';
+
 
 const MyLeave = () => {
     const [leaves, setLeaves] = useState([]);
@@ -22,6 +25,7 @@ const MyLeave = () => {
     const [loading, setLoading] = useState(false);
     const [searchLeave, setSearchLeave] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
+    const [AllUsers, setAllUsers] = useState([]);
     const [formState, setFormState] = useState({
         employeeId: '',
         employeeName: '',
@@ -32,7 +36,7 @@ const MyLeave = () => {
         leaveReason: '',
     });
     const history = useHistory();
-
+    console.log({employees});
     useEffect(() => {
         const user = getUser();
         setFormState({ ...formState, employeeId: user.id, employeeName: user.name });
@@ -69,8 +73,20 @@ const MyLeave = () => {
                     {
                         name: 'Create Leave',
                         employee_id: user.employee_id,
-                        activity: `${user.name} Created a new leave ; ${response.leaveType}`,
+                        activity: `${user.name} Created a new leave ; ${body.leaveType}`,
                         activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
+                )
+                const notifyLeave = await createNotification(
+                    {
+                        name: 'Create Leave',
+                        sender_id: user.employee_id,
+                        receiver_id: body.notifyEmployee,
+                        hr_id: AllUsers[0]?.employee_id,
+                        notification: `${user.name} want's to notify you about their leave request; ${body.leaveType}`,
+                        notification_name: 'Creation',
                         user: user.name,
                         company_id: user.company_id,
                     }
@@ -121,8 +137,15 @@ const MyLeave = () => {
                 const {employee_id, company_id} = user;
                 const companyData = await getCompanyData();
                 companyData.settings?.features['leave'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
+                console.log({companyData});
                 const response = await getEmployeeLeave(employee_id);
                 const userResponse = await getAllEmployees(company_id);
+                
+                const allUsers = await getAllUsers(company_id);
+                const filteredAllUsers = allUsers.filter(
+                    (allUser) => allUser.role === "HR Manager"
+                  );
+                setAllUsers(filteredAllUsers)
                 setLeaves(response);
                 setUsers(userResponse);
                 setUser(user);

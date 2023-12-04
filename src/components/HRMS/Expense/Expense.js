@@ -18,6 +18,7 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { getAllDepartments } from '../../../services/department';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
+import { createNotification } from '../../../services/notification';
 
 
 function Expense(props) {
@@ -43,7 +44,6 @@ function Expense(props) {
 		amount: '',
 		department: '',
 	});
-
 
 	const history = useHistory();
 
@@ -160,7 +160,7 @@ function Expense(props) {
         }
       }, [cancelClicked]);
 	  
-	const toggleRequisition = async (reqId, type) => {
+	const toggleRequisition = async (reqId, type, receiverID) => {
 		try {
 			if (!featureEnabled) {
 				toast.error('Feature not enabled');
@@ -176,7 +176,6 @@ function Expense(props) {
 
 				response = await disapproveRequisition(reqId);
 			}
-
 			if (!response.error) {
 
 				const logRequisitions = await createActivity(
@@ -188,6 +187,17 @@ function Expense(props) {
 						user: user.name,
 						company_id: user.company_id,
 					}
+				)
+				const notifyRequisition = await createNotification(
+                    {
+                        name: type === 'approve' ? 'Approve Requisition' : 'Reject Requisition',
+                        sender_id: user.employee_id,
+                        receiver_id: receiverID,
+                        notification: `${user.name} ${type === 'approve' ? 'Approved' : 'Rejected'} your requisition request`,
+                        notification_name: type === 'approve' ? 'Approval' : 'Rejection',
+                        user: user.name,
+                        company_id: user.company_id,
+                    }
 				)
 
 				if (logRequisitions.id) {
@@ -264,7 +274,6 @@ function Expense(props) {
 	const indexOfLastRequisitions = currentPage * RequisitionsPerPage;
 	const indexOfFirstRequisitions = indexOfLastRequisitions - RequisitionsPerPage;
 	const currentRequisitions = allExpensesArray.slice(indexOfFirstRequisitions, indexOfLastRequisitions);
-
 	const paginate = pageNumber => setCurrentPage(pageNumber);
 	const nextPage = () => setCurrentPage(currentPage + 1);
 	const prevPage = () => setCurrentPage(currentPage - 1);
@@ -414,7 +423,7 @@ function Expense(props) {
 																										<Popover.Body>
 																											<div className="clearfix" >
 																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'reject')} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'reject', request.employee_id)} type="button" className="btn btn-sm btn-danger">Disapprove</button>
 																											</div>
 																										</Popover.Body>
 																									</Popover>
@@ -430,7 +439,7 @@ function Expense(props) {
 																										<Popover.Body>
 																											<div className="clearfix" >
 																												<button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'approve')} type="button" className="btn btn-sm btn-danger">Approve</button>
+																												<button style={{ margin: '10px' }} onClick={() => toggleRequisition(request.id, 'approve', request.employee_id)} type="button" className="btn btn-sm btn-danger">Approve</button>
 																											</div>
 																										</Popover.Body>
 																									</Popover>
