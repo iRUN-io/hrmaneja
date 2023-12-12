@@ -28,7 +28,6 @@ const MyReport = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [ReportPerPage] = useState(10);
     const [user, setUser] = useState([]);
-    const [employees, setUsers] = useState([]);
     // const [department, setDepartments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchReport, setSearchReport] = useState('');
