@@ -16,6 +16,7 @@ function ManageReport(props) {
   const [user, setUser] = useState({});
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openPopoverId, setOpenPopoverId] = useState(null);
 
     const { location } = props;
     const { state } = location;
@@ -143,20 +144,19 @@ function ManageReport(props) {
                                     </button>
                                     </div>
                               </div>
-                                {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                    overlay={
-                                    <Popover id="popover-basic">
-                                        <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                        <Popover.Body>
-                                        <div className="clearfix" >
-                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                            <button style={{ margin: '10px' }} onClick={() => removeReport(report.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                        </div>
-                                        </Popover.Body>
-                                    </Popover>
-                                    }>
-                                    <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
-                                </OverlayTrigger>                             */}
+                              <OverlayTrigger trigger="focus" placement="bottom" show={openPopoverId === report.id} onHide={() => setOpenPopoverId(null)} delay={1}
+                              overlay={
+                                <Popover id="popover-basic">
+                                <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                <Popover.Body>
+                                <div className="clearfix" >
+                                <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setOpenPopoverId(null)}>Cancel</button>
+                                <button style={{ margin: '10px' }} onClick={() => removeReport(report.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                </div>
+                                </Popover.Body>
+                                </Popover>}>
+                                <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm" onClick={() => setOpenPopoverId(report.id)}><i className="fa fa-trash-o text-danger" /></button>
+                                </OverlayTrigger>
                                 </div>
                         </div>
                         ))}

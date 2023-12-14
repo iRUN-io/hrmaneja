@@ -8,6 +8,9 @@ import { getCompanyData, getUser } from '../../../config/common';
 import { getAllEmployees } from '../../../services/employee';
 import { getAllDepartments } from '../../../services/department';
 import { getAllReport } from '../../../services/report';
+import * as XLSX from 'xlsx'; 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import { toast } from 'material-react-toastify';
 
 
@@ -32,6 +35,8 @@ function Report (props) {
     const [loading, setLoading] = useState(false);
     const [featureEnabled, setFeatureEnabled] = useState(false);
     const [user, setUser] = useState([]);
+    // const [fromDate, setFromDate] = useState(null);
+    // const [toDate, setToDate] = useState(null);
 
     const employeeDetails = id => {
         try {
@@ -69,6 +74,14 @@ function Report (props) {
         }
         fetchData();
       }, []);
+
+    //   const handleFromDateChange = (event) => {
+    //     setFromDate(event.target.value ? moment(event.target.value).startOf('day').toDate() : null);
+    // };
+
+    // const handleToDateChange = (event) => {
+    //     setToDate(event.target.value ? moment(event.target.value).endOf('day').toDate() : null);
+    // };
 
       const setSearch = (e) => {
         const { value } = e.target;

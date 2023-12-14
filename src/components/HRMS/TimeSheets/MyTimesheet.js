@@ -20,6 +20,8 @@ import { emailCase } from '../../../enums/emailCase';
 import Loader from '../../common/loader';
 import { getAllUsers } from '../../../services/user';
 import { createNotification } from '../../../services/notification';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 
 
@@ -36,6 +38,7 @@ function Timesheet(props) {
     const [company, setCompany] = useState({});
     const [featureEnabled, setFeatureEnabled] = useState(true);
     const [hrID, setHrID] = useState([]);
+    const [selectedMonthYear, setSelectedMonthYear] = useState('');
     const comingSoon = false;
 
     useEffect(() => {
@@ -222,15 +225,32 @@ function Timesheet(props) {
             //   alert('You have already clocked out today.');
         }
     };
+    const handleMonthYearChange = (event) => {
+        setSelectedMonthYear(event.target.value);
+      };
+
+      const filteredTimesheet = timeEntries.filter(entry => {
+        const entryMonthYear = moment(entry.date).format('YYYY-MM');
+        return !selectedMonthYear || entryMonthYear === selectedMonthYear;
+      });
+
     // Group time entries by day
-    const groupedTimeEntries = timeEntries.reduce((result, entry) => {
+    // const groupedTimeEntries = timeEntries.reduce((result, entry) => {
+    //     const day = moment(entry.date).format('MMMM DD, YYYY');
+    //     if (!result[day]) {
+    //         result[day] = [];
+    //     }
+    //     result[day].push(entry);
+    //     return result;
+    // }, {});
+    const groupedTimeEntries = filteredTimesheet.reduce((result, entry) => {
         const day = moment(entry.date).format('MMMM DD, YYYY');
         if (!result[day]) {
-            result[day] = [];
+          result[day] = [];
         }
         result[day].push(entry);
         return result;
-    }, {});
+      }, {});
 
     // State to manage the current page
     const [currentPage, setCurrentPage] = useState(1);
@@ -422,6 +442,17 @@ function Timesheet(props) {
                                                         </button>
                                                     )} */}
                                                 </div>
+                                                <div className="form-group col-md-6">
+                                                        <label htmlFor="selectedMonthYear">Select Month and Year</label>
+                                                        <input
+                                                            type="month"
+                                                            className="form-control"
+                                                            id="selectedMonthYear"
+                                                            onChange={handleMonthYearChange}
+                                                            value={selectedMonthYear}
+                                                            style={{ width: '200px' }} 
+                                                        />
+                                                        </div>
                                                 <table className='table table-hover table-striped table-vcenter text-nowrap'>
                                                     <thead>
                                                         <tr>

@@ -6,7 +6,8 @@ import {Link, useHistory, useParams} from 'react-router-dom'
 import moment from "moment";
 import { getEmployeeReport } from "../../../services/report";
 import Time from "../../elements/Time";
-import html2pdf from 'html2pdf.js'
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 function ReportDoc(props) {
     const {fixNavbar} = props;
@@ -40,6 +41,19 @@ function ReportDoc(props) {
     const readableDate = (date) => {
         return Time(date);
     }
+    const exportToPDF = () => {
+        const pdf = new jsPDF();
+        
+        // Add content to PDF
+        pdf.text("Weekly Activity Report", 10, 10);
+        pdf.text(`Report Date\n${moment(reportData?.from).format('MMM Do YYYY')} To ${moment(reportData?.to).format('MMM Do YYYY')}`, 10, 20);
+        pdf.text(`Name of Team Member\n${reportData.team_member}`, 10, 30);
+        pdf.text(`Designation\n${reportData.designation}`, 10, 40);
+        // ... Repeat for other report data fields
+    
+        // Save PDF
+        pdf.save(`weekly_activity_report_${moment().format('YYYYMMDDHHmmss')}.pdf`);
+      };
 
     // const handlePrint = () => {
     //     // e.preventDefault();
