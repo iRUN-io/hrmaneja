@@ -193,7 +193,7 @@ function ViewTimesheet(props) {
                                     <div className="tab-pane fade show active" role="tabpanel">
                                         <div className="card table-card">
                                             <div className="card-header">
-                                            <div className="card-options">
+                                                <div className="card-options">
                                                 <button className="btn btn-icon btn-sm" onClick={exportToExcel}>
                                                     <span className="fe fe-download" /> Export to Excel
                                                 </button>
