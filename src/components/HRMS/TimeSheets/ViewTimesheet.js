@@ -20,6 +20,7 @@ function ViewTimesheet(props) {
     const [attendance, setUserAttendance] = useState([]);
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
+    const [selectedMonthYear, setSelectedMonthYear] = useState('');
 
     const timesheet = attendance[0]?.timeSheet || [];
 
@@ -66,6 +67,14 @@ function ViewTimesheet(props) {
           return true;
         });
       };
+      const handleMonthYearChange = (event) => {
+        setSelectedMonthYear(event.target.value);
+      };
+
+      const filteredTimesheet = timesheet.filter(entry => {
+        const entryMonthYear = moment(entry.date).format('YYYY-MM');
+        return !selectedMonthYear || entryMonthYear === selectedMonthYear;
+      });
 
     const handleFromDateChange = (event) => {
         setFromDate(event.target.value ? moment(event.target.value).startOf('day').toDate() : null);
@@ -76,14 +85,23 @@ function ViewTimesheet(props) {
     };
 
     // Group time entries by day
-    const groupedTimeEntries = timesheet.reduce((result, entry) => {
+    // const groupedTimeEntries = timesheet.reduce((result, entry) => {
+    //     const day = moment(entry.date).format('MMMM DD, YYYY');
+    //     if (!result[day]) {
+    //         result[day] = [];
+    //     }
+    //     result[day].push(entry);
+    //     return result;
+    // }, {});
+
+    const groupedTimeEntries = filteredTimesheet.reduce((result, entry) => {
         const day = moment(entry.date).format('MMMM DD, YYYY');
         if (!result[day]) {
-            result[day] = [];
+          result[day] = [];
         }
         result[day].push(entry);
         return result;
-    }, {});
+      }, {});
 
     // State to manage the current page
     const [currentPage, setCurrentPage] = useState(1);
@@ -118,7 +136,7 @@ function ViewTimesheet(props) {
 
         if(exportData.length === 0){
             toast.error("Error, No Entries!");
-            return;
+            return;;
         }
         
         const columns = Object.keys(exportData[0]);
@@ -175,7 +193,7 @@ function ViewTimesheet(props) {
                                     <div className="tab-pane fade show active" role="tabpanel">
                                         <div className="card table-card">
                                             <div className="card-header">
-                                            <div className="card-options">
+                                                <div className="card-options">
                                                 <button className="btn btn-icon btn-sm" onClick={exportToExcel}>
                                                     <span className="fe fe-download" /> Export to Excel
                                                 </button>
@@ -185,6 +203,7 @@ function ViewTimesheet(props) {
                                                 </div>
                                                 <div className="page-subtitle ml-0 col-md-4">{employeeData.name}'s time sheet</div>
                                                     <div className="form-row">
+                                                    
                                                     <div className="form-group col-md-6">
                                                         <label htmlFor="fromDate">From Date</label>
                                                         <input
@@ -202,6 +221,7 @@ function ViewTimesheet(props) {
                                                             id="toDate"
                                                             onChange={handleToDateChange}
                                                         />
+                                                        
                                                     </div>
                                                 </div>
                                             </div>
@@ -209,6 +229,17 @@ function ViewTimesheet(props) {
 
                                                 {timesheet.length === 0 && !loading ? (<EmptyState />) :
                                                     <>
+                                                    <div className="form-group col-md-6">
+                                                        <label htmlFor="selectedMonthYear">Select Month and Year</label>
+                                                        <input
+                                                            type="month"
+                                                            className="form-control"
+                                                            id="selectedMonthYear"
+                                                            onChange={handleMonthYearChange}
+                                                            value={selectedMonthYear}
+                                                            style={{ width: '200px' }} 
+                                                        />
+                                                        </div>
                                                         <table className='table table-hover table-striped table-vcenter text-nowrap'>
                                                             <thead>
                                                                 <tr>

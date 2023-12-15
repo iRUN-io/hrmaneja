@@ -8,6 +8,9 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import { createActivity } from '../../../services/activities';
 import Loader from '../../common/loader';
 import Time from '../../elements/Time';
+import * as XLSX from 'xlsx'; 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import moment from 'moment';
 
 
@@ -16,6 +19,9 @@ function ManageReport(props) {
   const [user, setUser] = useState({});
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [openPopoverId, setOpenPopoverId] = useState(null);
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
 
     const { location } = props;
     const { state } = location;
@@ -71,6 +77,58 @@ function ManageReport(props) {
   
     };
 
+    const exportData = reports.map(report => ({
+      report_summary: report.report_summary,
+      employee_name: report.employee_name,
+      // employee_id: report.employee_id,
+      tasks: report.tasks,
+      weekly_challenges: report.weekly_challenges,
+      weekly_outcomes: report.weekly_outcomes,
+      report_overview: report.report_overview,
+      team_member: report.team_member,
+      designation: report.designation,
+      // status: report.status
+    }));
+
+    const exportToExcel = () => {
+      const ws = XLSX.utils.json_to_sheet(exportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Reports');
+      XLSX.writeFile(wb, `${employeeData.name}'s_reports_${moment().format('YYYYMMDDHHmmss')}.xlsx`);
+    };
+  
+    const exportToPDF = () => {
+      const pdf = new jsPDF();
+  
+      pdf.text(`Reports from ${moment(fromDate).format('MMM Do YYYY')} to ${moment(toDate).format('MMM Do YYYY')}`, 10, 10);
+  
+      if (exportData.length === 0) {
+        toast.error('Error, No Entries!');
+        return;
+      }
+  
+      const columns = Object.keys(exportData[0]);
+      const rows = exportData.map((entry) => Object.values(entry));
+      
+  
+      pdf.autoTable({
+        head: [columns],
+        body: rows,
+        startY: 20,
+      
+      });
+  
+      pdf.save(`${employeeData.name}'s_weekly_activity_report_${moment().format('YYYYMMDDHHmmss')}.pdf`);
+    };
+
+    const handleFromDateChange = (event) => {
+      setFromDate(event.target.value ? moment(event.target.value).startOf('day').toDate() : null);
+  };
+
+  const handleToDateChange = (event) => {
+      setToDate(event.target.value ? moment(event.target.value).endOf('day').toDate() : null);
+  };
+
     const readableDate = (date) => {
       return Time(date);
   }
@@ -98,7 +156,35 @@ function ManageReport(props) {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <div className="page-subtitle ml-0">{employeeData.name}'s report</div>
+                                <div className="card-options">
+                                                <button className="btn btn-icon btn-sm" onClick={exportToExcel}>
+                                                    <span className="fe fe-download" /> Export to Excel
+                                                </button>
+                                                <button className="btn btn-icon btn-sm" onClick={exportToPDF}>
+                                                <span className="fe fe-download" /> Export to PDF
+                                                </button>
+                                                </div>
+                                    <div className="page-subtitle ml-0 col-md-4">{employeeData.name}'s report</div>
+                                    <div className="form-row">
+                                      <div className="form-group col-md-6">
+                                      <label htmlFor="fromDate">From Date</label>
+                                      <input
+                                      type="date"
+                                      className="form-control"
+                                      id="fromDate"
+                                      onChange={handleFromDateChange}
+                                      />
+                                      </div>
+                                      <div className="form-group col-md-6">
+                                      <label htmlFor="toDate">To Date</label>
+                                      <input
+                                      type="date"
+                                      className="form-control"
+                                      id="toDate"
+                                      onChange={handleToDateChange}
+                                      />
+                                      </div>
+                                      </div>
                                     <div className="page-options d-flex">
                                         {/* <select className="form-control custom-select w-auto">
                                             <option value="asc">Newest</option>
@@ -142,21 +228,21 @@ function ManageReport(props) {
                                     <i className="icon-printer" />
                                     </button>
                                     </div>
-                              </div>
-                                {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
-                                    overlay={
-                                    <Popover id="popover-basic">
-                                        <Popover.Header as="p">Confirm Delete</Popover.Header>
-                                        <Popover.Body>
-                                        <div className="clearfix" >
-                                            <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success">Cancel</button>
-                                            <button style={{ margin: '10px' }} onClick={() => removeReport(report.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
-                                        </div>
-                                        </Popover.Body>
-                                    </Popover>
-                                    }>
-                                    <button type="button" className="btn btn-sm btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fe fe-trash text-danger" /></button>
-                                </OverlayTrigger>                             */}
+                                    <OverlayTrigger trigger="focus" placement="bottom" show={openPopoverId === report.id} onHide={() => setOpenPopoverId(null)} delay={1}
+                                overlay={
+                                <Popover id="popover-basic">
+                                <Popover.Header as="p">Confirm Delete</Popover.Header>
+                                <Popover.Body>
+                                <div className="clearfix" >
+                                <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setOpenPopoverId(null)}>Cancel</button>
+                                <button style={{ margin: '10px' }} onClick={() => removeReport(report.id)} type="button" className="btn btn-sm btn-danger">Delete</button>
+                                </div>
+                                </Popover.Body>
+                                </Popover>}>
+                                <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm" onClick={() => setOpenPopoverId(report.id)}><i className="fa fa-trash-o text-danger" /></button>
+                                </OverlayTrigger>
+                                </div>
+                                
                                 </div>
                         </div>
                         ))}

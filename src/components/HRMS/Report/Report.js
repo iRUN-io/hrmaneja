@@ -8,6 +8,10 @@ import { getCompanyData, getUser } from '../../../config/common';
 import { getAllEmployees } from '../../../services/employee';
 import { getAllDepartments } from '../../../services/department';
 import { getAllReport } from '../../../services/report';
+import * as XLSX from 'xlsx'; 
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import moment from 'moment';
 import { toast } from 'material-react-toastify';
 
 
@@ -32,6 +36,9 @@ function Report (props) {
     const [loading, setLoading] = useState(false);
     const [featureEnabled, setFeatureEnabled] = useState(false);
     const [user, setUser] = useState([]);
+    const [fromDate, setFromDate] = useState(null);
+    const [toDate, setToDate] = useState(null);
+    console.log({reports});
 
     const employeeDetails = id => {
         try {
@@ -69,6 +76,60 @@ function Report (props) {
         }
         fetchData();
       }, []);
+
+      const exportData = reports.map(report => ({
+        report_summary: report.report_summary,
+        employee_name: report.employee_name,
+        // employee_id: report.employee_id,
+        tasks: report.tasks,
+        weekly_challenges: report.weekly_challenges,
+        weekly_outcomes: report.weekly_outcomes,
+        report_overview: report.report_overview,
+        team_member: report.team_member,
+        designation: report.designation,
+        // status: report.status
+      }));
+  
+      const exportToExcel = () => {
+        const ws = XLSX.utils.json_to_sheet(exportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Reports');
+        XLSX.writeFile(wb, `all_employee_reports_${moment().format('YYYYMMDDHHmmss')}.xlsx`);
+      };
+    
+      const exportToPDF = () => {
+        const pdf = new jsPDF();
+    
+        pdf.text(`Reports from ${moment(fromDate).format('MMM Do YYYY')} to ${moment(toDate).format('MMM Do YYYY')}`, 10, 10);
+    
+        if (exportData.length === 0) {
+          toast.error('Error, No Entries!');
+          return;
+        }
+    
+        const columns = Object.keys(exportData[0]);
+        const rows = exportData.map((entry) => Object.values(entry));
+  
+        
+    
+        pdf.autoTable({
+          head: [columns],
+          body: rows,
+          startY: 20,
+          
+        });
+    
+        pdf.save(`all_employee_weekly_activity_report_${moment().format('YYYYMMDDHHmmss')}.pdf`);
+      };
+  
+      const handleFromDateChange = (event) => {
+        setFromDate(event.target.value ? moment(event.target.value).startOf('day').toDate() : null);
+    };
+  
+    const handleToDateChange = (event) => {
+        setToDate(event.target.value ? moment(event.target.value).endOf('day').toDate() : null);
+    };
+  
 
       const setSearch = (e) => {
         const { value } = e.target;
@@ -143,9 +204,40 @@ function Report (props) {
                       role="tabpanel"
                     >
                       <div className="card loading">
+                        <div className="card-header" style={{justifyContent: "center", alignItems: "center", gap: "30px"}}>
+                        {/* <div className="card-options"> */}
+                          <div className="form-row">
+                                      <div className="form-group col-md-6">
+                                      <label htmlFor="fromDate">From Date</label>
+                                      <input
+                                      type="date"
+                                      className="form-control"
+                                      id="fromDate"
+                                      onChange={handleFromDateChange}
+                                      />
+                                      </div>
+                                      <div className="form-group col-md-6">
+                                      <label htmlFor="toDate">To Date</label>
+                                      <input
+                                      type="date"
+                                      className="form-control"
+                                      id="toDate"
+                                      onChange={handleToDateChange}
+                                      />
+                                      </div>
+                                      </div>
+                          <button className="btn btn-icon btn-sm" onClick={exportToExcel}>
+                          <span className="fe fe-download" /> Export to Excel
+                            </button>
+                            <button className="btn btn-icon btn-sm" onClick={exportToPDF}>
+                            <span className="fe fe-download" /> Export to PDF
+                            </button>
+                        {/* </div> */}
+                        </div>
                         <div className="card-header">
                           <h3 className="card-title">Employees</h3>
                           <div className="card-options">
+                          
                             <form>
                               <div className="input-group">
                                 <input
@@ -166,6 +258,7 @@ function Report (props) {
                                 </span>
                               </div>
                             </form>
+                            
                           </div>
                         </div>
                         {allEmployeesArray.length === 0 && !loading ? (

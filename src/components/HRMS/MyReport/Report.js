@@ -22,6 +22,7 @@ import { getAllUsers } from '../../../services/user';
 
 
 
+
 const MyReport = () => {
     const [reports, setReports] = useState([]);
     const [report, setReport] = useState([]);
@@ -211,6 +212,7 @@ const MyReport = () => {
         fetchData();
 
     }, []);
+     
 
     
 	const setSearch = (e) => {
@@ -366,7 +368,7 @@ const MyReport = () => {
 
                                                                         <i className="fa fa-edit" />
                                                                         </button>
-                                                                        {/* <OverlayTrigger trigger="focus" placement="bottom" delay={1}
+                                                                        <OverlayTrigger trigger="focus" placement="bottom" delay={1}
                                                                         overlay={
                                                                             <Popover id="popover-basic">
                                                                             <Popover.Header as="p">Confirm Delete</Popover.Header>
@@ -379,7 +381,7 @@ const MyReport = () => {
                                                                             </Popover>
                                                                         }>
                                                                         <button type="button" className="btn btn-icon js-sweetalert" title="Delete" data-type="confirm"><i className="fa fa-trash-o text-danger" /></button>
-                                                                        </OverlayTrigger> */}
+                                                                        </OverlayTrigger>
                                                                     </td>
                                                                 </tr>
                                                             ))}
