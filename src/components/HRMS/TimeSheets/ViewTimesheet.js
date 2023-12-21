@@ -22,6 +22,7 @@ function ViewTimesheet(props) {
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [selectedMonthYear, setSelectedMonthYear] = useState('');
+    console.log({leaves});
 
     const timesheet = attendance[0]?.timeSheet || [];
 
@@ -138,6 +139,7 @@ function ViewTimesheet(props) {
     
         for (const day in groupedTimeEntries) {
             const leaveInfosForDay = leaves.filter(leave => moment(leave.from).isSameOrBefore(day, 'day') && moment(leave.to).isSameOrAfter(day, 'day'));
+            console.log({leaveInfosForDay});
             const timesheetEntries = groupedTimeEntries[day] || [];
     
             if (timesheetEntries.length === 0 && leaveInfosForDay.length > 0) {
@@ -164,7 +166,7 @@ function ViewTimesheet(props) {
                 exportData.push(entryData);
             }
         }
-    
+        console.log({exportData});
         return exportData;
     };
 
