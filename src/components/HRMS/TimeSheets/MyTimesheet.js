@@ -22,6 +22,8 @@ import { getAllUsers } from '../../../services/user';
 import { createNotification } from '../../../services/notification';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { getEmployeeLeave } from '../../../services/leave';
+
 
 
 
@@ -39,7 +41,13 @@ function Timesheet(props) {
     const [featureEnabled, setFeatureEnabled] = useState(true);
     const [hrID, setHrID] = useState([]);
     const [selectedMonthYear, setSelectedMonthYear] = useState('');
+    const [leaveRange, setLeaveRange] = useState({ from: null, to: null });
+    const [hasClockedInToday, setHasClockedInToday] = useState(false);
+    const [hasClockedOutToday, setHasClockedOutToday] = useState(false);
+    const [isLeaveUpdateApplied, setLeaveUpdateApplied] = useState(false);
     const comingSoon = false;
+
+    console.log({allAttendance});
 
     useEffect(() => {
         // Load time entries from local storage on component mount
@@ -52,95 +60,321 @@ function Timesheet(props) {
       
         // return () => clearInterval(intervalId);
       }, []);
-      
-      useEffect(() => {
-        async function fetchData() {
-          setLoading(true);
-      
-          const user = getUser();
-          const week = moment().week().toString();
-          const month = moment().month().toString();
-          const year = moment().year().toString();
-      
-          if (user) {
-            const companyData = await getCompanyData();
-            // companyData.settings?.features['expenseManagement']
-            //   ? setFeatureEnabled(true)
-            //   : setFeatureEnabled(false);
-            setCompany(companyData);
-            const employeeRecord = await getEmployee(user.employee_id);
-            const lineManager = await getEmployee(employeeRecord.line_manager);
-      
-            setLineManager(lineManager);
-            const allAttendance = await getAttendance(user.employee_id);
-            setAttendance(allAttendance);
-            // const thisWeekAttendance = allAttendance.filter(
-            //   (attendance) =>
-            //     attendance.week === week &&
-            //     attendance.year === year &&
-            //     attendance.month === month
-            // );
-            // const savedData = thisWeekAttendance[0]?.timeSheet;
-            setEmployee(employeeRecord);
-            const allUsers = await getAllUsers(user.company_id);
-                const filteredAllUsers = allUsers.filter(
-                    (allUser) => allUser.role === "HR Manager"
-                  );
-            setHrID(filteredAllUsers)
-      
-            const combinedTimesheets = {};
 
-      
-            allAttendance.forEach((entry) => {
-              const employeeId = entry.employee_id;
-      
-              if (!combinedTimesheets[employeeId]) {
-                combinedTimesheets[employeeId] = {
-                  employee_id: employeeId,
-                  timeSheet: [],
-                  company_id: entry.company_id,
-                  date: entry.date,
-                  month: entry.month,
-                  week: entry.week,
-                  year: entry.year,
-                  status: entry.status,
-                  createdAt: entry.createdAt,
-                  updatedAt: entry.updatedAt,
-                  id: entry.id,
-                };
-              }
-      
-              // Combine the timesheets for this employee
-              combinedTimesheets[employeeId].timeSheet = combinedTimesheets[employeeId].timeSheet.concat(
-                entry.timeSheet
-              );
-            });
-      
-            // Convert the combinedTimesheets object into an array
-            const result = Object.values(combinedTimesheets);
-            
-            if(result.length > 0){
-                localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
-                setTimeEntries(result[0].timeSheet);
+      useEffect(() => {
+        // Fetch leave information for the user
+        const fetchLeave = async () => {
+            try {
+                const leaveResponse = await getEmployeeLeave(user.employee_id);
+    
+                // Filter approved leave requests that have not passed
+                const currentDate = new Date();
+                const approvedLeave = leaveResponse.filter(request => 
+                    request.status === 'approve' && new Date(request.to) >= currentDate
+                );
+    
+                // Extract start and end dates of approved leave
+                const leaveStartDate = approvedLeave.length > 0 ? approvedLeave[0].from : null;
+                const leaveEndDate = approvedLeave.length > 0 ? approvedLeave[approvedLeave.length - 1].to : null;
+    
+                setLeaveRange({ from: leaveStartDate, to: leaveEndDate });
+            } catch (error) {
+                console.error('Error fetching leave information:', error);
             }
             
-            // if (savedData) {
-            //     setFormFunction(null, savedData);
-            // }
-          }
-          setLoading(false);
-          setUser(user);
+        };
+    
+        fetchLeave();
+    }, [user.employee_id]);
+    
+    const isLeaveDay = (day) => {
+        if (leaveRange.from && leaveRange.to) {
+            const leaveFrom = moment(leaveRange.from);
+            const leaveTo = moment(leaveRange.to);
+            const currentDate = moment(day);
+
+            return currentDate.isBetween(leaveFrom, leaveTo, 'day', '[]');
         }
+
+        return false;
+    };
+
+    
+
+    // Function to update timesheet during leave
+    const updateTimesheetDuringLeave = async () => {
+        const { from, to } = leaveRange;
+        const startDate = moment(from);
+        const endDate = moment(to);
+        console.log({startDate});
+    
+        // Create an array of leave days
+        const leaveDays = [];
+        while (startDate.isSameOrBefore(endDate, 'day')) {
+            leaveDays.push(startDate.format('YYYY-MM-DD'));
+            startDate.add(1, 'days');
+        }
+    
+        // Iterate over each leave day
+        for (const leaveDay of leaveDays) {
+            const body = {
+                employee_id: user.employee_id,
+                company_id: company.id,
+                date: leaveDay,
+                type: 'leave',
+            };
+            console.log({body});
+            try {
+                const response = await createAttendance(body);
+                
+    
+                // Handle the response as needed
+                if (!response.error) {
+                    // Update local state or perform any additional actions
+                    setAttendance([...allAttendance, response]);
+                }
+            } catch (error) {
+                console.error('Error updating timesheet during leave:', error);
+            }
+        }
+    
+        // After creating leave entries, create regular timesheet entries for the days following the leave
+        // const lastLeaveDate = leaveDays[leaveDays.length - 1];
+        // const nextDay = moment(lastLeaveDate).add(1, 'days'); // Increment one day from the last leave day
+    
+        // while (nextDay.isBefore(moment())) {
+        //     const body = {
+        //         employee_id: user.employee_id,
+        //         company_id: company.id,
+        //         date: nextDay.format('YYYY-MM-DD'),
+        //         type: "leave", // You can set the type based on clock in/out logic
+        //     };
+    
+        //     try {
+        //         const response = await createAttendance(body);
+    
+        //         // Handle the response as needed
+        //         if (!response.error) {
+        //             // Update local state or perform any additional actions
+        //             setAttendance([...allAttendance, response]);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error updating timesheet after leave:', error);
+        //     }
+    
+        //     nextDay.add(1, 'days'); // Move to the next day
+        // }
+    };
+    
+    useEffect(() => {
+        // Call updateTimesheetDuringLeave for leave days
+        if (leaveRange.from && leaveRange.to) {
+            updateTimesheetDuringLeave();
+        }
+    }, [leaveRange]);
+    
+    // useEffect(() => {
+    //     const updateLeaveInAndOut = async () => {
+    //       await Promise.all([updateLeaveIn(), updateLeaveOut()]);
+    //     };
+
+    //     let currentDate = moment().format('YYYY-MM-DD');
+      
+    //     const updateLeaveIn = async () => {
+    //         // Check if the current date is a leave day
+    //         if (isLeaveDay(currentDate)) {
+    //           // Clone the existing time entries
+    //           let updatedEntries = [...timeEntries];
+          
+    //           // Check if there is no existing 'leaveIn' entry for the current day
+    //           const leaveEntriesExist = timeEntries.some(
+    //             (entry) =>
+    //               entry.type === 'leaveIn' &&
+    //               moment(entry.date).isSame(moment(currentDate), 'day')
+    //           );
+    //           console.log({ leaveEntriesExist });
+          
+    //           // If there is no existing 'leaveIn' entry, add a new one
+    //           if (!leaveEntriesExist) {
+    //             const newEntry = { date: new Date(), type: 'leaveIn' };
+    //             updatedEntries.push(newEntry);
+    //           } else {
+    //             // If there is an existing 'leaveIn' entry, display an error message
+    //             toast.error("You have already updated your leave for today.");
+    //           }
+          
+    //           // Update the time entries state and local storage
+    //           setTimeEntries(updatedEntries);
+    //           localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+          
+    //           // Set the state to indicate that the leave update has been applied
+    //           setLeaveUpdateApplied(true);
+    //         } else {
+    //           // If the current date is not a leave day, display an error message and return early
+    //           toast.error("You are not on leave.");
+    //           return;
+    //         }
+    //       };
+          
+          
+      
+    //     const updateLeaveOut = async () => {
+    //       await new Promise((resolve) => setTimeout(resolve, 5000)); 
+      
+    //       if (isLeaveDay(currentDate)) {
+    //         let updatedEntries = [...timeEntries];
+      
+    //         const leaveEntriesExist = timeEntries.some(
+    //           (entry) =>
+    //             entry.type === 'leaveOut' &&
+    //             moment(entry.date).isSame(moment(currentDate), 'day')
+    //         );
+      
+    //         if (!leaveEntriesExist) {
+    //           const newEntry = { date: new Date(), type: 'leaveOut' };
+    //           updatedEntries.push(newEntry);
+    //         } else {
+    //           toast.error("You are not on leave.");
+    //         }
+      
+    //         const week = moment().week().toString();
+    //         const month = moment().month().toString();
+    //         const year = moment().year().toString();
+    //         const date = moment().format('YYYY-MM-DD');
+      
+    //         const body = {
+    //           employee_id: user.employee_id,
+    //           company_id: company.id,
+    //           week: week,
+    //           year: year,
+    //           date: date,
+    //           month: month,
+    //           timeSheet: updatedEntries,
+    //         };
+      
+    //         const response = await createAttendance(body);
+      
+    //         if (!response.error) {
+    //           const logActivity = await createActivity({
+    //             name: 'Update TimeSheet',
+    //             employee_id: user.employee_id,
+    //             activity: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
+    //             activity_name: 'Creation',
+    //             user: user.name,
+    //             company_id: user.company_id,
+    //           });
+      
+    //           const notifyRequisition = await createNotification({
+    //             name: 'Update TimeSheet',
+    //             sender_id: user.employee_id,
+    //             receiver_id: employee.line_manager,
+    //             hr_id: hrID[0]?.employee_id,
+    //             notification: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
+    //             notification_name: 'Creation',
+    //             user: user.name,
+    //             company_id: user.company_id,
+    //           });
+      
+    //           if (logActivity.id) {
+    //             setAttendance([...allAttendance, response]);
+    //           }
+    //         }
+      
+    //       // Set the state to indicate that the leave update has been applied
+    //       setLeaveUpdateApplied(true);
+    //     };
+    //         return;
+    //       }
+      
+          
+      
+    //     if (leaveRange.from && leaveRange.to && !isLeaveUpdateApplied) {
+    //       updateLeaveInAndOut();
+    //     }
+    //   }, [leaveRange, isLeaveUpdateApplied, timeEntries, setTimeEntries]);
+      
+      
+      
+    
+    
+      
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+    
+            const user = getUser();
+            const week = moment().week().toString();
+            const month = moment().month().toString();
+            const year = moment().year().toString();
+    
+            if (user) {
+                const companyData = await getCompanyData();
+                setCompany(companyData);
+                const employeeRecord = await getEmployee(user.employee_id);
+                const lineManager = await getEmployee(employeeRecord.line_manager);
+    
+                setLineManager(lineManager);
+                const allAttendance = await getAttendance(user.employee_id);
+                setAttendance(allAttendance);
+    
+                // Call updateTimesheetDuringLeave for leave days
+                // const approvedLeave = allAttendance.filter(request => request.status === 'approve');
+                // const leaveStartDate = approvedLeave.length > 0 ? approvedLeave[0].from : null;
+                // const leaveEndDate = approvedLeave.length > 0 ? approvedLeave[approvedLeave.length - 1].to : null;
+                // setLeaveRange({ from: leaveStartDate, to: leaveEndDate });
+    
+                const combinedTimesheets = {};
+    
+                allAttendance.forEach((entry) => {
+                    const employeeId = entry.employee_id;
+    
+                    if (!combinedTimesheets[employeeId]) {
+                        combinedTimesheets[employeeId] = {
+                            employee_id: employeeId,
+                            timeSheet: [],
+                            company_id: entry.company_id,
+                            date: entry.date,
+                            month: entry.month,
+                            week: entry.week,
+                            year: entry.year,
+                            status: entry.status,
+                            createdAt: entry.createdAt,
+                            updatedAt: entry.updatedAt,
+                            id: entry.id,
+                        };
+                    }
+    
+                    // Combine the timesheets for this employee
+                    combinedTimesheets[employeeId].timeSheet = combinedTimesheets[employeeId].timeSheet.concat(
+                        entry.timeSheet
+                    );
+                });
+    
+                // Convert the combinedTimesheets object into an array
+                const result = Object.values(combinedTimesheets);
+    
+                if (result.length > 0) {
+                    localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
+                    setTimeEntries(result[0].timeSheet);
+                }
+            }
+            setLoading(false);
+            setUser(user);
+        }
+    
         fetchData();
-      }, []);
-    const clockIn = () => {
+    }, []);
+    
+      const clockIn = () => {
         const hasClockInToday = timeEntries.some(
             (entry) =>
                 entry.type === 'in' &&
                 moment(entry.date).isSame(new Date(), 'day')
         );
 
-        if (!hasClockInToday) {
+        const currentDate = moment().format('YYYY-MM-DD');
+
+        if (!hasClockInToday && !isLeaveDay(currentDate)) {
             // Clock in logic
             const newEntry = { date: new Date(), type: 'in' };
             const updatedEntries = [...timeEntries, newEntry];
@@ -149,8 +383,13 @@ function Timesheet(props) {
 
             // Save time entries to local storage
             localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+
+            // Check if the current date is a leave day
+            // if (isLeaveDay(currentDate)) {
+            //     updateTimesheetDuringLeave([currentDate]);
+            // }
         } else {
-            toast.error("You have already clocked in today.");
+            toast.error("You have already clocked in today or you are on leave.");
         }
     };
 
@@ -162,7 +401,9 @@ function Timesheet(props) {
                 moment(entry.date).isSame(new Date(), 'day')
         );
 
-        if (!hasClockOutToday) {
+        const currentDate = moment().format('YYYY-MM-DD');
+
+        if (!hasClockOutToday && !isLeaveDay(currentDate)) {
             // Clock out logic
             const newEntry = { date: new Date(), type: 'out' };
             const updatedEntries = [...timeEntries, newEntry];
@@ -171,6 +412,11 @@ function Timesheet(props) {
 
             // Save time entries to local storage
             localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+
+            // Check if the current date is a leave day
+            // if (isLeaveDay(currentDate)) {
+            //     await updateTimesheetDuringLeave([currentDate]);
+            // }
 
             const week = moment().week().toString();
             const month = moment().month().toString();
@@ -185,46 +431,43 @@ function Timesheet(props) {
                 date: date,
                 month: month,
                 timeSheet: updatedEntries
-            }
+            };
 
             const response = await createAttendance(body);
 
             if (!response.error) {
-                const logActivity = await createActivity(
-                    {
-                        name: 'Update TimeSheet',
-                        employee_id: user.employee_id,
-                        activity: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
-                        activity_name: 'Creation',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-                )
-                const notifyRequisition = await createNotification(
-                    {
-                        name: 'Update TimeSheet',
-                        sender_id: user.employee_id,
-                        receiver_id: employee.line_manager,
-						hr_id: hrID[0]?.employee_id,
-                        notification: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
-                        notification_name: 'Creation',
-                        user: user.name,
-                        company_id: user.company_id,
-                    }
-				)
+                const logActivity = await createActivity({
+                    name: 'Update TimeSheet',
+                    employee_id: user.employee_id,
+                    activity: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
+                    activity_name: 'Creation',
+                    user: user.name,
+                    company_id: user.company_id,
+                });
+
+                const notifyRequisition = await createNotification({
+                    name: 'Update TimeSheet',
+                    sender_id: user.employee_id,
+                    receiver_id: employee.line_manager,
+                    hr_id: hrID[0]?.employee_id,
+                    notification: `${user.name} TimeSheet updated for week ${week} of ${year} | ${date}`,
+                    notification_name: 'Creation',
+                    user: user.name,
+                    company_id: user.company_id,
+                });
 
                 if (logActivity.id) {
-                    // sendEmail(user.emailAddress, user.name, emailCase.makeRequisition);
-                    setAttendance([...allAttendance, response])
+                    setAttendance([...allAttendance, response]);
                     toast.success("Timesheet updated successfully");
                 }
             }
 
         } else {
-            toast.error("You have already clocked out today");
-            //   alert('You have already clocked out today.');
+            toast.error("You have already clocked out today or you are on leave.");
         }
     };
+
+
     const handleMonthYearChange = (event) => {
         setSelectedMonthYear(event.target.value);
       };
@@ -417,6 +660,7 @@ function Timesheet(props) {
                                                             className="btn btn-lg btn-danger"
                                                             onClick={clockOut}
                                                         // disabled={clockedIn || hasClockedInToday()}
+                                                        // disabled={clockedIn || hasClockedInToday() || isLeaveDay(moment().format('YYYY-MM-DD'))}
                                                         >
                                                             Clock Out
                                                         </button>
@@ -425,6 +669,7 @@ function Timesheet(props) {
                                                             style={{ width: 200, height: 50 }}
                                                             className="btn btn-lg btn-danger"
                                                             // disabled={!clockedIn || hasClockedOutToday()}
+                                                            // disabled={!clockedIn || hasClockedOutToday() || isLeaveDay(moment().format('YYYY-MM-DD'))}
                                                             onClick={clockIn}
                                                         >
                                                             Clock In

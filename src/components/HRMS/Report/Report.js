@@ -38,7 +38,6 @@ function Report (props) {
     const [user, setUser] = useState([]);
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
-    console.log({reports});
 
     const employeeDetails = id => {
         try {
