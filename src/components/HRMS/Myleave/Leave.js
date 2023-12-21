@@ -137,7 +137,7 @@ const MyLeave = () => {
                 const {employee_id, company_id} = user;
                 const companyData = await getCompanyData();
                 companyData.settings?.features['leave'] ? setFeatureEnabled(true) : setFeatureEnabled(false);
-                console.log({companyData});
+                
                 const response = await getEmployeeLeave(employee_id);
                 const userResponse = await getAllEmployees(company_id);
                 

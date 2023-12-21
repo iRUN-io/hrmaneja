@@ -209,19 +209,25 @@ const Leave = () => {
         setOpenPopoverId(null);  // Close the popover when "Cancel" is clicked
       };
 
-    const toggleLeave = async (leaveId, type, receiver_id, leaveType) => {
+    const toggleLeave = async (leaveId, type, receiver_id, leaveType, fromDate, toDate) => {
         try {
             if (!featureEnabled) {
                 toast.error('Feature not enabled');
                 return;
             }
+
+            
+
             let response;
 
+            const from = fromDate;
+            const to = toDate;
+
             if (type === 'approve') {
-
+                console.log('newEntry', from, to)
                 response = await approveLeave(leaveId);
-
-                const newEntry = { date: new Date(), type: `Leave, from ${response.fromDate} to ${response.toDate} ` };
+                const newEntry = { date: new Date(fromDate), type: `Leave, from ${fromDate} to ${toDate} ` };
+                
                 const updatedEntries = [...timeEntries, newEntry];
                 setTimeEntries(updatedEntries);
 
@@ -234,7 +240,7 @@ const Leave = () => {
                 const date = moment().format('YYYY-MM-DD');
 
                 const body = {
-                    employee_id: response.employeeId,
+                    employee_id: receiver_id,
                     company_id: user.company_id,
                     week: week,
                     year: year,
@@ -520,7 +526,7 @@ const Leave = () => {
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
                                                                                             <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject', leave.employee_id, leave.leave_type)} type="button" className="btn btn-sm btn-danger">Disapprove</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'reject', leave.employee_id, leave.leave_type, leave.from, leave.to)} type="button" className="btn btn-sm btn-danger">Disapprove</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
@@ -536,7 +542,7 @@ const Leave = () => {
                                                                                     <Popover.Body>
                                                                                         <div className="clearfix" >
                                                                                             <button style={{ margin: '10px' }} type="" className="btn btn-sm btn-success" onClick={() => setCancelClicked(true)}>Cancel</button>
-                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve', leave.employee_id, leave.leave_type)} type="button" className="btn btn-sm btn-danger">Approve</button>
+                                                                                            <button style={{ margin: '10px' }} onClick={() => toggleLeave(leave.id, 'approve', leave.employee_id, leave.leave_type, leave.from, leave.to)} type="button" className="btn btn-sm btn-danger">Approve</button>
                                                                                         </div>
                                                                                     </Popover.Body>
                                                                                 </Popover>
