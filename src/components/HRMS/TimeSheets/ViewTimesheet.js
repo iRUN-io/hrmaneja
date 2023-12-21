@@ -11,18 +11,16 @@ import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { toast } from 'material-react-toastify';
-import { getEmployeeLeave } from '../../../services/leave';
-import 'moment-range';
 
 function ViewTimesheet(props) {
+    ///// NEW PHASE STARTS HERE
+    const [currentDateTime, setCurrentDateTime] = useState(new Date());
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState({});
     const [attendance, setUserAttendance] = useState([]);
-    const [leaves, setUserLeaves] = useState([]);
     const [fromDate, setFromDate] = useState(null);
     const [toDate, setToDate] = useState(null);
     const [selectedMonthYear, setSelectedMonthYear] = useState('');
-    console.log({leaves});
 
     const timesheet = attendance[0]?.timeSheet || [];
 
@@ -47,9 +45,7 @@ function ViewTimesheet(props) {
                 }
 
                 const response = await getAttendance(employeeData?.id);
-                const leaves = await getEmployeeLeave(employeeData?.id);
                 setUserAttendance(response);
-                setUserLeaves(leaves);
                 //   setTimeEntries();
             }
 
@@ -59,6 +55,18 @@ function ViewTimesheet(props) {
     }, []);
 
 
+    const filterExportData = (data) => {
+        return data.filter(entry => {
+          const entryDate = moment(entry.Date, 'MMMM DD, YYYY, hh:mm:ss A z');
+          if (fromDate && entryDate.isBefore(moment(fromDate))) {
+            return false;
+          }
+          if (toDate && entryDate.isAfter(moment(toDate))) {
+            return false;
+          }
+          return true;
+        });
+      };
       const handleMonthYearChange = (event) => {
         setSelectedMonthYear(event.target.value);
       };
@@ -76,6 +84,15 @@ function ViewTimesheet(props) {
         setToDate(event.target.value ? moment(event.target.value).endOf('day').toDate() : null);
     };
 
+    // Group time entries by day
+    // const groupedTimeEntries = timesheet.reduce((result, entry) => {
+    //     const day = moment(entry.date).format('MMMM DD, YYYY');
+    //     if (!result[day]) {
+    //         result[day] = [];
+    //     }
+    //     result[day].push(entry);
+    //     return result;
+    // }, {});
 
     const groupedTimeEntries = filteredTimesheet.reduce((result, entry) => {
         const day = moment(entry.date).format('MMMM DD, YYYY');
@@ -133,47 +150,26 @@ function ViewTimesheet(props) {
     
         pdf.save(`timesheet_${moment().format('YYYYMMDDHHmmss')}.pdf`);
       };
+    
 
       const getExportData = () => {
         const exportData = [];
-    
-        for (const day in groupedTimeEntries) {
-            const leaveInfosForDay = leaves.filter(leave => moment(leave.from).isSameOrBefore(day, 'day') && moment(leave.to).isSameOrAfter(day, 'day'));
-            console.log({leaveInfosForDay});
-            const timesheetEntries = groupedTimeEntries[day] || [];
-    
-            if (timesheetEntries.length === 0 && leaveInfosForDay.length > 0) {
-                for (const leaveInfo of leaveInfosForDay) {
-                    const leaveData = {
-                        Date: moment(leaveInfo.from).format('MMMM DD, YYYY'),
-                        Type: 'Leave', 
-                        Leave: `${leaveInfo.leave_type}; Leave from ${moment(leaveInfo.from).format('MMMM DD, YYYY')} to ${moment(leaveInfo.to).format('MMMM DD, YYYY')}`,
-                    };
-                    exportData.push(leaveData);
-                }
-            }
-    
-            for (const entry of timesheetEntries) {
-                const entryData = {
+        const filteredDays = Object.keys(groupedTimeEntries)
+            .filter(day => (!fromDate || moment(day).isSameOrAfter(fromDate, 'day')) && (!toDate || moment(day).isSameOrBefore(toDate, 'day')));
+       
+        for (const day of filteredDays) {
+            for (const entry of groupedTimeEntries[day]) {
+                exportData.push({
                     Date: moment(entry.date).format('MMMM DD, YYYY, hh:mm:ss A z'),
                     Type: entry.type.toUpperCase(),
-                    Leave: '', 
-                };
-    
-                const leaveDescriptions = leaveInfosForDay.map(leave => `${leave.leave_type}; Leave from ${leave.from} to ${leave.to}`);
-                entryData.Leave = leaveDescriptions.join(', ');
-    
-                exportData.push(entryData);
+                });
             }
         }
-        console.log({exportData});
+
         return exportData;
     };
 
-    
-    
 
-console.log('leaves', leaves)
     return (
         <>
 

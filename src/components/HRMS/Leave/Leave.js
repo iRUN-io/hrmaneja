@@ -15,6 +15,7 @@ import EmptyState from '../../EmptyState';
 import { createActivity } from '../../../services/activities';
 import FeatureNotAvailable from '../../common/featureDisabled';
 import { createNotification } from '../../../services/notification';
+import { createAttendance, getAttendance } from '../../../services/attendance';
 
 
 const Leave = () => {
@@ -25,6 +26,8 @@ const Leave = () => {
     const [LeavePerPage] = useState(10);
     const [loading, setLoading] = useState(false);
     const [leave,] = useState([]);
+    const [attendance, setAttendance] = useState([]);
+    const [timeEntries, setTimeEntries] = useState([]);
     // console.log({leaves });
     const [searchLeave, setSearchLeave] = useState('');
     const [featureEnabled, setFeatureEnabled] = useState(false);
@@ -218,6 +221,41 @@ const Leave = () => {
 
                 response = await approveLeave(leaveId);
 
+                const newEntry = { date: new Date(), type: `Leave, from ${response.fromDate} to ${response.toDate} ` };
+                const updatedEntries = [...timeEntries, newEntry];
+                setTimeEntries(updatedEntries);
+
+                // Save time entries to local storage
+                localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
+
+                const week = moment().week().toString();
+                const month = moment().month().toString();
+                const year = moment().year().toString();
+                const date = moment().format('YYYY-MM-DD');
+
+                const body = {
+                    employee_id: response.employeeId,
+                    company_id: user.company_id,
+                    week: week,
+                    year: year,
+                    date: date,
+                    month: month,
+                    timeSheet: updatedEntries
+                };
+
+                const attendanceResponse = await createAttendance(body);
+
+                if (!attendanceResponse.error) {
+                    const logActivity = await createActivity({
+                        name: 'Update TimeSheet(Leave)',
+                        employee_id: user.employee_id,
+                        activity: `${user.name} is on TimeSheet updated for week ${week} of ${year} | ${date}`,
+                        activity_name: 'Creation',
+                        user: user.name,
+                        company_id: user.company_id,
+                    });
+                }
+
             } else {
 
                 response = await disapproveLeave(leaveId);
@@ -297,6 +335,43 @@ const Leave = () => {
                 setLeaves(response);
                 setUsers(userResponse);
                 setUser(user);
+                const allAttendance = await getAttendance(user.employee_id);
+                setAttendance(allAttendance);
+    
+                const combinedTimesheets = {};
+    
+                allAttendance.forEach((entry) => {
+                    const employeeId = entry.employee_id;
+    
+                    if (!combinedTimesheets[employeeId]) {
+                        combinedTimesheets[employeeId] = {
+                            employee_id: employeeId,
+                            timeSheet: [],
+                            company_id: entry.company_id,
+                            date: entry.date,
+                            month: entry.month,
+                            week: entry.week,
+                            year: entry.year,
+                            status: entry.status,
+                            createdAt: entry.createdAt,
+                            updatedAt: entry.updatedAt,
+                            id: entry.id,
+                        };
+                    }
+    
+                    // Combine the timesheets for this employee
+                    combinedTimesheets[employeeId].timeSheet = combinedTimesheets[employeeId].timeSheet.concat(
+                        entry.timeSheet
+                    );
+                });
+    
+                // Convert the combinedTimesheets object into an array
+                const result = Object.values(combinedTimesheets);
+    
+                if (result.length > 0) {
+                    localStorage.setItem('timeEntries', JSON.stringify(result[0].timeSheet));
+                    setTimeEntries(result[0].timeSheet);
+                }
                 setLoading(false);
 
             }
