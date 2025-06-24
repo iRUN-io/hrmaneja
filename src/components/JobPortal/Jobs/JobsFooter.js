@@ -8,7 +8,7 @@ const JobsFooter = () => {
 
                     <div className="social-icons col-6 d-flex ">
                         <ul>
-                            <li><p className="mb-0">© {new Date().getFullYear()} iRUN Technology </p></li>
+                            <li><p className="mb-0">© {new Date().getFullYear()} Werun Technology </p></li>
                         </ul>
                     </div>
 

@@ -20,9 +20,9 @@ const emailSwitch = {
   userCreation: () => {
     return {
       subject: 'Welcome to Hrmaneja',
-      body: `Thank you for taking a step further to boost your business. My name is Abasiama, on behalf of the team at IRun, we are pleased to welcome you to this great community.
+      body: `Thank you for taking a step further to boost your business. My name is Abasiama, on behalf of the team at Werun, we are pleased to welcome you to this great community.
 
-    At IRun, we believe that running a successful business could be less stressful. Hence, we aim to provide you with a personalized experience that helps you boost your business productivity using our first high speed software {HRmaneja} 
+    At Werun, we believe that running a successful business could be less stressful. Hence, we aim to provide you with a personalized experience that helps you boost your business productivity using our first high speed software {HRmaneja} 
     
     Here’s a video guide on how to use the amazing features our software has in stock for your business. (Video link)
     
@@ -30,7 +30,7 @@ const emailSwitch = {
     
     I promise to also keep in touch with you because your business productivity is my utmost priority.
     
-    Welcome to IRun once again.
+    Welcome to Werun once again.
     `
     };
   }
