@@ -1,0 +1,249 @@
+import React, { useEffect, useState } from 'react';
+
+import { formatMoney, getBillingData, getUser } from "../../../config/common";
+
+import { getAllBillings } from '../../../services/billing';
+import ComingSoon from '../../common/comingSoon';
+import Loader from '../../common/loader';
+import Subscribe from '../../common/subscribe';
+import { useHistory } from 'react-router-dom';
+import moment from 'moment';
+
+
+const Billing = () => {
+	const [billings, setBillings] = useState([]);
+	const user = getUser();
+	const [billingExists, setBillingExists] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const isAdmin = user?.role === "HR Manager";
+	const comingSoon = false;
+
+	const history = useHistory();
+
+	useEffect(() => {
+
+		async function fetchData() {
+			setLoading(true);
+			const user = await getUser();
+			if (user) {
+				const isAdmin = user?.role === "HR Manager";
+				if(!isAdmin){window.location.href = '/'}
+				const company_id = user.company_id;
+				const response = await getAllBillings(company_id);
+				const billingExist = await getBillingData();
+				setBillingExists(billingExist);
+				setBillings(response);
+				setLoading(false);
+			}
+		}
+		fetchData();
+	}, []);
+
+
+	if (loading) {
+		return <Loader />
+	}
+
+	if (comingSoon) {
+		return <ComingSoon />
+	}
+
+	if (!billingExists) {
+		return <Subscribe />
+	}
+
+
+	const viewBilling = (id) => {
+		history.push(`/admin/billing-receipt/${id}`);
+	}
+
+	// get next billing date
+	const getNextBillingDate = () => {
+		const currentBillingDate = new Date(billings[0]?.createdAt);
+		const nextBillingDate = new Date(currentBillingDate.setMonth(currentBillingDate.getMonth() + 1));
+		return `${nextBillingDate.getDate()} ${nextBillingDate.toLocaleString('default', { month: 'long' })}`;
+	}
+
+	return (
+		<>
+			<div>
+				<div className={`section-body  mt-3`}>
+					{isAdmin && (
+						<>
+							<div className="container-fluid" style={{ marginTop: '20px' }}>
+								<div className="row clearfix">
+									<div className="col-lg-12">
+										<div className={`mb-4`}>
+											<h6>
+												Billing Details{' '}
+											</h6>
+											<small>Have visibility of your billing information</small>
+										</div>
+									</div>
+								</div>
+
+
+								<div className="row clearfix">
+									{/* <div className="card disabled-card">
+										<div className="row">
+											<div className="col-6">
+												<div className="">
+													<div className="card-body">
+
+														<p></p>
+														<h3>---- Bank</h3>
+														<h5>------ Name</h5>
+														<h5>$ 0.00</h5>
+														<div className='upgrade-button'>
+															<button className="btn btn-default text-white card-blue btn-sm">Fund Account</button>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-6 wallet-card">
+
+											</div>
+										</div>
+									</div> */}
+
+									<div className="card card-blue col-md-6 col-xl-6">
+										<div className="card-body">
+											<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+												<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-star'></i></h5>
+											</div>
+											<p></p>
+											<h3>{formatMoney(billings[0].amount)}</h3>
+											<h5>{billings[0].plan}</h5>
+											<div className='upgrade-button'>
+												<button className="btn btn-default disabled btn-sm">Upgrade</button>
+											</div>
+										</div>
+									</div>
+
+									<div className="card next-plan-card  more-cards card-white col-lg-6 col-md-6 col-xl-6">
+										<div className="card-body">
+											<div className='card-icon card-icon-white' style={{ float: 'right' }}>
+												<h5 className="mb-0 font-weight-bold" style={{ color: '#4356A5' }}><i className='fe fe-credit-card'></i></h5>
+											</div>
+											<p>Next Payment</p>
+											<h3>{formatMoney(billings[0].amount)}</h3>
+											<h5>on {getNextBillingDate()}</h5>
+											<div className='upgrade-button'>
+												<button className="btn btn-dark disabled btn-sm">Manage Payments</button>
+											</div>
+										</div>
+									</div>
+
+
+
+									{/* test table */}
+									<div className="card table-card">
+										<div className="row">
+
+											<div className=' col-12'>
+
+												<div className='card-header'>Transaction history</div>
+												<div className="card-body">
+													<div className="table-responsive">
+														<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
+															<thead>
+																<tr>
+																	<th>Amount</th>
+																	<th>Plan</th>
+																	<th>Date</th>
+																	{/* <th>Paid By</th> */}
+																	<th>Status</th>
+																	<th>Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																{billings.map((billing) => (
+																	<tr key={billing.id}>
+																		<td>{formatMoney(billings.amount)}</td>
+																		<td>{billing.plan}</td>
+																		<td>{moment(billing.createdAt).format('MMM Do YYYY')}</td>
+																		{/* <td>{billing.paidBy}</td> */}
+																		<td>{billing.status}</td>
+																		<td>
+																			<button
+																				type="button"
+																				className="btn btn-icon "
+																				title="Print"
+																				data-toggle="tooltip"
+																				data-placement="top"
+																				onClick={() => viewBilling(billing.id)}
+																			>
+																				<i className="icon-printer" />
+
+																			</button>
+																		</td>
+																	</tr>
+																))}
+
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div>
+											{/* <div className=' col-6'>
+											
+											<div className='card-header'>Payment history</div>
+												<div className="card-body">
+													<div className="table-responsive">
+														<table className="table table-hover table-striped text-nowrap table-vcenter mb-0">
+															<thead>
+																<tr>
+																	<th>Amount</th>
+																	<th>Plan</th>
+																	<th>Date</th>
+																	<th>Status</th>
+																	<th>Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																{billings.map((billing) => (
+																	<tr key={billing.id}>
+																		<td>${billing.amount}</td>
+																		<td>{billing.plan}</td>
+																		<td>Nov 2022</td>
+																		<td>{billing.status}</td>
+																		<td>
+																			<button 
+																				type="button"
+																				className="btn btn-icon "
+																				title="Print"
+																				data-toggle="tooltip"
+																				data-placement="top"
+																				onClick={() => viewBilling(billing.id)}
+																			>
+																			<i className="icon-printer" />
+
+																			</button>
+																		</td>
+																	</tr>
+																))}
+																
+															</tbody>
+														</table>
+													</div>
+												</div>
+											</div> */}
+
+
+
+										</div>
+									</div>
+
+
+
+								</div>
+							</div>
+						</>
+					)}
+				</div>
+			</div>
+		</>
+	);
+}
+
+export default Billing;
